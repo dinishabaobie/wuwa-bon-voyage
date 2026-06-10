@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { TrailBackground } from './trail.js'
-import { AmbientAudio } from './audio.js'
+import { ChimePlayer } from './audio.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -143,19 +143,38 @@ timeline.querySelectorAll('.tl-item').forEach((btn) => {
 // ============================================================
 const trail = new TrailBackground(document.getElementById('trail-canvas'))
 
-const audio = new AmbientAudio()
+// BGM：「远航星的告别」，打开网站即自动播放；被浏览器拦截时在首次交互瞬间开播
+const bgm = new Audio('bgm.mp3')
+bgm.loop = true
+bgm.volume = 0.7
+const chimes = new ChimePlayer()
 const bgmBtn = document.getElementById('bgm-toggle')
-bgmBtn.addEventListener('click', () => {
-  if (audio.playing) {
-    audio.stop()
-    bgmBtn.classList.remove('playing')
-    bgmBtn.querySelector('.bgm-label').textContent = 'SOUND OFF'
-  } else {
-    audio.start()
-    bgmBtn.classList.add('playing')
-    bgmBtn.querySelector('.bgm-label').textContent = 'SOUND ON'
-  }
-})
+let autoplayArmed = true
+
+function setSoundUI(on) {
+  bgmBtn.classList.toggle('playing', on)
+  bgmBtn.querySelector('.bgm-label').textContent = on ? 'SOUND ON' : 'SOUND OFF'
+}
+function soundOn() {
+  bgm.play().then(() => {
+    chimes.setOn(true)
+    setSoundUI(true)
+  }).catch(() => {})
+}
+function soundOff() {
+  autoplayArmed = false
+  bgm.pause()
+  chimes.setOn(false)
+  setSoundUI(false)
+}
+
+bgmBtn.addEventListener('click', () => (bgm.paused ? soundOn() : soundOff()))
+
+soundOn()
+const gestureKick = () => { if (autoplayArmed && bgm.paused) soundOn() }
+;['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) =>
+  window.addEventListener(ev, gestureKick, { once: true, passive: true })
+)
 
 const cursor = document.getElementById('cursor')
 const cursorPos = { x: innerWidth / 2, y: innerHeight / 2 }
@@ -199,7 +218,7 @@ navSections.forEach((section) => {
       timeline.querySelectorAll('.tl-item').forEach((b) =>
         b.classList.toggle('active', b.dataset.target === section.id)
       )
-      if (currentNav && currentNav !== nav) audio.chime(CHIME_NOTES[nav] || 880)
+      if (currentNav && currentNav !== nav) chimes.chime(CHIME_NOTES[nav] || 880)
       currentNav = nav
     },
   })
