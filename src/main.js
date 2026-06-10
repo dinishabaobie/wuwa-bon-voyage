@@ -3,7 +3,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { TrailBackground } from './trail.js'
-import { ChimePlayer } from './audio.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -147,7 +146,6 @@ const trail = new TrailBackground(document.getElementById('trail-canvas'))
 const bgm = new Audio('bgm.mp3')
 bgm.loop = true
 bgm.volume = 0.7
-const chimes = new ChimePlayer()
 const bgmBtn = document.getElementById('bgm-toggle')
 let autoplayArmed = true
 
@@ -156,15 +154,11 @@ function setSoundUI(on) {
   bgmBtn.querySelector('.bgm-label').textContent = on ? 'SOUND ON' : 'SOUND OFF'
 }
 function soundOn() {
-  bgm.play().then(() => {
-    chimes.setOn(true)
-    setSoundUI(true)
-  }).catch(() => {})
+  bgm.play().then(() => setSoundUI(true)).catch(() => {})
 }
 function soundOff() {
   autoplayArmed = false
   bgm.pause()
-  chimes.setOn(false)
   setSoundUI(false)
 }
 
@@ -194,9 +188,8 @@ document.querySelectorAll('button, a').forEach((el) => {
 })
 
 // ============================================================
-// 颜色流转 + 导航高亮 + 切章音效
+// 颜色流转 + 导航高亮
 // ============================================================
-const CHIME_NOTES = { hero: 660, '3.0': 880, '3.1': 988, '3.2': 740, '3.3': 830, '3.4': 1109, end: 660 }
 let currentNav = null
 
 navSections.forEach((section) => {
@@ -218,7 +211,6 @@ navSections.forEach((section) => {
       timeline.querySelectorAll('.tl-item').forEach((b) =>
         b.classList.toggle('active', b.dataset.target === section.id)
       )
-      if (currentNav && currentNav !== nav) chimes.chime(CHIME_NOTES[nav] || 880)
       currentNav = nav
     },
   })
