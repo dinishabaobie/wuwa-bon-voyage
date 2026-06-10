@@ -151,7 +151,7 @@ let autoplayArmed = true
 
 function setSoundUI(on) {
   bgmBtn.classList.toggle('playing', on)
-  bgmBtn.querySelector('.bgm-label').textContent = on ? 'SOUND ON' : 'SOUND OFF'
+  bgmBtn.querySelector('.bgm-label').textContent = on ? '音乐 开' : '音乐 关'
 }
 function soundOn() {
   bgm.play().then(() => setSoundUI(true)).catch(() => {})
@@ -291,29 +291,37 @@ CHAPTERS.forEach((c) => {
   const heroChars = splitChars(document.querySelector('.hero-title'))
   gsap.set(heroChars, { y: 60 })
 
-  const intro = gsap.timeline()
-  intro
+  // 第一段：星形与站名亮起，停在「点击进入」——访客点击的这一下同时解锁浏览器的声音权限
+  gsap.timeline()
     .fromTo('.loader-star', { scale: 0, rotate: -90 }, { scale: 1, rotate: 0, duration: 1, ease: 'back.out(1.8)' })
     .to('.loader-star', { scale: .55, duration: .6, ease: 'power2.inOut' }, '>+0.2')
     .to(loaderChars, { opacity: 1, duration: .05, stagger: 0.06 }, '<')
     .to('.loader-sub', { opacity: 1, duration: .7 }, '<+0.4')
-    .to(loader, { yPercent: -100, duration: 1.1, ease: 'power3.inOut', delay: .7 })
-    .add(() => {
-      lenis.start()
-      loader.remove()
-      // 开场在屏幕中央撒一串星，宣告拖痕效果的存在
-      const cx = innerWidth / 2
-      const cy = innerHeight / 2
-      ;[0, 120, 240, 360, 480].forEach((delay, i) => {
-        setTimeout(() => trail.burst(cx + (i - 2) * 130, cy + Math.sin(i * 2.1) * 60, 150 - Math.abs(i - 2) * 30), delay)
-      })
-    }, '>-0.3')
-    .fromTo('.hero-kicker', { opacity: 0 }, { opacity: 1, duration: .8 })
-    .to(heroChars, { opacity: 1, y: 0, duration: .9, stagger: 0.07, ease: 'power3.out' }, '<')
-    .fromTo('.hero-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .8 }, '<+0.6')
-    .fromTo('.hero-hint', { opacity: 0 }, { opacity: 1, duration: .8 }, '<+0.3')
-    .to('#timeline', { opacity: 1, duration: .8 }, '<')
-    .to('#bgm-toggle', { opacity: 1, duration: .8 }, '<')
+    .to('.loader-enter', { opacity: 1, duration: .8 }, '>+0.3')
+
+  // 第二段：点击后开音乐、退场、首屏入场
+  const enterSite = () => {
+    soundOn()
+    gsap.timeline()
+      .to(loader, { yPercent: -100, duration: 1.1, ease: 'power3.inOut' })
+      .add(() => {
+        lenis.start()
+        loader.remove()
+        // 开场在屏幕中央撒一串星，宣告拖痕效果的存在
+        const cx = innerWidth / 2
+        const cy = innerHeight / 2
+        ;[0, 120, 240, 360, 480].forEach((delay, i) => {
+          setTimeout(() => trail.burst(cx + (i - 2) * 130, cy + Math.sin(i * 2.1) * 60, 150 - Math.abs(i - 2) * 30), delay)
+        })
+      }, '>-0.3')
+      .fromTo('.hero-kicker', { opacity: 0 }, { opacity: 1, duration: .8 })
+      .to(heroChars, { opacity: 1, y: 0, duration: .9, stagger: 0.07, ease: 'power3.out' }, '<')
+      .fromTo('.hero-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .8 }, '<+0.6')
+      .fromTo('.hero-hint', { opacity: 0 }, { opacity: 1, duration: .8 }, '<+0.3')
+      .to('#timeline', { opacity: 1, duration: .8 }, '<')
+      .to('#bgm-toggle', { opacity: 1, duration: .8 }, '<')
+  }
+  loader.addEventListener('click', enterSite, { once: true })
 }
 
 // 首屏标题滚动时上浮淡出，增强电影感

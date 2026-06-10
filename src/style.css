@@ -48,6 +48,14 @@ a, button { cursor: none; }
   color: rgba(232,233,242,.4);
   opacity: 0;
 }
+.loader-enter {
+  margin-top: 2.5rem;
+  font-size: 1rem; letter-spacing: .6em; text-indent: .6em;
+  color: var(--accent);
+  opacity: 0;
+  animation: enter-pulse 2.2s ease-in-out infinite;
+}
+@keyframes enter-pulse { 50% { filter: brightness(1.6); } }
 
 /* ---------- 背景画布 / 颗粒 ---------- */
 #trail-canvas {
@@ -122,7 +130,7 @@ a, button { cursor: none; }
 #bgm-toggle.playing .bgm-bars i:nth-child(3) { animation-delay: .45s; }
 #bgm-toggle.playing .bgm-bars i:nth-child(4) { animation-delay: .65s; }
 @keyframes bars { from { height: 3px; } to { height: 14px; } }
-.bgm-label { font-family: var(--font-latin); font-size: .72rem; letter-spacing: .3em; opacity: .7; }
+.bgm-label { font-family: var(--font-serif); font-size: 1.05rem; letter-spacing: .3em; opacity: .85; }
 
 /* ---------- 章节 ---------- */
 .chapter {
