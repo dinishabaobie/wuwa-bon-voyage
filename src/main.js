@@ -46,6 +46,21 @@ const CHAPTERS = [
     bg: '#0a1f24', accent: '#4ef0e0', photo: 'photos/3-4.jpg',
     wide: 'photos/3-4-wide.jpg', wideAlt: '月面之上，四人遥望地球',
   },
+  {
+    id: 'cyberpunk', num: 'cyberpunk', title: '赛博朋克-边缘幻梦',
+    en: 'CYBERPUNK · EDGE OF DREAMS',
+    desc: '人们都说夜之城没有活着的传奇，但这次鸣潮却要告诉你——<br/>勇敢的向前奔跑吧，露西，你所珍视的人已为你扫平前路荆棘，而你深爱的人正在路的尽头等你。',
+    cast: ['露西', '丽贝卡'],
+    bg: '#0a1f24', accent: '#4ef0e0', photo: 'photos/3-4.jpg',
+    wide: 'photos/3-4-wide.jpg', wideAlt: '月面之上，四人遥望地球',
+  },
+  {
+    id: 'anyuan', num: 'anyuan', title: '我 Chovy  到底谁才是反派啊',
+    en: 'ECHOING FROM THE END OF THE STAR SEA',
+    desc: '终于<br/>这个没有情感的女孩<br/>迎来了她的第一次微笑',
+    cast: ['绯雪', '达妮娅'],
+    bg: '#26130a', accent: '#ffb066', photo: 'photos/3-3.jpg',
+  },
 ]
 
 const HERO = { bg: '#05060f', accent: '#8b9aff' }
@@ -53,6 +68,16 @@ const ENDING = {
   bg: '#04050c', accent: '#cdd3ff', photo: 'photos/ending.jpg',
   title: '拉海洛篇章落幕',
   line: '各位星炬学院的眺望者，我们终会于无垠星海里再次相会。',
+}
+
+const REGION_LABELS = {
+  '3.0': '瑝珑',
+  '3.1': '拉古那',
+  '3.2': '七丘',
+  '3.3': '拉海洛',
+  '3.4': '冰原地表',
+  cyberpunk: '赛博朋克-边缘幻梦',
+  anyuan: '黯原',
 }
 
 // ============================================================
@@ -76,15 +101,40 @@ const app = document.getElementById('app')
 
 app.innerHTML = `
   <section id="hero" data-bg="${HERO.bg}" data-accent="${HERO.accent}" data-nav="hero">
-    <p class="hero-kicker">WUTHERING WAVES · CHAPTER OF LAHAILUO</p>
-    <h1 class="hero-title">鸣潮·拉海洛篇章</h1>
-    <p class="hero-sub">VER 3.0 — 3.4 · 一段眺望者的回望</p>
+    <div class="terminal-frame">
+      <div class="terminal-bar" aria-hidden="true">
+        <span>ACCESS CONFIRMED</span>
+      </div>
+      <div class="hero-core">
+        <h1 class="hero-title">欢迎回家</h1>
+      </div>
+      <div class="module-grid" aria-label="泰提斯终端模块">
+        <article class="hero-module">
+          <p class="module-code">OBJECT-01</p>
+          <h2>观测对象</h2>
+          <p>角色档案、频率特征、个体记录</p>
+          <span>ROLE ARCHIVE</span>
+        </article>
+        <article class="hero-module">
+          <p class="module-code">TIDE-02</p>
+          <h2>观潮</h2>
+          <p>版本解析、剧情回溯、潮汐事件</p>
+          <span>VERSION ANALYSIS</span>
+        </article>
+        <article class="hero-module">
+          <p class="module-code">RELATION-03</p>
+          <h2>群像</h2>
+          <p>势力关系、人物连接、阵营网络</p>
+          <span>RELATION MAP</span>
+        </article>
+      </div>
+    </div>
     <p class="hero-hint">SCROLL</p>
   </section>
   ${CHAPTERS.map((c) => `
     <section class="chapter${c.bigFig ? ' chapter--bigfig' : ''}" id="${c.id}" data-bg="${c.bg}" data-accent="${c.accent}" data-nav="${c.num}">
       <div class="chapter-inner">
-        <div class="ver-num" aria-hidden="true">Ver ${c.num}</div>
+        <div class="ver-num" aria-hidden="true">${REGION_LABELS[c.num] || c.num}</div>
         <div class="ch-text">
           <p class="ch-kicker">${c.en}</p>
           <h2 class="ch-title">${c.title}</h2>
@@ -93,7 +143,7 @@ app.innerHTML = `
         </div>
         <figure class="ch-figure">
           <img src="${c.photo}" alt="${c.title}" loading="lazy" />
-          <figcaption class="fig-tag">VER ${c.num}</figcaption>
+          <figcaption class="fig-tag">${REGION_LABELS[c.num] || c.num}</figcaption>
         </figure>
         ${c.wide ? `
         <figure class="ch-wide">
@@ -114,10 +164,21 @@ app.innerHTML = `
 // 时间轴导航
 const timeline = document.getElementById('timeline')
 const navSections = [...document.querySelectorAll('[data-nav]')]
+const NAV_LABELS = {
+  hero: 'TOP',
+  '3.0': '瑝珑',
+  '3.1': '拉古那',
+  '3.2': '七丘',
+  '3.3': '拉海洛',
+  '3.4': '冰原地表',
+  cyberpunk: '赛博朋克-边缘幻梦',
+  anyuan: '黯原',
+  end: '旅途愉快',
+}
 timeline.innerHTML = navSections
   .map((s) => {
     const key = s.dataset.nav
-    const label = key === 'hero' ? 'TOP' : key === 'end' ? 'FIN' : key
+    const label = NAV_LABELS[key] || key
     return `<button class="tl-item" data-target="${s.id}"><span class="dot"></span>${label}</button>`
   })
   .join('')
@@ -291,13 +352,14 @@ CHAPTERS.forEach((c) => {
   const heroChars = splitChars(document.querySelector('.hero-title'))
   gsap.set(heroChars, { y: 60 })
 
-  // 第一段：星形与站名亮起，停在「点击进入」——访客点击的这一下同时解锁浏览器的声音权限
+  // 第一段：黑花与站名亮起，等待访客点击并同时解锁浏览器的声音权限
   gsap.timeline()
     .fromTo('.loader-star', { scale: 0, rotate: -90 }, { scale: 1, rotate: 0, duration: 1, ease: 'back.out(1.8)' })
     .to('.loader-star', { scale: .55, duration: .6, ease: 'power2.inOut' }, '>+0.2')
     .to(loaderChars, { opacity: 1, duration: .05, stagger: 0.06 }, '<')
-    .to('.loader-sub', { opacity: 1, duration: .7 }, '<+0.4')
-    .to('.loader-enter', { opacity: 1, duration: .8 }, '>+0.3')
+    .to('.loader-status', { opacity: 1, duration: .65 }, '<+0.35')
+    .to('.loader-status', { opacity: 0, duration: .35 }, '+=2')
+    .to('.loader-confirm', { opacity: 1, duration: .45 }, '<+0.1')
 
   // 第二段：点击后开音乐、退场、首屏入场
   const enterSite = () => {
@@ -314,9 +376,12 @@ CHAPTERS.forEach((c) => {
           setTimeout(() => trail.burst(cx + (i - 2) * 130, cy + Math.sin(i * 2.1) * 60, 150 - Math.abs(i - 2) * 30), delay)
         })
       }, '>-0.3')
-      .fromTo('.hero-kicker', { opacity: 0 }, { opacity: 1, duration: .8 })
-      .to(heroChars, { opacity: 1, y: 0, duration: .9, stagger: 0.07, ease: 'power3.out' }, '<')
-      .fromTo('.hero-sub', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .8 }, '<+0.6')
+      .to(heroChars, { opacity: 1, y: 0, duration: .9, stagger: 0.07, ease: 'power3.out' })
+      .add(() => {
+        document.querySelectorAll('.hero-module').forEach((module, i) => {
+          setTimeout(() => module.classList.add('is-online'), i * 140)
+        })
+      }, '<+0.55')
       .fromTo('.hero-hint', { opacity: 0 }, { opacity: 1, duration: .8 }, '<+0.3')
       .to('#timeline', { opacity: 1, duration: .8 }, '<')
       .to('#bgm-toggle', { opacity: 1, duration: .8 }, '<')
@@ -325,7 +390,7 @@ CHAPTERS.forEach((c) => {
 }
 
 // 首屏标题滚动时上浮淡出，增强电影感
-gsap.to('.hero-title, .hero-kicker, .hero-sub', {
+gsap.to('.hero-title', {
   opacity: 0, y: -80, ease: 'none',
   scrollTrigger: { trigger: '#hero', start: '40% top', end: 'bottom top', scrub: true },
 })
