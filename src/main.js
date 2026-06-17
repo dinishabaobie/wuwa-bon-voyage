@@ -110,24 +110,30 @@ app.innerHTML = `
     <div class="hero-stage">
       <header class="hero-head">
         <span class="hero-sign">泰提斯终端<i>TETHYS&nbsp;TERMINAL</i></span>
-        <span class="hero-status" aria-hidden="true"><b>文明推演沙盘</b>SANDBOX&nbsp;ONLINE</span>
+        <nav class="module-grid" aria-label="泰提斯终端模块">
+          <a class="hero-module" href="./observation.html"><h2>观测对象</h2></a>
+          <a class="hero-module" href="./tide.html"><h2>观潮</h2></a>
+          <a class="hero-module" href="./relation.html"><h2>群像</h2></a>
+        </nav>
       </header>
 
       <div class="hero-core">
         <p class="hero-eyebrow">黑海岸 · 泰提斯系统</p>
         <h1 class="hero-title">欢迎回家</h1>
         <p class="hero-en" aria-hidden="true">WE&nbsp;WERE&nbsp;BORN&nbsp;TO&nbsp;GAZE</p>
-        <p class="hero-lead">泰提斯已完成这段航程的全部推演。<br/>Ver 1.0 — 3.4，这一路的每一次心跳皆已归档于地底星空，愿你旅途愉快。</p>
+        <p class="hero-lead">泰提斯已完成这段航程的全部推演。<br/>Ver 1.0 — 3.4，这一路皆已归档于地底星空，愿你旅途愉快。</p>
       </div>
 
       <footer class="hero-foot">
-        <nav class="module-grid" aria-label="泰提斯终端模块">
-          <a class="hero-module" href="./observation.html"><h2>观测对象</h2></a>
-          <a class="hero-module" href="./tide.html"><h2>观潮</h2></a>
-          <a class="hero-module" href="./relation.html"><h2>群像</h2></a>
-        </nav>
         <p class="hero-hint">SCROLL</p>
       </footer>
+    </div>
+    <div class="aimi-tag" aria-hidden="true">
+      <div class="aimi-portrait" data-text="UNKNOWN ACCESS"></div>
+      <div class="aimi-meta">
+        <p class="aimi-glitch" data-text="小爱到此一游">小爱到此一游</p>
+        <p class="aimi-sub">⚠ INTRUSION · AIMI</p>
+      </div>
     </div>
   </section>
   ${CHAPTERS.map((c) => `
@@ -462,6 +468,7 @@ CHAPTERS.forEach((c) => {
       .fromTo('.hero-hint', { opacity: 0 }, { opacity: 1, duration: .8 }, '<+0.3')
       .to('#timeline', { opacity: 1, duration: .8 }, '<')
       .to('#bgm-toggle', { opacity: 1, duration: .8 }, '<')
+      .fromTo('.aimi-tag', { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: .7 }, '<')
   }
   loader.addEventListener('click', enterSite)
 }
