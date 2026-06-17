@@ -182,7 +182,8 @@ timeline.innerHTML = navSections
 const lenis = new Lenis({ duration: 1.35, smoothWheel: true })
 lenis.on('scroll', ScrollTrigger.update)
 gsap.ticker.add((time) => lenis.raf(time * 1000))
-gsap.ticker.lagSmoothing(0)
+// 保留默认卡顿平滑：避免加载时主线程卡顿把时间差一次性灌给开场时间线、导致打字瞬间跑完
+gsap.ticker.lagSmoothing(500, 33)
 lenis.stop() // 加载动画期间锁定滚动
 
 timeline.querySelectorAll('.tl-item').forEach((btn) => {
@@ -218,11 +219,8 @@ function soundOff() {
 
 bgmBtn.addEventListener('click', () => (bgm.paused ? soundOn() : soundOff()))
 
-soundOn()
-const gestureKick = () => { if (autoplayArmed && bgm.paused) soundOn() }
-;['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) =>
-  window.addEventListener(ev, gestureKick, { once: true, passive: true })
-)
+// 注意：不在开场任意交互时解锁音频。BGM 只在「进入首页」那一下点击（enterSite）
+// 或手动点音乐开关时才播放——避免开场点击就把音乐放出来，破坏沉浸感。
 
 const cursor = document.getElementById('cursor')
 const cursorPos = { x: innerWidth / 2, y: innerHeight / 2 }
@@ -406,23 +404,43 @@ CHAPTERS.forEach((c) => {
     .fromTo('.boot-confirm', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .7, ease: 'power2.out' }, '+=0.15')
     .fromTo('.loader-star', { scale: 0, rotate: -90 }, { scale: 1, rotate: 0, duration: .8, ease: 'back.out(1.8)' }, '<')
 
-  // 第二段：点击后开音乐、退场、首屏入场（未打完则先快进到底）
+  // 第二段：点击后开音乐 → 黑花绽放吞屏转场 → 首屏入场
+  // 代码未打完之前不响应点击，保护开场沉浸感
+  let entered = false
   const enterSite = () => {
+    if (!booted || entered) return
+    entered = true
     soundOn()
-    if (!booted) bootTl.progress(1)
+    // 克隆一朵花精确叠在原花上做放大转场；原花与整个 loader 保持不动，
+    // 直到最后一起平滑淡出——避免抽离原花导致确认区布局跳动、花骤然消失。
+    const star = loader.querySelector('.loader-star')
+    const rect = star.getBoundingClientRect()
+    const warp = star.cloneNode(true)
+    document.body.appendChild(warp)
+    gsap.set(warp, {
+      position: 'fixed',
+      left: rect.left + rect.width / 2, top: rect.top + rect.height / 2,
+      width: rect.width, height: rect.height,
+      xPercent: -50, yPercent: -50, margin: 0, zIndex: 200, scale: 1,
+    })
     gsap.timeline()
-      .to(loader, { yPercent: -100, duration: 1.1, ease: 'power3.inOut' })
+      // 克隆花从原位放大、辉光增强，胀满整屏（原 loader 仍静止在后方）
+      .to(warp, { scale: 56, duration: 1.15, ease: 'power3.in' })
+      .to(warp, { filter: 'drop-shadow(0 0 80px var(--accent)) brightness(1.7)', duration: .95, ease: 'power2.in' }, '<')
+      // 胀满后：暗色 loader 整层淡出露出首页，花同步溶解
       .add(() => {
         lenis.start()
-        loader.remove()
         // 开场在屏幕中央撒一串星，宣告拖痕效果的存在
         const cx = innerWidth / 2
         const cy = innerHeight / 2
         ;[0, 120, 240, 360, 480].forEach((delay, i) => {
           setTimeout(() => trail.burst(cx + (i - 2) * 130, cy + Math.sin(i * 2.1) * 60, 150 - Math.abs(i - 2) * 30), delay)
         })
-      }, '>-0.3')
-      .to(heroChars, { opacity: 1, y: 0, duration: .9, stagger: 0.07, ease: 'power3.out' })
+      }, '>-0.35')
+      .to(loader, { opacity: 0, duration: .6, ease: 'power2.out' }, '<')
+      .to(warp, { opacity: 0, duration: .6, ease: 'power2.out' }, '<')
+      .add(() => { loader.remove(); warp.remove() })
+      .to(heroChars, { opacity: 1, y: 0, duration: .9, stagger: 0.07, ease: 'power3.out' }, '>-0.25')
       .to('.hero-eyebrow', { opacity: 1, y: 0, duration: .7, ease: 'power2.out' }, 0.1)
       .to('.hero-en', { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, '>-0.2')
       .to('.hero-lead', { opacity: 1, y: 0, duration: .9, ease: 'power2.out' }, '<+0.15')
@@ -435,7 +453,7 @@ CHAPTERS.forEach((c) => {
       .to('#timeline', { opacity: 1, duration: .8 }, '<')
       .to('#bgm-toggle', { opacity: 1, duration: .8 }, '<')
   }
-  loader.addEventListener('click', enterSite, { once: true })
+  loader.addEventListener('click', enterSite)
 }
 
 // 首屏标题滚动时上浮淡出，增强电影感
