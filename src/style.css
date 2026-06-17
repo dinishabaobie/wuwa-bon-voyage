@@ -35,6 +35,8 @@ a, button { cursor: none; }
 /* ---------- 开场加载层：身份核验终端 ---------- */
 #loader {
   position: fixed; inset: 0; z-index: 100;
+  /* 锁定开场强调色为品牌蓝，不受全局章节色流转影响（刷新后也不会被上一屏染色） */
+  --accent: #8b9aff;
   background:
     radial-gradient(80% 80% at 30% 20%, rgba(20,28,60,.55), transparent 70%),
     #04050c;

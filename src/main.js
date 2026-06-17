@@ -7,6 +7,11 @@ import { DataRain } from './datarain.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
+// 关闭浏览器的滚动位置恢复：避免刷新后停留在原滚动位置，
+// 导致开场结束、点击进入时不在顶部而是落到刷新前的中途位置。
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+window.scrollTo(0, 0)
+
 // ============================================================
 // 章节数据 —— 文案、配色、照片都在这里改
 // ============================================================
@@ -418,6 +423,7 @@ CHAPTERS.forEach((c) => {
     const star = loader.querySelector('.loader-star')
     const rect = star.getBoundingClientRect()
     const warp = star.cloneNode(true)
+    warp.style.setProperty('--accent', '#8b9aff') // 与开场锁定的品牌蓝一致
     document.body.appendChild(warp)
     gsap.set(warp, {
       position: 'fixed',
@@ -431,6 +437,8 @@ CHAPTERS.forEach((c) => {
       .to(warp, { filter: 'drop-shadow(0 0 80px var(--accent)) brightness(1.7)', duration: .95, ease: 'power2.in' }, '<')
       // 胀满后：暗色 loader 整层淡出露出首页，花同步溶解
       .add(() => {
+        window.scrollTo(0, 0)
+        lenis.scrollTo(0, { immediate: true })
         lenis.start()
         // 开场在屏幕中央撒一串星，宣告拖痕效果的存在
         const cx = innerWidth / 2
