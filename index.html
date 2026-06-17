@@ -7,13 +7,22 @@
   <link rel="icon" type="image/png" href="./black-shores-flower.png" />
 </head>
 <body>
-  <!-- 开场加载层 -->
+  <!-- 开场加载层：泰提斯逐行打出身份核验代码 -->
   <div id="loader">
-    <div class="loader-star" aria-hidden="true"></div>
-    <h1 class="loader-title">泰提斯终端</h1>
-    <div class="loader-state" aria-live="polite">
-      <p class="loader-status">核验访问者身份<span class="loader-dots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></p>
-      <p class="loader-confirm">已确认</p>
+    <div class="boot">
+      <div class="boot-bar" aria-hidden="true">
+        <span class="boot-bar-id">TETHYS · IDENTITY SCAN</span>
+        <span class="boot-bar-state">VERIFYING<i class="boot-bar-dot"></i></span>
+      </div>
+      <pre class="boot-code" aria-hidden="true"><code></code></pre>
+      <div class="boot-confirm">
+        <div class="loader-star" aria-hidden="true"></div>
+        <div class="boot-confirm-text">
+          <h1 class="loader-title">泰提斯终端</h1>
+          <p class="loader-confirm">访问者身份 · 已确认</p>
+        </div>
+        <p class="loader-enter">▸ 点击任意处接入</p>
+      </div>
     </div>
   </div>
 

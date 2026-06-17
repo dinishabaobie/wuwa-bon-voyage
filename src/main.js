@@ -101,35 +101,28 @@ const app = document.getElementById('app')
 
 app.innerHTML = `
   <section id="hero" data-bg="${HERO.bg}" data-accent="${HERO.accent}" data-nav="hero">
-    <div class="terminal-frame">
-      <div class="terminal-bar" aria-hidden="true">
-        <span>ACCESS CONFIRMED</span>
-      </div>
+    <div class="hero-stage">
+      <header class="hero-head">
+        <span class="hero-sign">泰提斯终端<i>TETHYS&nbsp;TERMINAL</i></span>
+        <span class="hero-status" aria-hidden="true"><b>文明推演沙盘</b>SANDBOX&nbsp;ONLINE</span>
+      </header>
+
       <div class="hero-core">
+        <p class="hero-eyebrow">黑海岸 · 泰提斯系统</p>
         <h1 class="hero-title">欢迎回家</h1>
+        <p class="hero-en" aria-hidden="true">WE&nbsp;WERE&nbsp;BORN&nbsp;TO&nbsp;GAZE</p>
+        <p class="hero-lead">泰提斯已完成这段航程的全部推演。<br/>Ver 1.0 — 3.4，这一路的每一次心跳皆已归档于地底星空，愿你旅途愉快。</p>
       </div>
-      <div class="module-grid" aria-label="泰提斯终端模块">
-        <article class="hero-module">
-          <p class="module-code">OBJECT-01</p>
-          <h2>观测对象</h2>
-          <p>角色档案、频率特征、个体记录</p>
-          <span>ROLE ARCHIVE</span>
-        </article>
-        <article class="hero-module">
-          <p class="module-code">TIDE-02</p>
-          <h2>观潮</h2>
-          <p>版本解析、剧情回溯、潮汐事件</p>
-          <span>VERSION ANALYSIS</span>
-        </article>
-        <article class="hero-module">
-          <p class="module-code">RELATION-03</p>
-          <h2>群像</h2>
-          <p>势力关系、人物连接、阵营网络</p>
-          <span>RELATION MAP</span>
-        </article>
-      </div>
+
+      <footer class="hero-foot">
+        <nav class="module-grid" aria-label="泰提斯终端模块">
+          <a class="hero-module" href="./observation.html"><h2>观测对象</h2></a>
+          <a class="hero-module" href="./tide.html"><h2>观潮</h2></a>
+          <a class="hero-module" href="./relation.html"><h2>群像</h2></a>
+        </nav>
+        <p class="hero-hint">SCROLL</p>
+      </footer>
     </div>
-    <p class="hero-hint">SCROLL</p>
   </section>
   ${CHAPTERS.map((c) => `
     <section class="chapter${c.bigFig ? ' chapter--bigfig' : ''}" id="${c.id}" data-bg="${c.bg}" data-accent="${c.accent}" data-nav="${c.num}">
@@ -348,22 +341,75 @@ CHAPTERS.forEach((c) => {
 // ============================================================
 {
   const loader = document.getElementById('loader')
-  const loaderChars = splitChars(loader.querySelector('.loader-title'))
+  const boot = loader.querySelector('.boot')
+  const codeRoot = loader.querySelector('.boot-code code')
   const heroChars = splitChars(document.querySelector('.hero-title'))
   gsap.set(heroChars, { y: 60 })
+  gsap.set(['.hero-eyebrow', '.hero-en', '.hero-lead'], { opacity: 0, y: 20 })
 
-  // 第一段：黑花与站名亮起，等待访客点击并同时解锁浏览器的声音权限
-  gsap.timeline()
-    .fromTo('.loader-star', { scale: 0, rotate: -90 }, { scale: 1, rotate: 0, duration: 1, ease: 'back.out(1.8)' })
-    .to('.loader-star', { scale: .55, duration: .6, ease: 'power2.inOut' }, '>+0.2')
-    .to(loaderChars, { opacity: 1, duration: .05, stagger: 0.06 }, '<')
-    .to('.loader-status', { opacity: 1, duration: .65 }, '<+0.35')
-    .to('.loader-status', { opacity: 0, duration: .35 }, '+=2')
-    .to('.loader-confirm', { opacity: 1, duration: .45 }, '<+0.1')
+  // 第一段：泰提斯逐行打出身份核验代码，每行代码下面紧跟对应的中文注释
+  // 拉丁字母经 Solaris3 渲染为「通用语」字形；// 注释为可读中文，暗一档
+  // k: 'code' 代码行 | 'note' 注释行 | 'gap' 空行
+  const BOOT_LINES = [
+    { k: 'code', s: '#access <Tethys.Core>' },
+    { k: 'note', s: '// 接入泰提斯核心（预言机内核）' },
+    { k: 'code', s: 'using namespace BlackShores;' },
+    { k: 'note', s: '// 引入「黑海岸」（组织权限）' },
+    { k: 'gap' },
+    { k: 'code', s: 'verify(Visitor v) {' },
+    { k: 'note', s: '// 核验来访者身份' },
+    { k: 'code', s: '    scan signal = v.frequency;' },
+    { k: 'note', s: '    // 读取访问者声痕（频率）' },
+    { k: 'code', s: '    bind echo = signal.lament;' },
+    { k: 'note', s: '    // 绑定其中的悲鸣回响' },
+    { k: 'gap' },
+    { k: 'code', s: '    for (resonance r : observer.match(signal)) {' },
+    { k: 'note', s: '    // 在眺望者中寻找与你共鸣者' },
+    { k: 'code', s: '        observer.identity = r.gaze;' },
+    { k: 'note', s: '        // 以「眺望」确认身份' },
+    { k: 'code', s: '        anchor(starfield, r.tide);' },
+    { k: 'note', s: '        // 于地底星空抛下稳定锚' },
+    { k: 'code', s: '    }' },
+    { k: 'gap' },
+    { k: 'code', s: '    sandbox.run(optimal);' },
+    { k: 'note', s: '    // 推演沙盘算出最优解' },
+    { k: 'code', s: '    confirm(v.welcome.home);' },
+    { k: 'note', s: '    // 确认通过：欢迎回家' },
+    { k: 'code', s: '}' },
+  ]
 
-  // 第二段：点击后开音乐、退场、首屏入场
+  let booted = false
+  const bootTl = gsap.timeline()
+  BOOT_LINES.forEach((ln) => {
+    let el
+    bootTl.add(() => {
+      el = document.createElement('div')
+      el.className = 'ln ln-' + ln.k
+      if (ln.k === 'gap') el.innerHTML = '&nbsp;'
+      codeRoot.appendChild(el)
+    })
+    if (ln.k === 'gap') {
+      bootTl.to({}, { duration: 0.12 })
+    } else {
+      const o = { n: 0 }
+      bootTl.to(o, {
+        n: ln.s.length,
+        duration: Math.max(0.12, ln.s.length * (ln.k === 'note' ? 0.022 : 0.016)),
+        ease: 'none',
+        onUpdate: () => { el.textContent = ln.s.slice(0, Math.round(o.n)) },
+      })
+    }
+  })
+  bootTl
+    .add(() => { boot.classList.add('done'); booted = true })
+    .to('.boot-bar-state', { opacity: .4, duration: .3 }, '<')
+    .fromTo('.boot-confirm', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .7, ease: 'power2.out' }, '+=0.15')
+    .fromTo('.loader-star', { scale: 0, rotate: -90 }, { scale: 1, rotate: 0, duration: .8, ease: 'back.out(1.8)' }, '<')
+
+  // 第二段：点击后开音乐、退场、首屏入场（未打完则先快进到底）
   const enterSite = () => {
     soundOn()
+    if (!booted) bootTl.progress(1)
     gsap.timeline()
       .to(loader, { yPercent: -100, duration: 1.1, ease: 'power3.inOut' })
       .add(() => {
@@ -377,6 +423,9 @@ CHAPTERS.forEach((c) => {
         })
       }, '>-0.3')
       .to(heroChars, { opacity: 1, y: 0, duration: .9, stagger: 0.07, ease: 'power3.out' })
+      .to('.hero-eyebrow', { opacity: 1, y: 0, duration: .7, ease: 'power2.out' }, 0.1)
+      .to('.hero-en', { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, '>-0.2')
+      .to('.hero-lead', { opacity: 1, y: 0, duration: .9, ease: 'power2.out' }, '<+0.15')
       .add(() => {
         document.querySelectorAll('.hero-module').forEach((module, i) => {
           setTimeout(() => module.classList.add('is-online'), i * 140)
