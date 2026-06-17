@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { TrailBackground } from './trail.js'
+import { DataRain } from './datarain.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -341,6 +342,7 @@ CHAPTERS.forEach((c) => {
   const loader = document.getElementById('loader')
   const boot = loader.querySelector('.boot')
   const codeRoot = loader.querySelector('.boot-code code')
+  const dataRain = new DataRain(loader.querySelector('#data-rain'))
   const heroChars = splitChars(document.querySelector('.hero-title'))
   gsap.set(heroChars, { y: 60 })
   gsap.set(['.hero-eyebrow', '.hero-en', '.hero-lead'], { opacity: 0, y: 20 })
@@ -439,7 +441,7 @@ CHAPTERS.forEach((c) => {
       }, '>-0.35')
       .to(loader, { opacity: 0, duration: .6, ease: 'power2.out' }, '<')
       .to(warp, { opacity: 0, duration: .6, ease: 'power2.out' }, '<')
-      .add(() => { loader.remove(); warp.remove() })
+      .add(() => { dataRain.destroy(); loader.remove(); warp.remove() })
       .to(heroChars, { opacity: 1, y: 0, duration: .9, stagger: 0.07, ease: 'power3.out' }, '>-0.25')
       .to('.hero-eyebrow', { opacity: 1, y: 0, duration: .7, ease: 'power2.out' }, 0.1)
       .to('.hero-en', { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, '>-0.2')

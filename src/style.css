@@ -60,6 +60,16 @@ a, button { cursor: none; }
 }
 @keyframes boot-scan { to { top: 100%; } }
 
+/* 数据洪流：跑在代码后面，径向遮罩让中央文字区淡出、四周流动 */
+#data-rain {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  opacity: .55;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(135% 80% at 50% 46%, transparent 14%, rgba(0,0,0,.55) 42%, #000 70%);
+  mask-image: radial-gradient(135% 80% at 50% 46%, transparent 14%, rgba(0,0,0,.55) 42%, #000 70%);
+}
+
 .boot {
   position: relative; z-index: 1;
   width: min(92vw, 940px);
