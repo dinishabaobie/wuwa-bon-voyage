@@ -7,7 +7,29 @@
   <link rel="icon" type="image/png" href="./black-shores-flower.png" />
 </head>
 <body>
-  <div id="page" data-page="observation"></div>
-  <script type="module" src="/src/page.js"></script>
+  <a class="back" href="./index.html#home"><span aria-hidden="true">◂</span> 返回泰提斯终端</a>
+
+  <main id="app">
+    <section class="subjects-hero">
+      <p class="subjects-kicker">TETHYS · OBSERVATION LOG</p>
+      <h1 class="subjects-heading">观测对象</h1>
+      <div class="subjects-rule"></div>
+      <p class="subjects-desc">以下档案由泰缇斯系统自动记录，内容已通过黑海岸权限核验。</p>
+    </section>
+
+    <section class="subjects-wall">
+      <div class="wall-toolbar">
+        <p class="wall-counter">
+          已观测 <span id="count-archived">0</span>
+          <em>·</em>
+          待解密 <span id="count-locked">0</span>
+        </p>
+        <div class="wall-filters" id="wall-filters" role="tablist" aria-label="筛选"></div>
+      </div>
+      <div class="wall-grid" id="wall-grid"></div>
+    </section>
+  </main>
+
+  <script type="module" src="/src/observation.js"></script>
 </body>
 </html>

@@ -1,0 +1,242 @@
+/* 观测对象 · 泰缇斯监测墙 —— 移植自黑海岸项目，适配泰提斯终端视觉 */
+
+.subjects-hero {
+  position: relative; z-index: 10;
+  height: 52vh; min-height: 320px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  background: linear-gradient(to bottom, var(--bg) 60%, transparent 100%);
+}
+.subjects-kicker {
+  font-family: var(--font-tech); font-size: .72rem;
+  letter-spacing: .55em; color: var(--accent);
+  margin-bottom: 1.4rem;
+}
+.subjects-heading {
+  font-size: clamp(2.8rem, 7vw, 6rem);
+  font-weight: 900; letter-spacing: .2em;
+  margin-bottom: 1.8rem;
+}
+.subjects-rule {
+  width: 48px; height: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  margin-bottom: 1.4rem;
+}
+.subjects-desc {
+  font-size: clamp(.78rem, 1.2vw, .92rem);
+  font-weight: 300; letter-spacing: .08em;
+  color: rgba(232,233,242,.45);
+}
+
+.subjects-wall {
+  position: relative; z-index: 10;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 4vw 14vh;
+}
+
+/* 工具栏：计数 + 筛选 */
+.wall-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1.2rem;
+  padding-bottom: 1.6rem;
+  margin-bottom: 2.8rem;
+  border-bottom: 1px solid rgba(232,233,242,.1);
+}
+.wall-counter {
+  font-family: var(--font-tech); font-size: .72rem;
+  letter-spacing: .3em; color: rgba(232,233,242,.42);
+}
+.wall-counter span { color: var(--accent); }
+.wall-counter em { font-style: normal; margin: 0 .5em; opacity: .4; }
+.wall-filters { display: flex; flex-wrap: wrap; gap: .55rem; }
+.wall-chip {
+  font-family: var(--font-main); font-size: .72rem;
+  letter-spacing: .12em; color: rgba(232,233,242,.5);
+  padding: .42rem 1rem;
+  background: none;
+  border: 1px solid rgba(232,233,242,.16);
+  border-radius: 1px;
+  cursor: pointer;
+  transition: color .3s, border-color .3s, background .3s;
+}
+.wall-chip:hover { color: var(--ink); border-color: rgba(232,233,242,.4); }
+.wall-chip.is-active {
+  color: var(--chip-accent, var(--accent));
+  border-color: var(--chip-accent, var(--accent));
+  background: rgba(255,255,255,.04);
+  box-shadow: 0 0 14px -4px var(--chip-accent, var(--accent));
+}
+
+/* 卡片网格 */
+.wall-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(212px, 1fr));
+  gap: 1.6rem;
+}
+.wall-empty {
+  display: none;
+  padding: 5vh 0;
+  text-align: center;
+  font-size: .82rem; letter-spacing: .25em;
+  color: rgba(232,233,242,.3);
+}
+.wall-empty.is-visible { display: block; }
+
+.subject-card {
+  --card-accent: var(--accent);
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid rgba(232,233,242,.12);
+  background: #0c0a12;
+  cursor: pointer;
+  transition: border-color .4s, box-shadow .4s, transform .4s;
+}
+.subject-card:not(.is-locked):hover {
+  border-color: var(--card-accent);
+  box-shadow: 0 18px 50px -18px rgba(0,0,0,.8), 0 0 0 1px var(--card-accent);
+  transform: translateY(-4px);
+}
+/* HUD 对角描点 */
+.subject-card::before,
+.subject-card::after {
+  content: ''; position: absolute; z-index: 4;
+  width: 16px; height: 16px;
+  border: 1px solid var(--card-accent);
+  opacity: 0; transition: opacity .4s;
+  pointer-events: none;
+}
+.subject-card::before { top: 9px; left: 9px; border-right: 0; border-bottom: 0; }
+.subject-card::after  { bottom: 9px; right: 9px; border-left: 0; border-top: 0; }
+.subject-card:not(.is-locked):hover::before,
+.subject-card:not(.is-locked):hover::after { opacity: .85; }
+
+.card-photo { position: absolute; inset: 0; overflow: hidden; }
+.card-photo img {
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: center top;
+  transition: transform .8s ease;
+}
+.subject-card:not(.is-locked):hover .card-photo img { transform: scale(1.06); }
+.card-veil {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top,
+    rgba(8,6,14,.96) 0%, rgba(8,6,14,.5) 40%, rgba(8,6,14,.05) 70%, transparent 100%);
+}
+
+/* hover 特效层 */
+@property --fx-angle {
+  syntax: '<angle>'; inherits: false; initial-value: 0deg;
+}
+.card-fx {
+  position: absolute; inset: 0; z-index: 2;
+  pointer-events: none; opacity: 0;
+}
+@keyframes fx-spin { to { --fx-angle: 360deg; } }
+
+/* 聚焦显影：本卡放大变亮，其余卡变暗去色 */
+.subject-card.fx-focus:hover .card-photo img {
+  transform: scale(1.08); filter: brightness(1.12) saturate(1.15);
+}
+.wall-grid:has(.fx-focus:hover) .subject-card:not(.fx-focus) {
+  filter: brightness(.5) grayscale(.55);
+}
+.wall-grid .subject-card {
+  transition: border-color .4s, box-shadow .4s, transform .4s, filter .4s;
+}
+
+/* 守岸人 · 蝴蝶来访 */
+.visiting-butterfly {
+  position: absolute; top: 0; left: 0; z-index: 105;
+  pointer-events: none; will-change: transform;
+}
+.visiting-butterfly > img {
+  display: block; width: 116px; height: auto;
+  filter: drop-shadow(0 0 12px rgba(95,115,235,.5));
+  animation: bf-flap .24s ease-in-out infinite;
+  transform-origin: center;
+}
+.visiting-butterfly.landed > img { animation-duration: 1.3s; }
+@keyframes bf-flap { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(.5); } }
+
+.card-code {
+  position: absolute; top: .85rem; left: 1rem; z-index: 3;
+  font-family: var(--font-tech); font-size: .58rem;
+  letter-spacing: .25em; color: rgba(232,233,242,.55);
+}
+.card-body {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+  padding: 1.1rem 1.1rem 1.2rem;
+}
+.card-badge {
+  display: inline-block;
+  font-size: .58rem; letter-spacing: .18em;
+  color: var(--card-accent);
+  border: 1px solid currentColor;
+  border-radius: 1px;
+  padding: .15rem .5rem;
+  margin-bottom: .7rem;
+  opacity: .85;
+}
+.card-name {
+  font-size: 1.45rem; font-weight: 900; letter-spacing: .08em;
+  line-height: 1.1; margin-bottom: .35rem;
+}
+.card-tagline {
+  font-size: .72rem; line-height: 1.6;
+  color: rgba(232,233,242,.5);
+  max-height: 0; opacity: 0; overflow: hidden;
+  transition: max-height .45s ease, opacity .45s ease, margin .45s ease;
+}
+.subject-card:not(.is-locked):hover .card-tagline {
+  max-height: 4em; opacity: 1; margin-top: .15rem;
+}
+.card-enter {
+  display: block; margin-top: .8rem;
+  font-family: var(--font-tech); font-size: .56rem;
+  letter-spacing: .3em; color: var(--card-accent);
+  opacity: 0; transform: translateX(-4px);
+  transition: opacity .4s ease .05s, transform .4s ease .05s;
+}
+.subject-card:not(.is-locked):hover .card-enter { opacity: 1; transform: translateX(0); }
+
+.card-author {
+  position: absolute; right: .7rem; bottom: .6rem; z-index: 4;
+  font-size: .5rem; letter-spacing: .04em;
+  color: rgba(232,233,242,.45);
+  text-shadow: 0 1px 4px rgba(0,0,0,.85);
+  pointer-events: none;
+}
+
+/* 待解密锁定卡 */
+.subject-card.is-locked {
+  cursor: not-allowed;
+  background: repeating-linear-gradient(45deg, #0e0c14 0 10px, #100e16 10px 20px);
+}
+.subject-card.is-locked .card-name,
+.subject-card.is-locked .card-tagline { color: rgba(232,233,242,.3); }
+.card-lock {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-tech); font-size: .62rem;
+  letter-spacing: .35em; color: rgba(232,233,242,.28);
+  background: rgba(8,6,14,.35);
+  backdrop-filter: blur(2px);
+}
+.subject-card.is-locked.shake { animation: card-shake .4s ease; }
+@keyframes card-shake {
+  0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)}
+  75%{transform:translateX(5px)}
+}
+.subject-card.is-locked.has-img { background: #0c0a12; }
+.subject-card.is-locked.has-img .card-photo img { filter: grayscale(.4) brightness(.5); }
+.subject-card.is-locked.has-img .card-lock { background: rgba(8,6,14,.22); backdrop-filter: none; }
+.locked-tagline {
+  font-size: .68rem; line-height: 1.6;
+  letter-spacing: .05em;
+  color: rgba(232,233,242,.5);
+  margin-top: .3rem;
+}

@@ -7,7 +7,21 @@
   <link rel="icon" type="image/png" href="./black-shores-flower.png" />
 </head>
 <body>
-  <div id="page" data-page="relation"></div>
-  <script type="module" src="/src/page.js"></script>
+  <a class="back" href="./index.html#home"><span aria-hidden="true">◂</span> 返回泰提斯终端</a>
+
+  <header class="rel-head">
+    <p class="rel-kicker">RELATION MAP</p>
+    <h1 class="rel-title">群像</h1>
+    <p class="rel-hint">势力人物关系总图　·　横向滚动 · 悬停预览 · 点击锁定关系</p>
+  </header>
+
+  <div class="board-wrap" id="board">
+    <div class="board-inner" id="binner">
+      <svg class="board-lines" id="lines" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="board-cols" id="cols"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/relation.js"></script>
 </body>
 </html>

@@ -1,0 +1,88 @@
+/* 群像关系看板 —— 移植自黑海岸项目，适配泰提斯终端视觉 */
+
+/* 顶部标题 */
+.rel-head {
+  position: fixed; top: clamp(1.1rem, 3.5vh, 2rem); left: 0; right: 0; z-index: 3;
+  text-align: center; pointer-events: none;
+}
+/* 顶部渐隐遮罩：挡住向上滚动的卡片，避免与标题重叠 */
+.rel-head::before {
+  content: ''; position: fixed; top: 0; left: 0; right: 0; z-index: -1;
+  height: clamp(7rem, 19vh, 9.5rem);
+  background: linear-gradient(180deg, #05060f 0, #05060f 48%, color-mix(in srgb, #05060f 80%, transparent) 72%, transparent 100%);
+  pointer-events: none;
+}
+.rel-kicker {
+  font-family: var(--font-tech); font-size: .66rem;
+  letter-spacing: .5em; color: var(--accent); margin-bottom: .45rem;
+}
+.rel-title {
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem); font-weight: 700;
+  letter-spacing: .22em;
+  color: #fbfcff;
+  text-shadow: 0 0 30px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.rel-hint {
+  margin-top: .55rem;
+  font-family: var(--font-tech); font-size: .68rem; letter-spacing: .14em;
+  color: rgba(232,233,242,.4);
+}
+
+/* 分栏看板：横向滚动 */
+.board-wrap {
+  position: fixed; inset: 0; z-index: 1;
+  overflow: auto;
+  padding: clamp(6.5rem, 17vh, 8.5rem) clamp(1.4rem, 4vw, 3rem) 3rem;
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.2) transparent;
+}
+.board-inner { position: relative; width: max-content; min-height: 100%; }
+.board-lines {
+  position: absolute; top: 0; left: 0; z-index: 1;
+  pointer-events: none; overflow: visible;
+}
+.board-cols {
+  position: relative; z-index: 2;
+  display: flex; gap: 1.8rem; align-items: flex-start;
+}
+.board-col { width: 248px; flex-shrink: 0; }
+.col-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: .6rem;
+  padding: 0 .2rem .9rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--c) 40%, transparent);
+  margin-bottom: 1rem;
+}
+.col-head span {
+  font-size: .9rem; font-weight: 800; letter-spacing: .04em; color: var(--c);
+  line-height: 1.35;
+}
+.col-head i {
+  flex: none;
+  font-style: normal; font-family: var(--font-tech);
+  font-size: .66rem; color: rgba(232,233,242,.4);
+}
+.bcard {
+  background: rgba(12,20,34,.92);
+  border: 1px solid color-mix(in srgb, var(--c) 32%, rgba(255,255,255,.08));
+  border-left: 3px solid var(--c);
+  border-radius: 5px;
+  padding: 9px 12px; margin-bottom: 11px;
+  font-size: 12.5px; line-height: 1.55;
+  color: rgba(232,233,242,.78);
+  cursor: pointer;
+  transition: opacity .25s, border-color .2s, box-shadow .2s;
+}
+.bcard strong { color: var(--c); font-size: 14px; font-weight: 800; }
+.bcard:hover { border-color: var(--c); box-shadow: 0 8px 24px -10px rgba(0,0,0,.9); }
+.board-inner.focusing .bcard { opacity: .18; }
+.board-inner.focusing .bcard.hl { opacity: 1; border-color: var(--c); }
+.board-inner.focusing .bcard.is-src { box-shadow: 0 0 22px -3px var(--c); }
+.edge-label {
+  font-family: var(--font-main); font-size: 11px;
+  font-weight: 500; opacity: .85;
+  paint-order: stroke; stroke: rgba(5,6,15,.9); stroke-width: 3px;
+}
+
+@media (max-width: 640px) {
+  .board-wrap { padding-top: 9rem; }
+  .board-col { width: 220px; }
+}

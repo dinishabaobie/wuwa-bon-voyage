@@ -1,4 +1,5 @@
 import './page.css'
+import './subshell.js'   // 自定义光标 + BGM 续播
 
 // 三个模块子页面的数据。内容后续往各自的 body 里填即可。
 const PAGES = {
@@ -26,7 +27,7 @@ document.documentElement.style.setProperty('--accent', data.accent)
 document.title = `${data.cn} | 泰提斯终端`
 
 root.innerHTML = `
-  <a class="back" href="./index.html"><span aria-hidden="true">◂</span> 返回泰提斯终端</a>
+  <a class="back" href="./index.html#home"><span aria-hidden="true">◂</span> 返回泰提斯终端</a>
   <main class="sub">
     <p class="sub-kicker">${data.en}</p>
     <h1 class="sub-title">${data.cn}</h1>

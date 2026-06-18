@@ -221,15 +221,22 @@ function setSoundUI(on) {
   bgmBtn.querySelector('.bgm-label').textContent = on ? '音乐 开' : '音乐 关'
 }
 function soundOn() {
-  bgm.play().then(() => setSoundUI(true)).catch(() => {})
+  bgm.play().then(() => { setSoundUI(true); sessionStorage.setItem('bgmOn', '1') }).catch(() => {})
 }
 function soundOff() {
   autoplayArmed = false
   bgm.pause()
   setSoundUI(false)
+  sessionStorage.setItem('bgmOn', '0')
 }
 
 bgmBtn.addEventListener('click', () => (bgm.paused ? soundOn() : soundOff()))
+
+// 跨页续播：恢复上次进度，并持续把进度写入 sessionStorage，供子页面接续
+const _savedT = parseFloat(sessionStorage.getItem('bgmTime') || '0')
+if (_savedT) bgm.addEventListener('loadedmetadata', () => { try { bgm.currentTime = _savedT } catch {} })
+setInterval(() => { if (!bgm.paused) sessionStorage.setItem('bgmTime', String(bgm.currentTime)) }, 1000)
+window.addEventListener('pagehide', () => sessionStorage.setItem('bgmTime', String(bgm.currentTime)))
 
 // 注意：不在开场任意交互时解锁音频。BGM 只在「进入首页」那一下点击（enterSite）
 // 或手动点音乐开关时才播放——避免开场点击就把音乐放出来，破坏沉浸感。
@@ -237,9 +244,11 @@ bgmBtn.addEventListener('click', () => (bgm.paused ? soundOn() : soundOff()))
 const cursor = document.getElementById('cursor')
 const cursorPos = { x: innerWidth / 2, y: innerHeight / 2 }
 const cursorTarget = { ...cursorPos }
+let cursorSnap = false // 浮层关闭后：下次移动时直接吸附，不缓动滑入
 window.addEventListener('pointermove', (e) => {
   cursorTarget.x = e.clientX
   cursorTarget.y = e.clientY
+  if (cursorSnap) { cursorPos.x = e.clientX; cursorPos.y = e.clientY; cursor.style.opacity = '1'; cursorSnap = false }
 })
 gsap.ticker.add(() => {
   cursorPos.x += (cursorTarget.x - cursorPos.x) * 0.18
@@ -353,10 +362,27 @@ CHAPTERS.forEach((c) => {
   const loader = document.getElementById('loader')
   const boot = loader.querySelector('.boot')
   const codeRoot = loader.querySelector('.boot-code code')
-  const dataRain = new DataRain(loader.querySelector('#data-rain'))
   const heroChars = splitChars(document.querySelector('.hero-title'))
   gsap.set(heroChars, { y: 60 })
   gsap.set(['.hero-eyebrow', '.hero-en', '.hero-lead'], { opacity: 0, y: 20 })
+
+  if (location.hash === '#home') {
+  // ── 从子页面「返回泰提斯终端」：跳过开场动画，直接进入已入场的首屏 ──
+  history.replaceState(null, '', location.pathname)
+  loader.remove()
+  lenis.start()
+  gsap.set(heroChars, { opacity: 1, y: 0 })
+  gsap.set(['.hero-eyebrow', '.hero-en', '.hero-lead'], { opacity: 1, y: 0 })
+  document.querySelectorAll('.hero-module').forEach((m) => m.classList.add('is-online'))
+  gsap.set(['.hero-hint', '#timeline', '#bgm-toggle', '.aimi-tag'], { opacity: 1 })
+  if (sessionStorage.getItem('bgmOn') === '1') {
+    soundOn()
+    const kick = () => { if (bgm.paused) soundOn() }
+    ;['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) =>
+      window.addEventListener(ev, kick, { once: true, passive: true }))
+  }
+  } else {
+  const dataRain = new DataRain(loader.querySelector('#data-rain'))
 
   // 第一段：泰提斯逐行打出身份核验代码，每行代码下面紧跟对应的中文注释
   // 拉丁字母经 Solaris3 渲染为「通用语」字形；// 注释为可读中文，暗一档
@@ -471,6 +497,7 @@ CHAPTERS.forEach((c) => {
       .fromTo('.aimi-tag', { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: .7 }, '<')
   }
   loader.addEventListener('click', enterSite)
+  }
 }
 
 // 首屏标题滚动时上浮淡出，增强电影感
@@ -478,3 +505,50 @@ gsap.to('.hero-title', {
   opacity: 0, y: -80, ease: 'none',
   scrollTrigger: { trigger: '#hero', start: '40% top', end: 'bottom top', scrub: true },
 })
+
+// ============================================================
+// 模块入口以 iframe 浮层方式打开 —— 主页与音乐始终不卸载，切换无缝
+// ============================================================
+{
+  function openOverlay(url) {
+    if (document.querySelector('.page-overlay')) return
+    cursor.style.opacity = '0' // 浮层期间隐藏主页光标（由 iframe 内的光标接管）
+    trail.pause()               // 暂停主页 WebGL 拖痕，把 CPU 让给子页面，避免卡顿
+    lenis.stop()
+    const ov = document.createElement('div')
+    ov.className = 'page-overlay'
+    const frame = document.createElement('iframe')
+    frame.title = '泰提斯终端子页面'
+    frame.src = url
+    ov.appendChild(frame)
+    document.body.appendChild(ov)
+    requestAnimationFrame(() => ov.classList.add('show'))
+  }
+  function closeOverlay(x, y) {
+    const ov = document.querySelector('.page-overlay')
+    if (!ov) return
+    // 立即隐藏浮层，返回瞬间完成；主页同时恢复
+    ov.style.display = 'none'
+    trail.resume()
+    lenis.start()
+    // 光标先隐藏，等下一次移动鼠标时直接吸附到实际位置（不缓动、不依赖回传坐标）
+    cursor.style.opacity = '0'
+    cursorSnap = true
+    void x; void y
+    // iframe 重页面的销毁(GC)推迟到浏览器空闲，避免卡住返回
+    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 300))
+    idle(() => { const f = ov.querySelector('iframe'); if (f) f.src = 'about:blank'; ov.remove() })
+  }
+  document.querySelectorAll('.hero-module').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href')
+      if (!href || href === '#') return
+      e.preventDefault()
+      openOverlay(href)
+    })
+  })
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'close-overlay') closeOverlay(e.data.x, e.data.y)
+  })
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeOverlay() })
+}

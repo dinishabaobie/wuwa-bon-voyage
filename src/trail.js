@@ -104,6 +104,9 @@ export class TrailBackground {
     this.renderer.setAnimationLoop(() => this.tick())
   }
 
+  pause() { this.renderer.setAnimationLoop(null) }
+  resume() { this.renderer.setAnimationLoop(() => this.tick()) }
+
   resize() {
     const w = window.innerWidth
     const h = window.innerHeight
