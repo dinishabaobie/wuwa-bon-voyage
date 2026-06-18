@@ -72,6 +72,13 @@ export function mountObservation(root, onBack) {
         <h1 class="subjects-heading">观测对象</h1>
         <div class="subjects-rule"></div>
         <p class="subjects-desc">以下档案由泰缇斯系统自动记录，内容已通过黑海岸权限核验。</p>
+        <div class="aimi-tag" aria-hidden="true">
+          <div class="aimi-portrait" data-text="UNKNOWN ACCESS"></div>
+          <div class="aimi-meta">
+            <p class="aimi-glitch" data-text="小爱到此一游">小爱到此一游</p>
+            <p class="aimi-sub">⚠ INTRUSION · AIMI</p>
+          </div>
+        </div>
       </section>
       <section class="subjects-wall">
         <div class="wall-toolbar">

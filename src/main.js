@@ -107,6 +107,7 @@ const app = document.getElementById('app')
 
 app.innerHTML = `
   <section id="hero" data-bg="${HERO.bg}" data-accent="${HERO.accent}" data-nav="hero">
+    <div class="hero-figure" aria-hidden="true"></div>
     <div class="hero-stage">
       <header class="hero-head">
         <span class="hero-sign">泰提斯终端<i>TETHYS&nbsp;TERMINAL</i></span>
@@ -127,13 +128,6 @@ app.innerHTML = `
       <footer class="hero-foot">
         <p class="hero-hint">SCROLL</p>
       </footer>
-    </div>
-    <div class="aimi-tag" aria-hidden="true">
-      <div class="aimi-portrait" data-text="UNKNOWN ACCESS"></div>
-      <div class="aimi-meta">
-        <p class="aimi-glitch" data-text="小爱到此一游">小爱到此一游</p>
-        <p class="aimi-sub">⚠ INTRUSION · AIMI</p>
-      </div>
     </div>
   </section>
   ${CHAPTERS.map((c) => `
@@ -379,7 +373,7 @@ CHAPTERS.forEach((c) => {
   gsap.set(heroChars, { opacity: 1, y: 0 })
   gsap.set(['.hero-eyebrow', '.hero-en', '.hero-lead'], { opacity: 1, y: 0 })
   document.querySelectorAll('.hero-module').forEach((m) => m.classList.add('is-online'))
-  gsap.set(['.hero-hint', '#timeline', '#bgm-toggle', '.aimi-tag'], { opacity: 1 })
+  gsap.set(['.hero-hint', '#timeline', '#bgm-toggle', '.hero-figure'], { opacity: 1 })
   if (sessionStorage.getItem('bgmOn') === '1') {
     soundOn()
     const kick = () => { if (bgm.paused) soundOn() }
@@ -488,6 +482,7 @@ CHAPTERS.forEach((c) => {
       .to(warp, { opacity: 0, duration: .6, ease: 'power2.out' }, '<')
       .add(() => { dataRain.destroy(); loader.remove(); warp.remove() })
       .to(heroChars, { opacity: 1, y: 0, duration: .9, stagger: 0.07, ease: 'power3.out' }, '>-0.25')
+      .fromTo('.hero-figure', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1.2, ease: 'power2.out' }, '<')
       .to('.hero-eyebrow', { opacity: 1, y: 0, duration: .7, ease: 'power2.out' }, 0.1)
       .to('.hero-en', { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, '>-0.2')
       .to('.hero-lead', { opacity: 1, y: 0, duration: .9, ease: 'power2.out' }, '<+0.15')
@@ -499,7 +494,6 @@ CHAPTERS.forEach((c) => {
       .fromTo('.hero-hint', { opacity: 0 }, { opacity: 1, duration: .8 }, '<+0.3')
       .to('#timeline', { opacity: 1, duration: .8 }, '<')
       .to('#bgm-toggle', { opacity: 1, duration: .8 }, '<')
-      .fromTo('.aimi-tag', { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: .7 }, '<')
   }
   loader.addEventListener('click', enterSite)
   }
