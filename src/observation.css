@@ -313,11 +313,12 @@
   background:
     radial-gradient(70% 60% at 82% 8%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
     #07060c;
-  overflow: auto;
+  overflow: auto; overscroll-behavior: contain;
   opacity: 0; pointer-events: none;
   transition: opacity .36s ease;
 }
 .prof-overlay.show { opacity: 1; pointer-events: auto; }
+html.prof-lock { overflow: hidden; }
 .prof-back {
   position: fixed; left: clamp(1.4rem, 4vw, 3rem); top: clamp(1.4rem, 4vh, 2.4rem);
   z-index: 5;

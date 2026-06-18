@@ -602,3 +602,4 @@ a, button { cursor: none; }
   transition: opacity .35s ease;
 }
 .view-overlay.show { opacity: 1; }
+.view-overlay.prof-lock { overflow: hidden; }

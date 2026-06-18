@@ -570,10 +570,14 @@ export function mountObservation(root, onBack) {
       </div>`
     profEl.querySelector('.prof-back').addEventListener('click', (e) => { e.preventDefault(); closeProfile() })
     profEl.scrollTop = 0
+    profEl.closest('.view-overlay')?.classList.add('prof-lock')
+    document.documentElement.classList.add('prof-lock')
     requestAnimationFrame(() => profEl.classList.add('show'))
   }
   function closeProfile() {
     profEl.classList.remove('show')
+    profEl.closest('.view-overlay')?.classList.remove('prof-lock')
+    document.documentElement.classList.remove('prof-lock')
     setTimeout(() => { profEl.innerHTML = '' }, 360)
   }
 
