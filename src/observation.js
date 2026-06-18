@@ -548,7 +548,8 @@ export function mountObservation(root, onBack) {
   // ── 个人档案浮层 ──
   const profEl = document.createElement('div')
   profEl.className = 'prof-overlay'
-  root.appendChild(profEl)
+  // 挂到 body：避免被 .view-overlay 的 transform 困住导致 position:fixed 失效
+  document.body.appendChild(profEl)
   function openProfile(code) {
     const d = PROFILES[code]; if (!d) return
     profEl.style.setProperty('--accent', d.accent)
@@ -570,13 +571,13 @@ export function mountObservation(root, onBack) {
       </div>`
     profEl.querySelector('.prof-back').addEventListener('click', (e) => { e.preventDefault(); closeProfile() })
     profEl.scrollTop = 0
-    profEl.closest('.view-overlay')?.classList.add('prof-lock')
-    document.documentElement.classList.add('prof-lock')
+    root.style.overflow = 'hidden'              // 锁滚动容器（SPA 的 .view-overlay / 独立页容器）
+    document.documentElement.classList.add('prof-lock')  // 锁文档（独立页 document 滚动）
     requestAnimationFrame(() => profEl.classList.add('show'))
   }
   function closeProfile() {
     profEl.classList.remove('show')
-    profEl.closest('.view-overlay')?.classList.remove('prof-lock')
+    root.style.overflow = ''
     document.documentElement.classList.remove('prof-lock')
     setTimeout(() => { profEl.innerHTML = '' }, 360)
   }
@@ -607,5 +608,9 @@ export function mountObservation(root, onBack) {
   }, { root, rootMargin: '0px 0px -8% 0px' })
   cards.forEach((c) => io.observe(c))
 
-  return () => io.disconnect()
+  return () => {
+    io.disconnect()
+    document.documentElement.classList.remove('prof-lock')
+    profEl.remove()
+  }
 }

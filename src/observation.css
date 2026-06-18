@@ -309,7 +309,7 @@
 
 /* ---------- 个人观测档案浮层 ---------- */
 .prof-overlay {
-  position: fixed; inset: 0; z-index: 80;
+  position: fixed; inset: 0; z-index: 120;
   background:
     radial-gradient(70% 60% at 82% 8%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
     #07060c;
