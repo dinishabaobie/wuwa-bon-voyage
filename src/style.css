@@ -643,17 +643,15 @@ a, button { cursor: none; }
   opacity: 0;
 }
 
-/* ---------- 模块子页面 iframe 浮层 ---------- */
-.page-overlay {
-  position: fixed; inset: 0; z-index: 120;
+/* ---------- 模块子页面：单页视图容器（SPA） ---------- */
+/* z-index 95：盖住颗粒(90)/时间轴/音乐(60) 等，但低于自定义光标(99)，
+   让主页光标浮在视图之上；transform 使内部 position:fixed 相对本容器定位。 */
+.view-overlay {
+  position: fixed; inset: 0; z-index: 95;
   background: #05060f;
+  overflow: auto;
+  transform: translateZ(0);
   opacity: 0;
-  transition: opacity .42s ease;
+  transition: opacity .35s ease;
 }
-.page-overlay.show { opacity: 1; }
-.page-overlay iframe {
-  width: 100%; height: 100%; border: 0; display: block;
-  transform: scale(1.015);
-  transition: transform .5s ease;
-}
-.page-overlay.show iframe { transform: scale(1); }
+.view-overlay.show { opacity: 1; }

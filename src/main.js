@@ -191,7 +191,12 @@ timeline.innerHTML = navSections
 // ============================================================
 // Lenis 丝滑滚动 + ScrollTrigger 同步
 // ============================================================
-const lenis = new Lenis({ duration: 1.35, smoothWheel: true })
+const lenis = new Lenis({
+  duration: 1.35,
+  smoothWheel: true,
+  // 浮层视图内的滚动交给浏览器原生处理，避免 Lenis 吃掉竖向滚轮导致视图滚不动
+  prevent: (node) => !!(node && node.closest && node.closest('.view-overlay')),
+})
 lenis.on('scroll', ScrollTrigger.update)
 gsap.ticker.add((time) => lenis.raf(time * 1000))
 // 保留默认卡顿平滑：避免加载时主线程卡顿把时间差一次性灌给开场时间线、导致打字瞬间跑完
@@ -244,20 +249,20 @@ window.addEventListener('pagehide', () => sessionStorage.setItem('bgmTime', Stri
 const cursor = document.getElementById('cursor')
 const cursorPos = { x: innerWidth / 2, y: innerHeight / 2 }
 const cursorTarget = { ...cursorPos }
-let cursorSnap = false // 浮层关闭后：下次移动时直接吸附，不缓动滑入
 window.addEventListener('pointermove', (e) => {
   cursorTarget.x = e.clientX
   cursorTarget.y = e.clientY
-  if (cursorSnap) { cursorPos.x = e.clientX; cursorPos.y = e.clientY; cursor.style.opacity = '1'; cursorSnap = false }
 })
 gsap.ticker.add(() => {
   cursorPos.x += (cursorTarget.x - cursorPos.x) * 0.18
   cursorPos.y += (cursorTarget.y - cursorPos.y) * 0.18
   cursor.style.translate = `${cursorPos.x}px ${cursorPos.y}px`
 })
-document.querySelectorAll('button, a').forEach((el) => {
-  el.addEventListener('pointerenter', () => cursor.classList.add('is-active'))
-  el.addEventListener('pointerleave', () => cursor.classList.remove('is-active'))
+// 悬停交互元素放大（事件委托，兼容动态渲染的视图元素）
+const CURSOR_HOVER = 'a, button, .bcard, .subject-card, .wall-chip, .hero-module, .tl-item'
+document.addEventListener('pointerover', (e) => { if (e.target.closest(CURSOR_HOVER)) cursor.classList.add('is-active') })
+document.addEventListener('pointerout', (e) => {
+  if (e.target.closest(CURSOR_HOVER) && !e.relatedTarget?.closest(CURSOR_HOVER)) cursor.classList.remove('is-active')
 })
 
 // ============================================================
@@ -507,48 +512,46 @@ gsap.to('.hero-title', {
 })
 
 // ============================================================
-// 模块入口以 iframe 浮层方式打开 —— 主页与音乐始终不卸载，切换无缝
+// 模块入口 = 单页视图(SPA)：渲染进同文档的容器，主页/音乐/光标全程不卸载
 // ============================================================
 {
-  function openOverlay(url) {
-    if (document.querySelector('.page-overlay')) return
-    cursor.style.opacity = '0' // 浮层期间隐藏主页光标（由 iframe 内的光标接管）
-    trail.pause()               // 暂停主页 WebGL 拖痕，把 CPU 让给子页面，避免卡顿
-    lenis.stop()
-    const ov = document.createElement('div')
-    ov.className = 'page-overlay'
-    const frame = document.createElement('iframe')
-    frame.title = '泰提斯终端子页面'
-    frame.src = url
-    ov.appendChild(frame)
-    document.body.appendChild(ov)
-    requestAnimationFrame(() => ov.classList.add('show'))
+  const VIEWS = {
+    'observation.html': { load: () => import('./observation.js'), fn: 'mountObservation', accent: '#8b9aff' },
+    'tide.html':        { load: () => import('./page.js'),        fn: 'mountPlaceholder', accent: '#4ef0e0', arg: 'tide' },
+    'relation.html':    { load: () => import('./relation.js'),    fn: 'mountRelation',    accent: '#ffb066' },
   }
-  function closeOverlay(x, y) {
-    const ov = document.querySelector('.page-overlay')
+  let viewCleanup = null
+  let busy = false
+
+  async function openView(key) {
+    if (busy || document.querySelector('.view-overlay')) return
+    const v = VIEWS[key]; if (!v) return
+    busy = true
+    trail.pause(); lenis.stop()
+    const ov = document.createElement('div')
+    ov.className = 'view-overlay'
+    ov.style.setProperty('--accent', v.accent)
+    document.body.appendChild(ov)
+    const mod = await v.load()
+    viewCleanup = v.arg ? mod[v.fn](ov, v.arg, closeView) : mod[v.fn](ov, closeView)
+    requestAnimationFrame(() => ov.classList.add('show'))
+    busy = false
+  }
+  function closeView() {
+    const ov = document.querySelector('.view-overlay')
     if (!ov) return
-    // 立即隐藏浮层，返回瞬间完成；主页同时恢复
-    ov.style.display = 'none'
-    trail.resume()
-    lenis.start()
-    // 光标先隐藏，等下一次移动鼠标时直接吸附到实际位置（不缓动、不依赖回传坐标）
-    cursor.style.opacity = '0'
-    cursorSnap = true
-    void x; void y
-    // iframe 重页面的销毁(GC)推迟到浏览器空闲，避免卡住返回
-    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 300))
-    idle(() => { const f = ov.querySelector('iframe'); if (f) f.src = 'about:blank'; ov.remove() })
+    ov.classList.remove('show')
+    if (viewCleanup) { try { viewCleanup() } catch {} viewCleanup = null }
+    trail.resume(); lenis.start()
+    setTimeout(() => ov.remove(), 320)
   }
   document.querySelectorAll('.hero-module').forEach((a) => {
     a.addEventListener('click', (e) => {
-      const href = a.getAttribute('href')
-      if (!href || href === '#') return
+      const key = (a.getAttribute('href') || '').replace(/^\.\//, '')
+      if (!VIEWS[key]) return
       e.preventDefault()
-      openOverlay(href)
+      openView(key)
     })
   })
-  window.addEventListener('message', (e) => {
-    if (e.data && e.data.type === 'close-overlay') closeOverlay(e.data.x, e.data.y)
-  })
-  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeOverlay() })
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeView() })
 }
