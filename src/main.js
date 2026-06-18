@@ -517,7 +517,7 @@ gsap.to('.hero-title', {
 {
   const VIEWS = {
     'observation.html': { load: () => import('./observation.js'), fn: 'mountObservation', accent: '#8b9aff' },
-    'tide.html':        { load: () => import('./page.js'),        fn: 'mountPlaceholder', accent: '#4ef0e0', arg: 'tide' },
+    'tide.html':        { load: () => import('./tide.js'),        fn: 'mountTide',        accent: '#3a9fe8' },
     'relation.html':    { load: () => import('./relation.js'),    fn: 'mountRelation',    accent: '#ffb066' },
   }
   let viewCleanup = null
