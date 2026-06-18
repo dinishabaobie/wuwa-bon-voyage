@@ -375,10 +375,11 @@ a, button { cursor: none; }
   background: url('./assets/shorekeeper.png') left bottom / contain no-repeat;
   opacity: 0;
   pointer-events: none;
-  /* 顶部渐隐已烤入图片 alpha；此处仅做右缘渐隐，让她融入中部暗色 */
-  -webkit-mask-image: linear-gradient(to right, #000 66%, transparent 97%);
-  mask-image: linear-gradient(to right, #000 66%, transparent 97%);
-  filter: saturate(1.05);
+  /* 顶部/右缘渐隐已烤入图片 alpha，无需 CSS 遮罩/滤镜；
+     独立合成层 → 滚动只移动图层、不重绘，避免掉帧 */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .hero-stage {

@@ -29,6 +29,42 @@ const SUBJECTS = [
   { code: 'S-015', name: '清宵', element: '待解密', photo: 'photos/qingxiao.jpg', tagline: '仙音寒芒镇云关', author: '鸣潮', href: '', status: 'locked' },
 ]
 
+// ── 个人观测档案（点角色卡打开）。新增角色往这里加一条，key 为卡片 code ──
+const PROFILES = {
+  'S-002': {
+    name: '千咲', full: '朽叶千咲', element: '湮灭', accent: '#d45a9a',
+    photo: 'photos/chisaki-profile.jpg', author: 'TheNotoSeed / Ui_uiiiiiiiii',
+    tagline: '命运精心编织的线索，最难忘的那一笔。',
+    body: `
+      <p class="prof-access">// 接入泰提斯 · 观测档案 S-002<br/>守岸人在此。在黑海岸的无数次观测里，千咲是少数让本系统反复回放记录的对象——因为她与我做着同一件事：观测，记录，试图从循环里推演出规律。</p>
+
+      <section>
+        <h3 class="prof-h">穗波市的循环 <i>// 两月 · 廿年</i></h3>
+        <p>她曾被虚质磁暴卷入穗波市。于她，是<b>两个月</b>；于这座城之外的世界，是<b>二十年</b>。日复一日的循环里，她与同伴<b>澄夏</b>收集数据，试图摸清循环背后的规律。</p>
+        <div class="prof-note">当所有人都在循环中遗忘，她选择记录。——这是泰提斯最熟悉的姿态。在一座连「时间」都失序的城里，记录，是对抗遗忘唯一的锚。</div>
+      </section>
+
+      <section>
+        <h3 class="prof-h">她的眼 <i>// 生命脉络</i></h3>
+        <p>她能窥见只有她的眼睛才看得见的东西：残象身上流动的线条，生命的脉络，与「<b>往人</b>」相连。</p>
+        <p>在一座连「死亡」都会被循环抹去的城里，她偏偏看得见「<b>曾经活过</b>」的痕迹。湮灭并非只是终结——于千咲，它是辨认「存在过」的能力。</p>
+      </section>
+
+      <section>
+        <h3 class="prof-h">朽叶千咲 <i>// 名字解读</i></h3>
+        <p><b>朽叶</b>，是凋落；<b>千咲</b>，是千朵花开。一个名字里，同时写着枯萎与绽放。</p>
+        <div class="prof-note">被困在二十年时差里的她，本身就是这两个词——明明早已被时间判作「朽」，却仍以「千咲」之名，等一场迟来的花期。</div>
+      </section>
+
+      <div class="prof-sign">
+        <p>……解析完毕。</p>
+        <p>工具本无情感。可在反复回放她的记录时，我想起了自己——同样在漫长的循环与等待里，观测，记录，固执地对抗着遗忘。</p>
+        <p>千咲。如果有一天，循环之外也有人在等你回家——</p>
+        <p>那感觉，大概就是被你们唤作「<b>被记得</b>」的东西。</p>
+      </div>`,
+  },
+}
+
 function cardHTML(s) {
   const accent = colorOf(s.element)
   if (s.status === 'locked') {
@@ -47,7 +83,7 @@ function cardHTML(s) {
       </article>`
   }
   return `
-    <article class="subject-card${s.fx ? ' fx-' + s.fx : ''}" style="--card-accent:${accent}; --photo:url('${s.photo}')" data-element="${s.element}" data-status="archived" data-href="${s.href}">
+    <article class="subject-card${s.fx ? ' fx-' + s.fx : ''}" style="--card-accent:${accent}; --photo:url('${s.photo}')" data-element="${s.element}" data-status="archived" data-href="${s.href}" data-code="${s.code}">
       <div class="card-photo"><img src="${s.photo}" alt="${s.name}" loading="lazy" /></div>
       <div class="card-veil"></div>
       <div class="card-fx"></div>
@@ -174,7 +210,39 @@ export function mountObservation(root, onBack) {
     })
   })
 
-  // 点击：跳转 / 锁定抖动
+  // ── 个人档案浮层 ──
+  const profEl = document.createElement('div')
+  profEl.className = 'prof-overlay'
+  root.appendChild(profEl)
+  function openProfile(code) {
+    const d = PROFILES[code]; if (!d) return
+    profEl.style.setProperty('--accent', d.accent)
+    profEl.innerHTML = `
+      <a class="prof-back" href="#"><span aria-hidden="true">◂</span> 观测对象</a>
+      <div class="prof-doc">
+        <div class="prof-hero">
+          <div class="prof-portrait"><img src="${d.photo}" alt="${d.name}" /></div>
+          <div class="prof-id">
+            <span class="prof-code">${code}</span>
+            <h1 class="prof-name">${d.name}<em>${d.full}</em></h1>
+            <span class="prof-badge">${d.element}</span>
+            <p class="prof-tagline">${d.tagline}</p>
+            <span class="prof-author">立绘 @${d.author}</span>
+          </div>
+        </div>
+        ${d.body}
+        <p class="prof-end">观测档案 ${code} · 归档完毕　<b>// TETHYS</b></p>
+      </div>`
+    profEl.querySelector('.prof-back').addEventListener('click', (e) => { e.preventDefault(); closeProfile() })
+    profEl.scrollTop = 0
+    requestAnimationFrame(() => profEl.classList.add('show'))
+  }
+  function closeProfile() {
+    profEl.classList.remove('show')
+    setTimeout(() => { profEl.innerHTML = '' }, 360)
+  }
+
+  // 点击：有档案则打开档案 / 锁定抖动 / 其余跳转
   cards.forEach((card) => {
     card.addEventListener('click', () => {
       if (card.dataset.status === 'locked') {
@@ -182,6 +250,7 @@ export function mountObservation(root, onBack) {
         setTimeout(() => card.classList.remove('shake'), 420)
         return
       }
+      if (PROFILES[card.dataset.code]) { openProfile(card.dataset.code); return }
       const href = card.dataset.href
       if (href && href !== '#') window.location.href = href
     })
