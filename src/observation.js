@@ -405,7 +405,7 @@ function cardHTML(s) {
   if (s.status === 'locked') {
     const hasImg = !!s.photo
     return `
-      <article class="subject-card is-locked${hasImg ? ' has-img' : ''}" style="--card-accent:${accent}" data-element="${s.element}" data-status="locked">
+      <article class="subject-card is-locked${hasImg ? ' has-img' : ''}" style="--card-accent:${accent}" data-element="${s.element}" data-status="locked" role="button" tabindex="0" aria-label="${s.name}，待解密">
         ${hasImg ? `<div class="card-photo"><img src="${s.photo}" alt="" loading="lazy" /></div><div class="card-veil"></div>` : ''}
         <span class="card-code">${s.code}</span>
         <div class="card-lock">待解密</div>
@@ -418,7 +418,7 @@ function cardHTML(s) {
       </article>`
   }
   return `
-    <article class="subject-card${s.fx ? ' fx-' + s.fx : ''}" style="--card-accent:${accent}; --photo:url('${s.photo}')" data-element="${s.element}" data-status="archived" data-href="${s.href}" data-code="${s.code}">
+    <article class="subject-card${s.fx ? ' fx-' + s.fx : ''}" style="--card-accent:${accent}; --photo:url('${s.photo}')" data-element="${s.element}" data-status="archived" data-href="${s.href}" data-code="${s.code}" role="button" tabindex="0" aria-label="打开${s.name}档案">
       <div class="card-photo"><img src="${s.photo}" alt="${s.name}" loading="lazy" /></div>
       <div class="card-veil"></div>
       <div class="card-fx"></div>
@@ -515,7 +515,7 @@ export function mountObservation(root, onBack) {
   const filterBar = root.querySelector('.wall-filters')
   filterBar.innerHTML = filters.map((el, i) => {
     const accent = el === '全部' ? '' : ` style="--chip-accent:${colorOf(el)}"`
-    return `<button class="wall-chip${i === 0 ? ' is-active' : ''}" data-filter="${el}"${accent} role="tab">${el}</button>`
+    return `<button class="wall-chip${i === 0 ? ' is-active' : ''}" data-filter="${el}"${accent} role="tab" aria-selected="${i === 0}">${el}</button>`
   }).join('')
   const chips = Array.from(filterBar.querySelectorAll('.wall-chip'))
   const wall = root.querySelector('.subjects-wall')
@@ -539,8 +539,9 @@ export function mountObservation(root, onBack) {
   }
   chips.forEach((chip) => {
     chip.addEventListener('click', () => {
-      chips.forEach((c) => c.classList.remove('is-active'))
+      chips.forEach((c) => { c.classList.remove('is-active'); c.setAttribute('aria-selected', 'false') })
       chip.classList.add('is-active')
+      chip.setAttribute('aria-selected', 'true')
       applyFilter(chip.dataset.filter)
     })
   })
@@ -548,10 +549,30 @@ export function mountObservation(root, onBack) {
   // ── 个人档案浮层 ──
   const profEl = document.createElement('div')
   profEl.className = 'prof-overlay'
+  profEl.setAttribute('role', 'dialog')
+  profEl.setAttribute('aria-modal', 'true')
+  profEl.setAttribute('aria-hidden', 'true')
+  profEl.setAttribute('aria-labelledby', 'profile-title')
   // 挂到 body：避免被 .view-overlay 的 transform 困住导致 position:fixed 失效
   document.body.appendChild(profEl)
-  function openProfile(code) {
+  const inertState = new Map()
+  let profileTrigger = null
+  let clearProfileTimer = null
+  function lockBackground() {
+    Array.from(document.body.children).forEach((child) => {
+      if (child === profEl) return
+      inertState.set(child, child.inert)
+      child.inert = true
+    })
+  }
+  function unlockBackground() {
+    inertState.forEach((wasInert, child) => { child.inert = wasInert })
+    inertState.clear()
+  }
+  function openProfile(code, trigger) {
     const d = PROFILES[code]; if (!d) return
+    if (clearProfileTimer) clearTimeout(clearProfileTimer)
+    profileTrigger = trigger || null
     profEl.style.setProperty('--accent', d.accent)
     profEl.innerHTML = `
       <a class="prof-back" href="#"><span aria-hidden="true">◂</span> 观测对象</a>
@@ -560,7 +581,7 @@ export function mountObservation(root, onBack) {
           <div class="prof-portrait"><img src="${d.photo}" alt="${d.name}" /></div>
           <div class="prof-id">
             <span class="prof-code">${code}</span>
-            <h1 class="prof-name">${d.name}<em>${d.full}</em></h1>
+            <h1 class="prof-name" id="profile-title">${d.name}<em>${d.full}</em></h1>
             <span class="prof-badge">${d.element}</span>
             <p class="prof-tagline">${d.tagline}</p>
             <span class="prof-author">立绘 @${d.author}</span>
@@ -573,26 +594,60 @@ export function mountObservation(root, onBack) {
     profEl.scrollTop = 0
     root.style.overflow = 'hidden'              // 锁滚动容器（SPA 的 .view-overlay / 独立页容器）
     document.documentElement.classList.add('prof-lock')  // 锁文档（独立页 document 滚动）
-    requestAnimationFrame(() => profEl.classList.add('show'))
+    lockBackground()
+    profEl.setAttribute('aria-hidden', 'false')
+    requestAnimationFrame(() => {
+      profEl.classList.add('show')
+      profEl.querySelector('.prof-back')?.focus()
+    })
   }
   function closeProfile() {
+    if (!profEl.classList.contains('show')) return
     profEl.classList.remove('show')
+    profEl.setAttribute('aria-hidden', 'true')
     root.style.overflow = ''
     document.documentElement.classList.remove('prof-lock')
-    setTimeout(() => { profEl.innerHTML = '' }, 360)
+    unlockBackground()
+    const returnTarget = profileTrigger
+    profileTrigger = null
+    returnTarget?.focus()
+    clearProfileTimer = setTimeout(() => { profEl.innerHTML = '' }, 360)
   }
+  function onProfileKeydown(e) {
+    if (!profEl.classList.contains('show')) return
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      e.stopPropagation()
+      closeProfile()
+      return
+    }
+    if (e.key !== 'Tab') return
+    const focusable = Array.from(profEl.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+    if (!focusable.length) { e.preventDefault(); profEl.focus(); return }
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+  }
+  window.addEventListener('keydown', onProfileKeydown, true)
 
   // 点击：有档案则打开档案 / 锁定抖动 / 其余跳转
-  cards.forEach((card) => {
-    card.addEventListener('click', () => {
+  function activateCard(card) {
       if (card.dataset.status === 'locked') {
         card.classList.add('shake')
         setTimeout(() => card.classList.remove('shake'), 420)
         return
       }
-      if (PROFILES[card.dataset.code]) { openProfile(card.dataset.code); return }
+      if (PROFILES[card.dataset.code]) { openProfile(card.dataset.code, card); return }
       const href = card.dataset.href
       if (href && href !== '#') window.location.href = href
+  }
+  cards.forEach((card) => {
+    card.addEventListener('click', () => activateCard(card))
+    card.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return
+      e.preventDefault()
+      activateCard(card)
     })
   })
 
@@ -610,6 +665,9 @@ export function mountObservation(root, onBack) {
 
   return () => {
     io.disconnect()
+    window.removeEventListener('keydown', onProfileKeydown, true)
+    if (clearProfileTimer) clearTimeout(clearProfileTimer)
+    unlockBackground()
     document.documentElement.classList.remove('prof-lock')
     profEl.remove()
   }

@@ -2,7 +2,6 @@ import './style.css'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
-import { TrailBackground } from './trail.js'
 import { DataRain } from './datarain.js'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -188,8 +187,8 @@ timeline.innerHTML = navSections
 const lenis = new Lenis({
   duration: 1.35,
   smoothWheel: true,
-  // 浮层视图内的滚动交给浏览器原生处理，避免 Lenis 吃掉竖向滚轮导致视图滚不动
-  prevent: (node) => !!(node && node.closest && node.closest('.view-overlay')),
+  // 浮层视图/档案弹层内的滚动交给浏览器原生处理，避免 Lenis 吃掉竖向滚轮导致滚不动
+  prevent: (node) => !!(node && node.closest && node.closest('.view-overlay, .prof-overlay')),
 })
 lenis.on('scroll', ScrollTrigger.update)
 gsap.ticker.add((time) => lenis.raf(time * 1000))
@@ -206,10 +205,23 @@ timeline.querySelectorAll('.tl-item').forEach((btn) => {
 // ============================================================
 // Three.js 光标拖痕 / 音频 / 自定义光标
 // ============================================================
-const trail = new TrailBackground(document.getElementById('trail-canvas'))
+let trail = null
+let trailPromise = null
+let trailTint = HERO.accent
+function ensureTrail() {
+  if (!trailPromise) {
+    trailPromise = import('./trail.js').then(({ TrailBackground }) => {
+      trail = new TrailBackground(document.getElementById('trail-canvas'))
+      trail.setTint(trailTint)
+      return trail
+    })
+  }
+  return trailPromise
+}
 
 // BGM：「远航星的告别」，打开网站即自动播放；被浏览器拦截时在首次交互瞬间开播
 const bgm = new Audio('bgm.mp3')
+bgm.preload = 'metadata'
 bgm.loop = true
 bgm.volume = 0.7
 const bgmBtn = document.getElementById('bgm-toggle')
@@ -279,7 +291,8 @@ navSections.forEach((section) => {
         ease: 'power2.out',
         overwrite: 'auto',
       })
-      trail.setTint(accent)
+      trailTint = accent
+      trail?.setTint(accent)
       timeline.querySelectorAll('.tl-item').forEach((b) =>
         b.classList.toggle('active', b.dataset.target === section.id)
       )
@@ -449,6 +462,10 @@ CHAPTERS.forEach((c) => {
     if (!booted || entered) return
     entered = true
     soundOn()
+    const trailReady = ensureTrail().catch((error) => {
+      console.error('光标拖痕加载失败', error)
+      return null
+    })
     // 克隆一朵花精确叠在原花上做放大转场；原花与整个 loader 保持不动，
     // 直到最后一起平滑淡出——避免抽离原花导致确认区布局跳动、花骤然消失。
     const star = loader.querySelector('.loader-star')
@@ -474,8 +491,11 @@ CHAPTERS.forEach((c) => {
         // 开场在屏幕中央撒一串星，宣告拖痕效果的存在
         const cx = innerWidth / 2
         const cy = innerHeight / 2
-        ;[0, 120, 240, 360, 480].forEach((delay, i) => {
-          setTimeout(() => trail.burst(cx + (i - 2) * 130, cy + Math.sin(i * 2.1) * 60, 150 - Math.abs(i - 2) * 30), delay)
+        trailReady.then((currentTrail) => {
+          if (!currentTrail) return
+          ;[0, 120, 240, 360, 480].forEach((delay, i) => {
+            setTimeout(() => currentTrail.burst(cx + (i - 2) * 130, cy + Math.sin(i * 2.1) * 60, 150 - Math.abs(i - 2) * 30), delay)
+          })
         })
       }, '>-0.35')
       .to(loader, { opacity: 0, duration: .6, ease: 'power2.out' }, '<')
@@ -515,36 +535,57 @@ gsap.to('.hero-title', {
     'relation.html':    { load: () => import('./relation.js'),    fn: 'mountRelation',    accent: '#ffb066' },
   }
   let viewCleanup = null
+  let viewTrigger = null
   let busy = false
 
-  async function openView(key) {
+  async function openView(key, trigger) {
     if (busy || document.querySelector('.view-overlay')) return
     const v = VIEWS[key]; if (!v) return
     busy = true
-    trail.pause(); lenis.stop()
+    viewTrigger = trigger || null
+    trail?.pause(); lenis.stop()
     const ov = document.createElement('div')
     ov.className = 'view-overlay'
+    ov.setAttribute('role', 'dialog')
+    ov.setAttribute('aria-modal', 'true')
     ov.style.setProperty('--accent', v.accent)
     document.body.appendChild(ov)
-    const mod = await v.load()
-    viewCleanup = v.arg ? mod[v.fn](ov, v.arg, closeView) : mod[v.fn](ov, closeView)
-    requestAnimationFrame(() => ov.classList.add('show'))
-    busy = false
+    try {
+      const mod = await v.load()
+      viewCleanup = v.arg ? mod[v.fn](ov, v.arg, closeView) : mod[v.fn](ov, closeView)
+      requestAnimationFrame(() => {
+        ov.classList.add('show')
+        ov.querySelector('.back')?.focus()
+      })
+    } catch (error) {
+      console.error(`模块加载失败: ${key}`, error)
+      ov.remove()
+      trail?.resume(); lenis.start()
+      viewTrigger?.focus()
+      viewTrigger = null
+    } finally {
+      busy = false
+    }
   }
   function closeView() {
     const ov = document.querySelector('.view-overlay')
     if (!ov) return
+    const returnTarget = viewTrigger
+    viewTrigger = null
     ov.classList.remove('show')
     if (viewCleanup) { try { viewCleanup() } catch {} viewCleanup = null }
-    trail.resume(); lenis.start()
-    setTimeout(() => ov.remove(), 320)
+    trail?.resume(); lenis.start()
+    setTimeout(() => {
+      ov.remove()
+      returnTarget?.focus()
+    }, 320)
   }
   document.querySelectorAll('.hero-module').forEach((a) => {
     a.addEventListener('click', (e) => {
       const key = (a.getAttribute('href') || '').replace(/^\.\//, '')
       if (!VIEWS[key]) return
       e.preventDefault()
-      openView(key)
+      openView(key, a)
     })
   })
   window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeView() })

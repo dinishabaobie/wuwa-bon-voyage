@@ -154,6 +154,7 @@ a, button { cursor: none; }
 }
 .loader-enter {
   flex: none;
+  padding: 0; border: 0; background: none;
   font-family: var(--font-tech);
   font-size: .78rem; letter-spacing: .24em;
   color: rgba(232,233,242,.7);
@@ -225,7 +226,7 @@ a, button { cursor: none; }
 
 /* ---------- BGM 开关 ---------- */
 #bgm-toggle {
-  position: fixed; right: 2.4rem; top: 2.2rem; z-index: 60;
+  position: fixed; right: 2.4rem; bottom: 2.2rem; z-index: 60;
   display: flex; align-items: center; gap: .8rem;
   background: none; border: none; color: var(--ink);
   opacity: 0;
@@ -241,6 +242,13 @@ a, button { cursor: none; }
 #bgm-toggle.playing .bgm-bars i:nth-child(4) { animation-delay: .65s; }
 @keyframes bars { from { height: 3px; } to { height: 14px; } }
 .bgm-label { font-family: var(--font-main); font-size: 1.05rem; letter-spacing: .3em; opacity: .85; }
+
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
 
 /* ---------- 章节 ---------- */
 .chapter {
@@ -603,3 +611,12 @@ a, button { cursor: none; }
 }
 .view-overlay.show { opacity: 1; }
 .view-overlay.prof-lock { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

@@ -73,6 +73,7 @@
 }
 .bcard strong { color: var(--c); font-size: 14px; font-weight: 800; }
 .bcard:hover { border-color: var(--c); box-shadow: 0 8px 24px -10px rgba(0,0,0,.9); }
+.bcard:focus-visible { outline: 2px solid var(--c); outline-offset: 3px; border-color: var(--c); }
 .board-inner.focusing .bcard { opacity: .18; }
 .board-inner.focusing .bcard.hl { opacity: 1; border-color: var(--c); }
 .board-inner.focusing .bcard.is-src { box-shadow: 0 0 22px -3px var(--c); }

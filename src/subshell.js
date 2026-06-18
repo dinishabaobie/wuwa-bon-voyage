@@ -29,6 +29,7 @@ document.addEventListener('pointerout', (e) => {
 
 // ── BGM 跨页续播 ─────────────────────────────────────────────────
 const bgm = new Audio('bgm.mp3')
+bgm.preload = 'metadata'
 bgm.loop = true
 bgm.volume = 0.7
 const savedT = parseFloat(sessionStorage.getItem('bgmTime') || '0')

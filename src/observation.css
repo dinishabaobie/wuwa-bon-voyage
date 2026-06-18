@@ -95,6 +95,11 @@
   cursor: pointer;
   transition: border-color .4s, box-shadow .4s, transform .4s;
 }
+.subject-card:focus-visible {
+  outline: 2px solid var(--card-accent);
+  outline-offset: 4px;
+  border-color: var(--card-accent);
+}
 .subject-card:not(.is-locked):hover {
   border-color: var(--card-accent);
   box-shadow: 0 18px 50px -18px rgba(0,0,0,.8), 0 0 0 1px var(--card-accent);
@@ -318,6 +323,8 @@
   transition: opacity .36s ease;
 }
 .prof-overlay.show { opacity: 1; pointer-events: auto; }
+.prof-overlay:focus-visible,
+.prof-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 html.prof-lock { overflow: hidden; }
 .prof-back {
   position: fixed; left: clamp(1.4rem, 4vw, 3rem); top: clamp(1.4rem, 4vh, 2.4rem);

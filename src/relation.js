@@ -84,6 +84,10 @@ export function mountRelation(root, onBack) {
       card.className = 'bcard'
       card.style.setProperty('--c', it.color)
       card.dataset.id = it.id
+      card.setAttribute('role', 'button')
+      card.setAttribute('tabindex', '0')
+      card.setAttribute('aria-pressed', 'false')
+      card.setAttribute('aria-label', it.text.replace(/\*\*/g, '').replace(/\n/g, ' '))
       card.innerHTML = mdHTML(it.text)
       col.appendChild(card)
       cardById[it.id] = card
@@ -159,13 +163,25 @@ export function mountRelation(root, onBack) {
   Object.entries(cardById).forEach(([id, card]) => {
     card.addEventListener('pointerenter', () => { if (!pinned) setFocus(id) })
     card.addEventListener('pointerleave', () => { if (!pinned) clearFocusUI() })
-    card.addEventListener('click', (e) => {
-      e.stopPropagation()
+    const activate = () => {
       if (pinned === id) { pinned = null; clearFocusUI() }
       else { pinned = id; setFocus(id) }
+      Object.entries(cardById).forEach(([cardId, item]) => item.setAttribute('aria-pressed', String(cardId === pinned)))
+    }
+    card.addEventListener('click', (e) => { e.stopPropagation(); activate() })
+    card.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return
+      e.preventDefault()
+      e.stopPropagation()
+      activate()
     })
   })
-  binner.addEventListener('click', () => { if (pinned) { pinned = null; clearFocusUI() } })
+  binner.addEventListener('click', () => {
+    if (!pinned) return
+    pinned = null
+    clearFocusUI()
+    Object.values(cardById).forEach((card) => card.setAttribute('aria-pressed', 'false'))
+  })
 
   return () => window.removeEventListener('resize', sizeLines)
 }

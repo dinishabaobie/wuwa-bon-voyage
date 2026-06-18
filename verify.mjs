@@ -1,45 +1,124 @@
+import assert from 'node:assert/strict'
+import { spawn } from 'node:child_process'
 import { chromium } from 'playwright-core'
-import { mkdirSync } from 'node:fs'
 
-mkdirSync('shots', { recursive: true })
+const HOST = '127.0.0.1'
+const PORT = 5173
+const BASE_URL = `http://${HOST}:${PORT}`
+const consoleErrors = []
 
-const browser = await chromium.launch({
-  executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-  headless: true,
-})
-const page = await browser.newPage({ viewport: { width: 1600, height: 900 } })
-const errors = []
-page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
-page.on('pageerror', (e) => errors.push(String(e)))
+const server = spawn(process.execPath, [
+  'node_modules/vite/bin/vite.js',
+  '--host', HOST,
+  '--port', String(PORT),
+  '--strictPort',
+], { stdio: ['ignore', 'pipe', 'pipe'] })
 
-await page.goto('http://localhost:5173')
-await page.waitForTimeout(2200)
-await page.screenshot({ path: 'shots/0-loader.png' })
+let serverOutput = ''
+server.stdout.on('data', (chunk) => { serverOutput += chunk })
+server.stderr.on('data', (chunk) => { serverOutput += chunk })
 
-await page.waitForTimeout(4200) // 等加载层退场、首屏入场
-
-// 画一道光标拖痕
-for (let i = 0; i <= 24; i++) {
-  await page.mouse.move(260 + i * 46, 460 + Math.sin(i / 2.6) * 130, { steps: 2 })
-  await page.waitForTimeout(16)
-}
-await page.waitForTimeout(250)
-await page.screenshot({ path: 'shots/1-hero.png' })
-
-const stops = [
-  ['v30', '2-ver30'], ['v31', '3-ver31'], ['v32', '4-ver32'],
-  ['v33', '5-ver33'], ['v34', '6-ver34'], ['ending', '7-ending-start'],
-]
-for (const [id, name] of stops) {
-  await page.click(`.tl-item[data-target="${id}"]`)
-  await page.waitForTimeout(3000)
-  await page.screenshot({ path: `shots/${name}.png` })
+async function waitForServer() {
+  const deadline = Date.now() + 15_000
+  while (Date.now() < deadline) {
+    if (server.exitCode !== null) throw new Error(`Vite exited early:\n${serverOutput}`)
+    try {
+      const response = await fetch(BASE_URL)
+      if (response.ok) return
+    } catch {}
+    await new Promise((resolve) => setTimeout(resolve, 150))
+  }
+  throw new Error(`Vite did not become ready:\n${serverOutput}`)
 }
 
-// 在结尾固定段内继续滚动，看告别语逐字浮现
-for (let i = 0; i < 10; i++) { await page.mouse.wheel(0, 320); await page.waitForTimeout(120) }
-await page.waitForTimeout(2200)
-await page.screenshot({ path: 'shots/8-ending-text.png' })
+async function centerHits(page) {
+  return page.locator('.hero-module').evaluateAll((links) => links.map((link) => {
+    const rect = link.getBoundingClientRect()
+    const top = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)
+    return top?.closest('a,button')?.textContent?.trim() || ''
+  }))
+}
 
-console.log(errors.length ? 'CONSOLE ERRORS:\n' + errors.join('\n') : 'NO CONSOLE ERRORS')
-await browser.close()
+async function closeModule(page) {
+  await page.locator('.view-overlay .back').click()
+  await page.locator('.view-overlay').waitFor({ state: 'detached' })
+}
+
+let browser
+try {
+  await waitForServer()
+  browser = await chromium.launch({
+    ...(process.env.CHROME_PATH
+      ? { executablePath: process.env.CHROME_PATH }
+      : { channel: 'chrome' }),
+    headless: true,
+  })
+  const page = await browser.newPage({ viewport: { width: 1280, height: 720 } })
+  page.on('console', (message) => {
+    if (message.type() === 'error') consoleErrors.push(message.text())
+  })
+  page.on('pageerror', (error) => consoleErrors.push(String(error)))
+
+  await page.goto(BASE_URL)
+  await page.locator('.boot.done').waitFor({ timeout: 15_000 })
+
+  const enter = page.locator('#enter-site')
+  assert.equal(await enter.count(), 1, 'intro must expose one #enter-site control')
+  assert.equal(await enter.evaluate((element) => element.tagName), 'BUTTON', 'intro control must be a button')
+  await enter.focus()
+  await enter.press('Enter')
+  await page.locator('#loader').waitFor({ state: 'detached', timeout: 5000 })
+
+  assert.deepEqual(
+    await centerHits(page),
+    ['观测对象', '观潮', '群像'],
+    'desktop module links must receive their own center-point clicks',
+  )
+
+  await page.setViewportSize({ width: 390, height: 844 })
+  assert.deepEqual(
+    await centerHits(page),
+    ['观测对象', '观潮', '群像'],
+    'mobile module links must receive their own center-point clicks',
+  )
+  await page.setViewportSize({ width: 1280, height: 720 })
+
+  await page.getByRole('link', { name: '观测对象', exact: true }).click()
+  await page.locator('.view-overlay.show').waitFor()
+  assert.equal(await page.locator('.subject-card').count(), 15)
+  assert.equal(await page.locator('.subject-card[role="button"][tabindex="0"]').count(), 15)
+
+  const firstSubject = page.locator('.subject-card').first()
+  await firstSubject.focus()
+  await firstSubject.press('Enter')
+  const profile = page.locator('.prof-overlay.show')
+  await profile.waitFor()
+  assert.equal(await profile.getAttribute('role'), 'dialog')
+  assert.equal(await profile.getAttribute('aria-modal'), 'true')
+  assert.equal(await page.evaluate(() => document.activeElement?.classList.contains('prof-back')), true)
+  await page.keyboard.press('Escape')
+  await profile.waitFor({ state: 'hidden' })
+  assert.equal(await page.locator('.view-overlay.show').count(), 1, 'Escape must keep observation view open')
+  assert.equal(await page.evaluate(() => document.activeElement?.classList.contains('subject-card')), true)
+  await closeModule(page)
+
+  await page.getByRole('link', { name: '观潮', exact: true }).click()
+  await page.locator('.view-overlay.show').waitFor()
+  assert.equal(await page.locator('.tide-card').count(), 2)
+  await closeModule(page)
+
+  await page.getByRole('link', { name: '群像', exact: true }).click()
+  await page.locator('.view-overlay.show').waitFor()
+  assert.equal(await page.locator('.bcard').count(), 96)
+  assert.equal(await page.locator('.bcard[role="button"][tabindex="0"]').count(), 96)
+  const firstRelation = page.locator('.bcard').first()
+  await firstRelation.focus()
+  await firstRelation.press('Enter')
+  assert.equal(await firstRelation.evaluate((element) => element.classList.contains('is-src')), true)
+
+  assert.deepEqual(consoleErrors, [], `browser errors:\n${consoleErrors.join('\n')}`)
+  console.log('PASS: homepage navigation, module content, keyboard cards, and modal focus')
+} finally {
+  await browser?.close()
+  server.kill('SIGTERM')
+}
