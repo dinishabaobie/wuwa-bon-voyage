@@ -309,7 +309,9 @@ button:focus-visible,
 #v30 .ch-title,
 #v31 .ch-title,
 #v32 .ch-title,
-#v33 .ch-title { white-space: nowrap; }
+#v33 .ch-title,
+#v34 .ch-title,
+#anyuan .ch-title { white-space: nowrap; }
 .ch-desc {
   font-size: 1.02rem; line-height: 2.1;
   color: rgba(232,233,242,.62);
