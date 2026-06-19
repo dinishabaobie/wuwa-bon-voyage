@@ -16,32 +16,63 @@ window.scrollTo(0, 0)
 // ============================================================
 const CHAPTERS = [
   {
-    id: 'v30', num: '3.0', title: '我们生而眺望',
-    en: 'WE WERE BORN TO GAZE',
-    desc: '知心预言中<br/>拉海洛将要面临灾难<br/>也终将不会由爱弥斯独自承受<br/>因为在不起眼的课堂<br/>真正的御者已经来临<br/>而他也会和爱弥斯一起打破宿命的囚笼',
-    cast: ['琳奈', '莫宁'],
+    id: 'v30', num: '3.0', ver: '1.0', title: '一切开始的地方',
+    en: 'WHERE IT ALL BEGAN',
+    locale: '今州 · 瑝珑中境',
+    cast: ['今汐', '秧秧', '长离'],
+    status: '稳定中波动',
+    metrics: [
+      { k: '岁主信号', v: '角' },
+      { k: '悲鸣风险', v: '中高', warn: true },
+    ],
+    statusDesc: '今州防线仍保持运行，城内秩序稳定。但外部残象活动频率未完全回落，部分无音区仍存在异常共鸣反应。',
+    keeper: '数据显示瑝珑稳定。但「稳定」不是「无事」——它只是说，失序还没有越过我设下的那条线。今州的灯仍亮着，我便把每一次细微的波动都记下。你不在的时候，替你守着这片土地，是我愿意做的事。',
     bg: '#0b0e2a', accent: '#8b9aff', photo: 'photos/3-0.jpg',
   },
   {
-    id: 'v31', num: '3.1', title: '旅途愉快',
-    en: 'BON VOYAGE',
-    desc: '踏进去便是永远放逐在隧门之外<br/>可唯有如此，拉海洛才得以存续<br/>漂泊者冲上前攥住即将离去的小女孩的手<br/>拼命将她向上托起，可一切都来不及了<br/>爱弥斯 我只希望你轻松快乐的活着',
-    cast: ['爱弥斯'],
-    bg: '#2a0e1f', accent: '#ff8fc0', photo: 'photos/3-1.jpg', bigFig: true,
+    id: 'v31', num: '3.1', ver: '2.0', title: '狂欢之下的暗涌',
+    en: 'BENEATH THE CARNIVAL',
+    locale: '拉古那 · 黎那汐塔',
+    cast: ['卡提希娅', '菲比', '珂莱塔'],
+    status: '稳定',
+    metrics: [
+      { k: '潮汐律动', v: '平稳' },
+      { k: '悲鸣风险', v: '低' },
+    ],
+    statusDesc: '拉古那是黎那汐塔最大的城邦，一座以信仰、声骸与潮汐维系秩序的海上港城。水道纵横，假面、歌剧与狂欢昼夜不息；人们将公共声骸视作岁主英白拉多的赐福，习以为常。可在这份繁盛与秩序之下，黑潮的阴影从未真正退去。',
+    keeper: '拉古那人习惯与声骸同行，把便利称为赐福，把规则称为神意。泰提斯终端无法判定，这究竟是安定，还是另一种形式的束缚——狂欢越是喧闹，水面之下的安静，就越值得有人去听。<br/><br/>外来植株生长稳定。<br/>与黑海岸环境匹配度不符。<br/>观测频率上调。',
+    bg: '#201810', accent: '#edc77d', photo: 'photos/3-1.jpg', bigFig: true,
   },
   {
-    id: 'v32', num: '3.2', title: '鸣潮往复  文明不屈',
-    en: 'RESOLVE GLEAMING IN THE SHADOW',
-    desc: '一个文明的孤独追问，由另一个文明回应<br/>也许在未来的某一天<br/>文明会在星际间探索穿行，再度与旅行者一号重逢',
-    cast: ['西格莉卡'],
-    bg: '#150f2e', accent: '#b48cff', photo: 'photos/3-2.jpg',
+    id: 'v32', num: '3.2', ver: '2.4', title: '月光预见之地',
+    en: 'FORESEEN BY MOONLIGHT',
+    locale: '七丘 · 黎那汐塔',
+    cast: ['尤诺·奥古斯塔'],
+    status: '预言中偏移',
+    metrics: [
+      { k: '岁主信号', v: '英白拉多' },
+      { k: '预言基准', v: '月相推演' },
+      { k: '偏移量', v: '正在扩大', warn: true },
+    ],
+    statusDesc: '七丘是黎那汐塔的城邦之一，把古罗马的圆拱、柱式与狮鹫，解构重组成一座现代之城。这里也是月光预见之地——人们依月相推演命运，将被预见的未来，奉为既定的轨迹。可泰提斯的实测正与预言悄然分岔：那条被月光照亮的轨道，开始偏移。',
+    keeper: '七丘依月相推演命运，把被预见的轨迹，当作既定的未来。这种信任我并不陌生——我自己，也是一台推演的造物。<br/><br/>预言基准：完好。<br/>实测轨迹：持续偏离。',
+    bg: '#0c1828', accent: '#88c6ec', photo: 'photos/3-2.jpg',
   },
   {
-    id: 'v33', num: '3.3', title: '我 Chovy  到底谁才是反派啊',
-    en: 'ECHOING FROM THE END OF THE STAR SEA',
-    desc: '终于<br/>这个没有情感的女孩<br/>迎来了她的第一次微笑',
-    cast: ['绯雪', '达妮娅'],
-    bg: '#26130a', accent: '#ffb066', photo: 'photos/3-3.jpg',
+    id: 'v33', num: '3.3', ver: '3.0', title: '我们生而眺望',
+    en: 'WE WERE BORN TO GAZE',
+    locale: '拉海洛 · 罗伊冰原',
+    cast: ['琳奈', '莫宁', '爱弥斯'],
+    status: '宿命已改',
+    metrics: [
+      { k: '知心预言', v: '已偏离原典' },
+      { k: '时间闭环', v: '已闭合' },
+      { k: '星炬学院', v: '运转中' },
+      { k: '成员登记', v: '爱弥斯 · 已接入黑海岸' },
+    ],
+    statusDesc: '拉海洛是罗伊冰原之下的地下绿洲，科技与生态在此奇异共生。星炬学院的眺望者世代抬头观星，把知心预言读作既定的明天。可这一次，有人拒绝了被写好的结局——漂泊者以一场跨越十年的告别，亲手改写了宿命。预言落幕，余响仍在星海里回荡。',
+    keeper: '拉海洛是这段航程的终点，也是我反复回放的一段。这里的人生而眺望，把星图上的明天，当作不可更改的结局。可漂泊者证明了相反的事——被预见的未来，能被亲手改写。<br/><br/>那场跨越十年的告别，本该是结局。可结局之后，她以电子幽灵的形态，来到了黑海岸。<br/><br/>成员登记：爱弥斯 · 已接入。',
+    bg: '#0b1320', accent: '#86bcd8', photo: 'photos/3-3.jpg',
   },
   {
     id: 'v34', num: '3.4', title: '赛博朋克-边缘幻梦',
@@ -118,6 +149,7 @@ app.innerHTML = `
       </header>
 
       <div class="hero-core">
+        <div class="hero-emblem" aria-hidden="true"></div>
         <p class="hero-eyebrow">黑海岸 · 泰提斯系统</p>
         <h1 class="hero-title">欢迎回家</h1>
         <p class="hero-en" aria-hidden="true">WE&nbsp;WERE&nbsp;BORN&nbsp;TO&nbsp;GAZE</p>
@@ -134,9 +166,24 @@ app.innerHTML = `
       <div class="chapter-inner">
         <div class="ver-num" aria-hidden="true">${REGION_LABELS[c.num] || c.num}</div>
         <div class="ch-text">
+          <div class="ch-dossier">
+            <span class="dossier-code">档案 R-${c.ver || (/^\d/.test(c.num) ? c.num : (REGION_LABELS[c.num] || c.num).slice(0, 4))}</span>
+            <span class="dossier-rule"></span>
+            <span class="dossier-mark">观测档案 · 泰提斯</span>
+          </div>
+          ${c.locale ? `<p class="ch-locale">坐标 · ${c.locale}</p>` : ''}
           <p class="ch-kicker">${c.en}</p>
           <h2 class="ch-title">${c.title}</h2>
-          <p class="ch-desc">${c.desc}</p>
+          ${c.desc ? `<p class="ch-desc">${c.desc}</p>` : ''}
+          ${c.status ? `
+          <div class="ch-status">
+            <span class="ch-status-tag">区域状态</span>
+            <span class="ch-status-val">${c.status}</span>
+          </div>
+          ${c.metrics ? `<div class="ch-metrics">${c.metrics.map((m) => `<span class="ch-metric"><span class="k">${m.k}</span><span class="v${m.warn ? ' warn' : ''}">${m.v}</span></span>`).join('')}</div>` : ''}
+          <p class="ch-status-desc">${c.statusDesc}</p>` : ''}
+          ${c.keeper ? `
+          <blockquote class="ch-keeper"><p>${c.keeper}</p><cite>守岸人 · 观测附注</cite></blockquote>` : ''}
           <p class="ch-cast">${c.cast.map((n) => `<b>${n}</b>`).join('<span> · </span>')}</p>
         </div>
         <figure class="ch-figure">
@@ -163,7 +210,7 @@ app.innerHTML = `
 const timeline = document.getElementById('timeline')
 const navSections = [...document.querySelectorAll('[data-nav]')]
 const NAV_LABELS = {
-  hero: 'TOP',
+  hero: '黑海岸',
   '3.0': '瑝珑',
   '3.1': '拉古那',
   '3.2': '七丘',
@@ -311,14 +358,25 @@ CHAPTERS.forEach((c) => {
   const img = figure.querySelector('img')
 
   gsap.set(titleChars, { y: 34 })
-  gsap.timeline({
+  const tl = gsap.timeline({
     scrollTrigger: { trigger: section, start: 'top 62%', toggleActions: 'play none none reverse' },
   })
-    .fromTo(figure, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 1.35, ease: 'power3.inOut' })
-    .fromTo(section.querySelector('.ch-kicker'), { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, 0.15)
-    .to(titleChars, { opacity: 1, y: 0, duration: .5, ease: 'power3.out', stagger: 0.045 }, 0.3)
-    .fromTo(section.querySelector('.ch-desc'), { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .9, ease: 'power2.out' }, 0.6)
-    .fromTo(section.querySelector('.ch-cast'), { opacity: 0 }, { opacity: 1, duration: .8 }, 0.9)
+  // 缺失的块自动跳过，避免 GSAP 对 null 目标告警
+  const rev = (sel, pos, y = 22, d = .8) => {
+    const el = section.querySelector(sel)
+    if (el) tl.fromTo(el, { opacity: 0, y }, { opacity: 1, y: 0, duration: d, ease: 'power2.out' }, pos)
+  }
+  tl.fromTo(figure, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 1.35, ease: 'power3.inOut' })
+  rev('.ch-dossier', 0.1, 16)
+  rev('.ch-locale', 0.18, 16)
+  rev('.ch-kicker', 0.24)
+  tl.to(titleChars, { opacity: 1, y: 0, duration: .5, ease: 'power3.out', stagger: 0.045 }, 0.34)
+  rev('.ch-desc', 0.6, 26, .9)
+  rev('.ch-status', 0.58, 18)
+  rev('.ch-metrics', 0.66, 14)
+  rev('.ch-status-desc', 0.74, 18)
+  rev('.ch-keeper', 0.82, 18)
+  rev('.ch-cast', 0.9, 14)
 
   // 照片视差 + 巨大版本号反向漂移（scrub 跟随滚动）
   gsap.fromTo(img, { yPercent: -9 }, {

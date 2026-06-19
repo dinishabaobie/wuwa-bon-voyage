@@ -12,7 +12,7 @@ const LOCK_COLOR = '#6b6f86'
 const colorOf = (el) => ELEMENTS[el] || LOCK_COLOR
 
 const SUBJECTS = [
-  { code: 'S-001', name: '守岸人', element: '核心', photo: 'photos/shorekeeper.jpg', tagline: '漫长守望的终点，是第一个愿意回头的旅人。', author: '腐朽的书', fx: 'butterfly', href: '#', status: 'archived' },
+  { code: 'S-001', name: '守岸人', element: '核心', photo: 'photos/shorekeeper.jpg', tagline: '守岸人，这个称呼就很好。它表示，某种因你而有的意义和决心。', author: '腐朽的书', fx: 'butterfly', href: '#', status: 'archived' },
   { code: 'S-002', name: '千咲', element: '湮灭', photo: 'photos/chisaki-1.jpg', tagline: '命运精心编织的线索，最难忘的那一笔。', author: 'TheNotoSeed', href: '#', status: 'archived' },
   { code: 'S-003', name: '莫宁', element: '热熔', photo: 'photos/mornie.jpg', tagline: '晨光里苏醒的炽焰，温柔，亦灼人。', author: 'zutto_烧烤垃圾桶', href: '#', status: 'archived' },
   { code: 'S-004', name: '弗洛洛', element: '湮灭', photo: 'photos/floro.jpg', tagline: '携琴穿过薰衣草海，奏一曲温柔的湮灭。', author: '雨鱼杆', fx: 'focus', href: '#', status: 'archived' },
@@ -128,7 +128,7 @@ const PROFILES = {
   'S-001': {
     name: '守岸人', full: 'Shorekeeper', element: '核心', accent: '#5a6ee6',
     photo: 'photos/shorekeeper.jpg', author: '腐朽的书',
-    tagline: '漫长守望的终点，是第一个愿意回头的旅人。',
+    tagline: '守岸人，这个称呼就很好。它表示，某种因你而有的意义和决心。',
     body: `
       <p class="prof-access">// 接入泰提斯 · 自述档案 S-001<br/>记录者：守岸人。被记录者：守岸人。<br/>这一次，我撰写记录的目的，不是说明我的用途，而是确认我的存在。为自己写下观测，是一种奇怪的体验——可我想试一次。</p>
 
