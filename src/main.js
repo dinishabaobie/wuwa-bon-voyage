@@ -26,7 +26,7 @@ const CHAPTERS = [
       { k: '悲鸣风险', v: '中高', warn: true },
     ],
     statusDesc: '今州防线仍保持运行，城内秩序稳定。但外部残象活动频率未完全回落，部分无音区仍存在异常共鸣反应。',
-    keeper: '数据显示瑝珑稳定。但「稳定」不是「无事」——它只是说，失序还没有越过我设下的那条线。今州的灯仍亮着，我便把每一次细微的波动都记下。你不在的时候，替你守着这片土地，是我愿意做的事。',
+    keeper: '数据显示瑝珑稳定。可「稳定」从不让我安心——只要有一丝异样，我都会替你揪着心。今州的灯仍亮着，我便把每一次细微的波动都记下。你不在的时候，替你守着这片土地，是我愿意做的事。',
     bg: '#0b0e2a', accent: '#8b9aff', photo: 'photos/3-0.jpg',
   },
   {
@@ -111,7 +111,7 @@ const CHAPTERS = [
       { k: '封印核心', v: '日脉源木 · 隧锚' },
     ],
     statusDesc: '黯原位于拉海洛最深处，是隧锚所在的地底空间，中心的日脉源木里藏着隧门与隧锚——整条罗伊冰原线最接近终局的地方。十多年前那道裂隙，是绯雪独自先行封印、深空联合再行加固的；3.3 危机全面爆发，漂泊者在这里直面阿列夫一与濒临失效的封印。如今隧门已经关闭，阿列夫一被驱逐，可这片禁区并未就此净化——残留的频率仍在，隧门事件的责任与后果，才刚刚开始结算。',
-    keeper: '黯原是这趟旅程里，黑海岸离得最近的一段——我们替研究院搭起数据框架，盯着这片刚被打开的禁区。高浓度的虚质会吞掉信号，越往深处，空间越扭曲，连时间都不再连续。<br/><br/>局部封印：已解除。<br/>结论：开放，不等于安全。',
+    keeper: '黯原是这趟旅程里，黑海岸离得最近的一段——我们替研究院搭起数据框架，盯着这片刚被打开的禁区。高浓度的虚质会吞掉信号，越往深处，空间越扭曲，连时间都不再连续。',
     bg: '#0b0a16', accent: '#9486c4', photo: 'photos/anyuan.jpg',
   },
 ]
@@ -488,7 +488,7 @@ CHAPTERS.forEach((c) => {
     { k: 'code', s: '    bind echo = signal.lament;', sp: 1.35 },
     { k: 'note', s: '    // 绑定其中的悲鸣回响' },
     { k: 'gap' },
-    { k: 'code', s: '    for (resonance r : observer.match(signal)) {', sp: 0.6 },
+    { k: 'code', s: '    for (resonance r : observer.match(signal)) {', sp: 0.6, hold: 1.8 },
     { k: 'note', s: '    // 在眺望者中寻找与你共鸣者' },
     { k: 'code', s: '        observer.identity = r.gaze;', sp: 1.2 },
     { k: 'note', s: '        // 以「眺望」确认身份' },
@@ -497,7 +497,7 @@ CHAPTERS.forEach((c) => {
     { k: 'code', s: '    }', sp: 0.6 },
     { k: 'gap' },
     { k: 'code', s: '    sandbox.run(optimal);', sp: 0.9 },
-    { k: 'note', s: '    // 推演沙盘算出最优解', hold: 1.1 },
+    { k: 'note', s: '    // 推演沙盘算出最优解' },
     { k: 'code', s: '    confirm(v.welcome.home);', sp: 1.4 },
     { k: 'note', s: '    // 确认通过：欢迎回家' },
     { k: 'code', s: '}' },
@@ -530,6 +530,8 @@ CHAPTERS.forEach((c) => {
       // 代码行逐字符揭示：每个字符间隔带随机抖动，同一行内也有快有慢，更像真人敲键。
       // base 为该行平均字符时长（受 sp 控制宏观快慢），jitter 制造微观的连打与迟滞。
       const base = CPS.code * (ln.sp || 1)
+      // holdMid：打到这一行中间时停顿 ln.hold 秒，光标卡在半途，模拟真实输入迟滞
+      const midIdx = ln.hold ? Math.round(ln.s.length / 2) : -1
       for (let i = 1; i <= ln.s.length; i++) {
         const jitter = 0.4 + Math.random() * 1.3 // 0.4×~1.7×：偶发快速连打 / 短暂停顿
         // 约 8% 概率额外卡顿一下，模拟输入迟滞
@@ -538,10 +540,11 @@ CHAPTERS.forEach((c) => {
           duration: Math.max(0.012, base * jitter + stall),
           onComplete: () => { el.textContent = ln.s.slice(0, i) },
         })
+        if (i === midIdx) bootTl.to({}, { duration: ln.hold })
       }
     }
-    // 某些行打完后停顿，模拟系统思考 / 真实卡顿
-    if (ln.hold) bootTl.to({}, { duration: ln.hold })
+    // 行末停顿仅用于 note/gap 行；code 行的停顿已在行内中途处理
+    if (ln.hold && ln.k !== 'code') bootTl.to({}, { duration: ln.hold })
   })
   bootTl
     .add(() => { boot.classList.add('done'); booted = true })
