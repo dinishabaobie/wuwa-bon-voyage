@@ -595,6 +595,10 @@ CHAPTERS.forEach((c) => {
   }
 }
 
+// 全部图片加载完成后刷新一次 ScrollTrigger：纠正懒加载图片可能造成的位置偏差，
+// 避免滚到底部时 pin 的结尾区出现错位抖动
+window.addEventListener('load', () => ScrollTrigger.refresh())
+
 // 首屏标题滚动时上浮淡出，增强电影感
 gsap.to('.hero-title', {
   opacity: 0, y: -80, ease: 'none',
