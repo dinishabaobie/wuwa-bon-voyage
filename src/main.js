@@ -89,7 +89,6 @@ const CHAPTERS = [
     statusDesc: '冰原地表是拉海洛之上的罗伊冰原地表，也曾是罗伊人世代游牧的寒带峡湾故土——直到第一次悲鸣引发地磁极变，它才被冻成隔开地下文明与外界的极寒边境。如今这里是浮出地表的监测前线：联运椎骨连通上下，海维夏在地表盯着炉芯，虚质磁暴之下，唯有带上拉贝尔磁带方能前行。拉海洛的危机，在这里第一次露出地表。',
     keeper: '冰原地表是这趟航程里风雪最大的一段——也是罗伊人失落的故土。漂泊者一路追索到这片地表，在隧者与炉芯核心的尽头，与养女爱弥斯，完成了那场跨越十年的告别。<br/><br/>那场告别，本该是结局。可结局之后，她以电子幽灵的形态，来到了黑海岸。',
     bg: '#0c1620', accent: '#aacfe0', photo: 'photos/3-4.jpg',
-    wide: 'photos/3-4-wide.jpg', wideAlt: '月面之上，四人遥望地球',
   },
   {
     id: 'cyberpunk', num: 'cyberpunk', title: '赛博朋克-边缘幻梦',
@@ -475,36 +474,39 @@ CHAPTERS.forEach((c) => {
   // 第一段：泰提斯逐行打出身份核验代码，每行代码下面紧跟对应的中文注释
   // 拉丁字母经 Solaris3 渲染为「通用语」字形；// 注释为可读中文，暗一档
   // k: 'code' 代码行 | 'note' 注释行 | 'gap' 空行
+  // sp: 该行打字快慢系数（<1 更快、>1 更慢，缺省 1）；hold: 该行打完后停顿秒数（模拟卡顿/思考）
   const BOOT_LINES = [
-    { k: 'code', s: '#access <Tethys.Core>' },
+    { k: 'code', s: '#access <Tethys.Core>', sp: 1.25 },
     { k: 'note', s: '// 接入泰提斯核心（预言机内核）' },
-    { k: 'code', s: 'using namespace BlackShores;' },
+    { k: 'code', s: 'using namespace BlackShores;', sp: 0.65 },
     { k: 'note', s: '// 引入「黑海岸」（组织权限）' },
     { k: 'gap' },
     { k: 'code', s: 'verify(Visitor v) {' },
     { k: 'note', s: '// 核验来访者身份' },
-    { k: 'code', s: '    scan signal = v.frequency;' },
+    { k: 'code', s: '    scan signal = v.frequency;', sp: 0.7 },
     { k: 'note', s: '    // 读取访问者声痕（频率）' },
-    { k: 'code', s: '    bind echo = signal.lament;' },
+    { k: 'code', s: '    bind echo = signal.lament;', sp: 1.35 },
     { k: 'note', s: '    // 绑定其中的悲鸣回响' },
     { k: 'gap' },
-    { k: 'code', s: '    for (resonance r : observer.match(signal)) {' },
+    { k: 'code', s: '    for (resonance r : observer.match(signal)) {', sp: 0.6 },
     { k: 'note', s: '    // 在眺望者中寻找与你共鸣者' },
-    { k: 'code', s: '        observer.identity = r.gaze;' },
+    { k: 'code', s: '        observer.identity = r.gaze;', sp: 1.2 },
     { k: 'note', s: '        // 以「眺望」确认身份' },
-    { k: 'code', s: '        anchor(starfield, r.tide);' },
+    { k: 'code', s: '        anchor(starfield, r.tide);', sp: 0.75 },
     { k: 'note', s: '        // 于地底星空抛下稳定锚' },
-    { k: 'code', s: '    }' },
+    { k: 'code', s: '    }', sp: 0.6 },
     { k: 'gap' },
-    { k: 'code', s: '    sandbox.run(optimal);' },
-    { k: 'note', s: '    // 推演沙盘算出最优解' },
-    { k: 'code', s: '    confirm(v.welcome.home);' },
+    { k: 'code', s: '    sandbox.run(optimal);', sp: 0.9 },
+    { k: 'note', s: '    // 推演沙盘算出最优解', hold: 1.1 },
+    { k: 'code', s: '    confirm(v.welcome.home);', sp: 1.4 },
     { k: 'note', s: '    // 确认通过：欢迎回家' },
     { k: 'code', s: '}' },
   ]
 
   let booted = false
   const bootTl = gsap.timeline()
+  // 每字符基准时长（已整体加快）；code 比 note 略快，再乘以每行 sp 形成快慢节奏
+  const CPS = { code: 0.011, note: 0.014 }
   BOOT_LINES.forEach((ln) => {
     let el
     bootTl.add(() => {
@@ -514,16 +516,32 @@ CHAPTERS.forEach((c) => {
       codeRoot.appendChild(el)
     })
     if (ln.k === 'gap') {
-      bootTl.to({}, { duration: 0.12 })
-    } else {
+      bootTl.to({}, { duration: 0.1 })
+    } else if (ln.k === 'note') {
+      // 注释行匀速打出，不做快慢抖动
       const o = { n: 0 }
       bootTl.to(o, {
         n: ln.s.length,
-        duration: Math.max(0.12, ln.s.length * (ln.k === 'note' ? 0.022 : 0.016)),
+        duration: Math.max(0.1, ln.s.length * CPS.note * (ln.sp || 1)),
         ease: 'none',
         onUpdate: () => { el.textContent = ln.s.slice(0, Math.round(o.n)) },
       })
+    } else {
+      // 代码行逐字符揭示：每个字符间隔带随机抖动，同一行内也有快有慢，更像真人敲键。
+      // base 为该行平均字符时长（受 sp 控制宏观快慢），jitter 制造微观的连打与迟滞。
+      const base = CPS.code * (ln.sp || 1)
+      for (let i = 1; i <= ln.s.length; i++) {
+        const jitter = 0.4 + Math.random() * 1.3 // 0.4×~1.7×：偶发快速连打 / 短暂停顿
+        // 约 8% 概率额外卡顿一下，模拟输入迟滞
+        const stall = Math.random() < 0.08 ? 0.05 + Math.random() * 0.12 : 0
+        bootTl.to({}, {
+          duration: Math.max(0.012, base * jitter + stall),
+          onComplete: () => { el.textContent = ln.s.slice(0, i) },
+        })
+      }
     }
+    // 某些行打完后停顿，模拟系统思考 / 真实卡顿
+    if (ln.hold) bootTl.to({}, { duration: ln.hold })
   })
   bootTl
     .add(() => { boot.classList.add('done'); booted = true })

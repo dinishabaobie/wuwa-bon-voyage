@@ -407,7 +407,7 @@ button:focus-visible,
 .ch-wide {
   grid-column: 1 / -1;
   order: 3;
-  margin-top: 6vh;
+  margin-top: 2vh;
   position: relative;
   /* 预留盒高：宽图(2400×469)懒加载完成时不再撑高页面，避免滚到底部时布局抖动 */
   aspect-ratio: 2400 / 469;
