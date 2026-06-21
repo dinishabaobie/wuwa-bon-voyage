@@ -407,7 +407,7 @@ button:focus-visible,
 .ch-wide {
   grid-column: 1 / -1;
   order: 3;
-  margin-top: 2vh;
+  margin-top: -4vh;
   position: relative;
   /* 预留盒高：宽图(2400×469)懒加载完成时不再撑高页面，避免滚到底部时布局抖动 */
   aspect-ratio: 2400 / 469;
@@ -428,6 +428,24 @@ button:focus-visible,
 .chapter:nth-child(even) .ch-text { order: 2; }
 .chapter:nth-child(even) .ch-figure { order: 1; }
 .chapter:nth-child(even) .ver-num { left: auto; right: -6vw; }
+
+/* figFull：标题整行在上；下方两栏＝左「区域状态」、右「守岸人附注+群像」（顶端对齐）；大图全幅在下 */
+.chapter--figfull .chapter-inner { display: block; }
+/* flex 两栏，顶端对齐；figfull-status 已不带 ch-text 类，不再被全局 order 规则干扰 */
+.chapter--figfull .figfull-cols {
+  display: flex;
+  align-items: flex-start;
+  gap: 5vw;
+  margin-top: 1.4rem;
+}
+.chapter--figfull .figfull-status { flex: 0 1 52%; min-width: 0; } /* 区域状态在左 */
+.chapter--figfull .ch-aside { flex: 0 1 48%; min-width: 0; margin-top: 3.6rem; } /* 守岸人附注+群像在右，比左栏低约两行 */
+.chapter--figfull .ch-aside .ch-keeper { margin-top: 0; }
+.chapter--figfull .ch-figure {
+  margin-top: 5vh;
+  aspect-ratio: 2560 / 1078; /* 与图片真实比例一致：object-fit 既不裁切也不留黑边 */
+}
+.chapter--figfull .ch-figure img { height: 100%; object-fit: contain; }
 #cyberpunk .ver-num {
   font-size: clamp(2.6rem, 6vw, 6.8rem);
   letter-spacing: .08em;

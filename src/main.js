@@ -18,14 +18,15 @@ const CHAPTERS = [
   {
     id: 'v30', num: '3.0', ver: '1.0', title: '一切开始的地方',
     en: 'WHERE IT ALL BEGAN',
-    locale: '今州 · 瑝珑中境',
-    cast: ['今汐', '秧秧', '长离'],
-    status: '稳定中波动',
+    locale: '今州 · 瑝珑北境边关',
+    cast: ['今汐', '长离', '秧秧'],
+    status: '边关 · 稳定中戒备',
     metrics: [
-      { k: '岁主信号', v: '角' },
+      { k: '今州岁主', v: '角' },
+      { k: '夜归军前线', v: '北落野' },
       { k: '悲鸣风险', v: '中高', warn: true },
     ],
-    statusDesc: '今州防线仍保持运行，城内秩序稳定。但外部残象活动频率未完全回落，部分无音区仍存在异常共鸣反应。',
+    statusDesc: '今州是瑝珑北境的边陲关隘，自悲鸣之初便是对抗鸣式与残象潮的第一道防线。岁主「角」曾降临乘霄山，以时序之力庇护先民；如今今汐以令尹之身兼任角的共鸣者，夜归军驻守北落野前线。残星会潜入城中，企图唤醒无相燹主、加速悲鸣同化——这道看似太平的防线，始终绷在临界。',
     keeper: '数据显示瑝珑稳定。可「稳定」从不让我安心——只要有一丝异样，我都会替你揪着心。今州的灯仍亮着，我便把每一次细微的波动都记下。你不在的时候，替你守着这片土地，是我愿意做的事。',
     bg: '#0b0e2a', accent: '#8b9aff', photo: 'photos/3-0.jpg',
   },
@@ -71,7 +72,7 @@ const CHAPTERS = [
       { k: '异常备注', v: '隧者离去', warn: true },
     ],
     statusDesc: '拉海洛是罗伊冰原之下的地下学园都市，索拉里斯新极点之下的文明核心。头顶的星空由大气拟造阵列点亮；深空联合在此办起星炬学院，罗伊族世代守着日灵与归源的古老传统。终局之后，隧者与阿列夫一相继离去，灭世危机暂退——可学院该如何在失去隧者的明天里继续存在，成了新的难题。',
-    keeper: '这里的人住在冰原之下，头顶的星空是人造的，连脚下那颗太阳——炉芯——也是人造的核心，如今已被装上沉睡的隧者。可即便如此，他们依然把自己唤作眺望者。<br/><br/>炉芯核心：人造 · 已装入隧者。<br/>人工星空：照常点亮。<br/>仰望频率：未见衰减。',
+    keeper: '这里的人住在冰原之下，头顶的星空是人造的，连脚下那颗太阳——炉芯——也是人造的核心，如今已被装上沉睡的隧者。可即便如此，他们依然把自己唤作眺望者。',
     bg: '#0b1320', accent: '#86bcd8', photo: 'photos/3-3.jpg',
   },
   {
@@ -83,27 +84,18 @@ const CHAPTERS = [
     metrics: [
       { k: '地表环境', v: '风雪 · 频率不稳' },
       { k: '跨层交通', v: '联运椎骨' },
-      { k: '炉芯监测', v: '海维夏 · 部署地表' },
       { k: '通行装备', v: '拉贝尔磁带 · 必携' },
     ],
     statusDesc: '冰原地表是拉海洛之上的罗伊冰原地表，也曾是罗伊人世代游牧的寒带峡湾故土——直到第一次悲鸣引发地磁极变，它才被冻成隔开地下文明与外界的极寒边境。如今这里是浮出地表的监测前线：联运椎骨连通上下，海维夏在地表盯着炉芯，虚质磁暴之下，唯有带上拉贝尔磁带方能前行。拉海洛的危机，在这里第一次露出地表。',
-    keeper: '冰原地表是这趟航程里风雪最大的一段——也是罗伊人失落的故土。漂泊者一路追索到这片地表，在隧者与炉芯核心的尽头，与养女爱弥斯，完成了那场跨越十年的告别。<br/><br/>那场告别，本该是结局。可结局之后，她以电子幽灵的形态，来到了黑海岸。',
-    bg: '#0c1620', accent: '#aacfe0', photo: 'photos/3-4.jpg',
-  },
-  {
-    id: 'cyberpunk', num: 'cyberpunk', title: '赛博朋克-边缘幻梦',
-    en: 'CYBERPUNK · EDGE OF DREAMS',
-    desc: '人们都说夜之城没有活着的传奇，但这次鸣潮却要告诉你——<br/>勇敢的向前奔跑吧，露西，你所珍视的人已为你扫平前路荆棘，而你深爱的人正在路的尽头等你。',
-    cast: ['露西', '丽贝卡'],
-    bg: '#0a1f24', accent: '#4ef0e0', photo: 'photos/3-4.jpg',
-    wide: 'photos/3-4-wide.jpg', wideAlt: '月面之上，四人遥望地球',
+    keeper: '冰原地表是这趟航程里风雪最大的一段——也是罗伊人失落的故土。漂泊者一路追索到这片地表，在隧者与炉芯核心的尽头，与养女爱弥斯，完成了那场跨越十年的告别。',
+    bg: '#0a131e', accent: '#e7cd92', photo: 'photos/3-4-farewell.jpg', figFull: true,
   },
   {
     id: 'anyuan', num: 'anyuan', ver: '3.3', title: '恒黯之下的封印',
     en: 'THE SEAL IN THE DARK',
     locale: '黯原 · 拉海洛深处',
     cast: ['绯雪', '达妮娅', '洛瑟菈'],
-    status: '隧门已闭 · 余波未平',
+    status: '隧门已闭',
     metrics: [
       { k: '虚质浓度', v: '残留未净', warn: true },
       { k: '隧门', v: '已关闭' },
@@ -112,7 +104,15 @@ const CHAPTERS = [
     ],
     statusDesc: '黯原位于拉海洛最深处，是隧锚所在的地底空间，中心的日脉源木里藏着隧门与隧锚——整条罗伊冰原线最接近终局的地方。十多年前那道裂隙，是绯雪独自先行封印、深空联合再行加固的；3.3 危机全面爆发，漂泊者在这里直面阿列夫一与濒临失效的封印。如今隧门已经关闭，阿列夫一被驱逐，可这片禁区并未就此净化——残留的频率仍在，隧门事件的责任与后果，才刚刚开始结算。',
     keeper: '黯原是这趟旅程里，黑海岸离得最近的一段——我们替研究院搭起数据框架，盯着这片刚被打开的禁区。高浓度的虚质会吞掉信号，越往深处，空间越扭曲，连时间都不再连续。',
-    bg: '#0b0a16', accent: '#9486c4', photo: 'photos/anyuan.jpg',
+    bg: '#0b0a16', accent: '#a18fda', photo: 'photos/anyuan.jpg',
+  },
+  {
+    id: 'cyberpunk', num: 'cyberpunk', title: '赛博朋克-边缘幻梦',
+    en: 'CYBERPUNK · EDGE OF DREAMS',
+    desc: '人们都说夜之城没有活着的传奇，可这一次，你终于能好好道一次别——<br/>勇敢的向前奔跑吧，露西，你所珍视的人已为你扫平前路荆棘，而你深爱的人正在路的尽头等你。',
+    cast: ['露西', '丽贝卡'],
+    bg: '#0a1f24', accent: '#4ef0e0', photo: 'photos/3-4.jpg',
+    wide: 'photos/3-4-wide.jpg', wideAlt: '月面之上，四人遥望地球',
   },
 ]
 
@@ -179,40 +179,42 @@ app.innerHTML = `
     </div>
   </section>
   ${CHAPTERS.map((c) => `
-    <section class="chapter${c.bigFig ? ' chapter--bigfig' : ''}" id="${c.id}" data-bg="${c.bg}" data-accent="${c.accent}" data-nav="${c.num}">
-      <div class="chapter-inner">
-        <div class="ver-num" aria-hidden="true">${REGION_LABELS[c.num] || c.num}</div>
-        <div class="ch-text">
-          <div class="ch-dossier">
-            <span class="dossier-code">档案 R-${c.ver || (/^\d/.test(c.num) ? c.num : (REGION_LABELS[c.num] || c.num).slice(0, 4))}</span>
-            <span class="dossier-rule"></span>
-            <span class="dossier-mark">观测档案 · 泰提斯</span>
-          </div>
-          ${c.locale ? `<p class="ch-locale">坐标 · ${c.locale}</p>` : ''}
-          <p class="ch-kicker">${c.en}</p>
-          <h2 class="ch-title">${c.title}</h2>
-          ${c.desc ? `<p class="ch-desc">${c.desc}</p>` : ''}
-          ${c.status ? `
-          <div class="ch-status">
-            <span class="ch-status-tag">区域状态</span>
-            <span class="ch-status-val">${c.status}</span>
-          </div>
-          ${c.metrics ? `<div class="ch-metrics">${c.metrics.map((m) => `<span class="ch-metric"><span class="k">${m.k}</span><span class="v${m.warn ? ' warn' : ''}">${m.v}</span></span>`).join('')}</div>` : ''}
-          <p class="ch-status-desc">${c.statusDesc}</p>` : ''}
-          ${c.keeper ? `
-          <blockquote class="ch-keeper"><p>${c.keeper}</p><cite>守岸人 · 观测附注</cite></blockquote>` : ''}
-          <p class="ch-cast">${c.cast.map((n) => `<b>${n}</b>`).join('<span> · </span>')}</p>
+    ${(() => {
+      const region = REGION_LABELS[c.num] || c.num
+      const dossierId = c.ver || (/^\d/.test(c.num) ? c.num : region.slice(0, 4))
+      // 标题部分（档案/坐标/EN/标题/简介）
+      const headTitle = `
+        <div class="ch-dossier">
+          <span class="dossier-code">档案 R-${dossierId}</span>
+          <span class="dossier-rule"></span>
+          <span class="dossier-mark">观测档案 · 泰提斯</span>
         </div>
-        <figure class="ch-figure">
-          <img src="${c.photo}" alt="${c.title}" loading="lazy" />
-          <figcaption class="fig-tag">${REGION_LABELS[c.num] || c.num}</figcaption>
-        </figure>
-        ${c.wide ? `
-        <figure class="ch-wide">
-          <img src="${c.wide}" alt="${c.wideAlt || c.title}" loading="lazy" />
-        </figure>` : ''}
-      </div>
-    </section>
+        ${c.locale ? `<p class="ch-locale">坐标 · ${c.locale}</p>` : ''}
+        <p class="ch-kicker">${c.en}</p>
+        <h2 class="ch-title">${c.title}</h2>
+        ${c.desc ? `<p class="ch-desc">${c.desc}</p>` : ''}`
+      // 状态部分（区域状态/指标/状态描述）
+      const headStatus = c.status ? `
+        <div class="ch-status">
+          <span class="ch-status-tag">区域状态</span>
+          <span class="ch-status-val">${c.status}</span>
+        </div>
+        ${c.metrics ? `<div class="ch-metrics">${c.metrics.map((m) => `<span class="ch-metric"><span class="k">${m.k}</span><span class="v${m.warn ? ' warn' : ''}">${m.v}</span></span>`).join('')}</div>` : ''}
+        <p class="ch-status-desc">${c.statusDesc}</p>` : ''
+      const keeper = c.keeper ? `<blockquote class="ch-keeper"><p>${c.keeper}</p><cite>守岸人 · 观测附注</cite></blockquote>` : ''
+      const cast = `<p class="ch-cast">${c.cast.map((n) => `<b>${n}</b>`).join('<span> · </span>')}</p>`
+      const figure = `<figure class="ch-figure"><img src="${c.photo}" alt="${c.title}" loading="lazy" /><figcaption class="fig-tag">${region}</figcaption></figure>`
+      const wide = c.wide ? `<figure class="ch-wide"><img src="${c.wide}" alt="${c.wideAlt || c.title}" loading="lazy" /></figure>` : ''
+      const cls = `chapter${c.bigFig ? ' chapter--bigfig' : ''}${c.figFull ? ' chapter--figfull' : ''}`
+      const verNum = `<div class="ver-num" aria-hidden="true">${region}</div>`
+      // figFull：标题整行在上；下方两栏＝左「区域状态/指标/描述」、右「守岸人附注+群像」（与区域状态顶端对齐）；大图全幅在下
+      const inner = c.figFull
+        ? `${verNum}<div class="ch-text figfull-head">${headTitle}</div>
+           <div class="figfull-cols"><div class="figfull-status">${headStatus}</div><aside class="ch-aside">${keeper}${cast}</aside></div>
+           ${figure}`
+        : `${verNum}<div class="ch-text">${headTitle}${headStatus}${keeper}${cast}</div>${figure}${wide}`
+      return `<section class="${cls}" id="${c.id}" data-bg="${c.bg}" data-accent="${c.accent}" data-nav="${c.num}"><div class="chapter-inner">${inner}</div></section>`
+    })()}
   `).join('')}
   <section id="ending" data-bg="${ENDING.bg}" data-accent="${ENDING.accent}" data-nav="end">
     <figure class="end-figure"><img src="${ENDING.photo}" alt="${ENDING.title}" loading="lazy" /></figure>
@@ -396,7 +398,8 @@ CHAPTERS.forEach((c) => {
   rev('.ch-cast', 0.9, 14)
 
   // 照片视差 + 巨大版本号反向漂移（scrub 跟随滚动）
-  gsap.fromTo(img, { yPercent: -9 }, {
+  // figFull 章节要完整展示整图，不做纵向视差（否则会裁掉上下边）
+  if (!c.figFull) gsap.fromTo(img, { yPercent: -9 }, {
     yPercent: -1, ease: 'none',
     scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true },
   })
