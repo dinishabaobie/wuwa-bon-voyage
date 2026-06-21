@@ -269,22 +269,8 @@ timeline.querySelectorAll('.tl-item').forEach((btn) => {
 })
 
 // ============================================================
-// Three.js 光标拖痕 / 音频 / 自定义光标
+// 音频 / 自定义光标
 // ============================================================
-let trail = null
-let trailPromise = null
-let trailTint = HERO.accent
-function ensureTrail() {
-  if (!trailPromise) {
-    trailPromise = import('./trail.js').then(({ TrailBackground }) => {
-      trail = new TrailBackground(document.getElementById('trail-canvas'))
-      trail.setTint(trailTint)
-      return trail
-    })
-  }
-  return trailPromise
-}
-
 // BGM：「远航星的告别」，打开网站即自动播放；被浏览器拦截时在首次交互瞬间开播
 const bgm = new Audio('bgm.mp3')
 bgm.preload = 'metadata'
@@ -357,8 +343,6 @@ navSections.forEach((section) => {
         ease: 'power2.out',
         overwrite: 'auto',
       })
-      trailTint = accent
-      trail?.setTint(accent)
       timeline.querySelectorAll('.tl-item').forEach((b) =>
         b.classList.toggle('active', b.dataset.target === section.id)
       )
@@ -562,10 +546,6 @@ CHAPTERS.forEach((c) => {
     if (!booted || entered) return
     entered = true
     soundOn()
-    const trailReady = ensureTrail().catch((error) => {
-      console.error('光标拖痕加载失败', error)
-      return null
-    })
     // 克隆一朵花精确叠在原花上做放大转场；原花与整个 loader 保持不动，
     // 直到最后一起平滑淡出——避免抽离原花导致确认区布局跳动、花骤然消失。
     const star = loader.querySelector('.loader-star')
@@ -588,15 +568,6 @@ CHAPTERS.forEach((c) => {
         window.scrollTo(0, 0)
         lenis.scrollTo(0, { immediate: true })
         lenis.start()
-        // 开场在屏幕中央撒一串星，宣告拖痕效果的存在
-        const cx = innerWidth / 2
-        const cy = innerHeight / 2
-        trailReady.then((currentTrail) => {
-          if (!currentTrail) return
-          ;[0, 120, 240, 360, 480].forEach((delay, i) => {
-            setTimeout(() => currentTrail.burst(cx + (i - 2) * 130, cy + Math.sin(i * 2.1) * 60, 150 - Math.abs(i - 2) * 30), delay)
-          })
-        })
       }, '>-0.35')
       .to(loader, { opacity: 0, duration: .6, ease: 'power2.out' }, '<')
       .to(warp, { opacity: 0, duration: .6, ease: 'power2.out' }, '<')
@@ -647,7 +618,7 @@ gsap.to('.hero-title', {
     const v = VIEWS[key]; if (!v) return
     busy = true
     viewTrigger = trigger || null
-    trail?.pause(); lenis.stop()
+    lenis.stop()
     const ov = document.createElement('div')
     ov.className = 'view-overlay'
     ov.setAttribute('role', 'dialog')
@@ -664,7 +635,7 @@ gsap.to('.hero-title', {
     } catch (error) {
       console.error(`模块加载失败: ${key}`, error)
       ov.remove()
-      trail?.resume(); lenis.start()
+      lenis.start()
       viewTrigger?.focus()
       viewTrigger = null
     } finally {
@@ -678,7 +649,7 @@ gsap.to('.hero-title', {
     viewTrigger = null
     ov.classList.remove('show')
     if (viewCleanup) { try { viewCleanup() } catch {} viewCleanup = null }
-    trail?.resume(); lenis.start()
+    lenis.start()
     setTimeout(() => {
       ov.remove()
       returnTarget?.focus()
