@@ -95,13 +95,27 @@ export function mountRelation(root, onBack) {
     cols.appendChild(col)
   }
   const CAT_RANK = { '#1565C0': 1, '#2E7D32': 1, '#5D4037': 2, '#00838F': 3, '#8E24AA': 4, '#EF6C00': 5, '#455A64': 6 }
-  const catSort = (arr) => arr.slice().sort((a, b) => (CAT_RANK[a.color] ?? 7) - (CAT_RANK[b.color] ?? 7))
+  const degOf = (id) => (rel[id] ? rel[id].size : 0)
+  // 卡片首行的中文名（去掉 ** 和英文/括号后缀），用于匹配分组标题里的地区锚点
+  const cnName = (it) => it.text.replace(/\*\*/g, '').trim().split(/[\s/·（(]/)[0]
+  // 每列的「地区/势力锚点」：标题里最先出现的那个节点（如 黑海岸列 → 黑海岸）
+  const anchorIds = new Set()
   order.forEach((label) => {
-    makeColumn(label, catSort(items.filter((i) => i.group === label)),
+    const cands = items.filter((i) => i.group === label && cnName(i) && label.includes(cnName(i)))
+    if (!cands.length) return
+    cands.sort((a, b) => (label.indexOf(cnName(a)) - label.indexOf(cnName(b))) || (degOf(b.id) - degOf(a.id)))
+    anchorIds.add(cands[0].id)
+  })
+  // 重要程度分层：地区锚点(0) → 系统/鸣式·橙(1) → 守岸人阵营·红(2) → 其余(3)；同层按关系数多→少
+  const impRank = (it) => anchorIds.has(it.id) ? 0 : it.color === '#EF6C00' ? 1 : it.color === '#fb464c' ? 2 : 3
+  const impSort = (arr) => arr.slice().sort((a, b) =>
+    (impRank(a) - impRank(b)) || (degOf(b.id) - degOf(a.id)) || ((CAT_RANK[a.color] ?? 7) - (CAT_RANK[b.color] ?? 7)))
+  order.forEach((label) => {
+    makeColumn(label, impSort(items.filter((i) => i.group === label)),
       colorOf((groups.find((g) => g.label === label) || {}).color))
   })
   const loose = items.filter((i) => i.group === null)
-  if (loose.length) makeColumn('其它', catSort(loose), '#8aa0b8')
+  if (loose.length) makeColumn('其它', impSort(loose), '#8aa0b8')
 
   const binner = root.querySelector('.board-inner')
   const lines = root.querySelector('.board-lines')
