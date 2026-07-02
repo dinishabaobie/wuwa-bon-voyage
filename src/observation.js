@@ -453,7 +453,7 @@ export function mountObservation(root, onBack) {
         <p class="subjects-kicker">TETHYS · OBSERVATION LOG</p>
         <h1 class="subjects-heading">观测对象</h1>
         <div class="subjects-rule"></div>
-        <p class="subjects-desc">以下档案由泰缇斯系统自动记录，内容已通过黑海岸权限核验。</p>
+        <p class="subjects-desc">以下档案由泰提斯系统自动记录，内容已通过黑海岸权限核验。</p>
         <div class="aimi-tag" aria-hidden="true">
           <div class="aimi-portrait" data-text="UNKNOWN ACCESS"></div>
           <div class="aimi-meta">
@@ -540,7 +540,8 @@ export function mountObservation(root, onBack) {
       if (show) {
         shown++
         c.style.display = ''
-        gsap.fromTo(c, { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'power2.out', overwrite: true })
+        // y:0 一并归位：尚未被入场 IO 揭示过的卡片仍停在 y:36，筛选显示时不能悬在半空
+        gsap.fromTo(c, { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: 'power2.out', overwrite: true })
       } else {
         gsap.set(c, { opacity: 0 })
         c.style.display = 'none'

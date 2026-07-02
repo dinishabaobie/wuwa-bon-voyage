@@ -125,7 +125,15 @@ export function mountRelation(root, onBack) {
     lines.setAttribute('height', binner.scrollHeight)
   }
   sizeLines()
-  window.addEventListener('resize', sizeLines)
+  // 字体加载完成后列宽会变，重新量一次画布
+  document.fonts?.ready?.then(sizeLines)
+  const onResize = () => {
+    sizeLines()
+    // 窗口变化令列重排：锁定中的连线按新坐标重画，悬停态的直接清掉
+    if (pinned) drawRelations(pinned)
+    else lines.innerHTML = ''
+  }
+  window.addEventListener('resize', onResize)
 
   function center(card) {
     const ir = binner.getBoundingClientRect()
@@ -197,5 +205,5 @@ export function mountRelation(root, onBack) {
     Object.values(cardById).forEach((card) => card.setAttribute('aria-pressed', 'false'))
   })
 
-  return () => window.removeEventListener('resize', sizeLines)
+  return () => window.removeEventListener('resize', onResize)
 }

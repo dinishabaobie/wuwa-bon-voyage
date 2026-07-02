@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { DataRain } from './datarain.js'
+import { setupCursor, setupBGM } from './shell.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -104,7 +105,7 @@ const CHAPTERS = [
     ],
     statusDesc: '黯原位于拉海洛最深处，是隧锚所在的地底空间，中心的日脉源木里藏着隧门与隧锚——整条罗伊冰原线最接近终局的地方。十多年前那道裂隙，是绯雪独自先行封印、深空联合再行加固的；3.3 危机全面爆发，漂泊者在这里直面阿列夫一与濒临失效的封印。如今隧门已经关闭，阿列夫一被驱逐，可这片禁区并未就此净化——残留的频率仍在，隧门事件的责任与后果，才刚刚开始结算。',
     keeper: '黯原是这趟旅程里，黑海岸离得最近的一段——我们替研究院搭起数据框架，盯着这片刚被打开的禁区。高浓度的虚质会吞掉信号，越往深处，空间越扭曲，连时间都不再连续。',
-    bg: '#0b0a16', accent: '#a18fda', photo: 'photos/anyuan.jpg',
+    bg: '#0b0a16', accent: '#e57a90', photo: 'photos/anyuan.jpg',
   },
   {
     id: 'cyberpunk', num: 'cyberpunk', title: '赛博朋克-边缘幻梦',
@@ -269,59 +270,12 @@ timeline.querySelectorAll('.tl-item').forEach((btn) => {
 })
 
 // ============================================================
-// 音频 / 自定义光标
+// 音频 / 自定义光标（逻辑在 shell.js，与独立子页共用）
 // ============================================================
-// BGM：「远航星的告别」，打开网站即自动播放；被浏览器拦截时在首次交互瞬间开播
-const bgm = new Audio('bgm.mp3')
-bgm.preload = 'metadata'
-bgm.loop = true
-bgm.volume = 0.7
-const bgmBtn = document.getElementById('bgm-toggle')
-let autoplayArmed = true
-
-function setSoundUI(on) {
-  bgmBtn.classList.toggle('playing', on)
-  bgmBtn.querySelector('.bgm-label').textContent = on ? '音乐 开' : '音乐 关'
-}
-function soundOn() {
-  bgm.play().then(() => { setSoundUI(true); sessionStorage.setItem('bgmOn', '1') }).catch(() => {})
-}
-function soundOff() {
-  autoplayArmed = false
-  bgm.pause()
-  setSoundUI(false)
-  sessionStorage.setItem('bgmOn', '0')
-}
-
-bgmBtn.addEventListener('click', () => (bgm.paused ? soundOn() : soundOff()))
-
-// 跨页续播：恢复上次进度，并持续把进度写入 sessionStorage，供子页面接续
-const _savedT = parseFloat(sessionStorage.getItem('bgmTime') || '0')
-if (_savedT) bgm.addEventListener('loadedmetadata', () => { try { bgm.currentTime = _savedT } catch {} })
-setInterval(() => { if (!bgm.paused) sessionStorage.setItem('bgmTime', String(bgm.currentTime)) }, 1000)
-window.addEventListener('pagehide', () => sessionStorage.setItem('bgmTime', String(bgm.currentTime)))
-
-// 注意：不在开场任意交互时解锁音频。BGM 只在「进入首页」那一下点击（enterSite）
-// 或手动点音乐开关时才播放——避免开场点击就把音乐放出来，破坏沉浸感。
-
-const cursor = document.getElementById('cursor')
-const cursorPos = { x: innerWidth / 2, y: innerHeight / 2 }
-const cursorTarget = { ...cursorPos }
-window.addEventListener('pointermove', (e) => {
-  cursorTarget.x = e.clientX
-  cursorTarget.y = e.clientY
-})
-gsap.ticker.add(() => {
-  cursorPos.x += (cursorTarget.x - cursorPos.x) * 0.18
-  cursorPos.y += (cursorTarget.y - cursorPos.y) * 0.18
-  cursor.style.translate = `${cursorPos.x}px ${cursorPos.y}px`
-})
-// 悬停交互元素放大（事件委托，兼容动态渲染的视图元素）
-const CURSOR_HOVER = 'a, button, .bcard, .subject-card, .wall-chip, .hero-module, .tl-item'
-document.addEventListener('pointerover', (e) => { if (e.target.closest(CURSOR_HOVER)) cursor.classList.add('is-active') })
-document.addEventListener('pointerout', (e) => {
-  if (e.target.closest(CURSOR_HOVER) && !e.relatedTarget?.closest(CURSOR_HOVER)) cursor.classList.remove('is-active')
-})
+// BGM：「远航星的告别」。注意：不在开场任意交互时解锁音频——只在「进入首页」
+// 那一下点击（enterSite）或手动点音乐开关时才播放，避免破坏开场沉浸感。
+const { soundOn, resumeIfOn } = setupBGM(document.getElementById('bgm-toggle'))
+setupCursor(document.getElementById('cursor'))
 
 // ============================================================
 // 颜色流转 + 导航高亮
@@ -449,12 +403,7 @@ CHAPTERS.forEach((c) => {
   gsap.set(['.hero-eyebrow', '.hero-en', '.hero-lead'], { opacity: 1, y: 0 })
   document.querySelectorAll('.hero-module').forEach((m) => m.classList.add('is-online'))
   gsap.set(['.hero-hint', '#timeline', '#bgm-toggle', '.hero-figure'], { opacity: 1 })
-  if (sessionStorage.getItem('bgmOn') === '1') {
-    soundOn()
-    const kick = () => { if (bgm.paused) soundOn() }
-    ;['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) =>
-      window.addEventListener(ev, kick, { once: true, passive: true }))
-  }
+  resumeIfOn()
   } else {
   const dataRain = new DataRain(loader.querySelector('#data-rain'))
 
@@ -612,11 +561,29 @@ gsap.to('.hero-title', {
   let viewCleanup = null
   let viewTrigger = null
   let busy = false
+  let openId = 0        // 每次 openView 递增；closeView 令加载中的挂载失效
+  let viewInert = null  // 视图打开期间被 inert 的背景元素 → 原 inert 值
+
+  // aria-modal 之外真正隔离键盘焦点：视图打开时把主页内容设为 inert
+  function lockBehind(ov) {
+    viewInert = new Map()
+    Array.from(document.body.children).forEach((child) => {
+      if (child === ov) return
+      viewInert.set(child, child.inert)
+      child.inert = true
+    })
+  }
+  function unlockBehind() {
+    if (!viewInert) return
+    viewInert.forEach((wasInert, child) => { child.inert = wasInert })
+    viewInert = null
+  }
 
   async function openView(key, trigger) {
     if (busy || document.querySelector('.view-overlay')) return
     const v = VIEWS[key]; if (!v) return
     busy = true
+    const id = ++openId
     viewTrigger = trigger || null
     lenis.stop()
     const ov = document.createElement('div')
@@ -625,15 +592,20 @@ gsap.to('.hero-title', {
     ov.setAttribute('aria-modal', 'true')
     ov.style.setProperty('--accent', v.accent)
     document.body.appendChild(ov)
+    lockBehind(ov)
     try {
       const mod = await v.load()
-      viewCleanup = v.arg ? mod[v.fn](ov, v.arg, closeView) : mod[v.fn](ov, closeView)
+      // 动态加载期间可能已被 Esc 关闭（closeView 使 openId 失效）：放弃挂载，
+      // 否则模块给 window/body 加的监听器与节点将无人清理
+      if (id !== openId || !ov.isConnected) return
+      viewCleanup = mod[v.fn](ov, closeView)
       requestAnimationFrame(() => {
         ov.classList.add('show')
         ov.querySelector('.back')?.focus()
       })
     } catch (error) {
       console.error(`模块加载失败: ${key}`, error)
+      unlockBehind()
       ov.remove()
       lenis.start()
       viewTrigger?.focus()
@@ -645,10 +617,12 @@ gsap.to('.hero-title', {
   function closeView() {
     const ov = document.querySelector('.view-overlay')
     if (!ov) return
+    openId++
     const returnTarget = viewTrigger
     viewTrigger = null
     ov.classList.remove('show')
     if (viewCleanup) { try { viewCleanup() } catch {} viewCleanup = null }
+    unlockBehind()
     lenis.start()
     setTimeout(() => {
       ov.remove()
