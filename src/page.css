@@ -24,7 +24,7 @@ a, button { cursor: none; }
 
 /* 自定义四芒星光标（子页面） */
 #cursor {
-  position: fixed; left: 0; top: 0; z-index: 99;
+  position: fixed; left: 0; top: 0; z-index: 9999;
   width: 28px; height: 28px; margin: -14px 0 0 -14px;
   background: #fff;
   -webkit-mask: var(--black-flower-icon) center / contain no-repeat;

@@ -21,7 +21,7 @@ const SUBJECTS = [
   { code: 'S-007', name: '西格莉卡', element: '气动', photo: 'photos/sigrika.jpg', tagline: '乘风而来，将星辉编入每一缕气流。', author: 'byx', href: '#', status: 'archived' },
   { code: 'S-008', name: '琳奈', element: '衍射', photo: 'photos/linnai.jpg', tagline: '以光为笔，在世界的暗面涂下属于自己的色彩。', author: '禾策', href: '#', status: 'archived' },
   { code: 'S-009', name: '菲比', element: '衍射', photo: 'photos/phoebe.jpg', tagline: '在洒满阳光的海岸，把一个秘密轻轻藏进光里。', author: 'HA', href: '#', status: 'archived' },
-  { code: 'S-010', name: '泱泱·玄翎', element: '待解密', photo: 'photos/yangyang.jpg', tagline: '耳畔苍翎响远音', author: '鸣潮', href: '', status: 'locked' },
+  { code: 'S-010', name: '泱泱·玄翎', element: '湮灭', photo: 'photos/yangyang.jpg', tagline: '耳畔苍翎响远音', author: '鸣潮', href: '#', status: 'archived' },
   { code: 'S-011', name: '心月狐', element: '待解密', photo: 'photos/xinyuehu.jpg', tagline: '朝月清辉照孤城', author: '鸣潮', href: '', status: 'locked' },
   { code: 'S-012', name: '锁暝', element: '待解密', photo: 'photos/suoming.jpg', tagline: '故锁旧契囚执念', author: '鸣潮', href: '', status: 'locked' },
   { code: 'S-013', name: '景燃', element: '待解密', photo: 'photos/jingran.jpg', tagline: '幽境今人亦独行', author: '鸣潮', href: '', status: 'locked' },
@@ -409,6 +409,46 @@ const PROFILES = {
         <p>泰提斯归档：能在黑暗里给别人光的人，自己心里，一定也藏着一束，舍不得说出口的光。</p>
       </div>`,
   },
+
+  'S-010': {
+    name: '泱泱·玄翎', full: 'Yangyang · Xuanling', element: '湮灭', accent: '#d45a9a',
+    photo: 'photos/yangyang-profile.jpg', author: '',
+    tagline: '耳畔苍翎响远音',
+    body: `
+      <p class="prof-access">// 接入泰提斯 · 观测档案 S-010<br/>守岸人在此。本档案解封于 VER 3.5。请注意：编号之下存有两段频率——一段属于气动，一段属于湮灭。它们，来自同一个女孩。</p>
+      <section>
+        <h3 class="prof-h">听风的向导 <i>// 最初的频率</i></h3>
+        <p>档案的前半段，是所有人熟悉的她：今州的向导，温柔而妥帖，最早向漂泊者伸出手的人之一。她的共鸣让她<b>听得见风</b>——风里有远方的讯息，也有旁人听不见的心事。</p>
+        <div class="prof-note">很多故事的开端，都有一个这样的人：她不站在舞台中央，却是把主角领上舞台的那只手。</div>
+      </section>
+      <section>
+        <h3 class="prof-h">失踪 <i>// 忽然安静的风</i></h3>
+        <p>拉海洛的事务告一段落，漂泊者重返瑝珑，等来的却是一个消息：<b>泱泱失踪了</b>。为了找到她，漂泊者与她的姐姐——邵明商会的二小姐<b>穗穗</b>（观测编号 S-014，档案尚未解封）——一同踏入梦州的玄方地界。</p>
+      </section>
+      <section>
+        <h3 class="prof-h">梦州 <i>// 她离开的地方</i></h3>
+        <p>梦州，是她的故乡。悬浮的仙阁，瀑布与云雾托起的城。可故乡于她，并不只意味着温暖——她当年离开梦州的原因，与家族背后的秘密，正是这次观测要追索的东西。</p>
+        <div class="prof-note">泰提斯提示：梦州观测站的数据仍在分批接入（VER 3.5–3.8），本节记录将持续更新。</div>
+      </section>
+      <section>
+        <h3 class="prof-h">界限突破 <i>// 气动，到湮灭</i></h3>
+        <p>再次捕获到她时，频率变了。气动的轻盈退去，涌上来的是<b>湮灭</b>的暗流；迅刀起落之间，周身环绕玄鸟的虚影，共鸣解放时，<b>万鸟齐飞</b>。她的角色影像，名为「噩梦」。</p>
+        <figure class="prof-wide">
+          <img src="photos/yangyang-wide.jpg" alt="泱泱·玄翎驻足石阶，群鸟随行" loading="lazy" />
+          <figcaption>观测影像 · 群鸟随行　画 @火柴蝎Msc</figcaption>
+        </figure>
+        <p>究竟发生了什么，让一个听风的女孩，覆上了一身玄色的羽？泰提斯尚未取得完整记录。</p>
+      </section>
+      <section>
+        <h3 class="prof-h">玄翎 <i>// 耳畔苍翎响远音</i></h3>
+        <p>玄鸟，是传说里衔来讯息的鸟。她曾用耳朵听风；如今，她自己成了风里最深的那道影子。「玄翎」这个名字，既是黑色的羽，也是一句回答：<b>风一直都在，只是换了一种方式，继续替她传话。</b></p>
+      </section>
+      <div class="prof-sign">
+        <p>……本次解封，到此为止。</p>
+        <p>频率已重新捕获，观测仍在继续。她的电台，名为《风之所在》——我想，这四个字本身就是答案。</p>
+        <p>我见过许多共鸣者的蜕变，很少有哪一次，让我这样在意「之前」与「之后」的连线。愿她在噩梦的尽头，仍听得见最初的那阵风。风起之处，即是归途——这一条，我先替她记下。</p>
+      </div>`,
+  },
 }
 
 function cardHTML(s) {
@@ -596,7 +636,7 @@ export function mountObservation(root, onBack) {
             <h1 class="prof-name" id="profile-title">${d.name}<em>${d.full}</em></h1>
             <span class="prof-badge">${d.element}</span>
             <p class="prof-tagline">${d.tagline}</p>
-            <span class="prof-author">立绘 @${d.author}</span>
+            ${d.author ? `<span class="prof-author">立绘 @${d.author}</span>` : ''}
           </div>
         </div>
         ${d.body}

@@ -383,6 +383,9 @@ html.prof-lock { overflow: hidden; }
 .prof-quote { margin: 1.4rem 0; padding: .2rem 0 .2rem 1.2rem; border-left: 2px solid color-mix(in srgb, var(--accent) 50%, transparent); }
 .prof-quote p { font-size: 1rem; line-height: 1.9; color: rgba(232,233,242,.82); font-style: italic; margin-bottom: .3rem; }
 .prof-quote cite { font-style: normal; font-size: .8rem; color: rgba(232,233,242,.42); }
+.prof-wide { margin: 1.6rem 0 1.8rem; }
+.prof-wide img { width: 100%; display: block; border-radius: 10px; border: 1px solid rgba(232,233,242,.1); }
+.prof-wide figcaption { margin-top: .55rem; font-family: var(--font-tech); font-size: .74rem; letter-spacing: .14em; color: rgba(232,233,242,.42); text-align: right; }
 .prof-note {
   margin: 1.3rem 0; padding: .9rem 1.1rem; background: rgba(255,255,255,.03);
   border: 1px dashed rgba(232,233,242,.18); font-size: .9rem; line-height: 1.85; color: rgba(232,233,242,.62);
