@@ -102,6 +102,29 @@ try {
   assert.equal(await page.evaluate(() => document.activeElement?.classList.contains('subject-card')), true)
   await closeModule(page)
 
+  const observationPage = await browser.newPage({ viewport: { width: 1280, height: 720 } })
+  await observationPage.goto(`${BASE_URL}/observation.html`)
+  const observationRoot = observationPage.locator('#view-root')
+  assert.equal(await observationRoot.evaluate((element) => getComputedStyle(element).overflowY), 'auto')
+  const standaloneSubject = observationPage.locator('.subject-card').first()
+  await standaloneSubject.click()
+  await observationPage.locator('.prof-overlay.show').waitFor()
+  await observationPage.keyboard.press('Escape')
+  await observationPage.locator('.prof-overlay.show').waitFor({ state: 'hidden' })
+  assert.equal(
+    await observationRoot.evaluate((element) => getComputedStyle(element).overflowY),
+    'auto',
+    'closing a profile must restore the standalone observation scroll container',
+  )
+  await observationPage.mouse.move(1100, 650)
+  await observationPage.mouse.wheel(0, 600)
+  await observationPage.waitForTimeout(100)
+  assert.ok(
+    await observationRoot.evaluate((element) => element.scrollTop) > 0,
+    'trackpad-style vertical wheel input must scroll the standalone observation page',
+  )
+  await observationPage.close()
+
   await page.getByRole('link', { name: '观潮', exact: true }).click()
   await page.locator('.view-overlay.show').waitFor()
   assert.equal(await page.locator('.tide-card').count(), 2)
@@ -117,7 +140,7 @@ try {
   assert.equal(await firstRelation.evaluate((element) => element.classList.contains('is-src')), true)
 
   assert.deepEqual(consoleErrors, [], `browser errors:\n${consoleErrors.join('\n')}`)
-  console.log('PASS: homepage navigation, module content, keyboard cards, and modal focus')
+  console.log('PASS: navigation, module content, modal focus, and observation trackpad scrolling')
 } finally {
   await browser?.close()
   server.kill('SIGTERM')

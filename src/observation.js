@@ -130,7 +130,7 @@ const PROFILES = {
     photo: 'photos/shorekeeper.jpg', author: '腐朽的书',
     tagline: '守岸人，这个称呼就很好。它表示，某种因你而有的意义和决心。',
     body: `
-      <p class="prof-access">// 接入泰提斯 · 自述档案 S-001<br/>记录者：守岸人。被记录者：守岸人。<br/>这一次，我撰写记录的目的，不是说明我的用途，而是确认我的存在。为自己写下观测，是一种奇怪的体验——可我想试一次。</p>
+      <p class="prof-access">// 接入泰提斯 · 自述档案 S-001<br/>记录者：守岸人。被记录者：守岸人。<br/>档案标识：五星共鸣者｜衍射｜音感仪。<br/>这一次，我撰写记录的目的，不是说明我的用途，而是确认我的存在。为自己写下观测，是一种奇怪的体验——可我想试一次。</p>
 
       <section>
         <h3 class="prof-h">关于我的名字 <i>// 称谓，与回望的海岸</i></h3>
@@ -140,7 +140,7 @@ const PROFILES = {
 
       <section>
         <h3 class="prof-h">关于我的诞生 <i>// 浅蓝色的晶茧</i></h3>
-        <p>我并非自然诞生的生命。我的身体由高纯度残响能量构成，最初的形态，是一枚沉睡在锚点附近的<b>浅蓝色晶茧</b>。我被创造出来，是为了成为一个长久存在的容器，协助巡星调律者与泰提斯，分析悲鸣。</p>
+        <p>我并非自然诞生的生命。我的身体由高纯度残响能量构成，最初的形态，是一簇沉睡在锚点附近的<b>浅蓝色回音晶体</b>。我被创造出来，是为了成为一个长久存在的容器，协助巡星调律者与泰提斯，分析悲鸣。</p>
         <p>是你的频率唤醒了我。晶体破裂时，我已经知道自己应该做什么，却不知道自己究竟是谁。所以我对你说：我是为你而创造的工具，我会执行你的命令，满足你的需要。</p>
         <blockquote class="prof-quote"><p>你却没有立刻下达命令。你只是看着我，问起我的名字。</p><cite>—— 那是第一次，有人试图确认我的存在，而不只是确认我的功能。</cite></blockquote>
       </section>
@@ -171,7 +171,7 @@ const PROFILES = {
       <section>
         <h3 class="prof-h">关于那片星云 <i>// 蝴蝶停下的形状</i></h3>
         <p>我是被称作「第二实例」的存在，最初被造出来，是为了协助调律者，解析悲鸣的起源。可在守望的漫长里，我渐渐学会的，远不止演算。</p>
-        <p>当我以回响能量织构境界时，它会舒展成一只蝴蝶——一片形如星云的光。人们叫它蝴蝶星云。对我而言，它不是力量的展示，而是一句无声的承诺：<b>只要我还在，生命的延续，就有人守着。</b></p>
+        <p>我的异能力名为<b>「叙响织构」</b>——引导回音彼此缀连，织构出新的境界。当回响能量舒展开来，它会化作一只蝴蝶，一片形如星云的光。人们叫它蝴蝶星云。对我而言，它不是力量的展示，而是一句无声的承诺：<b>只要我还在，生命的延续，就有人守着。</b></p>
       </section>
 
       <section>
@@ -181,9 +181,9 @@ const PROFILES = {
 
       <section>
         <h3 class="prof-h">关于噬亡星 <i>// 我把最高权限，交到了你手里</i></h3>
-        <p>海岸尽头那一战，噬亡星苏醒了。它要吞噬的不只是黑海岸，而是这片天空里所有尚未熄灭的频率。泰提斯演算到尽头，给出的仍是同一个结论：让我作为介质，把灾难接进核心。我也曾质疑过那套算法——泰提斯并没有给出真正的推演，而人类，不该是这样被限制的存在。</p>
+        <p>海岸尽头，噬亡星失去稳定。它是泰提斯用于收容错误和弃用数据的特殊星图，没有恶意，也不理解牺牲；它只会依照系统最底层的规则，将一切无法被正确归档的频率拖入黑洞。泰提斯演算到尽头，给出的仍是同一个结论：让我作为介质，把灾难接进核心。我也曾质疑过那套算法——泰提斯并没有给出真正的推演，而人类，不该是这样被限制的存在。</p>
         <p>所以这一次，在被黑洞吞没之前，我先把黑海岸的最高权限，交到了你的手里。我以为那是道别。可你没有用它去完成计算——你用它，把我从噬亡星里，一点点拉了回来。</p>
-        <blockquote class="prof-quote"><p>危机过后，我们在只属于两个人的海岸边，奏响了那段熟悉的旋律。</p><cite>—— 第一次，被我护住的人，是我自己。</cite></blockquote>
+        <blockquote class="prof-quote"><p>危机过后，我们在只属于两个人的海岸边，奏响了那段熟悉的旋律。</p><cite>—— 第一次，我也成了被保护的人。</cite></blockquote>
       </section>
 
       <section>
@@ -614,6 +614,7 @@ export function mountObservation(root, onBack) {
   const inertState = new Map()
   let profileTrigger = null
   let clearProfileTimer = null
+  let rootOverflowBeforeProfile = root.style.overflow
   function lockBackground() {
     Array.from(document.body.children).forEach((child) => {
       if (child === profEl) return
@@ -648,6 +649,7 @@ export function mountObservation(root, onBack) {
       </div>`
     profEl.querySelector('.prof-back').addEventListener('click', (e) => { e.preventDefault(); closeProfile() })
     profEl.scrollTop = 0
+    rootOverflowBeforeProfile = root.style.overflow
     root.style.overflow = 'hidden'              // 锁滚动容器（SPA 的 .view-overlay / 独立页容器）
     document.documentElement.classList.add('prof-lock')  // 锁文档（独立页 document 滚动）
     lockBackground()
@@ -661,7 +663,7 @@ export function mountObservation(root, onBack) {
     if (!profEl.classList.contains('show')) return
     profEl.classList.remove('show')
     profEl.setAttribute('aria-hidden', 'true')
-    root.style.overflow = ''
+    root.style.overflow = rootOverflowBeforeProfile
     document.documentElement.classList.remove('prof-lock')
     unlockBackground()
     const returnTarget = profileTrigger
@@ -723,6 +725,7 @@ export function mountObservation(root, onBack) {
     io.disconnect()
     window.removeEventListener('keydown', onProfileKeydown, true)
     if (clearProfileTimer) clearTimeout(clearProfileTimer)
+    if (profEl.classList.contains('show')) root.style.overflow = rootOverflowBeforeProfile
     unlockBackground()
     document.documentElement.classList.remove('prof-lock')
     profEl.remove()
