@@ -528,6 +528,742 @@ html.prof-lock { overflow: hidden; }
   100% { opacity: 0; background-position: -30% 0; }
 }
 
+/* ---------- S-001 守岸人 · 系统→星海渐变 ---------- */
+/* --p 为滚动进度 0→1：网格溶解、星空浮现、暖色上涌 */
+.prof-overlay.s001 { --p: 0; background: #05070f; }
+.s001 .prof-doc { position: relative; z-index: 2; }
+
+.s001-grid {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 54px, rgba(90, 140, 230, .09) 54px 55px),
+    repeating-linear-gradient(90deg, transparent 0 54px, rgba(90, 140, 230, .09) 54px 55px);
+  opacity: calc(1 - var(--p));
+}
+.s001-sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: var(--p); }
+.s001-sky i {
+  position: absolute; left: var(--x); top: var(--y);
+  width: 2px; height: 2px; border-radius: 50%;
+  background: #dfe6ff; box-shadow: 0 0 6px rgba(190, 200, 255, .9);
+  animation: s001tw var(--tw) ease-in-out infinite alternate;
+}
+@keyframes s001tw {
+  from { opacity: calc(var(--o) * .25); }
+  to   { opacity: var(--o); }
+}
+.s001-warmth {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 70% 82%, rgba(150, 90, 200, .30), transparent 70%),
+    radial-gradient(50% 42% at 18% 90%, rgba(220, 120, 170, .18), transparent 70%),
+    radial-gradient(45% 40% at 50% 8%, rgba(90, 110, 230, .14), transparent 70%);
+  opacity: var(--p);
+}
+
+/* 自我确认航程：系统不是背景，而是一层逐渐被生命穿透的壳 */
+.s001-tide {
+  position: fixed; z-index: 4; left: 3.2rem; top: 50%; width: 72px;
+  transform: translateY(-50%); color: rgba(158, 197, 242, .62);
+  font-family: var(--font-tech); letter-spacing: .14em; pointer-events: none;
+}
+.s001-tide-label { display: block; font-size: .5rem; writing-mode: vertical-rl; margin: 0 0 1rem 10px; }
+.s001-tide strong::after { content: attr(data-empty); }
+.s001[data-tide="系统"] .s001-tide strong::after { content: "系统"; }
+.s001[data-tide="苏醒"] .s001-tide strong::after { content: "苏醒"; }
+.s001[data-tide="选择"] .s001-tide strong::after { content: "选择"; }
+.s001[data-tide="守望"] .s001-tide strong::after { content: "守望"; }
+.s001[data-tide="归岸"] .s001-tide strong::after { content: "归岸"; }
+.s001-tide strong { display: block; margin: 0 0 .8rem; font: 500 .7rem/1 var(--font-tech); color: #d8e7ff; }
+.s001-tide i { display: block; width: 5px; height: 5px; margin: 0 0 17px 8px; border: 1px solid #718fd2; border-radius: 50%; }
+.s001-tide i:first-of-type { background: #bfe0ff; box-shadow: 0 0 12px #7db4ff; }
+.s001[data-tide="苏醒"] .s001-tide i:nth-of-type(-n+2),
+.s001[data-tide="选择"] .s001-tide i:nth-of-type(-n+3),
+.s001[data-tide="守望"] .s001-tide i:nth-of-type(-n+4),
+.s001[data-tide="归岸"] .s001-tide i { background: #e3c3ff; box-shadow: 0 0 12px #a884e9; }
+.s001-frequency { position: fixed; z-index: 1; left: 0; right: 0; bottom: 8vh; height: 64px; opacity: calc(.16 + var(--p) * .45); pointer-events: none; overflow: hidden; }
+.s001-frequency i { display: block; width: 200%; height: 100%; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='64' viewBox='0 0 640 64'%3E%3Cpath d='M0 32h115l8-8 10 16 12-35 14 54 12-27h100l8-8 10 16 12-35 14 54 12-27h303' fill='none' stroke='%237aa6ee' stroke-width='1'/%3E%3C/svg%3E") repeat-x; animation: s001pulse 12s linear infinite; }
+@keyframes s001pulse { to { transform: translateX(-640px); } }
+.s001-nebula { position: fixed; z-index: 1; right: -6vw; top: 18vh; width: 35vw; height: 35vw; opacity: calc(var(--p) * .68); filter: blur(.2px); pointer-events: none; }
+.s001-nebula b { position: absolute; width: 58%; height: 72%; border-radius: 70% 30% 60% 40%; background: radial-gradient(ellipse at center, rgba(205,165,255,.55), rgba(83,117,235,.16) 52%, transparent 72%); }
+.s001-nebula b:first-child { left: 0; transform: rotate(-24deg); }
+.s001-nebula b:nth-child(2) { right: 0; transform: scaleX(-1) rotate(-24deg); }
+.s001-nebula span { position: absolute; left: 49%; top: 24%; width: 2%; height: 50%; background: linear-gradient(#fff, #9d8be8, transparent); box-shadow: 0 0 20px #c8b5ff; }
+
+/* 频率蝶：随观测进度沿海潮形轨迹引路，归岸时停驻 */
+.s001-guide-butterfly {
+  --bf-x: 8vw; --bf-y: 22vh; --bf-r: 0deg;
+  position: fixed; z-index: 5; left: 0; top: 0; width: 72px; pointer-events: none;
+  transform: translate3d(var(--bf-x), var(--bf-y), 0) rotate(var(--bf-r));
+  transition: transform .75s cubic-bezier(.2,.75,.25,1), filter .8s ease;
+  will-change: transform;
+  filter: drop-shadow(0 0 12px rgba(99,166,255,.65));
+}
+.s001-guide-butterfly::after {
+  content: ""; position: absolute; right: 72%; top: 48%; width: 92px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(116,185,255,.58));
+  transform-origin: right; transform: rotate(5deg); opacity: .7;
+}
+.s001-guide-butterfly span { display: block; animation: s001drift 2.8s ease-in-out infinite; }
+.s001-guide-butterfly img { display: block; width: 72px; height: auto; animation: bf-flap .34s ease-in-out infinite; }
+.s001-guide-butterfly.is-home { filter: drop-shadow(0 0 18px rgba(235,169,255,.9)) sepia(.12); }
+.s001-guide-butterfly.is-home span { animation-duration: 4s; }
+.s001-guide-butterfly.is-home img { animation-duration: 1.25s; }
+@keyframes s001drift { 0%,100% { transform: translateY(-5px); } 50% { transform: translateY(7px); } }
+
+/* 自检打字机 */
+.s001-boot {
+  margin: 0 0 2.6rem; padding: 1.1rem 1.4rem; min-height: 10.5em;
+  border: 1px solid rgba(90, 140, 230, .35);
+  background: rgba(8, 14, 30, .6);
+  font-family: var(--font-tech); font-size: .82rem; line-height: 2.1; letter-spacing: .06em;
+  color: #8fc1e8; white-space: pre-wrap;
+}
+.boot-caret {
+  display: inline-block; width: .55em; height: 1em; margin-left: 2px;
+  background: #8fc1e8; vertical-align: -.15em;
+  animation: s001blink 1s steps(1) infinite;
+}
+@keyframes s001blink { 50% { opacity: 0; } }
+
+/* 档案头：扫描线冷色 */
+.s001 .prof-hero { position: relative; display: block; min-height: 0; overflow: hidden; padding-bottom: 0; gap: 0; border: 1px solid rgba(100, 145, 225, .28); background: rgba(4, 9, 22, .72); box-shadow: 0 34px 90px -55px rgba(83, 145, 255, .9); }
+.s001 .prof-portrait { position: relative; inset: auto; width: 100%; max-width: none; min-height: 0; aspect-ratio: 2400 / 1642; background: #020713; }
+.s001 .prof-portrait img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; filter: saturate(.96) contrast(1.03); }
+.s001 .prof-portrait::before { content: ""; position: absolute; z-index: 1; inset: 0; background: linear-gradient(0deg, rgba(2,7,18,.18), transparent 22%); pointer-events: none; }
+.s001 .prof-id { position: relative; z-index: 2; width: auto; padding: 2.2rem 2.6rem 2.5rem; border-top: 1px solid rgba(107, 157, 235, .26); background: linear-gradient(110deg, rgba(8,18,39,.96), rgba(12,15,38,.88)); text-shadow: 0 2px 16px #020612; }
+.s001 .prof-id::before { content: "SELF / EXISTENCE CONFIRMED"; display: block; float: right; margin-top: .35rem; color: rgba(126, 181, 240, .52); font: .58rem/1 var(--font-tech); letter-spacing: .18em; }
+.s001 .prof-code::after { content: "  /  LIFEFORM STATUS: CONFIRMED"; color: #8cd7ff; }
+
+/* 两段被系统珍藏的图像记忆 */
+.s001-memory {
+  position: relative; margin: 2rem -5vw 1rem; overflow: hidden;
+  border: 1px solid rgba(137, 175, 242, .3); background: #071020;
+  box-shadow: 0 28px 80px -42px rgba(89, 151, 255, .8);
+}
+.s001-memory img { display: block; width: 100%; height: clamp(330px, 49vw, 620px); object-fit: cover; transition: transform 1.6s cubic-bezier(.2,.8,.2,1), filter 1s ease; }
+.s001-memory--coast img { object-position: 50% 50%; }
+.s001-memory::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, transparent 52%, rgba(3,8,21,.82)); }
+.s001-memory:hover img { transform: scale(1.025); filter: saturate(1.12) brightness(1.04); }
+.s001-memory figcaption { position: absolute; z-index: 2; left: 2rem; right: 2rem; bottom: 1.5rem; color: #e6edff; font: .9rem/1.7 var(--font-tech); text-shadow: 0 2px 10px #000; }
+.s001-memory figcaption span { display: block; margin-bottom: .25rem; color: #82baf5; font-size: .65rem; letter-spacing: .18em; }
+.s001-memory--coast { margin-left: calc(50% - 50vw + 4rem); margin-right: calc(50% - 50vw + 4rem); }
+.s001-memory--coast img { height: clamp(360px, 52vw, 700px); }
+
+@media (max-width: 760px) {
+  .s001-tide { display: none; }
+  .s001-guide-butterfly { width: 52px; opacity: .78; }
+  .s001-guide-butterfly img { width: 52px; }
+  .s001-memory, .s001-memory--coast { margin-left: 0; margin-right: 0; }
+  .s001-memory img, .s001-memory--coast img { height: 54vw; min-height: 250px; }
+  .s001-memory figcaption { left: 1rem; right: 1rem; bottom: .8rem; font-size: .75rem; }
+  .s001 .prof-hero, .s001 .prof-portrait { min-height: 0; }
+  .s001 .prof-id { padding: 1.5rem 1.4rem 1.8rem; }
+  .s001 .prof-id::before { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s001-guide-butterfly { display: none; }
+}
+.s001 .prof-portrait::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(90, 160, 255, .09) 0 2px, transparent 2px 4px);
+  mix-blend-mode: screen;
+}
+.s001 .prof-name { font-family: var(--font-tech); letter-spacing: .14em; }
+
+/* 阶段一（1–2 章）：终端面板 */
+.s001 .prof-doc section:nth-of-type(-n+2) {
+  border: 1px solid rgba(90, 140, 230, .3);
+  background: rgba(8, 14, 30, .55);
+  padding: 1.4rem 1.6rem .9rem;
+}
+.s001 .prof-doc section:nth-of-type(-n+2) .prof-h {
+  font-family: var(--font-tech); font-size: 1.05rem; letter-spacing: .1em; color: #bcd7f0;
+}
+.s001 .prof-doc section:nth-of-type(-n+2) .prof-h::before { content: "> "; color: #5a8ce6; }
+.s001 .prof-doc section:nth-of-type(-n+2) p { color: #9fb6d8; }
+
+/* 阶段二（3–4 章）：边框软化，蓝转紫 */
+.s001 .prof-doc section:nth-of-type(n+3):nth-of-type(-n+4) {
+  border: 1px solid rgba(150, 140, 220, .22); border-radius: 12px;
+  background: rgba(16, 16, 38, .4);
+  padding: 1.4rem 1.6rem .9rem;
+}
+.s001 .prof-doc section:nth-of-type(n+3):nth-of-type(-n+4) .prof-h { color: #d5cdf0; }
+.s001 .prof-doc section:nth-of-type(n+3):nth-of-type(-n+4) p { color: #b3accf; }
+
+/* 阶段三（5 章起）：无框星空，宋体变暖 */
+.s001 .prof-doc section:nth-of-type(n+5) { border: none; background: transparent; padding: .4rem 0 0; }
+.s001 .prof-doc section:nth-of-type(n+5) .prof-h {
+  font-family: "Songti SC", "STSong", serif; font-size: 1.5rem; letter-spacing: .16em;
+  color: #f0e6f6; text-shadow: 0 0 24px rgba(190, 140, 220, .45);
+}
+.s001 .prof-doc section:nth-of-type(n+5) p { color: #d8cfe6; font-size: 1rem; }
+.s001 .prof-doc section:nth-of-type(n+5) .prof-quote { border-left-color: rgba(220, 140, 190, .6); }
+.s001 .prof-doc section:nth-of-type(n+5) .prof-note {
+  border-style: solid; border-color: rgba(190, 140, 220, .3); background: rgba(150, 90, 200, .08);
+  color: #cfc2de;
+}
+
+/* 签名区：最暖处，落一只光蝶 */
+.s001 .prof-sign {
+  position: relative; border: none; border-left: none; border-radius: 16px;
+  background: linear-gradient(160deg, rgba(120, 80, 180, .18), rgba(220, 120, 170, .10));
+  box-shadow: 0 0 70px -22px rgba(170, 110, 220, .5);
+}
+.s001 .prof-sign p { font-family: "Songti SC", "STSong", serif; color: #ead9f2; }
+.s001 .prof-sign p:last-child { color: #f2b8d8; text-shadow: 0 0 22px rgba(242, 150, 200, .55); }
+.s001 .prof-sign::before {
+  content: ""; position: absolute; top: -27px; right: 46px; width: 54px; height: 46px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 52'%3E%3Cpath d='M32 26 C 18 2, 2 8, 6 22 C 9 33, 22 34, 32 26 Z' fill='%23d9a8f0'/%3E%3Cpath d='M32 26 C 46 2, 62 8, 58 22 C 55 33, 42 34, 32 26 Z' fill='%23d9a8f0'/%3E%3Cpath d='M32 26 C 20 46, 8 44, 12 34 C 15 27, 25 27, 32 26 Z' fill='%23b88ae0'/%3E%3Cpath d='M32 26 C 44 46, 56 44, 52 34 C 49 27, 39 27, 32 26 Z' fill='%23b88ae0'/%3E%3Crect x='30.6' y='16' width='2.8' height='20' rx='1.4' fill='%23f2e2ff'/%3E%3C/svg%3E") no-repeat center / contain;
+  filter: drop-shadow(0 0 14px rgba(230, 160, 255, .85));
+  animation: s001fly 4.5s ease-in-out infinite;
+}
+@keyframes s001fly {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50%      { transform: translateY(-8px) rotate(5deg); }
+}
+.s001 .prof-end { color: rgba(234, 217, 242, .55); border-top-color: rgba(190, 140, 220, .25); }
+.s001 .prof-end b { color: #d9a8f0; }
+
+/* ---------- S-008 琳奈 · 街头喷绘墙 ---------- */
+.prof-overlay.s008 {
+  background-color: #17161c;
+  background-image:
+    radial-gradient(60% 50% at 15% 10%, rgba(53,200,216,.10), transparent 70%),
+    radial-gradient(55% 45% at 88% 20%, rgba(232,88,168,.10), transparent 70%),
+    radial-gradient(60% 55% at 75% 90%, rgba(232,200,79,.08), transparent 70%),
+    repeating-linear-gradient(0deg, transparent 0 46px, rgba(255,255,255,.035) 46px 48px),
+    repeating-linear-gradient(90deg, transparent 0 118px, rgba(255,255,255,.028) 118px 120px);
+}
+.s008 .prof-doc { position: relative; z-index: 2; }
+
+/* 档案头：拍立得 + 喷漆大字 */
+.s008 .prof-hero { border-bottom: none; position: relative; padding-bottom: 2.8rem; }
+.s008 .prof-hero::after {
+  content: ""; position: absolute; left: 0; right: 14%; bottom: 0; height: 7px; border-radius: 4px;
+  background: linear-gradient(90deg, #35c8d8, #e8c84f 45%, #e858a8);
+  filter: blur(.5px); transform: rotate(-.6deg);
+  box-shadow: 0 0 18px rgba(232,200,79,.35);
+}
+.s008 .prof-portrait {
+  border: none; background: #f6f2e9; padding: 10px 10px 44px;
+  aspect-ratio: auto; overflow: visible;
+  transform: rotate(-2.4deg);
+  box-shadow: 0 16px 44px -12px rgba(0,0,0,.78);
+  position: relative;
+}
+.s008 .prof-portrait img { aspect-ratio: 3 / 4; height: auto; }
+.s008 .prof-portrait::before {
+  content: ""; position: absolute; top: -13px; left: 50%; width: 96px; height: 26px; z-index: 2;
+  transform: translateX(-50%) rotate(3deg);
+  background: rgba(240,230,160,.45); box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.s008 .prof-portrait::after {
+  content: "星炬学院 · 预科生（真的）"; position: absolute; left: 0; right: 0; bottom: 11px;
+  text-align: center; font-family: "Hannotate SC", "Wawati SC", cursive;
+  font-size: .92rem; color: #4a4454;
+}
+.s008 .prof-name {
+  font-family: "Hannotate SC", "Wawati SC", sans-serif;
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  color: #e8c84f; transform: rotate(-1.6deg); transform-origin: left bottom;
+  text-shadow:
+    3px 3px 0 rgba(232,88,168,.55),
+    -3px -2px 0 rgba(53,200,216,.45),
+    0 0 26px rgba(232,200,79,.5);
+}
+.s008 .prof-name em { font-family: var(--font-tech); color: rgba(232,233,242,.55); text-shadow: none; }
+.s008 .prof-badge {
+  background: #e8c84f; color: #1a1820; border: none; border-radius: 3px;
+  font-weight: 700; letter-spacing: .26em; padding: .3rem .7rem;
+  transform: rotate(1.8deg); box-shadow: 0 3px 10px rgba(0,0,0,.4);
+}
+.s008 .prof-tagline {
+  font-family: "Hannotate SC", "Wawati SC", serif;
+  font-size: 1.15rem; color: #f2ede0;
+}
+.s008 .prof-author { color: rgba(242,237,224,.45); }
+.s008 .prof-access {
+  color: color-mix(in srgb, #35c8d8 72%, #cfd8e0);
+  text-shadow: 0 0 14px rgba(53,200,216,.4);
+}
+
+/* 章节 = 贴在墙上的海报 */
+.s008 .prof-doc section {
+  margin-top: 3.2rem; padding: 1.7rem 1.9rem 1.2rem;
+  background: #f6f1e4;
+  box-shadow: 0 18px 46px -14px rgba(0,0,0,.72);
+  position: relative; transform: rotate(-.8deg);
+}
+.s008 .prof-doc section:nth-of-type(even) { transform: rotate(.9deg); }
+.s008 .prof-doc section::before,
+.s008 .prof-doc section::after {
+  content: ""; position: absolute; top: -12px; width: 86px; height: 24px;
+  background: rgba(240,230,160,.5); box-shadow: 0 2px 5px rgba(0,0,0,.25);
+}
+.s008 .prof-doc section::before { left: 7%; transform: rotate(-5deg); }
+.s008 .prof-doc section::after { right: 7%; transform: rotate(4deg); }
+.s008 .prof-doc section .prof-h {
+  color: #232030; font-family: "Hannotate SC", "Wawati SC", serif; font-size: 1.4rem;
+}
+.s008 .prof-doc section p { color: #453f52; }
+.s008 .prof-doc section p b { color: #17131f; }
+.s008 .prof-doc section:nth-of-type(4n+1) .prof-h i { color: #0fa3b5; }
+.s008 .prof-doc section:nth-of-type(4n+2) .prof-h i { color: #e06a10; }
+.s008 .prof-doc section:nth-of-type(4n+3) .prof-h i { color: #d43e96; }
+.s008 .prof-doc section:nth-of-type(4n)   .prof-h i { color: #b98f0a; }
+.s008 .prof-note {
+  background: #fbe98f; border: none; color: #4a3f18;
+  font-family: "Hannotate SC", "Wawati SC", serif; font-size: .96rem;
+  transform: rotate(-1.2deg);
+  box-shadow: 0 10px 26px -10px rgba(0,0,0,.5);
+}
+
+/* 守岸人签名 = 墙上的喷漆板 */
+.s008 .prof-sign {
+  background: transparent;
+  border: 2px dashed rgba(232,200,79,.5); border-left: 2px dashed rgba(232,200,79,.5);
+  transform: rotate(-.5deg);
+}
+.s008 .prof-sign p {
+  color: rgba(242,237,224,.85);
+  font-family: "Hannotate SC", "Wawati SC", serif; font-size: 1.05rem;
+}
+.s008 .prof-sign p:last-child { color: #e858a8; text-shadow: 0 0 18px rgba(232,88,168,.5); }
+.s008 .prof-end { color: rgba(242,237,224,.5); border-top-color: rgba(242,237,224,.2); }
+.s008 .prof-end b { color: #35c8d8; }
+.s008 .prof-back { color: rgba(242,237,224,.65); }
+.s008 .prof-back:hover { color: #35c8d8; }
+
+/* 喷漆斑、猫猫头、墙角签名 */
+.s008-deco { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.s008-deco span {
+  position: absolute; left: var(--x); top: var(--y);
+  width: calc(110px * var(--s)); height: calc(110px * var(--s));
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 40%, var(--c) 0 6%, transparent 7%),
+    radial-gradient(circle at 62% 30%, var(--c) 0 4%, transparent 5%),
+    radial-gradient(circle at 50% 62%, var(--c) 0 5%, transparent 6%),
+    radial-gradient(circle, var(--c) 0%, transparent 62%);
+  opacity: .16; transform: rotate(var(--r));
+}
+.s008-cat {
+  position: fixed; top: 9vh; right: 5vw;
+  width: clamp(90px, 10vw, 150px);
+  stroke: #e858a8; stroke-width: 5; fill: none;
+  stroke-linecap: round; stroke-linejoin: round;
+  filter: drop-shadow(0 0 14px rgba(232,88,168,.6));
+  transform: rotate(8deg); opacity: .85;
+}
+.s008-cat .fill { fill: #e858a8; stroke: none; }
+.s008-cat .whisker { stroke-width: 3.5; }
+.s008-sign {
+  position: fixed; bottom: 7vh; left: 5vw;
+  font-family: "Hannotate SC", "Wawati SC", serif;
+  font-size: 1.15rem; letter-spacing: .25em;
+  color: #35c8d8; opacity: .8; transform: rotate(-6deg);
+  text-shadow: 0 0 14px rgba(53,200,216,.6);
+}
+
+/* ---------- S-009 菲比 · 晨光礼拜堂 ---------- */
+.prof-overlay.s009 {
+  --s009-p: 0;
+  background-color: #eef6f4;
+  background-image:
+    radial-gradient(70% 52% at 78% 2%, rgba(255,232,151,.58), transparent 72%),
+    radial-gradient(52% 58% at 7% 62%, rgba(129,202,225,.24), transparent 74%),
+    linear-gradient(180deg, rgba(255,255,255,.78), rgba(226,242,239,.94));
+}
+
+/* ---------- S-002 千咲 · 命运卷宗 ---------- */
+.prof-overlay.s002 {
+  --s002-p: 0;
+  background-color: #09080b;
+  background-image:
+    radial-gradient(70% 46% at 82% 8%, rgba(176,33,58,.18), transparent 72%),
+    radial-gradient(65% 55% at 12% 86%, rgba(116,61,32,.14), transparent 72%),
+    repeating-linear-gradient(0deg, transparent 0 38px, rgba(255,255,255,.018) 38px 39px);
+}
+.prof-overlay.s002::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(75% 65% at 50% 88%, rgba(210,116,47,.28), transparent 72%);
+  opacity: calc(var(--s002-p) * .95); transition: opacity .12s linear;
+}
+.s002 .prof-doc { position: relative; z-index: 2; max-width: 920px; }
+.s002 .prof-back { color: rgba(230,214,202,.55); }
+.s002 .prof-back:hover { color: #e33c58; }
+
+/* 横向电影画幅：让千咲与猫完整进入第一眼 */
+.s002 .prof-hero {
+  display: block; min-height: 510px; padding: 0; margin-bottom: 3rem;
+  border: 1px solid rgba(213,60,82,.32); overflow: hidden; position: relative;
+  background: #08070a; box-shadow: 0 35px 90px -42px rgba(176,25,51,.62);
+  clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 34px 100%, 0 calc(100% - 34px));
+}
+.s002 .prof-portrait {
+  width: 100%; height: 510px; aspect-ratio: auto; border: none; box-shadow: none;
+  opacity: .82; filter: saturate(.78) contrast(1.07);
+}
+.s002 .prof-portrait img { object-fit: cover; object-position: center 42%; }
+.s002 .prof-hero::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(8,7,10,.9) 0%, transparent 48%),
+    linear-gradient(0deg, rgba(8,7,10,.96) 0%, transparent 58%);
+}
+.s002 .prof-hero::after {
+  content: ""; position: absolute; inset: 16px; z-index: 2; pointer-events: none;
+  border: 1px solid rgba(235,61,84,.22);
+  clip-path: polygon(0 0, 22% 0, 22% 1px, 78% 1px, 78% 0, 100% 0, 100% 100%, 0 100%);
+}
+.s002 .prof-id {
+  position: absolute; z-index: 3; left: clamp(1.6rem,5vw,3.5rem); right: 2rem; bottom: 2.1rem;
+}
+.s002 .prof-code { color: rgba(241,215,207,.46); }
+.s002 .prof-name {
+  color: #f6ebe5; font-family: "Songti SC", "STSong", serif; font-weight: 600;
+  letter-spacing: .18em; text-shadow: 0 0 28px rgba(218,40,67,.55);
+}
+.s002 .prof-name em { color: rgba(239,212,205,.48); font-family: var(--font-tech); }
+.s002 .prof-badge { color: #ef4b65; border-color: rgba(239,75,101,.58); background: rgba(85,8,22,.42); }
+.s002 .prof-tagline { color: rgba(246,228,219,.76); font-family: "Songti SC", "STSong", serif; }
+.s002 .prof-author { color: rgba(238,210,201,.4); }
+.s002 .prof-access {
+  margin: 0 0 3.6rem; padding: 1.3rem 1.5rem;
+  border: 1px solid rgba(195,49,72,.24); border-left: 3px solid #c92f49;
+  background: rgba(20,13,17,.76); color: rgba(225,181,178,.7);
+  box-shadow: 0 18px 55px -42px rgba(203,43,69,.8);
+}
+
+/* 每一节像钉在证物墙上的记忆卷页 */
+.s002 .prof-doc section {
+  margin: 2.8rem 0; padding: 1.7rem 2rem 1.25rem 2.35rem;
+  border: 1px solid rgba(225,205,194,.12); border-left: 2px solid rgba(203,47,73,.58);
+  background: linear-gradient(135deg, rgba(31,23,26,.94), rgba(17,14,18,.9));
+  box-shadow: 0 24px 55px -38px #000; position: relative;
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+}
+.s002 .prof-doc section:nth-of-type(even) { transform: translateX(1.2rem); }
+.s002 .prof-doc section::before {
+  content: ""; position: absolute; left: -8px; top: 32px; width: 14px; height: 14px;
+  border-radius: 50%; background: #c82f49; box-shadow: 0 0 16px rgba(224,49,80,.8);
+}
+.s002 .prof-doc section::after {
+  content: attr(data-memory); position: absolute; right: 1rem; top: .65rem;
+  font: .52rem/1 var(--font-tech); letter-spacing: .22em; color: rgba(224,197,186,.18);
+}
+.s002 .prof-doc section:nth-of-type(n+8) {
+  border-left-color: rgba(217,137,58,.68);
+  background: linear-gradient(135deg, rgba(42,29,23,.94), rgba(19,15,17,.92));
+}
+.s002 .prof-doc section:nth-of-type(n+8)::before { background: #d7923f; box-shadow: 0 0 17px rgba(223,146,54,.8); }
+.s002 .prof-h { color: #f0ded5; font-family: "Songti SC", "STSong", serif; letter-spacing: .13em; }
+.s002 .prof-h i { color: #dd4960; }
+.s002 .prof-doc section:nth-of-type(n+8) .prof-h i { color: #d99a4e; }
+.s002 .prof-doc p { color: rgba(231,211,201,.7); }
+.s002 .prof-doc p b { color: #f6e7df; }
+.s002 .prof-note {
+  border: 1px dashed rgba(219,65,88,.3); background: rgba(94,16,31,.16);
+  color: rgba(224,186,180,.7); transform: rotate(-.35deg);
+}
+.s002 .prof-quote {
+  margin: 1.6rem -.25rem; padding: 1.15rem 1.45rem;
+  border-left: 2px solid #cf3650; background: rgba(8,7,10,.52);
+}
+.s002 .prof-quote p { color: rgba(248,229,219,.84); }
+.s002 .prof-quote cite { color: rgba(208,168,160,.52); }
+
+/* 剪断时刻 */
+.s002-cut { display: grid; grid-template-columns: 1fr auto 1fr; gap: .75rem; align-items: center; margin: 1.8rem 0 .35rem; }
+.s002-cut span { height: 1px; background: repeating-linear-gradient(90deg, #db3652 0 22px, transparent 22px 29px); }
+.s002-cut b { color: #e34b64; font-size: 1.55rem; rotate: -22deg; text-shadow: 0 0 15px rgba(231,59,91,.65); }
+
+.s002 .prof-sign {
+  border: 1px solid rgba(216,138,58,.36); border-left: 3px solid #d68c3e;
+  background: linear-gradient(145deg, rgba(68,42,27,.48), rgba(25,17,20,.8));
+  box-shadow: 0 24px 70px -45px rgba(224,135,47,.8); position: relative;
+}
+.s002 .prof-sign::before {
+  content: "糾"; position: absolute; right: 1.4rem; top: 1rem;
+  font: 3.6rem/1 "Songti SC", serif; color: rgba(218,139,56,.1);
+}
+.s002 .prof-sign p { color: rgba(235,210,193,.76); }
+.s002 .prof-sign p:last-child { color: #e1a25b; text-shadow: 0 0 18px rgba(222,137,50,.45); }
+.s002 .prof-end { color: rgba(218,187,174,.38); border-top-color: rgba(203,68,79,.2); }
+.s002 .prof-end b { color: #d78e43; }
+
+/* 红线背景：前半段断裂，后半段逐渐接续为琥珀金 */
+.s002-deco { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.s002-threads { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .38; }
+.s002-threads path {
+  fill: none; stroke: #d72e4b; stroke-width: 1.5; vector-effect: non-scaling-stroke;
+  stroke-dasharray: 13 5 4 8; stroke-dashoffset: calc(100 - var(--s002-p) * 100);
+  filter: drop-shadow(0 0 5px rgba(219,42,72,.55));
+}
+.s002-threads .thread-b { stroke-width: 1; opacity: .66; stroke-dashoffset: calc(-70 + var(--s002-p) * 100); }
+.s002-threads .thread-c { stroke-width: .8; opacity: .5; }
+.s002[data-thread="琥珀"] .s002-threads path,
+.s002[data-thread="接线"] .s002-threads path { stroke: #d89240; filter: drop-shadow(0 0 6px rgba(223,143,55,.6)); }
+.s002-scissors {
+  position: absolute; right: 7vw; top: calc(18% + var(--s002-p) * 60%);
+  color: rgba(227,58,85,.42); font-size: 2.4rem; rotate: calc(-28deg + var(--s002-p) * 70deg);
+  text-shadow: 0 0 18px rgba(222,46,77,.6); transition: color .25s;
+}
+.s002[data-thread="接线"] .s002-scissors { color: rgba(218,145,61,.32); }
+.s002-case {
+  position: fixed; right: 2.2vw; bottom: 4vh; writing-mode: vertical-rl;
+  font: .55rem/1 var(--font-tech); letter-spacing: .28em; color: rgba(213,67,87,.3);
+}
+
+/* 左侧年龄 / 命运节点 */
+.s002-timeline {
+  position: fixed; left: clamp(18px,3vw,46px); top: 50%; translate: 0 -50%;
+  display: flex; flex-direction: column; align-items: center; gap: .75rem;
+  color: rgba(223,186,175,.36);
+}
+.s002-timeline > span { writing-mode: vertical-rl; font: .52rem/1 var(--font-tech); letter-spacing: .28em; }
+.s002-timeline > div { position: relative; width: 2px; height: 155px; background: rgba(215,59,82,.18); }
+.s002-timeline > div i {
+  position: absolute; inset: 0 0 auto; height: calc(var(--s002-p) * 100%);
+  background: linear-gradient(#d62c4a, #d49342); box-shadow: 0 0 9px rgba(216,49,76,.55);
+}
+.s002-timeline > div b {
+  position: absolute; left: 50%; translate: -50% -50%; width: 7px; height: 7px;
+  border: 1px solid #bf3b50; border-radius: 50%; background: #0c090c;
+}
+.s002-timeline > div b:nth-of-type(1) { top: 0; }
+.s002-timeline > div b:nth-of-type(2) { top: 25%; }
+.s002-timeline > div b:nth-of-type(3) { top: 50%; }
+.s002-timeline > div b:nth-of-type(4) { top: 75%; border-color: #c7783b; }
+.s002-timeline > div b:nth-of-type(5) { top: 100%; border-color: #d99a4e; }
+.s002-timeline > em {
+  min-width: 3.5em; text-align: center; font: normal 600 .72rem/1.2 "Songti SC", serif;
+  letter-spacing: .18em; color: #d8425b;
+}
+.s002[data-thread="琥珀"] .s002-timeline > em,
+.s002[data-thread="接线"] .s002-timeline > em { color: #dda054; text-shadow: 0 0 14px rgba(218,142,55,.55); }
+
+@media (max-width: 640px) {
+  .s002 .prof-hero { min-height: 430px; }
+  .s002 .prof-portrait { height: 430px; }
+  .s002 .prof-id { left: 1.25rem; bottom: 1.5rem; }
+  .s002 .prof-doc section, .s002 .prof-doc section:nth-of-type(even) { transform: none; padding-inline: 1.45rem 1.15rem; }
+  .s002-timeline, .s002-case, .s002-scissors { display: none; }
+}
+.prof-overlay.s009::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(70% 55% at 72% 18%, rgba(255,208,73,.42), transparent 68%),
+    linear-gradient(180deg, rgba(255,250,222,.2), rgba(255,216,105,.25));
+  opacity: calc(var(--s009-p) * .78); transition: opacity .12s linear;
+}
+.s009 .prof-doc { position: relative; z-index: 2; }
+.s009 .prof-back { color: rgba(40,76,91,.62); }
+.s009 .prof-back:hover { color: #c9992d; }
+
+/* 档案头：拱窗肖像与日轮 */
+.s009 .prof-hero {
+  align-items: center; min-height: 360px; padding: 2rem 1.4rem 3rem;
+  border: 1px solid rgba(96,158,181,.25); border-radius: 180px 180px 22px 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,.82), rgba(231,246,247,.54));
+  box-shadow: 0 26px 70px -38px rgba(42,94,113,.48), inset 0 0 60px rgba(255,255,255,.7);
+  position: relative; overflow: hidden;
+}
+.s009 .prof-hero::before {
+  content: ""; position: absolute; width: 360px; height: 360px; left: -74px; top: -92px;
+  border-radius: 50%; border: 1px solid rgba(219,177,73,.3);
+  box-shadow: 0 0 0 24px rgba(255,235,166,.08), 0 0 0 58px rgba(111,191,218,.06);
+}
+.s009 .prof-hero::after {
+  content: ""; position: absolute; width: 410px; height: 410px; left: -99px; top: -117px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 13deg, rgba(214,169,48,.35) 14deg 15deg, transparent 16deg 43deg, rgba(92,180,213,.25) 44deg 46deg, transparent 47deg 100%);
+  opacity: calc(.28 + var(--s009-p) * .58);
+  transform: rotate(calc(var(--s009-p) * 90deg));
+  transition: opacity .2s linear; pointer-events: none;
+}
+.s009 .prof-portrait {
+  width: clamp(170px, 24vw, 235px); aspect-ratio: 3 / 4;
+  border: 5px solid rgba(255,255,255,.9); border-radius: 120px 120px 18px 18px;
+  box-shadow: 0 20px 52px -22px rgba(44,99,118,.5), 0 0 0 1px rgba(211,169,63,.38), 0 0 45px rgba(255,223,128,.38);
+  position: relative; z-index: 1;
+}
+.s009 .prof-id { position: relative; z-index: 1; }
+.s009 .prof-code { color: rgba(54,103,119,.48); }
+.s009 .prof-name {
+  color: #214c5c; font-family: "Songti SC", "STSong", serif; font-weight: 600;
+  letter-spacing: .16em; text-shadow: 0 0 28px rgba(255,211,95,.58);
+}
+.s009 .prof-name em { color: rgba(52,102,119,.48); font-family: var(--font-tech); }
+.s009 .prof-badge {
+  color: #9a721c; border-color: rgba(196,146,35,.55); border-radius: 999px;
+  background: rgba(255,246,207,.72); padding: .28rem .78rem;
+}
+.s009 .prof-tagline {
+  color: rgba(39,79,94,.7); font-family: "Songti SC", "STSong", serif;
+  font-size: 1.05rem; letter-spacing: .05em;
+}
+.s009 .prof-author { color: rgba(47,88,103,.4); }
+.s009 .prof-access {
+  margin: 2.4rem .7rem 3.4rem; padding: 1.25rem 1.5rem;
+  color: rgba(47,102,121,.72); border-left: 2px solid rgba(205,157,45,.52);
+  background: linear-gradient(90deg, rgba(255,255,255,.6), transparent);
+}
+
+/* 章节：摊开的祷文书页 */
+.s009 .prof-doc section {
+  margin-top: 2.2rem; padding: 1.65rem 1.9rem 1.15rem 2.2rem;
+  border: 1px solid rgba(86,151,175,.18); border-radius: 4px 38px 4px 38px;
+  background: rgba(255,255,255,.66);
+  box-shadow: 0 15px 45px -32px rgba(42,94,113,.68);
+  position: relative; overflow: hidden;
+}
+.s009 .prof-doc section:nth-of-type(3) {
+  padding-bottom: 1.8rem;
+  background: linear-gradient(135deg, rgba(224,245,250,.84), rgba(255,248,218,.9));
+  border-color: rgba(203,158,42,.28);
+}
+.s009 .prof-doc section::before {
+  content: "✦"; position: absolute; left: .72rem; top: 1.6rem;
+  color: rgba(201,151,36,.7); font-size: .75rem;
+}
+.s009 .prof-doc section::after {
+  content: ""; position: absolute; right: -35px; bottom: -62px; width: 150px; height: 150px;
+  border: 1px solid rgba(103,183,211,.18); border-radius: 50%;
+  box-shadow: 0 0 0 18px rgba(103,183,211,.035), 0 0 0 38px rgba(225,181,70,.025);
+}
+.s009 .prof-h {
+  color: #255366; font-family: "Songti SC", "STSong", serif;
+  font-size: 1.34rem; letter-spacing: .14em;
+}
+.s009 .prof-h i { color: #b58624; font-family: var(--font-tech); }
+.s009 .prof-doc p { color: rgba(32,70,84,.76); }
+.s009 .prof-doc p b { color: #173f4e; }
+.s009 .prof-note {
+  border: 1px solid rgba(94,166,192,.27); border-left: 3px solid rgba(219,177,73,.72);
+  border-radius: 3px 22px 3px 22px; background: rgba(228,244,247,.78);
+  color: rgba(37,79,94,.7); font-family: "Songti SC", "STSong", serif;
+}
+
+/* 告解 / 赦罪：将角色机制化成一枚可见的双面圣印 */
+.s009-spectrum {
+  display: grid; grid-template-columns: minmax(0,1fr) 82px minmax(0,1fr);
+  align-items: stretch; gap: 1rem; margin: 1.8rem 0 1.6rem;
+}
+.s009-spectrum > div {
+  min-height: 150px; padding: 1.15rem 1.2rem; display: flex; flex-direction: column; justify-content: center;
+  border-radius: 44px 6px 44px 6px; position: relative; overflow: hidden;
+}
+.s009-spectrum > div::after {
+  content: ""; position: absolute; width: 100px; height: 100px; right: -48px; top: -48px;
+  border: 1px solid currentColor; border-radius: 50%; opacity: .16;
+  box-shadow: 0 0 0 12px currentColor, 0 0 0 28px currentColor;
+}
+.s009-confession {
+  color: #287c9b; border: 1px solid rgba(62,157,190,.28);
+  background: linear-gradient(145deg, rgba(224,249,255,.92), rgba(255,255,255,.62));
+}
+.s009-absolution {
+  color: #a5750f; border: 1px solid rgba(205,158,43,.3);
+  background: linear-gradient(145deg, rgba(255,250,220,.94), rgba(255,255,255,.68));
+}
+.s009-spectrum span { font: .58rem/1.2 var(--font-tech); letter-spacing: .25em; opacity: .68; }
+.s009-spectrum b { margin: .45rem 0 .5rem; font: 600 1.4rem/1.2 "Songti SC", "STSong", serif; letter-spacing: .18em; }
+.s009-spectrum small { font-size: .78rem; line-height: 1.75; color: rgba(31,70,84,.62); }
+.s009-spectrum > i {
+  align-self: center; width: 70px; height: 70px; display: grid; place-items: center;
+  border: 1px solid rgba(203,157,42,.45); border-radius: 50%;
+  background: rgba(255,255,255,.75); box-shadow: 0 0 30px rgba(255,211,88,.38);
+  animation: s009seal 12s linear infinite;
+}
+.s009-spectrum > i::before,
+.s009-spectrum > i::after { content: ""; position: absolute; width: 46px; height: 46px; border: 1px solid rgba(81,166,197,.38); transform: rotate(45deg); }
+.s009-spectrum > i::after { width: 28px; height: 28px; border-color: rgba(203,157,42,.56); transform: rotate(22.5deg); }
+.s009-spectrum > i em { width: 8px; height: 8px; border-radius: 50%; background: #e2b847; box-shadow: 0 0 15px #f5d674; }
+@keyframes s009seal { to { rotate: 360deg; } }
+.s009 .prof-sign {
+  border: 1px solid rgba(207,164,60,.32); border-left: none; border-radius: 90px 12px 90px 12px;
+  background: linear-gradient(135deg, rgba(255,250,226,.9), rgba(224,243,246,.72));
+  box-shadow: 0 22px 55px -38px rgba(187,139,28,.65); text-align: center;
+}
+.s009 .prof-sign::before {
+  content: "◇"; display: block; margin: -.2rem auto .6rem; color: #c3962d;
+  font-size: 1.4rem; text-shadow: 0 0 16px rgba(239,195,75,.6);
+}
+.s009 .prof-sign p { color: rgba(34,72,86,.75); font-family: "Songti SC", "STSong", serif; }
+.s009 .prof-sign p:last-child { color: #a67918; text-shadow: 0 0 16px rgba(232,190,77,.45); }
+.s009 .prof-end { color: rgba(46,91,107,.45); border-top-color: rgba(74,139,163,.2); }
+.s009 .prof-end b { color: #b48622; }
+
+/* 彩窗投影与缓慢漂浮的棱镜光尘 */
+.s009-deco { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.s009-window {
+  position: absolute; width: min(28vw, 270px); right: 2.2vw; top: 8vh;
+  opacity: .14; color: #3c9abb;
+}
+.s009-window svg { width: 100%; fill: rgba(255,255,255,.24); stroke: currentColor; stroke-width: 2; }
+.s009-rays {
+  position: absolute; width: 72vw; height: 42vh; right: -12vw; top: -5vh;
+  background: conic-gradient(from 212deg at 100% 0%, transparent 0 7deg, rgba(255,222,119,.18) 8deg 11deg, transparent 12deg 20deg, rgba(109,198,226,.12) 21deg 25deg, transparent 26deg 100%);
+  filter: blur(1px); transform: rotate(calc(-4deg + var(--s009-p) * 7deg));
+  opacity: calc(.28 + var(--s009-p) * .72);
+}
+.s009-motes i {
+  position: absolute; left: var(--x); top: var(--y); width: calc(9px * var(--s)); height: calc(14px * var(--s));
+  border-radius: 70% 10% 70% 10%; transform: rotate(var(--r));
+  background: linear-gradient(145deg, rgba(255,226,128,.9), rgba(109,196,226,.55));
+  box-shadow: 0 0 14px rgba(255,214,96,.5); opacity: .22;
+  animation: s009float var(--t) ease-in-out var(--d) infinite alternate;
+}
+@keyframes s009float {
+  from { translate: 0 10px; rotate: -8deg; opacity: .12; }
+  to { translate: 10px -16px; rotate: 10deg; opacity: .48; }
+}
+.s009-verse {
+  position: fixed; right: 2.4vw; bottom: 5vh; writing-mode: vertical-rl;
+  font-family: var(--font-tech); font-size: .58rem; letter-spacing: .32em; color: rgba(57,124,147,.32);
+}
+
+/* 固定在页面右侧的祈光进度：入堂 → 告解 → 赦罪 */
+.s009-ritual {
+  position: fixed; right: clamp(18px, 3vw, 46px); top: 50%; translate: 0 -50%;
+  display: flex; flex-direction: column; align-items: center; gap: .8rem;
+  color: rgba(42,99,119,.46);
+}
+.s009-ritual > span {
+  writing-mode: vertical-rl; font: .52rem/1 var(--font-tech); letter-spacing: .3em;
+}
+.s009-ritual-rail {
+  position: relative; width: 2px; height: 150px; background: rgba(61,125,148,.18);
+}
+.s009-ritual-rail i {
+  position: absolute; left: 0; top: 0; width: 100%; height: calc(var(--s009-p) * 100%);
+  background: linear-gradient(#59afd0, #e2b443); box-shadow: 0 0 10px rgba(224,177,58,.42);
+}
+.s009-ritual-rail b {
+  position: absolute; left: 50%; translate: -50% -50%; width: 7px; height: 7px;
+  border: 1px solid #75aabe; border-radius: 50%; background: #eef6f4;
+}
+.s009-ritual-rail b:nth-of-type(1) { top: 0; }
+.s009-ritual-rail b:nth-of-type(2) { top: 50%; }
+.s009-ritual-rail b:nth-of-type(3) { top: 100%; border-color: #c59828; }
+.s009-ritual > em {
+  min-width: 3.5em; text-align: center; font: normal 600 .72rem/1.2 "Songti SC", "STSong", serif;
+  letter-spacing: .18em; color: #a2761d; transition: color .3s;
+}
+.s009[data-ritual="告解"] .s009-ritual > em { color: #2b87a9; }
+.s009[data-ritual="赦罪"] .s009-ritual > em { color: #c38b16; text-shadow: 0 0 14px rgba(230,184,63,.65); }
+
+@media (max-width: 640px) {
+  .s009 .prof-hero { border-radius: 100px 100px 18px 18px; padding-inline: 1rem; }
+  .s009 .prof-doc section { padding-inline: 1.7rem 1.2rem; border-radius: 3px 26px 3px 26px; }
+  .s009-window, .s009-verse, .s009-ritual { display: none; }
+  .s009-spectrum { grid-template-columns: 1fr; }
+  .s009-spectrum > i { width: 54px; height: 54px; }
+}
+
 /* 频率分段显隐 + 提示行 */
 .s010.freq-aero  .s010-part[data-freq="havoc"] { display: none; }
 .s010.freq-havoc .s010-part[data-freq="aero"]  { display: none; }

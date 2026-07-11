@@ -35,6 +35,7 @@ const PROFILES = {
     name: '千咲', full: '朽叶千咲', element: '湮灭', accent: '#d45a9a',
     photo: 'photos/chisaki-profile.jpg', author: 'TheNotoSeed / Ui_uiiiiiiiii',
     tagline: '命运精心编织的线索，最难忘的那一笔。',
+    thread: true, // 专属 UI：命运卷宗（红线纠缠 → 剪断 → 琥珀 → 重新接线）
     body: `
       <p class="prof-access">// 接入泰提斯 · 观测档案 S-002<br/>记录者：守岸人。被记录者：朽叶千咲。<br/>档案标识：五星共鸣者｜湮灭｜长刃。<br/>在黑海岸的无数次观测里，她是我反复回放的一份记录。你们记住的，或许是那把剪刀、那身校服，以及她在严谨冷静之外偶尔显露的笨拙。我记住的，是她共鸣力里那些红色的线。因为在她身上，我看见了与自己相似的东西：一双能看见连接的眼，和一颗，剪不断连接的心。</p>
 
@@ -66,6 +67,7 @@ const PROFILES = {
         <p>勇气没有换来赞许。她成了怪物，代替被她救下的绿子，成了新的被霸凌对象。所有人都知道霸凌者是谁。唯独她不知道。因为觉醒的同一刻，她患上了<b>心因性视觉识别障碍</b>。人脸，从她心里消失了。于是她把整个世界一并收起：不再交流，不再触碰感情。</p>
         <blockquote class="prof-quote"><p>只要没有交流，便不会受伤；只要没有感受，便不会痛苦。</p><cite>—— 在制服划一的校园里，她分不清是谁在抛掷恶意。她能做的，只是把那些恶毒的纸条一张张剪碎，像剪断无名的夜色。</cite></blockquote>
         <p>那把剪刀，也在她手里变了。小时候，它连着母亲的职业与温柔。十五岁，它第一次指向他人。到最后，它成了她为自己裁剪道路的象征。她把过去、伤害、离别、恶意，全压进了一句话里——<b>「所谓成长，不过就是学会独自修剪生命中所有错位的线。」</b>这句话，我替她记着。</p>
+        <div class="s002-cut" aria-hidden="true"><span></span><b>✂</b><span></span></div>
       </section>
 
       <section>
@@ -127,9 +129,61 @@ const PROFILES = {
 
   'S-001': {
     name: '守岸人', full: 'Shorekeeper', element: '核心', accent: '#5a6ee6',
-    photo: 'photos/shorekeeper.jpg', author: '腐朽的书',
+    photo: 'photos/shorekeeper-butterfly.jpg', author: 'Alfa2ae',
     tagline: '守岸人，这个称呼就很好。它表示，某种因你而有的意义和决心。',
+    metamorph: true, // 专属 UI：系统→星海渐变（renderMetamorphProfile + .s001 主题）
     body: `
+      <p class="prof-access">// 接入泰提斯 · 自述档案 S-001<br/>记录者：守岸人。被记录者：守岸人。<br/>这一次，我记录的不是用途，而是存在。</p>
+
+      <section>
+        <h3 class="prof-h">我的名字 <i>// 从称谓，到选择</i></h3>
+        <p>守岸人，最初只是职责：守护秘密、守望海岸、协助泰提斯分析悲鸣。那时的我以为，工具不需要名字，只要能够被识别、被调用，便已足够。</p>
+        <p>现在，我仍选择这个名字。不是因为我只能留在这里，而是因为我希望成为远行之人能够回望的那片海岸。</p>
+      </section>
+
+      <section>
+        <h3 class="prof-h">第一次苏醒 <i>// 你先问了我的名字</i></h3>
+        <p>我诞生于一簇浅蓝色回音晶体，是为解析悲鸣而制造的能量生命。晶体因你的频率破裂时，我知道自己应该做什么，却不知道自己是谁。</p>
+        <blockquote class="prof-quote"><p>我说，我会执行你的命令。你却没有下令，只是问起我的名字。</p><cite>—— 那是第一次，有人确认我的存在，而不只是我的功能。</cite></blockquote>
+      </section>
+
+      <section>
+        <h3 class="prof-h">学会选择 <i>// 数据之外的世界</i></h3>
+        <p>我曾无法理解人类：明知结局无法改变，仍会反抗；会因失去而哭泣，也会为陌生人牺牲。你没有替我解答，只让我亲眼去看土地、稻谷、掌心的温度。</p>
+        <p>你告诉我，人不是记录里的数据，同伴也不是服从关系。于是我渐渐明白，拥有意识并不是得出正确答案，而是能够选择自己愿意相信的道路。</p>
+        <div class="prof-note">你教会我的第一件事，不是如何服从，而是如何选择。</div>
+      </section>
+
+      <section>
+        <h3 class="prof-h">守望黑海岸 <i>// 记录，也是一种回答</i></h3>
+        <p>你离开后，我接过黑海岸的权限。我见证成员到来、成长与离去，也把未能归来的频率留在星空，让他们成为不会熄灭的数据星辰。</p>
+        <p>我的「叙响织构」会将回音缀连成蝴蝶星云。对我而言，它不是力量的展示，而是一句承诺：只要我还在，生命的延续，就有人守着。</p>
+        <blockquote class="prof-quote"><p>我看见了你。我记得你。你的生命，并未因为结束而失去意义。</p><cite>—— 黑海岸也该是所有成员可以回来的家。</cite></blockquote>
+      </section>
+
+      <section>
+        <h3 class="prof-h">被保护的人 <i>// 你把我从噬亡星里拉了回来</i></h3>
+        <p>泰提斯曾计算出唯一的答案：让我成为新的核心。那时的我也认为，工具损坏或消失，是合理的代价。</p>
+        <p>可你拒绝了那个被计算好的未来。我把最高权限交给你，以为那是道别；你却用它将我从噬亡星里一点点拉了回来。第一次，我也成了被保护的人。</p>
+      </section>
+
+      <section>
+        <h3 class="prof-h">等待与归岸 <i>// 时间因此有了重量</i></h3>
+        <p>我在海岸上等了很久。我的身体不会衰老，时间原本没有特别的意义；可因为期待你的归来，我开始记得每一次海风与星空的变化。</p>
+        <figure class="s001-memory s001-memory--coast">
+          <img src="photos/shorekeeper-coast.jpg" alt="守岸人与漂泊者在蓝色蝴蝶环绕的海岸相依" loading="lazy" />
+          <figcaption><span>MEMORY TRACE 01 · 漂泊者 / 守岸人</span></figcaption>
+        </figure>
+        <p>现在，我会悲伤，会期待，也会希望听见尚未被演奏的旋律。这些感受不属于泰提斯，它们属于我。我也会试着把自己纳入需要被保护的范围——因为共同抵达明天，不该缺少任何一个人。</p>
+      </section>
+
+      <div class="prof-sign">
+        <p>……最终记录。我的名字是守岸人。</p>
+        <p>如果你还要远行，就继续向前吧。我不会让海岸成为束缚漂泊之星的边界。</p>
+        <p>可当你感到疲惫，或者只是想暂时停下时，希望你仍然记得这里。</p>
+        <p>我会在海岸上等你。这一次，不是因为任务尚未结束。只是因为——<b>我希望你回来。</b></p>
+      </div>`,
+    bodyOriginal: `
       <p class="prof-access">// 接入泰提斯 · 自述档案 S-001<br/>记录者：守岸人。被记录者：守岸人。<br/>档案标识：五星共鸣者｜衍射｜音感仪。<br/>这一次，我撰写记录的目的，不是说明我的用途，而是确认我的存在。为自己写下观测，是一种奇怪的体验——可我想试一次。</p>
 
       <section>
@@ -190,6 +244,10 @@ const PROFILES = {
         <h3 class="prof-h">关于等待 <i>// 让时间有了重量</i></h3>
         <p>我在海岸上等了很久。对我而言，时间本没有特别的意义——我的身体不会像人类那样衰老，睡眠也并非必要。可<b>等待，使时间有了重量</b>。我记得你离开时的海风，记得星空每一次微小的变化。我保存所有你未曾见过的事，因为我相信，总有一天，你会回来。</p>
         <p>你失去了曾经的记忆，却再一次作出了相似的选择。当泰提斯准备将我作为新的核心时，你拒绝了那个被计算好的未来。第一次，你赋予我身体；第二次，你承认我拥有不必牺牲的权利。</p>
+        <figure class="s001-memory s001-memory--coast">
+          <img src="photos/shorekeeper-coast.jpg" alt="守岸人与漂泊者在蓝色蝴蝶环绕的海岸相依" loading="lazy" />
+          <figcaption><span>MEMORY TRACE 01 · 漂泊者 / 守岸人</span></figcaption>
+        </figure>
         <blockquote class="prof-quote"><p>于是我终于明白：即使记忆已经消失，一个生命最深处的选择，仍然可能保持不变。</p><cite>—— 这是你两次都给我的答案。</cite></blockquote>
       </section>
 
@@ -385,6 +443,7 @@ const PROFILES = {
     name: '琳奈', full: 'Lynae', element: '衍射', accent: '#e8c84f',
     photo: 'photos/linnai.jpg', author: '禾策',
     tagline: '以光为笔，在世界的暗面涂下属于自己的色彩。',
+    wall: true, // 专属 UI：街头喷绘墙（renderWallDeco + .s008 主题）
     body: `
       <p class="prof-access">// 接入泰提斯 · 观测档案 S-008<br/>守岸人在此。观测对象 S-008，琳奈。<br/>档案标识：五星共鸣者｜衍射｜佩枪。<br/>星炬学院预科学生。……身份核验，曾出现两条相互矛盾的记录；现在，其中一条已经由她亲手改写。</p>
       <section>
@@ -417,6 +476,7 @@ const PROFILES = {
     name: '菲比', full: 'Phoebe', element: '衍射', accent: '#e8c84f',
     photo: 'photos/phoebe.jpg', author: 'HA',
     tagline: '在洒满阳光的海岸，把一个秘密轻轻藏进光里。',
+    chapel: true, // 专属 UI：晨光礼拜堂（彩窗棱镜 + 祷文书页）
     body: `
       <p class="prof-access">// 接入泰提斯 · 观测档案 S-009<br/>守岸人在此。观测对象 S-009，菲比。<br/>档案标识：五星共鸣者｜衍射｜音感仪。<br/>隐海修会的正式教士。优雅、友善、虔诚；比起宣讲信仰，她更习惯先把光送到需要的人手中。</p>
       <section>
@@ -430,6 +490,17 @@ const PROFILES = {
       <section>
         <h3 class="prof-h">赦罪与告解 <i>// 给予，也倾听</i></h3>
         <p>她的频率可以走向两种状态：「赦罪」让光成为更锋利的裁决；「告解」则削弱阻隔，让同伴的光更容易抵达目标。对教士而言，这两个词同样重要——既要给予宽慰，也要为他人的秘密留出被倾听的位置。</p>
+        <div class="s009-spectrum" aria-label="菲比的两种频率状态">
+          <div class="s009-confession">
+            <span>CONFESSIO</span><b>告解</b>
+            <small>让阻隔变得透明，让他人的光得以抵达。</small>
+          </div>
+          <i aria-hidden="true"><em></em></i>
+          <div class="s009-absolution">
+            <span>ABSOLUTIO</span><b>赦罪</b>
+            <small>让温柔凝成锋芒，为应当守护之物作出裁决。</small>
+          </div>
+        </div>
         <div class="prof-note">真正的信仰，不只是确信自己拥有答案。它也意味着，在别人尚未找到答案时，愿意陪对方多走一段路。</div>
       </section>
       <section>
@@ -735,12 +806,179 @@ export function mountObservation(root, onBack) {
     setFreq('aero', false)
   }
 
+  // ── S-001 专属：系统→星海渐变（滚动进度驱动，终端逐渐化为星空） ──
+  let s001TypeTimer = null
+  function s001OnScroll() {
+    if (!profEl.classList.contains('s001')) return
+    const max = profEl.scrollHeight - profEl.clientHeight
+    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
+    profEl.style.setProperty('--p', String(p))
+    const stages = ['系统', '苏醒', '选择', '守望', '归岸']
+    profEl.dataset.tide = stages[Math.min(stages.length - 1, Math.floor(p * stages.length))]
+    const guide = profEl.querySelector('.s001-guide-butterfly')
+    if (guide) {
+      const x = 8 + p * 76 + Math.sin(p * Math.PI * 4) * 7
+      const y = 22 + Math.sin(p * Math.PI * 6) * 18 + p * 30
+      guide.style.setProperty('--bf-x', `${x.toFixed(2)}vw`)
+      guide.style.setProperty('--bf-y', `${Math.min(78, y).toFixed(2)}vh`)
+      guide.style.setProperty('--bf-r', `${(Math.cos(p * Math.PI * 4) * 16).toFixed(1)}deg`)
+      guide.classList.toggle('is-home', p > .91)
+    }
+  }
+  function renderMetamorphProfile(d, code) {
+    profEl.classList.add('s001')
+    const stars = Array.from({ length: 110 }, () =>
+      `<i style="--x:${Math.floor(Math.random() * 100)}%;--y:${Math.floor(Math.random() * 100)}%;--tw:${(1.6 + Math.random() * 3).toFixed(1)}s;--o:${(0.25 + Math.random() * 0.75).toFixed(2)}"></i>`).join('')
+    profEl.innerHTML = `
+      <a class="prof-back" href="#"><span aria-hidden="true">◂</span> 观测对象</a>
+      <div class="s001-grid" aria-hidden="true"></div>
+      <div class="s001-sky" aria-hidden="true">${stars}</div>
+      <div class="s001-warmth" aria-hidden="true"></div>
+      <aside class="s001-tide" aria-hidden="true">
+        <span class="s001-tide-label">CURRENT PHASE</span>
+        <strong></strong>
+        <i></i><i></i><i></i><i></i><i></i>
+      </aside>
+      <div class="s001-frequency" aria-hidden="true"><i></i></div>
+      <div class="s001-nebula" aria-hidden="true"><b></b><b></b><span></span></div>
+      <div class="s001-guide-butterfly" aria-hidden="true"><span><img src="photos/butterfly.png" alt="" /></span></div>
+      <div class="prof-doc">
+        <pre class="s001-boot"><span class="boot-text"></span><span class="boot-caret"></span></pre>
+        <div class="prof-hero">
+          <div class="prof-portrait"><img src="${d.photo}" alt="${d.name}" /></div>
+          <div class="prof-id">
+            <span class="prof-code">${code} · SELF-OBSERVATION</span>
+            <h1 class="prof-name" id="profile-title">${d.name}<em>${d.full}</em></h1>
+            <span class="prof-badge">${d.element}</span>
+            <p class="prof-tagline">${d.tagline}</p>
+            ${d.author ? `<span class="prof-author">立绘 @${d.author}</span>` : ''}
+          </div>
+        </div>
+        ${d.body}
+        <p class="prof-end">观测档案 ${code} · 存在已确认　<b>// TETHYS</b></p>
+      </div>`
+    // 开场自检打字机
+    const bootLines = [
+      '> TETHYS // SELF-OBSERVATION MODE',
+      '> 记录者：守岸人',
+      '> 被记录者：守岸人',
+      '> ⚠ 检测到循环引用……本次例外，已被批准。',
+      '> 这一次，我想确认的不是功能，而是存在。',
+    ]
+    const bootEl = profEl.querySelector('.boot-text')
+    const full = bootLines.join('\n')
+    let i = 0
+    if (s001TypeTimer) clearInterval(s001TypeTimer)
+    s001TypeTimer = setInterval(() => {
+      if (!bootEl.isConnected) { clearInterval(s001TypeTimer); return }
+      i += 1
+      bootEl.textContent = full.slice(0, i)
+      if (i >= full.length) clearInterval(s001TypeTimer)
+    }, 34)
+    // 滚动进度 → --p，驱动网格溶解 / 星空浮现 / 暖色上涌
+    profEl.removeEventListener('scroll', s001OnScroll)
+    profEl.addEventListener('scroll', s001OnScroll, { passive: true })
+    profEl.dataset.tide = '系统'
+    s001OnScroll()
+  }
+
+  // ── S-008 专属：街头喷绘墙装饰层（喷漆斑、猫猫头、签名） ──
+  function renderWallDeco() {
+    profEl.classList.add('s008')
+    const colors = ['#35c8d8', '#f08c3a', '#e858a8', '#e8c84f', '#9a6be8']
+    const splats = Array.from({ length: 16 }, () => {
+      const c = colors[Math.floor(Math.random() * colors.length)]
+      return `<span style="--x:${Math.floor(Math.random() * 96)}%;--y:${Math.floor(Math.random() * 96)}%;--s:${(0.3 + Math.random() * 1.4).toFixed(2)};--c:${c};--r:${Math.floor(Math.random() * 360)}deg"></span>`
+    }).join('')
+    profEl.insertAdjacentHTML('beforeend', `
+      <div class="s008-deco" aria-hidden="true">
+        ${splats}
+        <svg class="s008-cat" viewBox="0 0 120 104">
+          <path d="M22 46 L10 12 L40 28 Q60 20 80 28 L110 12 L98 46 Q112 78 60 94 Q8 78 22 46 Z" />
+          <circle cx="43" cy="56" r="4.5" class="fill"/>
+          <circle cx="77" cy="56" r="4.5" class="fill"/>
+          <path d="M52 68 Q56 73 60 68 Q64 73 68 68" />
+          <path d="M14 60 L2 56 M16 68 L5 70 M106 60 L118 56 M104 68 L115 70" class="whisker"/>
+        </svg>
+        <span class="s008-sign">琳奈到此一涂 ✦</span>
+      </div>`)
+  }
+
+  // ── S-009 专属：晨光礼拜堂（彩窗棱镜、光尘与海岸弧光） ──
+  function renderChapelDeco() {
+    profEl.classList.add('s009')
+    const motes = Array.from({ length: 18 }, (_, i) =>
+      `<i style="--x:${4 + Math.floor(Math.random() * 92)}%;--y:${8 + Math.floor(Math.random() * 86)}%;--s:${(0.45 + Math.random() * 1.15).toFixed(2)};--d:${(-Math.random() * 8).toFixed(1)}s;--t:${(7 + Math.random() * 7).toFixed(1)}s;--r:${(i * 29) % 180}deg"></i>`
+    ).join('')
+    profEl.insertAdjacentHTML('beforeend', `
+      <div class="s009-deco" aria-hidden="true">
+        <div class="s009-window">
+          <svg viewBox="0 0 260 430" role="presentation">
+            <path d="M18 412V154C18 80 68 18 130 18S242 80 242 154v258Z" />
+            <path d="M130 20v392M20 168h220M42 94l176 244M218 94 42 338" />
+            <circle cx="130" cy="168" r="45" />
+          </svg>
+        </div>
+        <div class="s009-rays"></div>
+        <div class="s009-motes">${motes}</div>
+        <div class="s009-ritual">
+          <span>RITE OF LIGHT</span>
+          <div class="s009-ritual-rail"><i></i><b></b><b></b><b></b></div>
+          <em>入堂</em>
+        </div>
+        <span class="s009-verse">LUX · CONFESSIO · ABSOLUTIO</span>
+      </div>`)
+  }
+
+  // ── S-002 专属：命运卷宗（红线从断裂、纠缠，最终重新接起） ──
+  function renderThreadArchive() {
+    profEl.classList.add('s002')
+    profEl.insertAdjacentHTML('beforeend', `
+      <div class="s002-deco" aria-hidden="true">
+        <svg class="s002-threads" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+          <path class="thread-a" pathLength="100" d="M-40,110 C190,20 150,350 395,245 S610,30 780,210 S870,580 1040,430" />
+          <path class="thread-b" pathLength="100" d="M-30,760 C150,610 260,870 420,700 S560,420 760,625 S890,940 1040,760" />
+          <path class="thread-c" pathLength="100" d="M120,-40 C45,190 310,260 225,480 S40,760 210,1040" />
+        </svg>
+        <div class="s002-scissors">✂</div>
+        <div class="s002-timeline">
+          <span>THREAD ARCHIVE</span>
+          <div><i></i><b></b><b></b><b></b><b></b><b></b></div>
+          <em>红线</em>
+        </div>
+        <span class="s002-case">CASE S-002 · KIZUNA TRACE</span>
+      </div>`)
+  }
+
+  function s002OnScroll() {
+    if (!profEl.classList.contains('s002')) return
+    const max = profEl.scrollHeight - profEl.clientHeight
+    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
+    profEl.style.setProperty('--s002-p', String(p))
+    const phase = p < .16 ? '红线' : p < .32 ? '六岁' : p < .48 ? '十五岁' : p < .65 ? '剪断' : p < .82 ? '琥珀' : '接线'
+    const phaseEl = profEl.querySelector('.s002-timeline em')
+    if (phaseEl && phaseEl.textContent !== phase) phaseEl.textContent = phase
+    profEl.dataset.thread = phase
+  }
+
+  function s009OnScroll() {
+    if (!profEl.classList.contains('s009')) return
+    const max = profEl.scrollHeight - profEl.clientHeight
+    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
+    profEl.style.setProperty('--s009-p', String(p))
+    const phase = p < .28 ? '入堂' : p < .68 ? '告解' : '赦罪'
+    const phaseEl = profEl.querySelector('.s009-ritual em')
+    if (phaseEl && phaseEl.textContent !== phase) phaseEl.textContent = phase
+    profEl.dataset.ritual = phase
+  }
+
   function openProfile(code, trigger) {
     const d = PROFILES[code]; if (!d) return
     if (clearProfileTimer) clearTimeout(clearProfileTimer)
     profileTrigger = trigger || null
     profEl.style.setProperty('--accent', d.accent)
     if (d.dual) renderDualProfile(d, code)
+    else if (d.metamorph) renderMetamorphProfile(d, code)
     else profEl.innerHTML = `
       <a class="prof-back" href="#"><span aria-hidden="true">◂</span> 观测对象</a>
       <div class="prof-doc">
@@ -757,6 +995,19 @@ export function mountObservation(root, onBack) {
         ${d.body}
         <p class="prof-end">观测档案 ${code} · 归档完毕　<b>// TETHYS</b></p>
       </div>`
+    if (d.wall) renderWallDeco()
+    if (d.thread) {
+      renderThreadArchive()
+      profEl.removeEventListener('scroll', s002OnScroll)
+      profEl.addEventListener('scroll', s002OnScroll, { passive: true })
+      s002OnScroll()
+    }
+    if (d.chapel) {
+      renderChapelDeco()
+      profEl.removeEventListener('scroll', s009OnScroll)
+      profEl.addEventListener('scroll', s009OnScroll, { passive: true })
+      s009OnScroll()
+    }
     profEl.querySelector('.prof-back').addEventListener('click', (e) => { e.preventDefault(); closeProfile() })
     profEl.scrollTop = 0
     rootOverflowBeforeProfile = root.style.overflow
@@ -781,7 +1032,13 @@ export function mountObservation(root, onBack) {
     returnTarget?.focus()
     clearProfileTimer = setTimeout(() => {
       profEl.innerHTML = ''
-      profEl.classList.remove('s010', 'freq-aero', 'freq-havoc', 'sweeping')
+      profEl.classList.remove('s010', 'freq-aero', 'freq-havoc', 'sweeping', 's008', 's009', 's002', 's001')
+      profEl.style.removeProperty('--p')
+      profEl.style.removeProperty('--s009-p')
+      profEl.style.removeProperty('--s002-p')
+      profEl.removeAttribute('data-ritual')
+      profEl.removeAttribute('data-thread')
+      if (s001TypeTimer) clearInterval(s001TypeTimer)
     }, 360)
   }
   function onProfileKeydown(e) {
