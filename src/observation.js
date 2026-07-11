@@ -452,8 +452,12 @@ const PROFILES = {
     name: '秧秧·玄翎', full: 'Yangyang · Xuanling', element: '湮灭', accent: '#d45a9a',
     photo: 'photos/yangyang-profile.jpg', author: '',
     tagline: '耳畔苍翎响远音',
-    body: `
-      <p class="prof-access">// 接入泰提斯 · 观测档案 S-010<br/>守岸人在此。本档案解封于 VER 3.5。请注意：编号之下存有两段频率——一段属于气动，一段属于湮灭。它们，来自同一个女孩。</p>
+    // 双频率档案：气动 / 湮灭 两套主题与内容，浮层内拨频率开关切换
+    dual: {
+      aero:  { accent: '#4fd6a0', name: '秧秧', badge: '气动 · 最初的频率', tagline: '风起之处，即是归途' },
+      havoc: { accent: '#d45a9a', name: '秧秧·玄翎', badge: '湮灭 · 当前频率', tagline: '耳畔苍翎响远音' },
+      access: `<p class="prof-access">// 接入泰提斯 · 观测档案 S-010<br/>守岸人在此。本档案解封于 VER 3.5。请注意：编号之下存有两段频率——一段属于气动，一段属于湮灭。它们，来自同一个女孩。拨动上方的频率开关，即可在两段记录之间往返。</p>`,
+      aeroBody: `
       <section>
         <h3 class="prof-h">听风的向导 <i>// 最初的频率</i></h3>
         <p>档案的前半段，是所有人熟悉的她：今州的向导，温柔而妥帖，最早向漂泊者伸出手的人之一。她的共鸣让她<b>听得见风</b>——风里有远方的讯息，也有旁人听不见的心事。</p>
@@ -463,6 +467,8 @@ const PROFILES = {
         <h3 class="prof-h">失踪 <i>// 忽然安静的风</i></h3>
         <p>拉海洛的事务告一段落，漂泊者重返瑝珑，等来的却是一个消息：<b>秧秧失踪了</b>。为了找到她，漂泊者与她的姐姐——昭明商会的大小姐<b>穗穗</b>（观测编号 S-014，档案尚未解封）——一同踏入梦州的玄方地界。</p>
       </section>
+      <p class="s010-hint">// 泰提斯提示：气动记录到此中断。编号之下，另一段频率仍在暗处震动——拨动频率开关，接入湮灭。</p>`,
+      havocBody: `
       <section>
         <h3 class="prof-h">梦州 <i>// 她离开的地方</i></h3>
         <p>梦州，是她的故乡。悬浮的仙阁，瀑布与云雾托起的城。可故乡于她，并不只意味着温暖——她当年离开梦州的原因，与家族背后的秘密，正是这次观测要追索的东西。</p>
@@ -489,7 +495,9 @@ const PROFILES = {
         <p>……VER 3.5 主记录，已归档。</p>
         <p>频率已重新捕获，观测仍在继续。她的电台，名为《风之所在》——我想，这四个字本身就是答案。</p>
         <p>我见过许多共鸣者的蜕变，很少有哪一次，让我这样在意「之前」与「之后」的连线。愿她在噩梦的尽头，仍听得见最初的那阵风。风起之处，即是归途——这一条，我先替她记下。</p>
-      </div>`,
+      </div>
+      <p class="s010-hint">// 湮灭记录归档完毕。最初的那段风声，仍在档案底层轻响——想再听一次，随时拨回气动。</p>`,
+    },
   },
 }
 
@@ -664,12 +672,76 @@ export function mountObservation(root, onBack) {
     inertState.forEach((wasInert, child) => { child.inert = wasInert })
     inertState.clear()
   }
+  // ── S-010 专属：双频率档案（气动⇄湮灭） ──
+  function renderDualProfile(d, code) {
+    const wave = Array.from({ length: 42 }, () =>
+      `<i style="--h:${18 + Math.floor(Math.random() * 82)}%;--d:${(Math.random() * 1.8).toFixed(2)}s"></i>`).join('')
+    const featherSvg = '<svg viewBox="0 0 24 24"><path d="M12 2C16.4 8 17.2 15 12 22C6.8 15 7.6 8 12 2Z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M12 5.5V19" stroke="currentColor" stroke-width=".8" opacity=".6"/></svg>'
+    const feathers = Array.from({ length: 8 }, () =>
+      `<span style="--x:${4 + Math.floor(Math.random() * 92)}%;--t:${(13 + Math.random() * 11).toFixed(1)}s;--dl:${(-Math.random() * 22).toFixed(1)}s;--s:${(0.55 + Math.random() * 0.9).toFixed(2)}">${featherSvg}</span>`).join('')
+    profEl.classList.add('s010')
+    profEl.innerHTML = `
+      <a class="prof-back" href="#"><span aria-hidden="true">◂</span> 观测对象</a>
+      <div class="s010-deco" aria-hidden="true">${feathers}</div>
+      <div class="s010-sweep" aria-hidden="true"></div>
+      <div class="prof-doc">
+        <div class="prof-hero">
+          <div class="prof-portrait"><img src="${d.photo}" alt="${d.name}" /></div>
+          <div class="prof-id">
+            <span class="prof-code">${code} · DUAL FREQUENCY</span>
+            <h1 class="prof-name" id="profile-title"></h1>
+            <span class="prof-badge"></span>
+            <p class="prof-tagline"></p>
+            <div class="s010-freq" role="group" aria-label="频率切换">
+              <span class="freq-cap">FREQ</span>
+              <button type="button" class="freq-opt" data-freq="aero">气动</button>
+              <button type="button" class="freq-rail" aria-label="切换频率"><i></i></button>
+              <button type="button" class="freq-opt" data-freq="havoc">湮灭</button>
+            </div>
+            <div class="s010-wave" aria-hidden="true">${wave}</div>
+          </div>
+        </div>
+        ${d.dual.access}
+        <div class="s010-part" data-freq="aero">${d.dual.aeroBody}</div>
+        <div class="s010-part" data-freq="havoc">${d.dual.havocBody}</div>
+        <p class="prof-end">观测档案 ${code} · 双频归档　<b>// TETHYS</b></p>
+      </div>`
+    const nameEl = profEl.querySelector('.prof-name')
+    const badgeEl = profEl.querySelector('.prof-badge')
+    const tagEl = profEl.querySelector('.prof-tagline')
+    const opts = [...profEl.querySelectorAll('.freq-opt')]
+    let current = ''
+    const setFreq = (mode, animate = true) => {
+      if (mode === current) return
+      current = mode
+      const m = d.dual[mode]
+      profEl.classList.toggle('freq-aero', mode === 'aero')
+      profEl.classList.toggle('freq-havoc', mode === 'havoc')
+      profEl.style.setProperty('--accent', m.accent)
+      nameEl.innerHTML = `${m.name}<em>${d.full}</em>`
+      badgeEl.textContent = m.badge
+      tagEl.textContent = m.tagline
+      opts.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.freq === mode)))
+      if (!animate) return
+      profEl.classList.remove('sweeping'); void profEl.offsetWidth
+      profEl.classList.add('sweeping')
+      const part = profEl.querySelector(`.s010-part[data-freq="${mode}"]`)
+      gsap.fromTo(part.children,
+        { opacity: 0, y: 26 },
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.07, ease: 'power2.out', delay: 0.12, overwrite: true })
+    }
+    opts.forEach((b) => b.addEventListener('click', () => setFreq(b.dataset.freq)))
+    profEl.querySelector('.freq-rail').addEventListener('click', () => setFreq(current === 'aero' ? 'havoc' : 'aero'))
+    setFreq('aero', false)
+  }
+
   function openProfile(code, trigger) {
     const d = PROFILES[code]; if (!d) return
     if (clearProfileTimer) clearTimeout(clearProfileTimer)
     profileTrigger = trigger || null
     profEl.style.setProperty('--accent', d.accent)
-    profEl.innerHTML = `
+    if (d.dual) renderDualProfile(d, code)
+    else profEl.innerHTML = `
       <a class="prof-back" href="#"><span aria-hidden="true">◂</span> 观测对象</a>
       <div class="prof-doc">
         <div class="prof-hero">
@@ -707,7 +779,10 @@ export function mountObservation(root, onBack) {
     const returnTarget = profileTrigger
     profileTrigger = null
     returnTarget?.focus()
-    clearProfileTimer = setTimeout(() => { profEl.innerHTML = '' }, 360)
+    clearProfileTimer = setTimeout(() => {
+      profEl.innerHTML = ''
+      profEl.classList.remove('s010', 'freq-aero', 'freq-havoc', 'sweeping')
+    }, 360)
   }
   function onProfileKeydown(e) {
     if (!profEl.classList.contains('show')) return

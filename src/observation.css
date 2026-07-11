@@ -406,3 +406,132 @@ html.prof-lock { overflow: hidden; }
   text-align: center; font-family: var(--font-tech); font-size: .72rem; letter-spacing: .24em; color: rgba(232,233,242,.4);
 }
 .prof-end b { color: var(--accent); font-weight: 400; }
+
+/* ---------- S-010 秧秧 · 双频率档案（气动⇄湮灭） ---------- */
+.prof-overlay.s010 { transition: opacity .36s ease, background-color .9s ease; }
+/* 两态都用不透明底色承接主题切换（渐变图像层只做半透明点缀，避免过渡期露出底下的观测墙） */
+.prof-overlay.s010.freq-aero {
+  background-color: #e3f0ea;
+  background-image:
+    radial-gradient(70% 60% at 82% 8%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+    radial-gradient(50% 40% at 10% 92%, rgba(255,255,255,.55), transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,0) 55%, rgba(180,214,199,.35) 100%);
+}
+.prof-overlay.s010.freq-havoc {
+  background-color: #08060f;
+  background-image:
+    radial-gradient(70% 60% at 82% 8%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%),
+    radial-gradient(55% 45% at 12% 90%, rgba(70, 60, 130, .28), transparent 70%);
+}
+.s010 .prof-doc { position: relative; z-index: 2; }
+/* 主题切换时的颜色过渡 */
+.s010 .prof-name, .s010 .prof-name em, .s010 .prof-code, .s010 .prof-back,
+.s010 .prof-h, .s010 .prof-doc p, .s010 .prof-doc p b, .s010 .prof-access,
+.s010 .prof-note, .s010 .prof-tagline, .s010 .prof-end, .s010 .prof-portrait,
+.s010 .prof-wide figcaption, .s010 .prof-sign, .s010 .prof-sign p {
+  transition: color .7s ease, background-color .7s ease, border-color .7s ease, box-shadow .7s ease, text-shadow .7s ease;
+}
+
+/* 气动态：羽白青绿的亮色调覆盖 */
+.s010.freq-aero .prof-back { color: rgba(20,52,42,.6); }
+.s010.freq-aero .prof-back:hover { color: var(--accent); }
+.s010.freq-aero .prof-code { color: rgba(20,52,42,.55); }
+.s010.freq-aero .prof-name { color: #0f2b21; text-shadow: 0 0 30px color-mix(in srgb, var(--accent) 45%, transparent); }
+.s010.freq-aero .prof-name em { color: rgba(20,52,42,.5); }
+.s010.freq-aero .prof-tagline { color: rgba(20,52,42,.68); }
+.s010.freq-aero .prof-access { color: color-mix(in srgb, var(--accent) 60%, #3f5c50); }
+.s010.freq-aero .prof-h { color: #0f2b21; }
+.s010.freq-aero .prof-doc p { color: rgba(15,43,33,.75); }
+.s010.freq-aero .prof-doc p b { color: #0a1f17; }
+.s010.freq-aero .prof-note {
+  background: rgba(255,255,255,.55); border-color: rgba(20,52,42,.28); color: rgba(20,52,42,.66);
+}
+.s010.freq-aero .prof-end { border-top-color: rgba(20,52,42,.18); color: rgba(20,52,42,.5); }
+.s010.freq-aero .prof-portrait {
+  border-color: rgba(255,255,255,.9);
+  box-shadow: 0 18px 50px -18px rgba(31,90,68,.45), 0 0 36px -8px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.s010.freq-aero .prof-hero { border-bottom-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+
+/* 频率开关 */
+.s010-freq { display: flex; align-items: center; gap: .8rem; margin-top: 1.15rem; }
+.freq-cap { font-family: var(--font-tech); font-size: .62rem; letter-spacing: .3em; opacity: .55; }
+.s010.freq-aero .freq-cap { color: rgba(20,52,42,.7); }
+.s010.freq-havoc .freq-cap { color: rgba(232,233,242,.55); }
+.freq-opt {
+  font: inherit; font-size: .82rem; letter-spacing: .18em; padding: .3rem .45rem;
+  background: none; border: none; cursor: pointer; opacity: .45;
+  transition: opacity .3s, color .3s, text-shadow .3s;
+}
+.s010.freq-aero .freq-opt { color: rgba(20,52,42,.75); }
+.s010.freq-havoc .freq-opt { color: rgba(232,233,242,.7); }
+.freq-opt[aria-pressed="true"] {
+  opacity: 1; font-weight: 700; color: var(--accent) !important;
+  text-shadow: 0 0 14px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.freq-rail {
+  position: relative; width: 58px; height: 22px; border-radius: 999px; cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  transition: background .5s, border-color .5s;
+}
+.freq-rail i {
+  position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 85%, transparent);
+  transition: transform .45s cubic-bezier(.55,-0.25,.3,1.3), background .5s;
+}
+.s010.freq-havoc .freq-rail i { transform: translateX(36px); }
+.freq-rail:focus-visible, .freq-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* 声纹波形 */
+.s010-wave { display: flex; align-items: center; gap: 3px; height: 30px; margin-top: 1.1rem; max-width: 340px; }
+.s010-wave i {
+  flex: 1; height: var(--h); border-radius: 2px;
+  background: color-mix(in srgb, var(--accent) 72%, transparent);
+  animation: s010wave 1.5s ease-in-out var(--d) infinite alternate;
+  transition: background .7s ease;
+}
+@keyframes s010wave {
+  from { transform: scaleY(.22); opacity: .45; }
+  to   { transform: scaleY(1); opacity: 1; }
+}
+
+/* 飘羽背景层 */
+.s010-deco { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+.s010-deco span {
+  position: absolute; top: -6%; left: var(--x);
+  color: var(--accent); opacity: 0;
+  animation: s010fall var(--t) linear var(--dl) infinite;
+  transition: color .7s ease;
+}
+.s010-deco svg { width: calc(22px * var(--s)); height: calc(22px * var(--s)); display: block; }
+@keyframes s010fall {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  8%   { opacity: .5; }
+  50%  { transform: translateY(56vh) translateX(3vw) rotate(160deg); }
+  85%  { opacity: .38; }
+  100% { transform: translateY(114vh) translateX(-2vw) rotate(320deg); opacity: 0; }
+}
+
+/* 切换时的频率扫掠闪光 */
+.s010-sweep {
+  position: fixed; inset: 0; pointer-events: none; z-index: 4; opacity: 0;
+  background: linear-gradient(105deg, transparent 32%, color-mix(in srgb, var(--accent) 50%, #fff) 50%, transparent 68%);
+  background-size: 260% 100%; background-position: 130% 0;
+  mix-blend-mode: screen;
+}
+.s010.sweeping .s010-sweep { animation: s010sweep .7s ease forwards; }
+@keyframes s010sweep {
+  0%   { opacity: 0; background-position: 130% 0; }
+  25%  { opacity: .95; }
+  100% { opacity: 0; background-position: -30% 0; }
+}
+
+/* 频率分段显隐 + 提示行 */
+.s010.freq-aero  .s010-part[data-freq="havoc"] { display: none; }
+.s010.freq-havoc .s010-part[data-freq="aero"]  { display: none; }
+.prof-doc p.s010-hint {
+  margin-top: 2.6rem; font-family: var(--font-tech); font-size: .78rem; line-height: 1.9;
+  letter-spacing: .08em; color: var(--accent); opacity: .9;
+}
