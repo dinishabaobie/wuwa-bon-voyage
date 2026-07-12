@@ -16,7 +16,7 @@ const SUBJECTS = [
   { code: 'S-002', name: '千咲', element: '湮灭', photo: 'photos/chisaki-1.jpg', tagline: '命运精心编织的线索，最难忘的那一笔。', author: 'TheNotoSeed', href: '#', status: 'archived' },
   { code: 'S-003', name: '莫宁', element: '热熔', photo: 'photos/mornie.jpg', tagline: '晨光里苏醒的炽焰，温柔，亦灼人。', author: 'zutto_烧烤垃圾桶', href: '#', status: 'archived' },
   { code: 'S-004', name: '弗洛洛', element: '湮灭', photo: 'photos/floro.jpg', tagline: '携琴穿过薰衣草海，奏一曲温柔的湮灭。', author: '雨鱼杆', fx: 'focus', href: '#', status: 'archived' },
-  { code: 'S-005', name: '爱弥斯', element: '热熔', photo: 'photos/aemis.jpg', tagline: '把炽热藏进一个心形里，悄悄递给你。', author: 'Akatsuki葉月', href: '#', status: 'archived' },
+  { code: 'S-005', name: '爱弥斯', element: '热熔', photo: 'photos/aemis.jpg', tagline: '把炽热藏进一个心形里，悄悄递给你。', author: 'Akatsuki葉月', fx: 'glitch', href: '#', status: 'archived' },
   { code: 'S-006', name: '达妮娅', element: '热熔', photo: 'photos/dania.jpg', tagline: '以热熔之名，献上最炽热的馈赠。', author: 'Dekrjan', href: '#', status: 'archived' },
   { code: 'S-007', name: '西格莉卡', element: '气动', photo: 'photos/sigrika.jpg', tagline: '乘风而来，将星辉编入每一缕气流。', author: 'byx', href: '#', status: 'archived' },
   { code: 'S-008', name: '琳奈', element: '衍射', photo: 'photos/linnai.jpg', tagline: '以光为笔，在世界的暗面涂下属于自己的色彩。', author: '禾策', href: '#', status: 'archived' },
@@ -347,6 +347,7 @@ const PROFILES = {
     name: '爱弥斯', full: 'Aemis', element: '热熔', accent: '#e8693f',
     photo: 'photos/aemis.jpg', author: 'Akatsuki葉月',
     tagline: '把炽热藏进一个心形里，悄悄递给你。',
+    ghost: true, // 专属 UI：越界信号（电子幽灵 · 屏幕虚境随滚动被热熔的暖意穿透）
     body: `
       <p class="prof-access">// 接入泰提斯 · 观测档案 S-005<br/>守岸人在此。观测对象 S-005，爱弥斯。<br/>档案标识：五星共鸣者｜热熔｜迅刀。<br/>一个学会了感受的电子幽灵。完整因果推演，见〈观潮 · VER 3.1 互相救赎〉。</p>
       <section>
@@ -356,6 +357,13 @@ const PROFILES = {
       <section>
         <h3 class="prof-h">电子幽灵与机兵 <i>// 为寂静赋形</i></h3>
         <p>失去肉身后，她以二维电子幽灵的形态存在；借由隧者核心与机兵，她又能短暂跨过虚实的边界，重新触碰现实。爱弥斯、机兵与电子幽灵，并非三个不同的生命，而是同一道频率寻找存在方式时，留下的三种形态。</p>
+        <div class="s005-forms" aria-label="同一频率的三种形态">
+          <div class="form-node"><span>GHOST</span><b>电子幽灵</b><small>二维的信号，栖身于网络与屏幕之间。</small></div>
+          <i aria-hidden="true"><em></em></i>
+          <div class="form-node is-core"><span>AEMIS</span><b>爱弥斯</b><small>那道频率，本来的名字。</small></div>
+          <i aria-hidden="true"><em></em></i>
+          <div class="form-node"><span>MECH</span><b>机兵</b><small>借隧者核心赋形，短暂触碰现实的手。</small></div>
+        </div>
         <p>她的共鸣能力名为<b>「长航的星辉」</b>。当星辉破界而来，那不是一具冰冷机械的启动，而是一个曾被困在寂静中的人，再一次让世界听见自己的声音。</p>
       </section>
       <section>
@@ -930,6 +938,51 @@ export function mountObservation(root, onBack) {
       </div>`)
   }
 
+  // ── S-005 专属：越界信号（电子幽灵的屏幕虚境，随滚动被热熔的暖意穿透） ──
+  let s005HeartTimer = null
+  function renderGhostDeco() {
+    profEl.classList.add('s005')
+    // 上浮的「飞行雪绒」光点
+    const fluff = Array.from({ length: 14 }, () =>
+      `<span style="--x:${3 + Math.floor(Math.random() * 94)}%;--sw:${(Math.random() * 90 - 45).toFixed(0)}px;--t:${(11 + Math.random() * 10).toFixed(1)}s;--dl:${(-Math.random() * 20).toFixed(1)}s;--s:${(0.5 + Math.random() * 1).toFixed(2)}"></span>`).join('')
+    // 像素心：线框 → 随滚动进度被炽热填满
+    const heartPath = 'M2 0 H6 V2 H8 V4 H10 V2 H12 V0 H16 V2 H18 V8 H16 V10 H14 V12 H12 V14 H10 V16 H8 V14 H6 V12 H4 V10 H2 V8 H0 V2 H2 Z'
+    profEl.insertAdjacentHTML('beforeend', `
+      <div class="s005-deco" aria-hidden="true">
+        <div class="s005-grid"></div>
+        <div class="s005-scan"></div>
+        ${fluff}
+      </div>
+      <button class="s005-heart" type="button" aria-label="她藏起来的心形">
+        <svg viewBox="0 0 18 16" role="presentation"><path d="${heartPath}" /></svg>
+        <em>——悄悄递给你 ♥</em>
+      </button>
+      <div class="s005-signal" aria-hidden="true">
+        <span>LONG VOYAGE</span>
+        <div><i></i><b></b><b></b><b></b><b></b><b></b><b></b></div>
+        <em>信号</em>
+      </div>
+      <span class="s005-case">CASE S-005 · FLYING COTTON // 飞行雪绒</span>`)
+    const heart = profEl.querySelector('.s005-heart')
+    heart.addEventListener('click', () => {
+      heart.classList.add('is-given')
+      gsap.fromTo(heart, { scale: 1 }, { scale: 1.22, duration: 0.16, yoyo: true, repeat: 3, ease: 'power1.inOut', overwrite: true, onComplete: () => gsap.set(heart, { scale: 1 }) })
+      if (s005HeartTimer) clearTimeout(s005HeartTimer)
+      s005HeartTimer = setTimeout(() => heart.classList.remove('is-given'), 2600)
+    })
+  }
+
+  function s005OnScroll() {
+    if (!profEl.classList.contains('s005')) return
+    const max = profEl.scrollHeight - profEl.clientHeight
+    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
+    profEl.style.setProperty('--s005-p', String(p))
+    const phase = p < .16 ? '信号' : p < .38 ? '越界' : p < .58 ? '心形' : p < .78 ? '面具' : p < .93 ? '心魔' : '归航'
+    const phaseEl = profEl.querySelector('.s005-signal em')
+    if (phaseEl && phaseEl.textContent !== phase) phaseEl.textContent = phase
+    profEl.dataset.signal = phase
+  }
+
   // ── S-002 专属：命运卷宗（红线从断裂、纠缠，最终重新接起） ──
   function renderThreadArchive() {
     profEl.classList.add('s002')
@@ -1008,6 +1061,12 @@ export function mountObservation(root, onBack) {
       profEl.addEventListener('scroll', s009OnScroll, { passive: true })
       s009OnScroll()
     }
+    if (d.ghost) {
+      renderGhostDeco()
+      profEl.removeEventListener('scroll', s005OnScroll)
+      profEl.addEventListener('scroll', s005OnScroll, { passive: true })
+      s005OnScroll()
+    }
     profEl.querySelector('.prof-back').addEventListener('click', (e) => { e.preventDefault(); closeProfile() })
     profEl.scrollTop = 0
     rootOverflowBeforeProfile = root.style.overflow
@@ -1032,13 +1091,16 @@ export function mountObservation(root, onBack) {
     returnTarget?.focus()
     clearProfileTimer = setTimeout(() => {
       profEl.innerHTML = ''
-      profEl.classList.remove('s010', 'freq-aero', 'freq-havoc', 'sweeping', 's008', 's009', 's002', 's001')
+      profEl.classList.remove('s010', 'freq-aero', 'freq-havoc', 'sweeping', 's008', 's009', 's002', 's001', 's005')
       profEl.style.removeProperty('--p')
       profEl.style.removeProperty('--s009-p')
       profEl.style.removeProperty('--s002-p')
+      profEl.style.removeProperty('--s005-p')
       profEl.removeAttribute('data-ritual')
       profEl.removeAttribute('data-thread')
+      profEl.removeAttribute('data-signal')
       if (s001TypeTimer) clearInterval(s001TypeTimer)
+      if (s005HeartTimer) clearTimeout(s005HeartTimer)
     }, 360)
   }
   function onProfileKeydown(e) {

@@ -1271,3 +1271,225 @@ html.prof-lock { overflow: hidden; }
   margin-top: 2.6rem; font-family: var(--font-tech); font-size: .78rem; line-height: 1.9;
   letter-spacing: .08em; color: var(--accent); opacity: .9;
 }
+
+/* ---------- S-005 爱弥斯 · 越界信号（电子幽灵 · 虚→实） ---------- */
+/* --s005-p 为滚动进度 0→1：扫描线与数据网格溶解，热熔的暖意自屏幕底部上涌 */
+.prof-overlay.s005 {
+  --s005-p: 0;
+  --aimi: #ff7bd5;
+  background-color: #0a070e;
+  background-image:
+    radial-gradient(70% 50% at 80% 4%, rgba(255, 123, 213, .14), transparent 70%),
+    radial-gradient(55% 50% at 8% 78%, rgba(232, 105, 63, .09), transparent 72%);
+}
+.prof-overlay.s005::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(82% 70% at 50% 94%, rgba(232, 105, 63, .34), transparent 72%);
+  opacity: calc(var(--s005-p) * .95); transition: opacity .12s linear;
+}
+.s005 .prof-doc { position: relative; z-index: 2; }
+.s005 .prof-back { color: rgba(240, 214, 232, .55); }
+.s005 .prof-back:hover { color: var(--aimi); }
+
+/* 屏幕虚境：数据网格 + 扫描线，越靠近归航越透明 */
+.s005-deco { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.s005-grid {
+  position: absolute; inset: 0;
+  opacity: calc(.55 - var(--s005-p) * .5);
+  background:
+    linear-gradient(rgba(255, 123, 213, .05) 1px, transparent 1px) 0 0 / 100% 44px,
+    linear-gradient(90deg, rgba(255, 123, 213, .05) 1px, transparent 1px) 0 0 / 44px 100%;
+}
+.s005-scan {
+  position: absolute; inset: 0;
+  opacity: calc(.8 - var(--s005-p) * .72);
+  background: repeating-linear-gradient(transparent 0 3px, rgba(0, 0, 0, .17) 3px 4px);
+}
+.s005-scan::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 130px;
+  background: linear-gradient(rgba(255, 123, 213, 0), rgba(255, 123, 213, .07), rgba(255, 123, 213, 0));
+  animation: s005-sweep 7s linear infinite;
+}
+@keyframes s005-sweep { from { top: -18%; } to { top: 112%; } }
+
+/* 飞行雪绒：自下而上的暖光点 */
+.s005-deco > span {
+  position: absolute; left: var(--x); bottom: -4vh;
+  width: calc(5px * var(--s)); height: calc(5px * var(--s)); border-radius: 50%;
+  background: #ffd9c9;
+  box-shadow: 0 0 10px 2px rgba(255, 150, 110, .5), 0 0 24px 7px rgba(255, 123, 213, .2);
+  opacity: 0;
+  animation: s005-drift var(--t) linear var(--dl) infinite;
+}
+@keyframes s005-drift {
+  0% { transform: translate(0, 0); opacity: 0; }
+  6% { opacity: .85; }
+  88% { opacity: .5; }
+  100% { transform: translate(var(--sw), -108vh); opacity: 0; }
+}
+
+/* 档案头：信号体的名字与残影 */
+.s005 .prof-name { animation: s005-name 5.2s steps(1) infinite; }
+@keyframes s005-name {
+  0%, 88%, 100% { text-shadow: 0 0 30px color-mix(in srgb, var(--accent) 35%, transparent); }
+  90% { text-shadow: -2px 0 0 rgba(255, 59, 208, .75), 2px 0 0 rgba(41, 230, 255, .75); }
+  93% { text-shadow: 2px 0 0 rgba(255, 59, 208, .75), -2px 0 0 rgba(41, 230, 255, .75); }
+}
+.s005 .prof-portrait { border-color: color-mix(in srgb, var(--aimi) 45%, transparent); position: relative; }
+.s005 .prof-portrait::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: repeating-linear-gradient(transparent 0 2px, rgba(0, 0, 0, .18) 2px 3px);
+  opacity: calc(1 - var(--s005-p));
+}
+.s005 .prof-portrait img { animation: s005-jitter 6s steps(1) infinite; }
+@keyframes s005-jitter {
+  0%, 90%, 100% { transform: none; filter: none; }
+  91% { transform: translateX(-3px); filter: hue-rotate(60deg) saturate(1.8); }
+  94% { transform: translateX(3px); filter: hue-rotate(-45deg) saturate(1.8); }
+  97% { transform: translateX(-1px); filter: none; }
+}
+.s005 .prof-badge { color: #ff9d72; border-color: rgba(255, 140, 96, .55); background: rgba(70, 22, 10, .35); }
+
+/* 接入行：一段正在握手的连接日志 */
+.s005 .prof-access {
+  padding: 1.1rem 1.3rem;
+  border: 1px dashed rgba(255, 123, 213, .3); background: rgba(34, 15, 30, .5);
+  color: color-mix(in srgb, var(--aimi) 52%, #9d8aa4);
+}
+
+/* 每一节：来自「飞行雪绒」的消息窗口 */
+.s005 .prof-doc section {
+  margin: 2.7rem 0; padding: 2.6rem 1.7rem 1.3rem; position: relative;
+  border: 1px solid color-mix(in srgb, var(--aimi) 16%, transparent);
+  background: linear-gradient(165deg, rgba(28, 16, 27, .85), rgba(15, 10, 17, .9));
+  box-shadow: 0 24px 60px -42px #000;
+}
+.s005 .prof-doc section::before {
+  content: "● ● ●"; position: absolute; left: 1.05rem; top: .85rem;
+  font-size: .5rem; letter-spacing: .35em;
+  color: color-mix(in srgb, var(--aimi) 55%, transparent);
+}
+.s005 .prof-doc section::after {
+  content: "MSG // FLYING_COTTON"; position: absolute; right: 1.05rem; top: .78rem;
+  font: .52rem/1 var(--font-tech); letter-spacing: .22em; color: rgba(255, 190, 230, .22);
+}
+.s005 .prof-h i { color: #ff8ccb; }
+.s005 .prof-note { border-color: rgba(255, 123, 213, .26); background: rgba(92, 26, 66, .14); }
+
+/* 三形态：同一道频率的三种存在方式 */
+.s005-forms {
+  display: grid; grid-template-columns: 1fr 34px 1fr 34px 1fr; align-items: stretch;
+  margin: 1.6rem 0 1.3rem;
+}
+.s005-forms .form-node {
+  padding: .95rem .85rem 1.05rem; text-align: center;
+  border: 1px solid rgba(255, 123, 213, .22); background: rgba(26, 13, 23, .6);
+}
+.s005-forms .form-node span { font: .55rem/1 var(--font-tech); letter-spacing: .24em; color: rgba(255, 170, 215, .5); }
+.s005-forms .form-node b { display: block; margin: .5rem 0 .4rem; letter-spacing: .1em; color: #ffe9f4; }
+.s005-forms .form-node small { display: block; font-size: .72rem; line-height: 1.7; color: rgba(232, 233, 242, .5); }
+.s005-forms .form-node.is-core {
+  border-color: rgba(232, 105, 63, .58); background: rgba(58, 25, 16, .38);
+  box-shadow: 0 0 28px -10px rgba(232, 105, 63, .6);
+}
+.s005-forms .form-node.is-core span { color: rgba(255, 176, 138, .72); }
+.s005-forms .form-node.is-core b { color: #ffd9c4; }
+.s005-forms > i { position: relative; }
+.s005-forms > i em {
+  position: absolute; left: -1px; right: -1px; top: 50%; height: 1px;
+  background: repeating-linear-gradient(90deg, #ff7bd5 0 4px, transparent 4px 7px);
+  box-shadow: 0 0 8px rgba(255, 123, 213, .5);
+}
+
+/* 像素心：线框 → 被炽热填满，归航时开始跳动 */
+.s005-heart {
+  position: fixed; right: clamp(20px, 6vw, 72px); top: calc(22% + var(--s005-p) * 48%);
+  z-index: 3; width: 46px; padding: 0; border: none; background: none; cursor: pointer;
+}
+.s005-heart svg { width: 100%; display: block; overflow: visible; }
+.s005-heart path {
+  fill: color-mix(in srgb, #e8693f calc(var(--s005-p) * 100%), var(--aimi));
+  fill-opacity: calc(.07 + var(--s005-p) * .93);
+  stroke: rgba(255, 148, 205, .8); stroke-width: .6;
+  stroke-dasharray: 3 2; animation: s005-heartline 2.2s linear infinite;
+  filter: drop-shadow(0 0 calc(4px + var(--s005-p) * 10px) rgba(255, 123, 160, .55));
+  transition: fill .25s;
+}
+@keyframes s005-heartline { to { stroke-dashoffset: -10; } }
+.s005[data-signal="归航"] .s005-heart svg { animation: s005-beat 1.15s ease-in-out infinite; }
+@keyframes s005-beat {
+  0%, 42%, 100% { transform: scale(1); }
+  12% { transform: scale(1.16); }
+  26% { transform: scale(1.06); }
+}
+.s005-heart em {
+  position: absolute; right: 115%; top: 50%; translate: 0 -50%;
+  white-space: nowrap; font-style: normal; font-size: .74rem; letter-spacing: .12em;
+  color: #ffc9e5; text-shadow: 0 0 12px rgba(255, 123, 213, .55);
+  opacity: 0; transition: opacity .35s; pointer-events: none;
+}
+.s005-heart.is-given em { opacity: 1; }
+.s005-heart:focus-visible { outline: 2px solid var(--aimi); outline-offset: 6px; }
+
+/* 左侧信号轨：信号 → 越界 → 心形 → 面具 → 心魔 → 归航 */
+.s005-signal {
+  position: fixed; left: clamp(18px, 3vw, 46px); top: 50%; translate: 0 -50%; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: .75rem;
+  color: rgba(240, 200, 224, .38); pointer-events: none;
+}
+.s005-signal > span { writing-mode: vertical-rl; font: .52rem/1 var(--font-tech); letter-spacing: .28em; }
+.s005-signal > div { position: relative; width: 2px; height: 165px; background: rgba(255, 123, 213, .16); }
+.s005-signal > div i {
+  position: absolute; inset: 0 0 auto; height: calc(var(--s005-p) * 100%);
+  background: linear-gradient(#ff7bd5, #e8693f); box-shadow: 0 0 9px rgba(255, 110, 170, .55);
+}
+.s005-signal > div b {
+  position: absolute; left: 50%; translate: -50% -50%; width: 7px; height: 7px;
+  border: 1px solid #d05fa8; border-radius: 50%; background: #0d0910;
+}
+.s005-signal > div b:nth-of-type(1) { top: 0; }
+.s005-signal > div b:nth-of-type(2) { top: 20%; }
+.s005-signal > div b:nth-of-type(3) { top: 40%; }
+.s005-signal > div b:nth-of-type(4) { top: 60%; }
+.s005-signal > div b:nth-of-type(5) { top: 80%; border-color: #d0764a; }
+.s005-signal > div b:nth-of-type(6) { top: 100%; border-color: #e8693f; }
+.s005-signal > em {
+  min-width: 3.5em; text-align: center; font: normal 600 .72rem/1.2 var(--font-main);
+  letter-spacing: .18em; color: #ff8ccb; transition: color .3s;
+}
+.s005[data-signal="心魔"] .s005-signal > em,
+.s005[data-signal="归航"] .s005-signal > em { color: #f0885c; text-shadow: 0 0 14px rgba(232, 105, 63, .6); }
+.s005-case {
+  position: fixed; right: 2.2vw; bottom: 4vh; z-index: 1; writing-mode: vertical-rl;
+  font: .55rem/1 var(--font-tech); letter-spacing: .28em; color: rgba(255, 123, 213, .28);
+  pointer-events: none;
+}
+
+/* 归档签名：暖意落定，信号不再抖动 */
+.s005[data-signal="归航"] .prof-name { animation: none; }
+.s005 .prof-end { border-top-color: rgba(255, 123, 213, .18); }
+
+@media (max-width: 640px) {
+  .s005-signal, .s005-case { display: none; }
+  .s005-heart { width: 36px; right: 14px; }
+  .s005-forms { grid-template-columns: 1fr; }
+  .s005-forms > i { height: 22px; }
+  .s005-forms > i em {
+    left: 50%; right: auto; top: -1px; bottom: -1px; height: auto; width: 1px;
+    background: repeating-linear-gradient(#ff7bd5 0 4px, transparent 4px 7px);
+  }
+  .s005 .prof-doc section { padding-inline: 1.2rem; }
+}
+
+/* 观测墙卡片 hover：信号撕裂（card-fx 以 --photo 叠一层错位残影） */
+.subject-card.fx-glitch .card-fx {
+  background: var(--photo) center top / cover;
+  mix-blend-mode: screen;
+}
+.subject-card.fx-glitch:hover .card-fx { animation: s005-card-slice 1.5s steps(1) infinite; }
+@keyframes s005-card-slice {
+  0%, 34%, 46%, 78%, 88%, 100% { opacity: 0; transform: none; filter: none; }
+  36% { opacity: .8; clip-path: inset(24% 0 52% 0); transform: translateX(5px); filter: hue-rotate(80deg) saturate(2.4); }
+  42% { opacity: .8; clip-path: inset(58% 0 18% 0); transform: translateX(-6px); filter: hue-rotate(-60deg) saturate(2.4); }
+  81% { opacity: .7; clip-path: inset(8% 0 78% 0); transform: translateX(-4px); filter: hue-rotate(140deg) saturate(2); }
+}
