@@ -407,6 +407,427 @@ html.prof-lock { overflow: hidden; }
 }
 .prof-end b { color: var(--accent); font-weight: 400; }
 
+/* ---------- S-003 莫宁 · 星枢工程蓝图 ---------- */
+.prof-overlay.s003 {
+  --s003-blue: #75b9d4;
+  --s003-ink: #07131b;
+  --s003-p: 0;
+  background:
+    radial-gradient(60% 42% at 72% 12%, rgba(232,105,63,.18), transparent 72%),
+    radial-gradient(52% 60% at 8% 70%, rgba(72,150,181,.12), transparent 75%),
+    #050b10;
+}
+.s003 .prof-doc { position: relative; z-index: 2; max-width: 960px; padding-top: clamp(5rem,12vh,7rem); }
+.s003 .prof-doc::before {
+  content: "PROJECT // STARTORCH  03";
+  display: block; margin-bottom: 1.1rem; padding-bottom: .55rem;
+  border-bottom: 1px solid rgba(117,185,212,.28);
+  font: 600 .62rem/1 var(--font-tech); letter-spacing: .28em; color: rgba(117,185,212,.65);
+}
+.s003 .prof-hero {
+  position: relative; min-height: min(68vh,680px); padding: clamp(1rem,3vw,1.7rem); overflow: visible;
+  display: grid; grid-template-columns: minmax(260px, .8fr) 1.2fr; align-items: center;
+  border: 1px solid rgba(117,185,212,.3); border-left: 3px solid var(--accent);
+  background: linear-gradient(120deg, rgba(117,185,212,.075), rgba(232,105,63,.045));
+  box-shadow: inset 0 0 50px rgba(0,0,0,.3), 0 28px 70px -45px rgba(117,185,212,.55);
+}
+.s003 .prof-hero::after {
+  content: "M-03  /  ARTIFICIAL LIMB LINK  /  ACTIVE";
+  position: absolute; right: 1rem; top: .65rem;
+  font: .54rem/1 var(--font-tech); letter-spacing: .14em; color: rgba(117,185,212,.45);
+}
+.s003 .prof-portrait {
+  position: relative; width: min(31vw,330px); justify-self:center;
+  clip-path: polygon(7% 0,86% 0,100% 12%,94% 89%,78% 100%,0 94%,0 9%);
+  transform: translateY(calc(var(--s003-p) * -24px));
+  border-color: rgba(117,185,212,.65);
+  box-shadow: 0 0 0 10px rgba(117,185,212,.025),0 0 0 11px rgba(117,185,212,.12),0 35px 90px -30px rgba(232,105,63,.6);
+}
+.s003 .prof-portrait::after { content:"SCAN / 003"; position:absolute; inset:0; padding:.8rem; background:linear-gradient(transparent 49%,rgba(117,185,212,.7) 50%,transparent 51%); background-size:100% 38px; mix-blend-mode:screen; font: .55rem var(--font-tech); letter-spacing:.2em; color:#bdeeff; animation:s003-scan 5s linear infinite; }
+.s003 .prof-portrait img { filter: saturate(.72) contrast(1.08) brightness(.86); transform:scale(1.05); }
+.s003 .prof-id { position:relative; padding:2rem 1.5rem 2rem clamp(1.5rem,4vw,3.5rem); }
+.s003 .prof-code { font-size:.75rem; color:var(--s003-blue); }
+.s003 .prof-name { margin:.65rem 0 .4rem; font-size:clamp(3.8rem,8vw,7.2rem); line-height:.86; letter-spacing:.08em; text-transform:uppercase; }
+.s003 .prof-name em { display:block; width:100%; margin:.8rem 0 0 .35rem; font-size:.72rem; letter-spacing:.65em; color:var(--s003-blue); }
+.s003 .prof-badge { background: rgba(232,105,63,.1); box-shadow: 0 0 24px rgba(232,105,63,.12); }
+.s003 .prof-access { margin:4rem 0; padding:1.4rem 1.5rem 1.4rem clamp(1.5rem,5vw,4rem); border:1px solid rgba(117,185,212,.17); border-left:3px solid var(--s003-blue); background:linear-gradient(90deg,rgba(117,185,212,.09),transparent 78%); transform:translateX(clamp(-1.2rem,-3vw,-2.5rem)); }
+.s003 section { margin-top:clamp(4rem,10vh,7rem); }
+.s003 section:nth-of-type(even) { margin-left:clamp(0px,9vw,110px); }
+.s003 section:nth-of-type(odd) { margin-right:clamp(0px,7vw,80px); }
+.s003 .prof-h { position: relative; padding-left: 1.4rem; font-size:clamp(1.35rem,3vw,2rem); }
+.s003 .prof-h::before { content: ""; position: absolute; left: 0; top: .45em; width: 6px; height: 6px; border: 1px solid var(--accent); transform: rotate(45deg); }
+.s003 .prof-note { border-style: solid; border-color: rgba(117,185,212,.24); background: linear-gradient(90deg, rgba(117,185,212,.07), transparent); }
+.s003 .prof-sign { position: relative; background: linear-gradient(115deg, rgba(232,105,63,.09), rgba(117,185,212,.035)); }
+.s003 .prof-sign::before { content: "CONCLUSION"; position: absolute; right: 1rem; top: .75rem; font: .55rem/1 var(--font-tech); letter-spacing: .25em; color: rgba(117,185,212,.4); }
+.s003-deco { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.s003-grid { position: absolute; inset: 0; opacity: .38; background-image: linear-gradient(rgba(117,185,212,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(117,185,212,.08) 1px,transparent 1px); background-size: 44px 44px; transform:perspective(600px) rotateX(58deg) scale(1.5) translateY(calc(20% - var(--s003-p) * 8%)); transform-origin:center bottom; mask-image:linear-gradient(transparent 10%,#000 80%); }
+.s003-orbit { position: absolute; width: min(70vw,900px); aspect-ratio: 1; right: max(-28vw,-390px); top: -8vh; border: 1px solid rgba(117,185,212,.2); border-radius: 50%; transform:rotate(calc(var(--s003-p) * 190deg)); transition:transform .15s linear; }
+.s003-orbit::before,.s003-orbit::after { content:""; position:absolute; border:1px solid rgba(117,185,212,.12); border-radius:50%; inset:12%; }
+.s003-orbit::after { inset:30%; border-color:rgba(232,105,63,.22); }
+.s003-orbit i { position:absolute; left:50%; top:50%; width:5px; height:5px; border-radius:50%; background:var(--accent); box-shadow:0 0 16px var(--accent); transform-origin:0 0; }
+.s003-orbit i:nth-child(1){transform:rotate(22deg) translateX(48%)} .s003-orbit i:nth-child(2){transform:rotate(142deg) translateX(160px)} .s003-orbit i:nth-child(3){transform:rotate(258deg) translateX(245px)}
+.s003-core { position:fixed; left:max(-90px,-7vw); top:42%; width:180px; aspect-ratio:1; border:1px solid rgba(232,105,63,.25); border-radius:50%; display:grid; place-items:center; animation:s003-pulse 3.2s ease-in-out infinite; }
+.s003-core::before,.s003-core::after{content:"";position:absolute;border-radius:50%;border:1px dashed rgba(232,105,63,.3);inset:18%;animation:s003-spin 16s linear infinite}.s003-core::after{inset:34%;border-style:solid;box-shadow:inset 0 0 28px rgba(232,105,63,.22);animation-direction:reverse}.s003-core b{font:900 2.4rem var(--font-tech);color:rgba(232,105,63,.8)}.s003-core em{position:absolute;left:102%;font:.5rem/1.5 var(--font-tech);letter-spacing:.15em;color:rgba(232,105,63,.45);font-style:normal;white-space:nowrap}
+.s003-limb { position:fixed; right:2.6rem; top:22%; width:80px; height:230px; opacity:.38; transform:translateY(calc(var(--s003-p) * 90px)); }
+.s003-limb::before,.s003-limb::after{content:"";position:absolute;left:30px;width:18px;border:1px solid var(--s003-blue);transform:skew(-6deg)}.s003-limb::before{top:0;height:92px}.s003-limb::after{top:109px;height:105px;transform:skew(8deg)}.s003-limb i{position:absolute;left:25px;width:29px;height:29px;border:1px solid var(--accent);border-radius:50%;box-shadow:0 0 12px rgba(232,105,63,.3)}.s003-limb i:nth-child(1){top:-8px}.s003-limb i:nth-child(2){top:83px}.s003-limb i:nth-child(3){top:102px}.s003-limb i:nth-child(4){bottom:0}.s003-limb em{position:absolute;right:100%;bottom:0;font:.48rem/1.5 var(--font-tech);letter-spacing:.12em;color:var(--s003-blue);font-style:normal;white-space:nowrap;text-align:right}
+.s003-readout { position: fixed; right: clamp(1rem,3vw,2.5rem); bottom: 2rem; width: 210px; padding: .8rem; border: 1px solid rgba(117,185,212,.2); background: rgba(5,11,16,.7); backdrop-filter: blur(8px); font-family: var(--font-tech); color: var(--s003-blue); }
+.s003-readout span,.s003-readout em { display:block; font-size:.52rem; letter-spacing:.12em; font-style:normal; opacity:.55; }
+.s003-readout strong { display:block; margin:.35rem 0; font-size:1.15rem; letter-spacing:.08em; color:#d9f3ff; }
+.s003-readout div { height:2px; background:rgba(117,185,212,.14); margin:.45rem 0 .65rem; overflow:hidden; }.s003-readout div i{display:block;width:82%;height:100%;background:linear-gradient(90deg,var(--s003-blue),var(--accent));box-shadow:0 0 10px var(--s003-blue);}
+.s003-coordinates { position:fixed; left:1.3rem; bottom:1.5rem; font: .5rem/1.8 var(--font-tech); letter-spacing:.14em; color:rgba(117,185,212,.3); }
+.s003-sideword { position:fixed; right:.7rem; top:50%; writing-mode:vertical-rl; transform:translateY(-50%); font:600 .5rem var(--font-tech); letter-spacing:.45em; color:rgba(117,185,212,.24); }
+@keyframes s003-spin { to { transform: rotate(360deg); } }
+@keyframes s003-scan { from{background-position:0 -150px} to{background-position:0 400px} }
+@keyframes s003-pulse { 50%{filter:brightness(1.55);box-shadow:0 0 50px rgba(232,105,63,.14)} }
+@media (max-width: 1100px) { .s003-readout,.s003-coordinates,.s003-limb,.s003-core,.s003-sideword { display:none; } }
+@media (max-width: 700px) { .s003 .prof-hero{display:flex;min-height:0}.s003 .prof-portrait{width:min(64vw,280px)}.s003 .prof-name{font-size:clamp(3rem,18vw,5rem)}.s003 section:nth-of-type(n){margin-left:0;margin-right:0} }
+@media (prefers-reduced-motion: reduce) { .s003-orbit,.s003-core,.s003-core::before,.s003-core::after,.s003 .prof-portrait::after { animation:none; } }
+
+/* ---------- S-004 弗洛洛 · 永不落幕的安魂曲 ---------- */
+.prof-overlay.s004 {
+  --s004-p: 0;
+  --violet: #a57ad8;
+  background:
+    radial-gradient(circle at 50% -8%, rgba(222,189,255,.16), transparent 30%),
+    linear-gradient(180deg,#08050e 0%,#100918 38%,#07050b 100%);
+}
+.s004 .prof-doc { position:relative; z-index:3; max-width:1000px; padding-top:clamp(7rem,17vh,11rem); counter-reset:movement; }
+.s004 .prof-doc::before { content:"“"; position:absolute; top:2rem; left:50%; transform:translateX(-50%); font:italic 11rem/1 Georgia,serif; color:rgba(212,170,244,.08); }
+.s004 .prof-hero { min-height:min(72vh,760px); position:relative; display:grid; grid-template-columns:1fr 1fr; align-items:center; border:0; padding:2rem 0 4rem; }
+.s004 .prof-hero::before { content:"REQUIEM FOR A TOWN THAT NO LONGER EXISTS"; position:absolute; left:50%; top:0; transform:translateX(-50%); width:max-content; font: .56rem var(--font-tech); letter-spacing:.45em; color:rgba(212,170,244,.42); }
+.s004 .prof-portrait { justify-self:end; width:min(32vw,350px); border:0; border-radius:50% 50% 4px 4px; clip-path:polygon(8% 0,92% 0,100% 82%,83% 100%,17% 100%,0 82%); box-shadow:0 0 0 1px rgba(212,170,244,.3),0 0 90px -18px rgba(165,122,216,.6); transform:translateY(calc(var(--s004-p) * -22px)); }
+.s004 .prof-portrait::before { content:""; position:absolute; z-index:2; inset:-1px; background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.22) 49%,transparent 51%); transform:translateX(calc(-100% + var(--s004-p) * 220%)); }
+.s004 .prof-portrait img { filter:saturate(.62) contrast(1.08) brightness(.75); }
+.s004 .prof-id { padding-left:clamp(2rem,6vw,5rem); }
+.s004 .prof-code { color:rgba(212,170,244,.55); letter-spacing:.6em; }
+.s004 .prof-name { margin:.7rem 0; display:block; font:500 clamp(4.6rem,10vw,8.6rem)/.8 Georgia,"Songti SC",serif; letter-spacing:-.04em; text-shadow:0 0 50px rgba(165,122,216,.38); }
+.s004 .prof-name em { display:block; margin:1.2rem 0 0 .5rem; font:italic .85rem Georgia,serif; letter-spacing:.55em; color:#c7a5e4; }
+.s004 .prof-badge { border:0; padding:.3rem 0; font-family:Georgia,serif; border-bottom:1px solid currentColor; }
+.s004 .prof-tagline { max-width:26rem; font-family:Georgia,"Songti SC",serif; font-style:italic; color:rgba(238,226,246,.72); }
+.s004 .prof-access { position:relative; margin:3rem auto 7rem; max-width:700px; text-align:center; color:rgba(205,180,224,.67); }
+.s004 .prof-access::before,.s004 .prof-access::after { content:"♦"; display:block; margin:1rem; color:var(--accent); opacity:.6; }
+.s004 section { counter-increment:movement; position:relative; margin:0 0 clamp(7rem,15vh,11rem); padding:clamp(2rem,5vw,4rem); border-left:1px solid rgba(212,170,244,.18); background:linear-gradient(105deg,rgba(130,83,156,.09),transparent 65%); }
+.s004 section:nth-of-type(even) { margin-left:clamp(0px,9vw,110px); border-left:0; border-right:1px solid rgba(212,170,244,.18); text-align:right; background:linear-gradient(255deg,rgba(130,83,156,.09),transparent 65%); }
+.s004 section::before { content:"0" counter(movement); position:absolute; right:1rem; top:-.45em; font:italic 6rem/1 Georgia,serif; color:rgba(212,170,244,.055); }
+.s004 section:nth-of-type(even)::before { right:auto; left:1rem; }
+.s004 .prof-h { font:500 clamp(1.7rem,4vw,2.6rem)/1.2 Georgia,"Songti SC",serif; letter-spacing:.04em; }
+.s004 section:nth-of-type(even) .prof-h { justify-content:flex-end; }
+.s004 .prof-h i { font-size:.58rem; color:#c997df; }
+.s004 .prof-note { position:relative; margin-top:2rem; padding:1.5rem; border:0; border-top:1px solid rgba(212,170,244,.25); border-bottom:1px solid rgba(212,170,244,.08); background:rgba(212,170,244,.025); font-family:Georgia,"Songti SC",serif; font-style:italic; }
+.s004 .prof-sign { margin-top:15vh; padding:clamp(2rem,7vw,5rem); text-align:center; border:1px solid rgba(212,170,244,.2); border-radius:50% 50% 0 0 / 18% 18% 0 0; background:radial-gradient(circle at 50% 0,rgba(165,122,216,.14),transparent 60%); }
+.s004 .prof-sign::before { content:"♪  DA CAPO AL FINE  ♪"; display:block; margin-bottom:2rem; font:.6rem var(--font-tech); letter-spacing:.4em; color:rgba(212,170,244,.5); }
+.s004-deco { position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+.s004-curtain { position:absolute; top:0; bottom:0; width:23vw; opacity:calc(.75 - var(--s004-p) * .5); transition:opacity .2s; background:repeating-linear-gradient(90deg,rgba(32,10,40,.96) 0,rgba(76,25,73,.85) 24%,rgba(15,5,21,.96) 48%); filter:drop-shadow(0 0 30px #000); }
+.s004-curtain.left { left:0; clip-path:polygon(0 0,100% 0,68% 100%,0 100%); transform:translateX(calc(var(--s004-p) * -42%)); }.s004-curtain.right{right:0;clip-path:polygon(0 0,100% 0,100% 100%,32% 100%);transform:translateX(calc(var(--s004-p) * 42%));}
+.s004-baton { position:absolute; left:50%; top:42%; width:2px; height:35vh; background:linear-gradient(transparent,#f7e9ff 40%,var(--accent)); transform-origin:top; transform:rotate(calc(-28deg + var(--s004-p) * 56deg)); box-shadow:0 0 18px rgba(212,170,244,.5); }
+.s004-movement { position:fixed; left:clamp(1rem,3vw,2.5rem); bottom:2rem; width:220px; font-family:var(--font-tech); color:#d8b8e8; }.s004-movement span{display:block;font-size:.5rem;letter-spacing:.35em;opacity:.55}.s004-movement strong{display:block;margin:.35rem 0;font:italic 1.15rem Georgia,serif;letter-spacing:.12em}.s004-movement i{display:block;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
+@media(max-width:1050px){.s004-curtain{width:14vw}.s004-movement{display:none}}
+@media(max-width:700px){.s004 .prof-hero{display:flex;min-height:0}.s004 .prof-portrait{width:min(67vw,290px);align-self:center}.s004 .prof-name{font-size:clamp(4rem,23vw,6.5rem)}.s004 section:nth-of-type(n){margin-left:0;text-align:left;border-right:0;border-left:1px solid rgba(212,170,244,.18)}.s004 section:nth-of-type(n) .prof-h{justify-content:flex-start}}
+
+/* S-004 refinement: opera programme / archival memorial, deliberately restrained
+   （--accent 由 profile 定义为 #9d435d，随内联样式注入，此处不再重复声明） */
+.prof-overlay.s004 {
+  background:#09090a;
+  color:#e7e1d8;
+}
+.s004 .prof-doc { max-width:1120px; padding-top:9rem; }
+.s004 .prof-doc::before { content:"IN MEMORIAM"; top:3.2rem; left:50%; transform:translateX(-50%); font:500 .52rem/1 Georgia,serif; letter-spacing:.68em; color:rgba(231,225,216,.34); }
+.s004 .prof-hero { min-height:76vh; grid-template-columns:1.18fr .82fr; gap:0; padding:0; border-top:1px solid rgba(231,225,216,.16); border-bottom:1px solid rgba(231,225,216,.16); }
+.s004 .prof-hero::before { top:-2.1rem; left:0; transform:none; font-size:.48rem; letter-spacing:.28em; color:rgba(231,225,216,.35); }
+.s004 .prof-portrait { order:2; justify-self:stretch; width:100%; height:76vh; aspect-ratio:auto; border-radius:0; clip-path:none; box-shadow:none; overflow:hidden; transform:none; }
+.s004 .prof-portrait::before { display:none; }
+.s004 .prof-portrait::after { content:"PLATE  IV"; position:absolute; right:1.1rem; bottom:1rem; z-index:2; font:500 .48rem/1 Georgia,serif; letter-spacing:.35em; color:rgba(240,235,225,.58); }
+.s004 .prof-portrait img { filter:grayscale(.65) sepia(.08) contrast(1.16) brightness(.68); object-position:54% top; transform:scale(1.015); transition:filter .8s ease,transform 1.2s cubic-bezier(.2,.7,.2,1); }
+.s004 .prof-hero:hover .prof-portrait img { filter:grayscale(.42) sepia(.05) contrast(1.12) brightness(.74); transform:scale(1); }
+.s004 .prof-id { order:1; align-self:end; padding:4rem clamp(2rem,6vw,5.5rem) 4rem 0; }
+.s004 .prof-code { font:500 .5rem/1 Georgia,serif; color:rgba(231,225,216,.42); letter-spacing:.5em; }
+.s004 .prof-name { margin:1.6rem 0 1.8rem; font:400 clamp(5rem,11vw,9.5rem)/.75 "Songti SC",Georgia,serif; letter-spacing:-.09em; color:#e9e3d9; text-shadow:none; }
+.s004 .prof-name em { margin:1.7rem 0 0 .3rem; font:italic .72rem/1 Georgia,serif; letter-spacing:.7em; color:rgba(231,225,216,.52); }
+.s004 .prof-badge { color:#a76a78; font:500 .52rem/1 Georgia,serif; letter-spacing:.34em; }
+.s004 .prof-tagline { max-width:20rem; margin-top:1.7rem; font:italic .9rem/1.9 Georgia,"Songti SC",serif; color:rgba(231,225,216,.58); }
+.s004 .prof-author { display:block; margin-top:2.2rem; font-size:.48rem; color:rgba(231,225,216,.25); }
+.s004 .prof-access { max-width:620px; margin:9rem auto 11rem; font:400 .76rem/2.1 var(--font-tech); letter-spacing:.04em; color:rgba(231,225,216,.5); text-align:left; }
+.s004 .prof-access::before { content:"ARCHIVE NOTE  /  004"; margin:0 0 1.5rem; font:500 .5rem/1 Georgia,serif; letter-spacing:.4em; color:#955166; }
+.s004 .prof-access::after { display:none; }
+.s004 section,.s004 section:nth-of-type(even) { max-width:760px; margin:0 auto 12rem; padding:0 0 0 clamp(1.8rem,5vw,4rem); text-align:left; border:0; border-left:1px solid rgba(231,225,216,.14); background:none; }
+.s004 section:nth-of-type(even) { transform:translateX(clamp(0px,6vw,70px)); }
+.s004 section::before,.s004 section:nth-of-type(even)::before { content:"ACT " counter(movement,upper-roman); left:auto; right:100%; top:.35rem; width:clamp(1.8rem,5vw,4rem); padding-right:1.1rem; text-align:right; font:italic .5rem/1 Georgia,serif; letter-spacing:.12em; color:rgba(157,67,93,.72); }
+.s004 .prof-h,.s004 section:nth-of-type(even) .prof-h { display:block; margin:0 0 2.1rem; font:400 clamp(1.75rem,4vw,2.7rem)/1.25 "Songti SC",Georgia,serif; letter-spacing:.03em; color:#e8e1d7; }
+.s004 .prof-h i { display:block; margin-top:.75rem; font:italic .68rem/1.5 Georgia,"Songti SC",serif; letter-spacing:.08em; color:rgba(231,225,216,.36); }
+.s004 .prof-doc p { font-family:"Songti SC",Georgia,serif; font-size:1rem; line-height:2.05; color:rgba(231,225,216,.66); }
+.s004 .prof-note { margin:2.6rem 0 0; padding:1.6rem 0 0; border:0; border-top:1px solid rgba(231,225,216,.13); background:none; font:italic .9rem/2 Georgia,"Songti SC",serif; color:rgba(231,225,216,.5); }
+.s004 .prof-sign { max-width:720px; margin:18rem auto 4rem; padding:5rem 3rem; border:1px solid rgba(231,225,216,.15); border-radius:0; background:none; text-align:left; }
+.s004 .prof-sign::before { content:"CODA  /  WITHOUT RESOLUTION"; margin-bottom:3rem; font:500 .48rem/1 Georgia,serif; letter-spacing:.48em; color:rgba(157,67,93,.8); }
+.s004 .prof-sign p:last-child { color:rgba(231,225,216,.82); text-shadow:none; }
+.s004 .prof-end { color:rgba(231,225,216,.22); }
+.s004 .prof-end b { color:#955166; }
+.s004-curtain { width:9vw; opacity:.28; background:linear-gradient(90deg,#080808,rgba(34,18,23,.65),#080808); filter:none; }
+.s004-curtain.left { clip-path:polygon(0 0,100% 0,45% 100%,0 100%); }.s004-curtain.right { clip-path:polygon(0 0,100% 0,100% 100%,55% 100%); }
+.s004-baton { left:auto; right:clamp(1rem,3vw,2.7rem); top:22%; width:1px; height:30vh; opacity:.24; background:linear-gradient(transparent,#e8e1d7,transparent); box-shadow:none; transform:rotate(calc(-4deg + var(--s004-p) * 8deg)); }
+.s004-movement { left:clamp(1rem,3vw,2.5rem); bottom:2rem; width:auto; color:rgba(231,225,216,.52); }
+.s004-movement span { font:500 .45rem/1 Georgia,serif; letter-spacing:.42em; }
+.s004-movement strong { margin:.5rem 0 0; font:italic .7rem/1 Georgia,serif; letter-spacing:.18em; color:#a66a7a; }
+.s004-movement i { display:none; }
+@media(max-width:700px){.s004 .prof-doc{padding-top:7rem}.s004 .prof-hero{display:flex;min-height:0;border-top:0}.s004 .prof-portrait{width:100%;height:58vh}.s004 .prof-id{padding:2.5rem 0}.s004 .prof-name{font-size:clamp(4.5rem,25vw,7rem)}.s004 section,.s004 section:nth-of-type(even){transform:none;margin-bottom:8rem;padding-left:1.5rem}.s004 .prof-sign{margin-top:10rem;padding:3rem 1.5rem}.s004-curtain,.s004-baton{display:none}}
+
+/* ---------- S-005 爱弥斯 · 赠与雪中的你（明媚雪原 · 光影随情绪明灭） ---------- */
+/* --s005-p 为滚动进度 0→1；--s005-dim 为情绪光影：裂痕与告别处光线沉下去，触碰时重新亮起 */
+.prof-overlay.s005 {
+  --s005-p: 0; --s005-dim: 0;
+  --ice: #7ecbe8; --sakura: #f299c1; --ink: #53344a;
+  background-color: #fdf3f6;
+  background-image:
+    radial-gradient(70% 55% at 78% 0%, rgba(242, 153, 193, .28), transparent 70%),
+    radial-gradient(60% 50% at 6% 30%, rgba(126, 203, 232, .2), transparent 72%),
+    linear-gradient(180deg, #fff 0%, #fdf1f5 55%, #f4ebf2 100%);
+}
+/* 结尾的暖：互相救赎处，粉金的光重新漫上来 */
+.prof-overlay.s005::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(80% 65% at 50% 96%, rgba(255, 182, 140, .5), rgba(255, 150, 180, .18) 55%, transparent 75%);
+  opacity: calc((var(--s005-p) - .8) * 5); transition: opacity .12s linear;
+}
+.s005 .prof-doc { position: relative; z-index: 2; }
+.s005 .prof-back { color: rgba(90, 52, 74, .55); }
+.s005 .prof-back:hover { color: #e8699f; }
+/* S-007 结尾整页转为亮色晨光，深色主题的浅灰返回链接会失读 —— 用深墨绿保证对比 */
+.s007 .prof-back { color: rgba(43, 63, 56, .72); }
+.s007 .prof-back:hover { color: #2f8a68; }
+
+/* 情绪光影：多层压暗（乘法混合），像冰原上光线沉下去的黄昏 */
+.s005-dusk {
+  position: fixed; inset: 0; z-index: 4; pointer-events: none;
+  mix-blend-mode: multiply;
+  background: linear-gradient(180deg, #cfd6e8, #b6bdd8);
+  opacity: calc(var(--s005-dim) * .52); transition: opacity .2s linear;
+}
+
+/* 缓缓飘落的雪：落地即融，是她无声的告别 */
+.s005-deco { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.s005-deco > span {
+  position: absolute; left: var(--x); top: -4vh;
+  width: calc(7px * var(--s)); height: calc(7px * var(--s)); border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px 1px rgba(126, 203, 232, .55), 0 0 14px 4px rgba(242, 153, 193, .18);
+  filter: blur(var(--b));
+  opacity: 0;
+  animation: s005-snow var(--t) linear var(--dl) infinite;
+}
+@keyframes s005-snow {
+  0% { transform: translate(0, 0); opacity: 0; }
+  8% { opacity: .9; }
+  86% { opacity: .7; }
+  100% { transform: translate(var(--sw), 106vh); opacity: 0; }
+}
+/* 数据化的雪：字符随雪同落 */
+.s005-deco > span.g {
+  width: auto; height: auto; border-radius: 0; background: none; box-shadow: none; filter: none;
+  font: 500 calc(11px * var(--s)) / 1 var(--font-tech); color: var(--c);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--c) 60%, transparent);
+}
+
+/* 左缘上行信号流：她从网络深处送出的讯息 */
+.s005-stream { position: absolute; left: clamp(14px, 2.6vw, 42px); top: 0; height: 74%; width: 16px; }
+.s005-stream b {
+  position: absolute; left: 0; bottom: -6vh;
+  font: 500 .68rem/1 var(--font-tech); color: #a7d8ec; font-weight: 500;
+  opacity: 0; animation: s005-rise var(--t2) linear var(--d) infinite;
+}
+.s005-stream b:nth-child(3n) { color: #f0a9ca; }
+@keyframes s005-rise {
+  0% { transform: translateY(0); opacity: 0; }
+  10% { opacity: var(--o); }
+  85% { opacity: var(--o); }
+  100% { transform: translateY(-100vh); opacity: 0; }
+}
+
+/* 纸飞机：自下而上，从没有选择的飞行，到人为选择的旅途 */
+.s005-plane {
+  position: absolute; left: var(--pl-x, 8vw); top: var(--pl-y, 76vh);
+  width: 84px; color: #e087ae; opacity: .9;
+  transform: rotate(var(--pl-r, -14deg));
+  filter: drop-shadow(3px 4px 0 rgba(126, 203, 232, .35));
+}
+.s005-plane svg { width: 100%; display: block; }
+.s005-plane path { fill: rgba(255, 255, 255, .9); stroke: currentColor; stroke-width: 1.2; stroke-linejoin: round; }
+.s005-plane path + path { fill: none; stroke-width: 1; opacity: .7; }
+
+/* 档案头：立绘同款的白框与冰蓝错位投影 */
+.s005 .prof-code { color: rgba(90, 52, 74, .5); }
+.s005 .prof-name { color: var(--ink); text-shadow: 3px 3px 0 rgba(126, 203, 232, .38); }
+.s005 .prof-name em { color: rgba(90, 52, 74, .5); }
+.s005 .prof-tagline { color: rgba(90, 52, 74, .72); }
+.s005 .prof-author { color: rgba(90, 52, 74, .4); }
+.s005 .prof-badge { color: #d95c32; border-color: rgba(232, 105, 63, .5); background: rgba(255, 240, 232, .7); }
+.s005 .prof-hero { border-bottom-color: rgba(242, 153, 193, .45); }
+.s005 .prof-portrait {
+  position: relative; border: 4px solid #fff; background: #fff;
+  box-shadow: 12px 14px 0 rgba(126, 203, 232, .3), 0 18px 45px -18px rgba(214, 120, 160, .45);
+}
+/* 电子幽灵的残影：极淡的扫描纹，随她走向真实而融化 */
+.s005 .prof-portrait::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(transparent 0 3px, rgba(126, 203, 232, .1) 3px 4px);
+  opacity: calc(1 - var(--s005-p));
+}
+/* 幽灵的信号偶尔错位一下，又立刻归位 */
+.s005 .prof-portrait img { animation: s005-flicker 9s steps(1) infinite; }
+.s005 .prof-name { animation: s005-flicker 13s steps(1) -5s infinite; }
+/* 归航（触碰）时信号稳定下来，不再抖动 */
+.s005[data-signal="触碰"] .prof-portrait img,
+.s005[data-signal="触碰"] .prof-name { animation: none; }
+@keyframes s005-flicker {
+  0%, 96.4%, 100% { transform: none; filter: none; opacity: 1; }
+  96.8% { transform: translateX(-3px); filter: drop-shadow(3px 0 rgba(242, 153, 193, .8)) drop-shadow(-3px 0 rgba(126, 203, 232, .8)); }
+  97.6% { transform: translateX(2px); opacity: .88; }
+  98.2% { transform: none; filter: none; opacity: 1; }
+}
+
+/* 接入行 */
+.s005 .prof-access {
+  padding: 1.1rem 1.3rem;
+  border: 1px dashed rgba(242, 153, 193, .55); background: rgba(255, 255, 255, .6);
+  color: #b0688c;
+}
+
+/* 每一节：一封雪中的信笺 */
+.s005 .prof-doc section {
+  margin: 2.7rem 0; padding: 2.7rem 1.8rem 1.4rem; position: relative;
+  border: 1px solid rgba(242, 153, 193, .4); border-radius: 4px;
+  background: rgba(255, 255, 255, .74);
+  box-shadow: 0 20px 45px -30px rgba(196, 110, 150, .5);
+}
+.s005 .prof-doc section::before {
+  content: "❄"; position: absolute; left: 1.1rem; top: .78rem;
+  font-size: .85rem; color: rgba(126, 203, 232, .85);
+}
+.s005 .prof-doc section::after {
+  content: "SNOW LETTER // 飞行雪绒"; position: absolute; right: 1.1rem; top: .95rem;
+  font: .52rem/1 var(--font-tech); letter-spacing: .22em; color: rgba(90, 52, 74, .3);
+}
+/* 信笺解码入场：内容默认可见（开场由浮层整体淡入遮住首屏），滚入视野时叠加一次接收闪动。
+   动画用 backwards 填充，只在播放期间从 0 起，不改变结束态，任何未被观察到的段落都保持可见。 */
+.s005 .prof-doc section.is-received, .s005 .prof-doc .prof-sign.is-received {
+  animation: s005-decode .8s ease-out backwards;
+}
+@keyframes s005-decode {
+  0% { opacity: 0; transform: translateY(16px); filter: drop-shadow(-5px 0 rgba(126, 203, 232, .9)) drop-shadow(5px 0 rgba(242, 153, 193, .9)) saturate(1.3); }
+  45% { opacity: 1; }
+  70% { filter: drop-shadow(-1px 0 rgba(126, 203, 232, .5)) drop-shadow(1px 0 rgba(242, 153, 193, .5)); }
+  100% { opacity: 1; transform: none; filter: none; }
+}
+.s005 .prof-h { color: var(--ink); }
+.s005 .prof-h i { color: #e0679d; }
+.s005 .prof-doc p { color: rgba(74, 44, 62, .78); }
+.s005 .prof-doc p b { color: #4a2438; }
+.s005 .prof-note {
+  border: 1px dashed rgba(126, 203, 232, .6); background: rgba(226, 244, 250, .55);
+  color: rgba(64, 84, 100, .82);
+}
+.s005 .prof-quote { border-left-color: rgba(242, 153, 193, .7); }
+.s005 .prof-quote p { color: rgba(90, 50, 72, .85); }
+.s005 .prof-quote cite { color: rgba(90, 52, 74, .5); }
+.s005 .prof-sign { border-color: rgba(232, 105, 63, .35); background: rgba(255, 244, 236, .8); }
+.s005 .prof-sign p { color: rgba(96, 54, 42, .82); }
+.s005 .prof-end { border-top-color: rgba(242, 153, 193, .4); color: rgba(90, 52, 74, .45); }
+
+/* 三形态：她内心世界的三块屏幕 */
+.s005-forms {
+  display: grid; grid-template-columns: 1fr 34px 1fr 34px 1fr; align-items: stretch;
+  margin: 1.6rem 0 1.3rem;
+}
+.s005-forms .form-node {
+  padding: .95rem .85rem 1.05rem; text-align: center; border-radius: 4px;
+  border: 1px solid rgba(126, 203, 232, .55); background: rgba(255, 255, 255, .85);
+}
+.s005-forms .form-node span { font: .55rem/1 var(--font-tech); letter-spacing: .24em; color: rgba(64, 120, 148, .75); }
+.s005-forms .form-node b { display: block; margin: .5rem 0 .4rem; letter-spacing: .1em; color: #35708c; }
+.s005-forms .form-node small { display: block; font-size: .72rem; line-height: 1.7; color: rgba(74, 44, 62, .6); }
+.s005-forms .form-node.is-core {
+  border-color: rgba(232, 105, 63, .55); background: rgba(255, 240, 232, .88);
+  box-shadow: 0 0 26px -8px rgba(242, 153, 193, .8);
+}
+.s005-forms .form-node.is-core span { color: rgba(200, 100, 60, .8); }
+.s005-forms .form-node.is-core b { color: #c25a30; }
+.s005-forms > i { position: relative; }
+.s005-forms > i em {
+  position: absolute; left: -1px; right: -1px; top: 50%; height: 1px;
+  background: repeating-linear-gradient(90deg, #7ecbe8 0 4px, transparent 4px 7px);
+  box-shadow: 0 0 8px rgba(126, 203, 232, .6);
+}
+
+/* 心形暖意计：右下角的玻璃糖果心，她递来的心随旅程被一点点焐暖 */
+.s005-heart {
+  position: fixed; right: clamp(20px, 5vw, 64px); bottom: 12vh;
+  z-index: 3; width: 62px; padding: 0; border: none; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: .6rem;
+}
+.s005-heart svg {
+  width: 100%; display: block; overflow: visible;
+  filter: drop-shadow(0 6px 16px rgba(214, 120, 160, .38));
+  transform-origin: 50% 55%;
+}
+.s005-heart .hout { fill: rgba(255, 255, 255, .6); }
+.s005-heart .hline { fill: none; stroke: #f299c1; stroke-width: 1.7; stroke-linejoin: round; }
+.s005-heart .hgloss { fill: rgba(255, 255, 255, .75); }
+/* 暖意液面：随滚动进度自底部涨满 */
+.s005-heart .hfill {
+  transform: translateY(calc((1 - var(--s005-p)) * 42px));
+  transition: transform .25s ease-out;
+}
+/* 心旁的小星光，随暖意渐渐亮起 */
+.s005-heart::before, .s005-heart::after {
+  position: absolute; font-size: .8rem; color: #f7a4c6;
+  opacity: calc(var(--s005-p) * .95); pointer-events: none;
+  animation: s005-twinkle 2.6s ease-in-out infinite;
+}
+.s005-heart::before { content: "✦"; left: -14px; top: -6px; }
+.s005-heart::after { content: "✧"; right: -12px; top: 40%; font-size: .6rem; animation-delay: -1.3s; }
+@keyframes s005-twinkle {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(.72); filter: brightness(1.35); }
+}
+.s005-phase {
+  font: normal 600 .72rem/1 var(--font-main); font-style: normal;
+  letter-spacing: .32em; padding-left: .32em;
+  color: #d8578f; transition: color .3s;
+}
+.s005[data-signal="告别"] .s005-phase { color: #6f86a8; }
+.s005[data-signal="触碰"] .s005-phase { color: #e07040; text-shadow: 0 0 12px rgba(255, 170, 120, .6); }
+.s005[data-signal="触碰"] .s005-heart svg { animation: s005-beat 1.15s ease-in-out infinite; }
+@keyframes s005-beat {
+  0%, 42%, 100% { transform: scale(1); }
+  12% { transform: scale(1.16); }
+  26% { transform: scale(1.06); }
+}
+.s005-heart em {
+  position: absolute; right: 115%; top: 34%; translate: 0 -50%;
+  white-space: nowrap; font-style: normal; font-size: .74rem; letter-spacing: .12em;
+  color: #c2537f; text-shadow: 0 1px 0 #fff;
+  opacity: 0; transition: opacity .35s; pointer-events: none;
+}
+.s005-heart.is-given em { opacity: 1; }
+.s005-heart:focus-visible { outline: 2px solid #e8699f; outline-offset: 6px; }
+
+/* 左下角案卷编号（竖排，替代旅程轨，把左侧留给雪与信笺） */
+.s005-case {
+  position: fixed; left: 2.2vw; bottom: 4vh; z-index: 1; writing-mode: vertical-rl;
+  font: .55rem/1 var(--font-tech); letter-spacing: .28em; color: rgba(214, 110, 150, .45);
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .s005-case, .s005-plane, .s005-stream { display: none; }
+  .s005-heart { width: 44px; right: 14px; bottom: 9vh; }
+  .s005-forms { grid-template-columns: 1fr; }
+  .s005-forms > i { height: 22px; }
+  .s005-forms > i em {
+    left: 50%; right: auto; top: -1px; bottom: -1px; height: auto; width: 1px;
+    background: repeating-linear-gradient(#7ecbe8 0 4px, transparent 4px 7px);
+  }
+  .s005 .prof-doc section { padding-inline: 1.2rem; }
+}
+
 /* ---------- S-010 秧秧 · 双频率档案（气动⇄湮灭） ---------- */
 .prof-overlay.s010 { transition: opacity .36s ease, background-color .9s ease; }
 /* 两态都用不透明底色承接主题切换（渐变图像层只做半透明点缀，避免过渡期露出底下的观测墙） */
@@ -1272,215 +1693,6 @@ html.prof-lock { overflow: hidden; }
   letter-spacing: .08em; color: var(--accent); opacity: .9;
 }
 
-/* ---------- S-005 爱弥斯 · 越界信号（电子幽灵 · 虚→实） ---------- */
-/* --s005-p 为滚动进度 0→1：扫描线与数据网格溶解，热熔的暖意自屏幕底部上涌 */
-.prof-overlay.s005 {
-  --s005-p: 0;
-  --aimi: #ff7bd5;
-  background-color: #0a070e;
-  background-image:
-    radial-gradient(70% 50% at 80% 4%, rgba(255, 123, 213, .14), transparent 70%),
-    radial-gradient(55% 50% at 8% 78%, rgba(232, 105, 63, .09), transparent 72%);
-}
-.prof-overlay.s005::before {
-  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background: radial-gradient(82% 70% at 50% 94%, rgba(232, 105, 63, .34), transparent 72%);
-  opacity: calc(var(--s005-p) * .95); transition: opacity .12s linear;
-}
-.s005 .prof-doc { position: relative; z-index: 2; }
-.s005 .prof-back { color: rgba(240, 214, 232, .55); }
-.s005 .prof-back:hover { color: var(--aimi); }
-
-/* 屏幕虚境：数据网格 + 扫描线，越靠近归航越透明 */
-.s005-deco { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
-.s005-grid {
-  position: absolute; inset: 0;
-  opacity: calc(.55 - var(--s005-p) * .5);
-  background:
-    linear-gradient(rgba(255, 123, 213, .05) 1px, transparent 1px) 0 0 / 100% 44px,
-    linear-gradient(90deg, rgba(255, 123, 213, .05) 1px, transparent 1px) 0 0 / 44px 100%;
-}
-.s005-scan {
-  position: absolute; inset: 0;
-  opacity: calc(.8 - var(--s005-p) * .72);
-  background: repeating-linear-gradient(transparent 0 3px, rgba(0, 0, 0, .17) 3px 4px);
-}
-.s005-scan::after {
-  content: ""; position: absolute; left: 0; right: 0; height: 130px;
-  background: linear-gradient(rgba(255, 123, 213, 0), rgba(255, 123, 213, .07), rgba(255, 123, 213, 0));
-  animation: s005-sweep 7s linear infinite;
-}
-@keyframes s005-sweep { from { top: -18%; } to { top: 112%; } }
-
-/* 飞行雪绒：自下而上的暖光点 */
-.s005-deco > span {
-  position: absolute; left: var(--x); bottom: -4vh;
-  width: calc(5px * var(--s)); height: calc(5px * var(--s)); border-radius: 50%;
-  background: #ffd9c9;
-  box-shadow: 0 0 10px 2px rgba(255, 150, 110, .5), 0 0 24px 7px rgba(255, 123, 213, .2);
-  opacity: 0;
-  animation: s005-drift var(--t) linear var(--dl) infinite;
-}
-@keyframes s005-drift {
-  0% { transform: translate(0, 0); opacity: 0; }
-  6% { opacity: .85; }
-  88% { opacity: .5; }
-  100% { transform: translate(var(--sw), -108vh); opacity: 0; }
-}
-
-/* 档案头：信号体的名字与残影 */
-.s005 .prof-name { animation: s005-name 5.2s steps(1) infinite; }
-@keyframes s005-name {
-  0%, 88%, 100% { text-shadow: 0 0 30px color-mix(in srgb, var(--accent) 35%, transparent); }
-  90% { text-shadow: -2px 0 0 rgba(255, 59, 208, .75), 2px 0 0 rgba(41, 230, 255, .75); }
-  93% { text-shadow: 2px 0 0 rgba(255, 59, 208, .75), -2px 0 0 rgba(41, 230, 255, .75); }
-}
-.s005 .prof-portrait { border-color: color-mix(in srgb, var(--aimi) 45%, transparent); position: relative; }
-.s005 .prof-portrait::after {
-  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: repeating-linear-gradient(transparent 0 2px, rgba(0, 0, 0, .18) 2px 3px);
-  opacity: calc(1 - var(--s005-p));
-}
-.s005 .prof-portrait img { animation: s005-jitter 6s steps(1) infinite; }
-@keyframes s005-jitter {
-  0%, 90%, 100% { transform: none; filter: none; }
-  91% { transform: translateX(-3px); filter: hue-rotate(60deg) saturate(1.8); }
-  94% { transform: translateX(3px); filter: hue-rotate(-45deg) saturate(1.8); }
-  97% { transform: translateX(-1px); filter: none; }
-}
-.s005 .prof-badge { color: #ff9d72; border-color: rgba(255, 140, 96, .55); background: rgba(70, 22, 10, .35); }
-
-/* 接入行：一段正在握手的连接日志 */
-.s005 .prof-access {
-  padding: 1.1rem 1.3rem;
-  border: 1px dashed rgba(255, 123, 213, .3); background: rgba(34, 15, 30, .5);
-  color: color-mix(in srgb, var(--aimi) 52%, #9d8aa4);
-}
-
-/* 每一节：来自「飞行雪绒」的消息窗口 */
-.s005 .prof-doc section {
-  margin: 2.7rem 0; padding: 2.6rem 1.7rem 1.3rem; position: relative;
-  border: 1px solid color-mix(in srgb, var(--aimi) 16%, transparent);
-  background: linear-gradient(165deg, rgba(28, 16, 27, .85), rgba(15, 10, 17, .9));
-  box-shadow: 0 24px 60px -42px #000;
-}
-.s005 .prof-doc section::before {
-  content: "● ● ●"; position: absolute; left: 1.05rem; top: .85rem;
-  font-size: .5rem; letter-spacing: .35em;
-  color: color-mix(in srgb, var(--aimi) 55%, transparent);
-}
-.s005 .prof-doc section::after {
-  content: "MSG // FLYING_COTTON"; position: absolute; right: 1.05rem; top: .78rem;
-  font: .52rem/1 var(--font-tech); letter-spacing: .22em; color: rgba(255, 190, 230, .22);
-}
-.s005 .prof-h i { color: #ff8ccb; }
-.s005 .prof-note { border-color: rgba(255, 123, 213, .26); background: rgba(92, 26, 66, .14); }
-
-/* 三形态：同一道频率的三种存在方式 */
-.s005-forms {
-  display: grid; grid-template-columns: 1fr 34px 1fr 34px 1fr; align-items: stretch;
-  margin: 1.6rem 0 1.3rem;
-}
-.s005-forms .form-node {
-  padding: .95rem .85rem 1.05rem; text-align: center;
-  border: 1px solid rgba(255, 123, 213, .22); background: rgba(26, 13, 23, .6);
-}
-.s005-forms .form-node span { font: .55rem/1 var(--font-tech); letter-spacing: .24em; color: rgba(255, 170, 215, .5); }
-.s005-forms .form-node b { display: block; margin: .5rem 0 .4rem; letter-spacing: .1em; color: #ffe9f4; }
-.s005-forms .form-node small { display: block; font-size: .72rem; line-height: 1.7; color: rgba(232, 233, 242, .5); }
-.s005-forms .form-node.is-core {
-  border-color: rgba(232, 105, 63, .58); background: rgba(58, 25, 16, .38);
-  box-shadow: 0 0 28px -10px rgba(232, 105, 63, .6);
-}
-.s005-forms .form-node.is-core span { color: rgba(255, 176, 138, .72); }
-.s005-forms .form-node.is-core b { color: #ffd9c4; }
-.s005-forms > i { position: relative; }
-.s005-forms > i em {
-  position: absolute; left: -1px; right: -1px; top: 50%; height: 1px;
-  background: repeating-linear-gradient(90deg, #ff7bd5 0 4px, transparent 4px 7px);
-  box-shadow: 0 0 8px rgba(255, 123, 213, .5);
-}
-
-/* 像素心：线框 → 被炽热填满，归航时开始跳动 */
-.s005-heart {
-  position: fixed; right: clamp(20px, 6vw, 72px); top: calc(22% + var(--s005-p) * 48%);
-  z-index: 3; width: 46px; padding: 0; border: none; background: none; cursor: pointer;
-}
-.s005-heart svg { width: 100%; display: block; overflow: visible; }
-.s005-heart path {
-  fill: color-mix(in srgb, #e8693f calc(var(--s005-p) * 100%), var(--aimi));
-  fill-opacity: calc(.07 + var(--s005-p) * .93);
-  stroke: rgba(255, 148, 205, .8); stroke-width: .6;
-  stroke-dasharray: 3 2; animation: s005-heartline 2.2s linear infinite;
-  filter: drop-shadow(0 0 calc(4px + var(--s005-p) * 10px) rgba(255, 123, 160, .55));
-  transition: fill .25s;
-}
-@keyframes s005-heartline { to { stroke-dashoffset: -10; } }
-.s005[data-signal="归航"] .s005-heart svg { animation: s005-beat 1.15s ease-in-out infinite; }
-@keyframes s005-beat {
-  0%, 42%, 100% { transform: scale(1); }
-  12% { transform: scale(1.16); }
-  26% { transform: scale(1.06); }
-}
-.s005-heart em {
-  position: absolute; right: 115%; top: 50%; translate: 0 -50%;
-  white-space: nowrap; font-style: normal; font-size: .74rem; letter-spacing: .12em;
-  color: #ffc9e5; text-shadow: 0 0 12px rgba(255, 123, 213, .55);
-  opacity: 0; transition: opacity .35s; pointer-events: none;
-}
-.s005-heart.is-given em { opacity: 1; }
-.s005-heart:focus-visible { outline: 2px solid var(--aimi); outline-offset: 6px; }
-
-/* 左侧信号轨：信号 → 越界 → 心形 → 面具 → 心魔 → 归航 */
-.s005-signal {
-  position: fixed; left: clamp(18px, 3vw, 46px); top: 50%; translate: 0 -50%; z-index: 1;
-  display: flex; flex-direction: column; align-items: center; gap: .75rem;
-  color: rgba(240, 200, 224, .38); pointer-events: none;
-}
-.s005-signal > span { writing-mode: vertical-rl; font: .52rem/1 var(--font-tech); letter-spacing: .28em; }
-.s005-signal > div { position: relative; width: 2px; height: 165px; background: rgba(255, 123, 213, .16); }
-.s005-signal > div i {
-  position: absolute; inset: 0 0 auto; height: calc(var(--s005-p) * 100%);
-  background: linear-gradient(#ff7bd5, #e8693f); box-shadow: 0 0 9px rgba(255, 110, 170, .55);
-}
-.s005-signal > div b {
-  position: absolute; left: 50%; translate: -50% -50%; width: 7px; height: 7px;
-  border: 1px solid #d05fa8; border-radius: 50%; background: #0d0910;
-}
-.s005-signal > div b:nth-of-type(1) { top: 0; }
-.s005-signal > div b:nth-of-type(2) { top: 20%; }
-.s005-signal > div b:nth-of-type(3) { top: 40%; }
-.s005-signal > div b:nth-of-type(4) { top: 60%; }
-.s005-signal > div b:nth-of-type(5) { top: 80%; border-color: #d0764a; }
-.s005-signal > div b:nth-of-type(6) { top: 100%; border-color: #e8693f; }
-.s005-signal > em {
-  min-width: 3.5em; text-align: center; font: normal 600 .72rem/1.2 var(--font-main);
-  letter-spacing: .18em; color: #ff8ccb; transition: color .3s;
-}
-.s005[data-signal="心魔"] .s005-signal > em,
-.s005[data-signal="归航"] .s005-signal > em { color: #f0885c; text-shadow: 0 0 14px rgba(232, 105, 63, .6); }
-.s005-case {
-  position: fixed; right: 2.2vw; bottom: 4vh; z-index: 1; writing-mode: vertical-rl;
-  font: .55rem/1 var(--font-tech); letter-spacing: .28em; color: rgba(255, 123, 213, .28);
-  pointer-events: none;
-}
-
-/* 归档签名：暖意落定，信号不再抖动 */
-.s005[data-signal="归航"] .prof-name { animation: none; }
-.s005 .prof-end { border-top-color: rgba(255, 123, 213, .18); }
-
-@media (max-width: 640px) {
-  .s005-signal, .s005-case { display: none; }
-  .s005-heart { width: 36px; right: 14px; }
-  .s005-forms { grid-template-columns: 1fr; }
-  .s005-forms > i { height: 22px; }
-  .s005-forms > i em {
-    left: 50%; right: auto; top: -1px; bottom: -1px; height: auto; width: 1px;
-    background: repeating-linear-gradient(#ff7bd5 0 4px, transparent 4px 7px);
-  }
-  .s005 .prof-doc section { padding-inline: 1.2rem; }
-}
-
 /* 观测墙卡片 hover：信号撕裂（card-fx 以 --photo 叠一层错位残影） */
 .subject-card.fx-glitch .card-fx {
   background: var(--photo) center top / cover;
@@ -1492,4 +1704,443 @@ html.prof-lock { overflow: hidden; }
   36% { opacity: .8; clip-path: inset(24% 0 52% 0); transform: translateX(5px); filter: hue-rotate(80deg) saturate(2.4); }
   42% { opacity: .8; clip-path: inset(58% 0 18% 0); transform: translateX(-6px); filter: hue-rotate(-60deg) saturate(2.4); }
   81% { opacity: .7; clip-path: inset(8% 0 78% 0); transform: translateX(-4px); filter: hue-rotate(140deg) saturate(2); }
+}
+
+/* ---------- S-006 达妮娅 · 布景与幻灭（梦境星海舞台） ---------- */
+/* --s006-surge 为幻灭潮：读到海啸级威胁时涌起，读过后梦重新合拢 */
+.prof-overlay.s006 {
+  --s006-surge: 0;
+  --dream: #8f7bd8; --void: #e05ad8;
+  background-color: #0b0a18;
+  background-image:
+    radial-gradient(75% 60% at 68% 12%, rgba(143, 123, 216, .28), transparent 70%),
+    radial-gradient(60% 55% at 12% 78%, rgba(107, 208, 232, .14), transparent 72%),
+    radial-gradient(45% 40% at 88% 82%, rgba(224, 90, 216, .12), transparent 70%);
+}
+.prof-overlay.s006::before {
+  content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(60% 50% at 50% 42%, rgba(224, 90, 216, .38), rgba(120, 40, 150, .18) 55%, transparent 75%);
+  opacity: var(--s006-surge); transition: opacity .15s linear;
+}
+.s006 .prof-doc { position: relative; z-index: 2; }
+.s006 .prof-access { color: color-mix(in srgb, #b9a4ff 58%, #8089a8); }
+
+/* 梦境装饰层：玻璃泡泡上浮 + 星芒闪烁 */
+.s006-deco { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.s006-deco > span {
+  position: absolute; left: var(--x); bottom: -60px;
+  width: var(--s); height: var(--s); border-radius: 50%;
+  background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, .75), rgba(255, 255, 255, .06) 42%, transparent 68%);
+  border: 1px solid rgba(200, 210, 255, .32);
+  box-shadow: inset -3px -4px 10px rgba(120, 220, 255, .22), inset 3px 2px 8px rgba(255, 130, 220, .18), 0 0 14px rgba(150, 140, 255, .14);
+  opacity: 0;
+  animation: s006-float var(--t) linear var(--dl) infinite;
+}
+@keyframes s006-float {
+  0% { transform: translate(0, 0); opacity: 0; }
+  7% { opacity: .85; }
+  88% { opacity: .55; }
+  100% { transform: translate(var(--sw), -112vh); opacity: 0; }
+}
+.s006-deco > b {
+  position: absolute; left: var(--x); top: var(--y);
+  font-size: calc(1rem * var(--sc)); font-style: normal; font-weight: 400; color: #bcd6ff;
+  text-shadow: 0 0 12px rgba(140, 180, 255, .8);
+  animation: s006-twinkle var(--tw) ease-in-out var(--dl) infinite;
+}
+.s006-deco > b:nth-child(3n) { color: #f2a6e8; }
+@keyframes s006-twinkle {
+  0%, 100% { opacity: .12; transform: scale(.7); }
+  50% { opacity: .9; transform: scale(1); }
+}
+
+/* 纸片小人：门后那串剪影，幻灭时被点亮 */
+.s006-garland {
+  position: absolute; display: flex; gap: 6px;
+  opacity: calc(.3 + var(--s006-surge) * .6);
+  filter: drop-shadow(0 0 calc(var(--s006-surge) * 9px) rgba(224, 90, 216, .85));
+  transition: opacity .2s;
+}
+.s006-garland i { width: 20px; height: 24px; }
+.s006-garland svg { width: 100%; height: 100%; display: block; }
+.s006-garland path { fill: #5a7de0; }
+.s006-garland i:nth-child(2n) path { fill: #b45ad8; }
+.s006-garland--bl { left: -18px; bottom: 11vh; transform: rotate(-24deg); }
+.s006-garland--tr { right: -14px; top: 12vh; transform: rotate(-18deg); }
+
+/* 锁链：幻灭潮涌起时才显形 */
+.s006-chain {
+  position: absolute; top: 0; height: 100%; width: clamp(50px, 6vw, 90px);
+  opacity: calc(var(--s006-surge) * .8);
+}
+.s006-chain--l { left: 1.6vw; }
+.s006-chain--r { right: 1.6vw; }
+.s006-chain path {
+  fill: none; stroke: #9aa2c8; stroke-width: 7; stroke-dasharray: 9 7; stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(224, 90, 216, .6));
+}
+
+/* 电影画幅：让整片梦境星海进入第一眼 */
+.s006 .prof-hero {
+  display: block; min-height: 500px; padding: 0; margin-bottom: 3rem; position: relative; overflow: hidden;
+  border: 1px solid rgba(143, 123, 216, .35); border-radius: 14px;
+  background: #0b0a18; box-shadow: 0 35px 90px -42px rgba(140, 90, 220, .55);
+}
+.s006 .prof-portrait { width: 100%; height: 500px; aspect-ratio: auto; border: none; box-shadow: none; }
+.s006 .prof-portrait img { object-fit: cover; object-position: center 38%; }
+.s006 .prof-hero::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(11, 10, 24, .82) 0%, transparent 46%),
+    linear-gradient(0deg, rgba(11, 10, 24, .92) 0%, transparent 55%);
+}
+.s006 .prof-id { position: absolute; z-index: 3; left: clamp(1.6rem, 5vw, 3.2rem); right: 2rem; bottom: 2rem; }
+.s006 .prof-name { color: #f4f0ff; text-shadow: 0 0 34px rgba(160, 120, 255, .75); }
+.s006 .prof-name em { color: rgba(226, 222, 246, .55); }
+.s006 .prof-tagline { color: rgba(232, 226, 250, .78); }
+.s006 .prof-author { color: rgba(226, 222, 246, .42); }
+
+/* 每一节：一块悬在星海里的梦境布景 */
+.s006 .prof-doc section {
+  margin: 2.8rem 0; padding: 1.9rem 1.9rem 1.4rem; position: relative;
+  border: 1px solid rgba(143, 123, 216, .3); border-radius: 18px;
+  background: linear-gradient(160deg, rgba(38, 32, 66, .6), rgba(16, 14, 32, .74));
+  backdrop-filter: blur(4px);
+  box-shadow: 0 26px 60px -44px #000, inset 0 0 40px rgba(120, 100, 220, .07);
+}
+.s006 .prof-doc section::after {
+  content: "DREAM SET // 星海布景"; position: absolute; right: 1.2rem; top: .9rem;
+  font: .52rem/1 var(--font-tech); letter-spacing: .22em; color: rgba(190, 180, 240, .25);
+}
+.s006 .prof-h { color: #f2eeff; }
+.s006 .prof-h i { color: #b9a4ff; }
+.s006 .prof-doc p { color: rgba(226, 222, 246, .72); }
+.s006 .prof-doc p b { color: #fff; }
+.s006 .prof-doc strong { color: #f26bd8; text-shadow: 0 0 12px rgba(224, 90, 216, .5); }
+.s006 .prof-note {
+  border-color: rgba(143, 123, 216, .4); background: rgba(74, 60, 140, .14);
+  color: rgba(214, 208, 240, .68); border-radius: 10px;
+}
+.s006 .prof-wide img { border-radius: 12px; border-color: rgba(143, 123, 216, .35); }
+.s006 .prof-wide figcaption { color: rgba(200, 190, 240, .45); }
+.s006 .prof-sign { border-radius: 14px; }
+.s006 .prof-end { border-top-color: rgba(143, 123, 216, .25); }
+
+/* 威胁评级印章 */
+.s006-stamp {
+  display: inline-block; margin: .3rem 0 1.2rem; padding: .55rem .95rem;
+  border: 2px solid rgba(242, 107, 216, .65); border-radius: 4px;
+  font: 700 .8rem/1 var(--font-tech); letter-spacing: .28em; color: #f26bd8;
+  transform: rotate(-3deg);
+  box-shadow: 0 0 22px -6px rgba(224, 90, 216, .7), inset 0 0 14px rgba(224, 90, 216, .12);
+  animation: s006-stamp-pulse 2.4s ease-in-out infinite;
+}
+@keyframes s006-stamp-pulse {
+  0%, 100% { opacity: .72; }
+  50% { opacity: 1; }
+}
+
+/* 双形态：布景之形 ⇄ 幻灭之形 */
+.s006-forms { display: grid; grid-template-columns: 1fr 42px 1fr; align-items: stretch; margin: 1.5rem 0 1.4rem; }
+.s006-forms > div { padding: 1rem .9rem 1.05rem; text-align: center; border-radius: 14px; }
+.s006-forms span { font: .55rem/1 var(--font-tech); letter-spacing: .24em; }
+.s006-forms b { display: block; margin: .5rem 0 .4rem; letter-spacing: .1em; }
+.s006-forms small { display: block; font-size: .72rem; line-height: 1.7; color: rgba(226, 222, 246, .55); }
+.s006-forms .form-set { border: 1px solid rgba(255, 214, 150, .38); background: rgba(90, 70, 50, .22); }
+.s006-forms .form-set span { color: rgba(255, 214, 150, .68); }
+.s006-forms .form-set b { color: #ffd9a0; }
+.s006-forms .form-void {
+  border: 1px solid rgba(242, 107, 216, .5); background: rgba(120, 30, 110, .2);
+  box-shadow: 0 0 26px -10px rgba(224, 90, 216, .7);
+}
+.s006-forms .form-void span { color: rgba(242, 107, 216, .68); }
+.s006-forms .form-void b { color: #f8a8e8; }
+.s006-forms > i { display: flex; align-items: center; justify-content: center; }
+.s006-forms > i em {
+  font-style: normal; color: #b9a4ff; text-shadow: 0 0 10px rgba(160, 130, 255, .8);
+  animation: s006-twinkle 2.6s ease-in-out infinite; --dl: 0s;
+}
+
+/* 睡眠监测：一路熟睡，幻灭时猛地睁眼，结尾又睡回去 */
+.s006-sleep {
+  position: fixed; right: clamp(20px, 5vw, 64px); bottom: 11vh; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  pointer-events: none;
+}
+.s006-sleep svg { width: 54px; overflow: visible; display: block; }
+.s006-sleep svg path { fill: none; stroke: #cfc4f2; stroke-width: 2.4; stroke-linecap: round; }
+.s006-sleep .eyes-open { opacity: 0; }
+.s006-sleep .eyes-open circle { fill: #f26bd8; filter: drop-shadow(0 0 8px rgba(242, 107, 216, .9)); }
+.s006[data-dream="幻灭"] .s006-sleep .eyes-shut { opacity: 0; }
+.s006[data-dream="幻灭"] .s006-sleep .eyes-open { opacity: 1; }
+.s006-sleep .zzz { position: absolute; right: -6px; top: -8px; }
+.s006-sleep .zzz b {
+  position: absolute; right: 0; bottom: 0;
+  font: 700 .8rem/1 var(--font-tech); color: #bcd6ff; opacity: 0;
+  animation: s006-zzz 3s ease-out infinite;
+}
+.s006-sleep .zzz b:nth-child(2) { animation-delay: 1s; }
+.s006-sleep .zzz b:nth-child(3) { animation-delay: 2s; }
+@keyframes s006-zzz {
+  0% { opacity: 0; transform: translate(0, 0) scale(.7); }
+  20% { opacity: .9; }
+  100% { opacity: 0; transform: translate(15px, -27px) scale(1.3); }
+}
+.s006[data-dream="幻灭"] .s006-sleep .zzz { display: none; }
+.s006-sleep .alert {
+  display: none; position: absolute; top: -28px;
+  font-size: 1.05rem; color: #f26bd8; text-shadow: 0 0 12px rgba(242, 107, 216, .9);
+  animation: s006-alert .5s steps(2) infinite;
+}
+.s006[data-dream="幻灭"] .s006-sleep .alert { display: block; }
+@keyframes s006-alert { 50% { opacity: .3; } }
+.s006-phase {
+  font: normal 600 .72rem/1 var(--font-main); font-style: normal;
+  letter-spacing: .32em; padding-left: .32em;
+  color: #b9a4ff; transition: color .3s;
+}
+.s006[data-dream="幻灭"] .s006-phase { color: #f26bd8; text-shadow: 0 0 12px rgba(242, 107, 216, .6); }
+.s006[data-dream="归眠"] .s006-phase { color: #ffd9a0; }
+
+@media (max-width: 640px) {
+  .s006 .prof-hero { min-height: 400px; }
+  .s006 .prof-portrait { height: 400px; }
+  .s006 .prof-id { left: 1.2rem; bottom: 1.4rem; }
+  .s006-chain, .s006-garland--tr { display: none; }
+  .s006-sleep { right: 14px; bottom: 9vh; }
+  .s006-sleep svg { width: 42px; }
+  .s006-forms { grid-template-columns: 1fr; }
+  .s006-forms > i { height: 32px; }
+}
+
+/* 观测墙卡片 hover：梦境泡泡上浮 */
+.subject-card.fx-bubble .card-fx {
+  background-image:
+    radial-gradient(circle at 18% 88%, rgba(255, 255, 255, .75) 2px, rgba(190, 220, 255, .25) 5px, transparent 7px),
+    radial-gradient(circle at 42% 96%, rgba(255, 255, 255, .65) 3px, rgba(255, 170, 230, .22) 7px, transparent 10px),
+    radial-gradient(circle at 68% 90%, rgba(255, 255, 255, .7) 2px, rgba(190, 220, 255, .22) 5px, transparent 7px),
+    radial-gradient(circle at 86% 94%, rgba(255, 255, 255, .6) 3px, rgba(255, 170, 230, .2) 8px, transparent 11px),
+    radial-gradient(circle at 30% 92%, rgba(255, 255, 255, .5) 1.5px, transparent 5px);
+  background-size: 100% 220%; background-repeat: repeat-y;
+  transition: opacity .45s;
+}
+.subject-card.fx-bubble:hover .card-fx { opacity: 1; animation: s006-card-bubbles 7s linear infinite; }
+@keyframes s006-card-bubbles {
+  from { background-position: 0 0; }
+  to { background-position: 0 -183.4%; }
+}
+
+/* ---------- S-007 西格莉卡 · 昭日 · 破晓（天色随滚动渐亮） ---------- */
+/* --s007-p 为滚动进度：黎明前 → 晨光漫页；--s007-veil 为逆风乌云 */
+.prof-overlay.s007 {
+  --s007-p: 0; --s007-veil: 0;
+  --aero: #4fd6a0; --dawn: #ffd28a; --ink: #2b3f38;
+  background-color: #0e1b20;
+  background-image:
+    radial-gradient(70% 55% at 76% 8%, rgba(79, 214, 160, .14), transparent 70%),
+    radial-gradient(60% 45% at 14% 86%, rgba(255, 190, 110, .12), transparent 72%);
+}
+/* 晨光层：随滚动亮起来，昭日时漫满整页 */
+.prof-overlay.s007::before {
+  content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(85% 70% at 50% 100%, rgba(255, 214, 140, .55), transparent 68%),
+    linear-gradient(180deg, #cfeee2 0%, #eaf6e8 46%, #ffe9c2 100%);
+  opacity: calc(var(--s007-p) * .96); transition: opacity .12s linear;
+}
+.s007 .prof-doc { position: relative; z-index: 2; }
+
+/* 升起的太阳 */
+.s007-sun {
+  position: fixed; left: 50%; translate: -50% 0; z-index: 0; pointer-events: none;
+  width: 62vmin; height: 62vmin; border-radius: 50%;
+  bottom: calc(-46vmin + var(--s007-p) * 64vmin);
+  background: radial-gradient(circle, rgba(255, 216, 140, .9), rgba(255, 186, 100, .35) 42%, transparent 70%);
+  filter: blur(6px);
+  opacity: calc(.4 + var(--s007-p) * .6);
+}
+
+/* 风与符文的装饰层 */
+.s007-deco { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.s007-wind { position: absolute; inset: 0; width: 100%; height: 100%; }
+.s007-wind path {
+  fill: none; stroke: rgba(200, 240, 220, .3); stroke-width: 1.4; stroke-linecap: round;
+  stroke-dasharray: 90 60 26 80; animation: s007-windflow 9s linear infinite;
+}
+.s007-wind path:nth-child(2) { animation-duration: 12s; animation-delay: -4s; opacity: .7; }
+.s007-wind path:nth-child(3) { animation-duration: 15s; animation-delay: -8s; opacity: .5; }
+@keyframes s007-windflow { to { stroke-dashoffset: -256; } }
+/* 悬浮的罗伊符文：解译段一起亮起 */
+.s007-deco .r {
+  position: absolute; left: var(--x); top: var(--y);
+  font-size: calc(1.1rem * var(--sc)); text-decoration: none; font-style: normal;
+  color: rgba(140, 220, 190, .38); text-shadow: 0 0 10px rgba(110, 220, 170, .25);
+  animation: s007-runebob var(--t) ease-in-out var(--dl) infinite;
+  transition: color .6s, text-shadow .6s;
+}
+@keyframes s007-runebob {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-14px) rotate(5deg); }
+}
+.s007[data-sun="解译"] .s007-deco .r {
+  color: #8fe8c0; text-shadow: 0 0 16px rgba(110, 240, 180, .85);
+}
+/* 乘风的叶 */
+.s007-deco .lf {
+  position: absolute; left: -6vw; top: var(--y);
+  width: calc(15px * var(--s)); color: #7ecfa8; opacity: 0;
+  animation: s007-leafdrift var(--t) linear var(--dl) infinite;
+}
+.s007-deco .lf svg, .s007-deco .gust-leaf svg { width: 100%; display: block; }
+.s007-deco .lf path, .s007-deco .gust-leaf path { fill: rgba(126, 207, 168, .3); stroke: currentColor; stroke-width: 1.1; }
+.s007-deco .lf path.vein, .s007-deco .gust-leaf path.vein { fill: none; opacity: .7; }
+@keyframes s007-leafdrift {
+  0% { transform: translate(0, 0) rotate(0); opacity: 0; }
+  6% { opacity: .8; }
+  50% { transform: translate(54vw, var(--bob)) rotate(180deg); }
+  94% { opacity: .6; }
+  100% { transform: translate(112vw, calc(var(--bob) * -.7)) rotate(348deg); opacity: 0; }
+}
+.s007-deco .gust-leaf { position: absolute; left: 0; top: 0; width: 17px; color: #6ecb9e; }
+
+/* 逆风乌云：全力之下的段落，压过来遮住太阳 */
+.s007-veil {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none; mix-blend-mode: multiply;
+  background:
+    radial-gradient(52% 30% at 28% 26%, rgba(62, 82, 92, .92), transparent 70%),
+    radial-gradient(58% 34% at 72% 42%, rgba(52, 70, 84, .88), transparent 70%),
+    linear-gradient(180deg, rgba(70, 88, 100, .5), transparent 60%);
+  opacity: calc(var(--s007-veil) * .82); transition: opacity .2s linear;
+}
+
+/* 档案头（黎明前的暗色天空下） */
+.s007 .prof-name { text-shadow: 0 0 30px rgba(79, 214, 160, .45), 0 0 60px rgba(255, 200, 120, .3); }
+.s007 .prof-portrait {
+  border-color: rgba(200, 240, 220, .55);
+  box-shadow: 0 18px 50px -18px rgba(0, 0, 0, .7), 0 0 44px -8px rgba(79, 214, 160, .35);
+}
+.s007 .prof-hero { border-bottom-color: rgba(79, 214, 160, .4); }
+
+/* 每一节：黎明里亮着灯的晨读笺 */
+.s007 .prof-doc section {
+  margin: 2.8rem 0; padding: 2.5rem 1.8rem 1.4rem; position: relative;
+  border: 1px solid rgba(120, 190, 160, .5); border-radius: 8px;
+  background: rgba(252, 250, 242, .93);
+  box-shadow: 0 26px 60px -40px rgba(20, 40, 30, .8), 0 0 0 4px rgba(255, 244, 214, .12);
+}
+.s007 .prof-doc section::before {
+  content: "ᛊ"; position: absolute; left: 1.05rem; top: .72rem;
+  font-size: .95rem; color: #d8a545; text-shadow: 0 0 8px rgba(255, 200, 110, .5);
+}
+.s007 .prof-doc section::after {
+  content: "SUNRISE LOG // 昭日者"; position: absolute; right: 1.05rem; top: .9rem;
+  font: .52rem/1 var(--font-tech); letter-spacing: .22em; color: rgba(43, 63, 56, .35);
+}
+.s007 .prof-doc section .prof-h { color: var(--ink); }
+.s007 .prof-doc section .prof-h i { color: #2f8a68; }
+.s007 .prof-doc section p { color: rgba(38, 58, 50, .82); }
+.s007 .prof-doc section p b { color: #17302a; }
+.s007 .prof-doc section strong { color: #c87f22; }
+.s007 .prof-doc section .prof-note {
+  border: 1px dashed rgba(60, 140, 108, .5); background: rgba(210, 238, 224, .5);
+  color: rgba(38, 58, 50, .74);
+}
+.s007 .prof-sign {
+  border-color: rgba(216, 165, 69, .55); border-left-color: #d8a545; border-radius: 8px;
+  background: rgba(255, 246, 224, .94);
+}
+.s007 .prof-sign p { color: rgba(72, 52, 26, .85); }
+.s007 .prof-sign p:last-child { color: #c77c1f; text-shadow: none; }
+.s007 .prof-end { border-top-color: rgba(43, 63, 56, .25); color: rgba(43, 63, 56, .55); }
+.s007 .prof-end b { color: #c77c1f; }
+
+/* 符文石牌：悬停或行至解译段，语义显现 */
+.s007-runes { display: flex; gap: .6rem; flex-wrap: wrap; margin: 1.4rem 0 1.2rem; }
+.s007-runes .rn {
+  flex: 1; min-width: 68px; text-align: center; padding: .8rem .4rem .65rem;
+  border: 1px solid rgba(90, 160, 130, .5); border-radius: 8px;
+  background: linear-gradient(160deg, #eef7f0, #dcefe3);
+  transition: box-shadow .3s, transform .3s;
+}
+.s007-runes .rn:hover { transform: translateY(-3px); box-shadow: 0 10px 24px -14px rgba(47, 138, 104, .8); }
+.s007-runes .rn b {
+  display: block; font-size: 1.45rem; font-weight: 400; color: #2f8a68;
+  text-shadow: 0 0 10px rgba(80, 200, 150, .35);
+}
+.s007-runes .rn small {
+  display: block; margin-top: .45rem; font-size: .7rem; color: rgba(43, 63, 56, .62);
+  opacity: 0; transform: translateY(4px); transition: opacity .35s, transform .35s;
+}
+.s007-runes .rn:hover small, .s007[data-sun="解译"] .s007-runes .rn small { opacity: 1; transform: none; }
+
+/* 日晷：太阳沿地平弧爬升；点一下，唤一阵风 */
+.s007-dial {
+  position: fixed; right: clamp(20px, 5vw, 64px); bottom: 11vh; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: .45rem;
+  padding: 0; border: none; background: none; cursor: pointer;
+}
+.s007-dial svg { width: 66px; overflow: visible; display: block; }
+.s007-dial .arc { fill: none; stroke: rgba(160, 210, 190, .5); stroke-width: 1.2; stroke-dasharray: 3 4; }
+.s007-dial .hor { stroke: rgba(160, 210, 190, .65); stroke-width: 1.4; }
+.s007-dial .dot {
+  fill: #ffcf7a; filter: drop-shadow(0 0 7px rgba(255, 200, 110, .95));
+  transition: fill .3s;
+}
+.s007[data-sun="逆风"] .s007-dial .dot { fill: #8fa3b0; filter: drop-shadow(0 0 5px rgba(140, 170, 190, .6)); }
+.s007-phase {
+  font: normal 600 .72rem/1 var(--font-main); font-style: normal;
+  letter-spacing: .32em; padding-left: .32em;
+  color: #6fd0a8; transition: color .3s;
+}
+.s007[data-sun="逆风"] .s007-phase { color: #8fa3b0; }
+.s007[data-sun="破云"] .s007-phase, .s007[data-sun="昭日"] .s007-phase { color: #d8942c; text-shadow: 0 0 12px rgba(255, 200, 110, .55); }
+.s007-dial:focus-visible { outline: 2px solid var(--aero); outline-offset: 6px; }
+
+/* 开场破晓：暗 → 地平线亮起 → 日冕破出 → 金光一闪 */
+.s007-intro {
+  position: fixed; inset: 0; z-index: 6; pointer-events: none;
+  background: radial-gradient(80% 70% at 50% 40%, #071013, #04080a);
+  overflow: hidden;
+}
+.s007-intro .horizon {
+  position: absolute; left: 8%; right: 8%; top: 58%; height: 2px;
+  background: linear-gradient(90deg, transparent, #ffd28a 18%, #fff2cf 50%, #ffd28a 82%, transparent);
+  box-shadow: 0 0 22px 3px rgba(255, 205, 120, .75);
+}
+.s007-intro .crest {
+  position: absolute; left: 50%; top: 58%; translate: -50% -100%;
+  width: 30vmin; height: 15vmin; border-radius: 30vmin 30vmin 0 0;
+  background: radial-gradient(100% 200% at 50% 100%, #fff3cf, rgba(255, 206, 120, .75) 55%, transparent 80%);
+  filter: blur(2px);
+}
+.s007-intro .rays {
+  position: absolute; left: 50%; top: 58%; translate: -50% -50%;
+  width: 120vmin; height: 120vmin; border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 220, 150, .18) 0deg 7deg, transparent 7deg 22deg);
+  -webkit-mask-image: radial-gradient(circle, #000 12%, transparent 62%);
+  mask-image: radial-gradient(circle, #000 12%, transparent 62%);
+  mix-blend-mode: screen;
+}
+.s007-intro .flare {
+  position: absolute; inset: 0;
+  background: radial-gradient(70% 60% at 50% 55%, rgba(255, 244, 214, .96), rgba(255, 214, 140, .6) 55%, transparent 80%);
+}
+@media (prefers-reduced-motion: reduce) { .s007-intro { display: none; } }
+
+@media (max-width: 640px) {
+  .s007-dial { right: 14px; bottom: 9vh; }
+  .s007-dial svg { width: 52px; }
+  .s007-runes .rn { min-width: 56px; }
+  .s007-wind { display: none; }
+}
+
+/* 观测墙卡片 hover：一阵掠过的风 */
+.subject-card.fx-gust .card-fx {
+  background: repeating-linear-gradient(105deg, transparent 0 34px, rgba(255, 255, 255, .3) 34px 37px, transparent 37px 92px);
+  mix-blend-mode: screen; transition: opacity .4s;
+}
+.subject-card.fx-gust:hover .card-fx { opacity: 1; animation: s007-card-gust 1.1s linear infinite; }
+@keyframes s007-card-gust {
+  from { background-position: 0 0; }
+  to { background-position: 190px 0; }
 }

@@ -1012,7 +1012,7 @@
     {
       "id": "jinhsi_ally",
       "type": "text",
-      "text": "**1.0–1.4 今州 → 1.3 黑海岸 → 1.4 乘霄山**\n→ 2.7 黎那汐塔 → 2.8 穗波市 → 3.x 拉海洛",
+      "text": "**1.0–1.4 今州 → 1.3 黑海岸 → 1.4 乘霄山**\n→ 2.7 黎那汐塔 → 2.8 穗波市 → 3.0–3.4 拉海洛 → 3.5 梦州",
       "x": 11300,
       "y": 3418,
       "width": 380,
@@ -1042,7 +1042,7 @@
     {
       "id": "rover",
       "type": "text",
-      "text": "**漂泊者 Rover**\n主角 · 调律者\n串联今州 / 黑海岸 / 黎那汐塔 / 拉海洛",
+      "text": "**漂泊者 Rover**\n主角 · 调律者\n串联今州 / 黑海岸 / 黎那汐塔 / 拉海洛 / 梦州",
       "x": 11365,
       "y": 3066,
       "width": 250,
@@ -1058,7 +1058,19 @@
       "height": 140,
       "color": "#EF6C00",
       "text": "**无相燹主**\n今州主线核心鸣式（1.0–1.4）\n吞噬兵器自强 · 化亡者残响为残象\n忌炎率众击败 · 哥舒临决战失踪"
-    }
+    },
+    {"id":"group_9","type":"group","label":"梦州 / 玄方地界（3.5）","x":9000,"y":4500,"width":1700,"height":1750,"color":"#BFA35A"},
+    {"id":"dreamzhou","type":"text","text":"**梦州**\n瑼珑诸州之一\n3.5 第四章主线新舞台","x":9040,"y":4550,"width":280,"height":100,"color":"#BFA35A"},
+    {"id":"xuanfang","type":"text","text":"**玄方地界**\n梦州与今州之间的新开放区域\n第四章主线起点","x":9360,"y":4550,"width":300,"height":110,"color":"#5D4037"},
+    {"id":"xuanfang_city","type":"text","text":"**玄方城**\n玄方地界核心城池\n以机巧闻名诸州","x":9700,"y":4550,"width":270,"height":100,"color":"#1565C0"},
+    {"id":"houxuan_army","type":"text","text":"**后玄军**\n镇守玄方边境的军事力量\n卷入残象危机","x":10010,"y":4550,"width":270,"height":100,"color":"#2E7D32"},
+    {"id":"heart_moon_fox","type":"text","text":"**心月狐**\n梦州岁主\n与玄方试炼及穗穗线相关","x":9040,"y":4730,"width":280,"height":100,"color":"#00838F"},
+    {"id":"suisui","type":"text","text":"**穗穗**\n秧秧的姐姐\n昭明商会大小姐 · 心月狐试炼线","x":9360,"y":4730,"width":300,"height":110,"color":"#455A64"},
+    {"id":"yangyang_xuanling","type":"text","text":"**秧秧·玄翎**\n梦州危机中完成二次共鸣\n获得不可逆的新形态","x":9700,"y":4730,"width":280,"height":110,"color":"#455A64"},
+    {"id":"qingxiao","type":"text","text":"**清宵**\n梦州阵营\n玄方线重要人物","x":9040,"y":4910,"width":260,"height":90,"color":"#455A64"},
+    {"id":"jingran","type":"text","text":"**景燃**\n梦州阵营\n提灯独行的玄方人物","x":9340,"y":4910,"width":260,"height":90,"color":"#455A64"},
+    {"id":"suoming","type":"text","text":"**锁暝**\n梦州阵营\n与旧契及执念相关","x":9640,"y":4910,"width":260,"height":90,"color":"#455A64"},
+    {"id":"xin_dreamzhou","type":"text","text":"**心**\n梦州阵营\n与心月狐线索紧密相连","x":9940,"y":4910,"width":260,"height":90,"color":"#455A64"}
   ],
   "edges": [
     {
@@ -2299,6 +2311,21 @@
       "toSide": "top",
       "color": "#EF6C00",
       "label": "1.x 率众击败"
-    }
+    },
+    {"id":"e_dreamzhou_xuanfang","fromNode":"dreamzhou","fromSide":"right","toNode":"xuanfang","toSide":"left","color":"#777","label":"3.5 开放区域"},
+    {"id":"e_xuanfang_city","fromNode":"xuanfang","fromSide":"right","toNode":"xuanfang_city","toSide":"left","color":"#777","label":"核心城池"},
+    {"id":"e_xuanfang_houxuan","fromNode":"xuanfang","fromSide":"right","toNode":"houxuan_army","toSide":"left","color":"#777","label":"镇守边境"},
+    {"id":"e_dreamzhou_fox","fromNode":"dreamzhou","fromSide":"bottom","toNode":"heart_moon_fox","toSide":"top","color":"#00838F","label":"岁主"},
+    {"id":"e_fox_suisui","fromNode":"heart_moon_fox","fromSide":"right","toNode":"suisui","toSide":"left","color":"#00838F","label":"试炼 / 共鸣线"},
+    {"id":"e_suisui_yangyang","fromNode":"suisui","fromSide":"right","toNode":"yangyang_xuanling","toSide":"left","color":"#6D5DF6","label":"姐妹"},
+    {"id":"e_rover_dreamzhou","fromNode":"rover","fromSide":"left","toNode":"dreamzhou","toSide":"right","color":"#6D5DF6","label":"3.5 玄方主线"},
+    {"id":"e_rover_suisui","fromNode":"rover","fromSide":"left","toNode":"suisui","toSide":"right","color":"#6D5DF6","label":"共赴梦州 / 寻找秧秧"},
+    {"id":"e_rover_yangyang_x","fromNode":"rover","fromSide":"left","toNode":"yangyang_xuanling","toSide":"right","color":"#6D5DF6","label":"3.5 二次共鸣"},
+    {"id":"e_dream_qingxiao","fromNode":"dreamzhou","fromSide":"bottom","toNode":"qingxiao","toSide":"top","color":"#777","label":"梦州阵营"},
+    {"id":"e_dream_jingran","fromNode":"dreamzhou","fromSide":"bottom","toNode":"jingran","toSide":"top","color":"#777","label":"梦州阵营"},
+    {"id":"e_dream_suoming","fromNode":"dreamzhou","fromSide":"bottom","toNode":"suoming","toSide":"top","color":"#777","label":"梦州阵营"},
+    {"id":"e_dream_xin","fromNode":"dreamzhou","fromSide":"bottom","toNode":"xin_dreamzhou","toSide":"top","color":"#777","label":"梦州阵营"},
+    {"id":"e_xin_fox","fromNode":"xin_dreamzhou","fromSide":"left","toNode":"heart_moon_fox","toSide":"right","color":"#00838F","label":"心月狐线索"},
+    {"id":"e_houxuan_qingxiao","fromNode":"houxuan_army","fromSide":"bottom","toNode":"qingxiao","toSide":"top","color":"#2E7D32","label":"玄方军势线"}
   ]
 }

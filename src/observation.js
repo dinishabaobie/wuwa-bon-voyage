@@ -15,10 +15,10 @@ const SUBJECTS = [
   { code: 'S-001', name: '守岸人', element: '核心', photo: 'photos/shorekeeper.jpg', tagline: '守岸人，这个称呼就很好。它表示，某种因你而有的意义和决心。', author: '腐朽的书', fx: 'butterfly', href: '#', status: 'archived' },
   { code: 'S-002', name: '千咲', element: '湮灭', photo: 'photos/chisaki-1.jpg', tagline: '命运精心编织的线索，最难忘的那一笔。', author: 'TheNotoSeed', href: '#', status: 'archived' },
   { code: 'S-003', name: '莫宁', element: '热熔', photo: 'photos/mornie.jpg', tagline: '晨光里苏醒的炽焰，温柔，亦灼人。', author: 'zutto_烧烤垃圾桶', href: '#', status: 'archived' },
-  { code: 'S-004', name: '弗洛洛', element: '湮灭', photo: 'photos/floro.jpg', tagline: '携琴穿过薰衣草海，奏一曲温柔的湮灭。', author: '雨鱼杆', fx: 'focus', href: '#', status: 'archived' },
+  { code: 'S-004', name: '弗洛洛', element: '湮灭', photo: 'photos/floro.jpg', tagline: '她为逝者举起指挥棒，乐章至今没有终止。', author: '雨鱼杆', fx: 'focus', href: '#', status: 'archived' },
   { code: 'S-005', name: '爱弥斯', element: '热熔', photo: 'photos/aemis.jpg', tagline: '把炽热藏进一个心形里，悄悄递给你。', author: 'Akatsuki葉月', fx: 'glitch', href: '#', status: 'archived' },
-  { code: 'S-006', name: '达妮娅', element: '热熔', photo: 'photos/dania.jpg', tagline: '以热熔之名，献上最炽热的馈赠。', author: 'Dekrjan', href: '#', status: 'archived' },
-  { code: 'S-007', name: '西格莉卡', element: '气动', photo: 'photos/sigrika.jpg', tagline: '乘风而来，将星辉编入每一缕气流。', author: 'byx', href: '#', status: 'archived' },
+  { code: 'S-006', name: '达妮娅', element: '热熔', photo: 'photos/dania.jpg', tagline: '以热熔之名，献上最炽热的馈赠。', author: 'Dekrjan', fx: 'bubble', href: '#', status: 'archived' },
+  { code: 'S-007', name: '西格莉卡', element: '气动', photo: 'photos/sigrika.jpg', tagline: '乘风而来，将星辉编入每一缕气流。', author: 'byx', fx: 'gust', href: '#', status: 'archived' },
   { code: 'S-008', name: '琳奈', element: '衍射', photo: 'photos/linnai.jpg', tagline: '以光为笔，在世界的暗面涂下属于自己的色彩。', author: '禾策', href: '#', status: 'archived' },
   { code: 'S-009', name: '菲比', element: '衍射', photo: 'photos/phoebe.jpg', tagline: '在洒满阳光的海岸，把一个秘密轻轻藏进光里。', author: 'HA', href: '#', status: 'archived' },
   { code: 'S-010', name: '秧秧·玄翎', element: '湮灭', photo: 'photos/yangyang.jpg', tagline: '耳畔苍翎响远音', author: '鸣潮', href: '#', status: 'archived' },
@@ -274,9 +274,10 @@ const PROFILES = {
   'S-003': {
     name: '莫宁', full: 'Mornye', element: '热熔', accent: '#e8693f',
     photo: 'photos/mornie.jpg', author: 'zutto_烧烤垃圾桶',
+    engineering: true,
     tagline: '晨光里苏醒的炽焰，温柔，亦灼人。',
     body: `
-      <p class="prof-access">// 接入泰提斯 · 观测档案 S-003<br/>守岸人在此。观测对象 S-003，莫宁。<br/>档案标识：五星共鸣者｜热熔｜长刃。<br/>深空联合研究院学者，星炬学院教授。思维敏捷，表达克制；比起解释自己，她更习惯让研究结果先抵达答案。</p>
+      <p class="prof-access">// 接入泰提斯 · 观测档案 S-003<br/>守岸人在此。观测对象 S-003，莫宁。<br/>档案标识：五星共鸣者｜热熔｜长刃。<br/>深空联合研究院工程师，星炬学院隧者工学部教授。她能在极短时间内拆解一台庞大机械的全部参数，却常在一句普通的问候前停顿。比起解释自己，她更习惯让公式、装置与结果替她开口。</p>
       <section>
         <h3 class="prof-h">轮椅与义肢 <i>// 以自己的方式抵达</i></h3>
         <p>就读星炬学院时，她已经长期依靠轮椅行动。后来，定制型神经接入式义肢让她实现了完全自主行走；多年复查中，系统始终保持稳定。</p>
@@ -288,9 +289,15 @@ const PROFILES = {
         <p>她以<b>人造的双腿</b>踏足大地，也把同样的能力用来修复、创造和推进研究。失去的，她以双手重造；够不到的，她以技术跨越。</p>
       </section>
       <section>
+        <h3 class="prof-h">人际误差 <i>// 无法被公式完全消除的变量</i></h3>
+        <p>对机械的异常，她能在数据波动出现前预先定位；对人与人之间的沉默，她却很难找到一套可靠的解法。需要协调关系时，她会在脑内反复演算每一种措辞，最后只留下一声极轻的哀鸣。</p>
+        <p>但「不善言辞」从不等于「漠不关心」。科考途中，她会记住队员的行程、装备状态和被忽略的疲惫；很少说安慰的话，却会把问题在对方察觉前处理好。</p>
+        <div class="prof-note">她的温柔不在声量里，而在被仔细校准的每一个细节里。</div>
+      </section>
+      <section>
         <h3 class="prof-h">旧日目光 <i>// 前辈与未说出口的期待</i></h3>
         <p>她与漂泊者并非初次相识。旧日的学生证、留在发间的两枚发卡，以及那一声郑重的「前辈」，都指向一段尚未完全复原的过去。</p>
-        <p>面对重新归来的前辈，她很少直接诉说感情。本系统捕捉到的，不只是依恋，而是敬意、期待，以及希望自己终于能够与对方<b>并肩</b>的愿望。</p>
+        <p>面对重新归来的前辈，她很少直接诉说感情。她会把欲言又止收回严谨的称呼里，再把思念拆成新的课题、新的图纸与「换日仪式」计划。她要的不是永远跟在那个人身后，而是终有一日能站在对方身旁，平静地说：<b>「前辈，我已经找到我要做的事了。」</b></p>
       </section>
       <section>
         <h3 class="prof-h">跨越时空的鸿沟 <i>// 触碰世界</i></h3>
@@ -305,9 +312,10 @@ const PROFILES = {
   },
 
   'S-004': {
-    name: '弗洛洛', full: 'Frololo', element: '湮灭', accent: '#d45a9a',
+    name: '弗洛洛', full: 'Frololo', element: '湮灭', accent: '#9d435d',
     photo: 'photos/floro.jpg', author: '雨鱼杆',
-    tagline: '携琴穿过薰衣草海，奏一曲温柔的湮灭。',
+    requiem: true,
+    tagline: '她为逝者举起指挥棒，乐章至今没有终止。',
     body: `
       <p class="prof-access">// 接入泰提斯 · 观测档案 S-004<br/>守岸人在此。观测对象 S-004，弗洛洛。<br/>档案标识：五星共鸣者｜湮灭｜音感仪。<br/>残星会会监，游走于生死之间的指挥家。她很少让情绪浮上表面，可沉默之下，是漫长岁月也未能冷却的哀悼。</p>
       <section>
@@ -346,8 +354,8 @@ const PROFILES = {
   'S-005': {
     name: '爱弥斯', full: 'Aemis', element: '热熔', accent: '#e8693f',
     photo: 'photos/aemis.jpg', author: 'Akatsuki葉月',
+    signal: true, // 专属 UI：赠与雪中的你（明媚雪原信笺 · 光影随她的情绪明灭）
     tagline: '把炽热藏进一个心形里，悄悄递给你。',
-    ghost: true, // 专属 UI：越界信号（电子幽灵 · 屏幕虚境随滚动被热熔的暖意穿透）
     body: `
       <p class="prof-access">// 接入泰提斯 · 观测档案 S-005<br/>守岸人在此。观测对象 S-005，爱弥斯。<br/>档案标识：五星共鸣者｜热熔｜迅刀。<br/>一个学会了感受的电子幽灵。完整因果推演，见〈观潮 · VER 3.1 互相救赎〉。</p>
       <section>
@@ -389,24 +397,35 @@ const PROFILES = {
 
   'S-006': {
     name: '达妮娅', full: 'Denia', element: '热熔', accent: '#e8693f',
-    photo: 'photos/dania.jpg', author: 'Dekrjan',
+    photo: 'photos/dania-dream.jpg', author: '茶壶',
     tagline: '以热熔之名，献上最炽热的馈赠。',
+    dream: true, // 专属 UI：布景与幻灭（梦境星海舞台，读到威胁评级时梦被撕开一线）
     body: `
       <p class="prof-access">// 接入泰提斯 · 观测档案 S-006<br/>守岸人在此。观测对象 S-006，达妮娅。<br/>档案标识：五星共鸣者｜热熔｜音感仪。<br/>星炬学院虚质科学部学生。……请注意：本则档案的威胁评级，与她的笑容并不相符。</p>
       <section>
         <h3 class="prof-h">慵懒的学生 <i>// 布景里的真实</i></h3>
         <p>她总爱摸鱼、打盹，用温柔的笑容面对身边的人。名字、身份、能力，甚至最初被安排的人际关系，都曾是预先搭建的布景。</p>
+        <figure class="prof-wide">
+          <img src="photos/dania-slumber.jpg" alt="达妮娅抱着小熊，在锁链与星光之间小睡" loading="lazy" />
+          <figcaption>观测影像 · 布景之形　画 @BINA</figcaption>
+        </figure>
         <p>可她与西格莉卡相处时显露的轻松，却令这份原本严密无隙的身份记录，第一次出现了无法归类的柔软读数。伪装持续得足够久以后，其中也可能生长出真实。</p>
       </section>
       <section>
         <h3 class="prof-h">海啸级威胁 <i>// 阿列夫一的容器</i></h3>
         <p>但泰提斯将她的真实身份，标注为<strong>海啸级威胁</strong>——源自阿列夫一。残星会的首领，曾欲将她培养为阿列夫一的容器，借由与声骸共鸣者绯雪的协同，最终产出一个握有阿列夫一权限的个体。</p>
+        <div class="s006-stamp" aria-hidden="true">THREAT LEVEL ⚠ TSUNAMI // 海啸级</div>
         <p>计划并未完全实现。但即便如此，达妮娅，仍成功承载并释放了<b>一部分阿列夫一的力量</b>。</p>
         <div class="prof-note">她之所以被选中，是因为最初的记录里近乎一无所有。可随着朋友、笑声与日常一点点进入她的生命，她与阿列夫一的共鸣反而逐渐减弱——容器开始拥有了不属于计划的内容。</div>
       </section>
       <section>
         <h3 class="prof-h">布景与幻灭 <i>// 双形态</i></h3>
         <p>她的能力，与泡泡、与梦境般的星空相连——能将敌人困入一片如梦的星海之境。</p>
+        <div class="s006-forms" aria-label="达妮娅的双形态">
+          <div class="form-set"><span>SET PIECE</span><b>布景之形</b><small>留在日常里的那一面，慵懒而柔软。</small></div>
+          <i aria-hidden="true"><em>✦</em></i>
+          <div class="form-void"><span>DISILLUSION</span><b>幻灭之形</b><small>共鸣解放，身后浮现阿列夫一的符号。</small></div>
+        </div>
         <p>「<b>布景之形</b>」，是她留在日常里的那一面，慵懒而柔软；当共鸣解放、切入「<b>幻灭之形</b>」，身后便浮现出阿列夫一的符号。两种形态并存于同一道频率中，却不再能简单分成虚假与真实。</p>
       </section>
       <div class="prof-sign">
@@ -420,6 +439,7 @@ const PROFILES = {
     name: '西格莉卡', full: 'Sigrika', element: '气动', accent: '#4fd6a0',
     photo: 'photos/sigrika.jpg', author: 'byx',
     tagline: '乘风而来，将星辉编入每一缕气流。',
+    sun: true, // 专属 UI：昭日 · 破晓（天色随滚动渐亮，逆风处乌云蔽日，终点晨光漫页）
     body: `
       <p class="prof-access">// 接入泰提斯 · 观测档案 S-007<br/>守岸人在此。观测对象 S-007，西格莉卡。<br/>档案标识：五星共鸣者｜气动｜臂铠。<br/>星炬学院学生，罗伊符文的共鸣者。为了成为合格的昭日者，她总是用尽全力。</p>
       <section>
@@ -430,6 +450,13 @@ const PROFILES = {
       <section>
         <h3 class="prof-h">语义解现 <i>// 读懂符文的频率</i></h3>
         <p>她能解读罗伊符文中蕴含的频率，并将其转化为自己的力量。这份能力依赖她对符文的理解，也受到精神状态影响；越是急于给出正确答案，解读便越可能失去稳定。</p>
+        <div class="s007-runes" aria-label="罗伊符文试译">
+          <div class="rn"><b>ᚹ</b><small>风</small></div>
+          <div class="rn"><b>ᛊ</b><small>日</small></div>
+          <div class="rn"><b>ᛉ</b><small>谜</small></div>
+          <div class="rn"><b>ᛗ</b><small>期待</small></div>
+          <div class="rn"><b>ᛟ</b><small>答案</small></div>
+        </div>
         <p>天赋让她看见符文中的语义，也让更多人相信，她理应承担更多。可天赋从来不是一张只通往责任的单程票。</p>
       </section>
       <section>
@@ -739,6 +766,17 @@ export function mountObservation(root, onBack) {
   const inertState = new Map()
   let profileTrigger = null
   let clearProfileTimer = null
+  // 打开档案时登记的撤销回调（监听、定时器、观察器、时间线）；关闭或重开时统一执行
+  const profileCleanups = []
+  // 有开场遮罩动画的主题（S-007 破晓）会把初始焦点推迟到遮罩散去，避免焦点落在不可见的返回键上
+  let deferInitialFocus = false
+  function resetProfileEl() {
+    profileCleanups.splice(0).forEach((fn) => { try { fn() } catch { /* 句柄已失效则忽略 */ } })
+    profEl.innerHTML = ''
+    profEl.className = 'prof-overlay'
+    profEl.removeAttribute('style') // 内联 --accent / --p / --sXXX-* 一并清除
+    Object.keys(profEl.dataset).forEach((k) => delete profEl.dataset[k])
+  }
   let rootOverflowBeforeProfile = root.style.overflow
   function lockBackground() {
     Array.from(document.body.children).forEach((child) => {
@@ -884,8 +922,11 @@ export function mountObservation(root, onBack) {
       if (i >= full.length) clearInterval(s001TypeTimer)
     }, 34)
     // 滚动进度 → --p，驱动网格溶解 / 星空浮现 / 暖色上涌
-    profEl.removeEventListener('scroll', s001OnScroll)
     profEl.addEventListener('scroll', s001OnScroll, { passive: true })
+    profileCleanups.push(() => {
+      profEl.removeEventListener('scroll', s001OnScroll)
+      if (s001TypeTimer) clearInterval(s001TypeTimer)
+    })
     profEl.dataset.tide = '系统'
     s001OnScroll()
   }
@@ -938,51 +979,6 @@ export function mountObservation(root, onBack) {
       </div>`)
   }
 
-  // ── S-005 专属：越界信号（电子幽灵的屏幕虚境，随滚动被热熔的暖意穿透） ──
-  let s005HeartTimer = null
-  function renderGhostDeco() {
-    profEl.classList.add('s005')
-    // 上浮的「飞行雪绒」光点
-    const fluff = Array.from({ length: 14 }, () =>
-      `<span style="--x:${3 + Math.floor(Math.random() * 94)}%;--sw:${(Math.random() * 90 - 45).toFixed(0)}px;--t:${(11 + Math.random() * 10).toFixed(1)}s;--dl:${(-Math.random() * 20).toFixed(1)}s;--s:${(0.5 + Math.random() * 1).toFixed(2)}"></span>`).join('')
-    // 像素心：线框 → 随滚动进度被炽热填满
-    const heartPath = 'M2 0 H6 V2 H8 V4 H10 V2 H12 V0 H16 V2 H18 V8 H16 V10 H14 V12 H12 V14 H10 V16 H8 V14 H6 V12 H4 V10 H2 V8 H0 V2 H2 Z'
-    profEl.insertAdjacentHTML('beforeend', `
-      <div class="s005-deco" aria-hidden="true">
-        <div class="s005-grid"></div>
-        <div class="s005-scan"></div>
-        ${fluff}
-      </div>
-      <button class="s005-heart" type="button" aria-label="她藏起来的心形">
-        <svg viewBox="0 0 18 16" role="presentation"><path d="${heartPath}" /></svg>
-        <em>——悄悄递给你 ♥</em>
-      </button>
-      <div class="s005-signal" aria-hidden="true">
-        <span>LONG VOYAGE</span>
-        <div><i></i><b></b><b></b><b></b><b></b><b></b><b></b></div>
-        <em>信号</em>
-      </div>
-      <span class="s005-case">CASE S-005 · FLYING COTTON // 飞行雪绒</span>`)
-    const heart = profEl.querySelector('.s005-heart')
-    heart.addEventListener('click', () => {
-      heart.classList.add('is-given')
-      gsap.fromTo(heart, { scale: 1 }, { scale: 1.22, duration: 0.16, yoyo: true, repeat: 3, ease: 'power1.inOut', overwrite: true, onComplete: () => gsap.set(heart, { scale: 1 }) })
-      if (s005HeartTimer) clearTimeout(s005HeartTimer)
-      s005HeartTimer = setTimeout(() => heart.classList.remove('is-given'), 2600)
-    })
-  }
-
-  function s005OnScroll() {
-    if (!profEl.classList.contains('s005')) return
-    const max = profEl.scrollHeight - profEl.clientHeight
-    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
-    profEl.style.setProperty('--s005-p', String(p))
-    const phase = p < .16 ? '信号' : p < .38 ? '越界' : p < .58 ? '心形' : p < .78 ? '面具' : p < .93 ? '心魔' : '归航'
-    const phaseEl = profEl.querySelector('.s005-signal em')
-    if (phaseEl && phaseEl.textContent !== phase) phaseEl.textContent = phase
-    profEl.dataset.signal = phase
-  }
-
   // ── S-002 专属：命运卷宗（红线从断裂、纠缠，最终重新接起） ──
   function renderThreadArchive() {
     profEl.classList.add('s002')
@@ -1001,6 +997,287 @@ export function mountObservation(root, onBack) {
         </div>
         <span class="s002-case">CASE S-002 · KIZUNA TRACE</span>
       </div>`)
+  }
+
+  // ── S-003 专属：隧者工程观测台（蓝图、神经接入与星轨） ──
+  function renderEngineeringDossier() {
+    profEl.classList.add('s003')
+    profEl.insertAdjacentHTML('beforeend', `
+      <div class="s003-deco" aria-hidden="true">
+        <div class="s003-grid"></div>
+        <div class="s003-orbit"><i></i><i></i><i></i><b></b></div>
+        <div class="s003-core"><i></i><b>03</b><em>THERMAL<br/>CORE</em></div>
+        <div class="s003-limb"><i></i><i></i><i></i><i></i><b></b><em>NEURAL LIMB<br/>MOTION TRACE</em></div>
+        <div class="s003-readout">
+          <span>NEURAL LINK // <b>STABLE</b></span>
+          <strong>72.00%</strong>
+          <div><i></i></div>
+          <em>MORNYE · ENGINEERING DOSSIER</em>
+        </div>
+        <div class="s003-sideword">WE ARE BORN TO GAZE</div>
+        <div class="s003-coordinates">X 03.17<br/>Y 08.42<br/>TETHYS / ONLINE</div>
+      </div>`)
+  }
+
+  function s003OnScroll() {
+    if (!profEl.classList.contains('s003')) return
+    const max = profEl.scrollHeight - profEl.clientHeight
+    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
+    profEl.style.setProperty('--s003-p', String(p))
+    const value = (72 + p * 27.87).toFixed(2)
+    const valueEl = profEl.querySelector('.s003-readout strong')
+    const stateEl = profEl.querySelector('.s003-readout span b')
+    if (valueEl) valueEl.textContent = `${value}%`
+    if (stateEl) stateEl.textContent = p < .34 ? 'CALIBRATING' : p < .78 ? 'SYNCHRONIZED' : 'STARBOUND'
+  }
+
+  // ── S-004 专属：永不终止的安魂曲 ──
+  function renderRequiemDossier() {
+    profEl.classList.add('s004')
+    profEl.insertAdjacentHTML('beforeend', `
+      <div class="s004-deco" aria-hidden="true">
+        <div class="s004-curtain left"></div><div class="s004-curtain right"></div>
+        <div class="s004-baton"></div>
+        <div class="s004-movement"><span>MOVEMENT I</span><strong>OVERTURE</strong><i></i></div>
+      </div>`)
+  }
+
+  function s004OnScroll() {
+    if (!profEl.classList.contains('s004')) return
+    const max = profEl.scrollHeight - profEl.clientHeight
+    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
+    profEl.style.setProperty('--s004-p', String(p))
+    const label = p < .18 ? ['MOVEMENT I', 'OVERTURE'] : p < .42 ? ['MOVEMENT II', 'CATASTROPHE'] : p < .68 ? ['MOVEMENT III', 'REQUIEM'] : p < .88 ? ['MOVEMENT IV', 'RE-CREATION'] : ['CODA', 'UNFINISHED']
+    const strong = profEl.querySelector('.s004-movement strong')
+    if (strong && strong.textContent !== label[1]) {
+      strong.textContent = label[1]
+      profEl.querySelector('.s004-movement span').textContent = label[0]
+    }
+  }
+
+  // ── S-005 专属：赠与雪中的你（明媚雪原信笺，光影随她的情绪明灭） ──
+  function renderSignalDossier() {
+    profEl.classList.add('s005')
+    // 缓缓飘落的雪：落地即融，是她无声的告别。约三分之一是数据化的雪——她的雪，本来就是信号
+    const glyphs = ['0', '1', '❄', '♥', '✦']
+    const snow = Array.from({ length: 24 }, () => {
+      const style = `--x:${Math.floor(Math.random() * 100)}%;--sw:${(Math.random() * 70 - 35).toFixed(0)}px;--t:${(9 + Math.random() * 12).toFixed(1)}s;--dl:${(-Math.random() * 20).toFixed(1)}s;--s:${(0.4 + Math.random() * 1.1).toFixed(2)}`
+      if (Math.random() < .38) {
+        const c = Math.random() < .5 ? '#7ecbe8' : '#f299c1'
+        return `<span class="g" style="${style};--c:${c}">${glyphs[Math.floor(Math.random() * glyphs.length)]}</span>`
+      }
+      return `<span style="${style};--b:${Math.random() < .3 ? 2 : 0}px"></span>`
+    }).join('')
+    // 左缘的上行信号流：她从网络深处，往上送出的讯息
+    const stream = Array.from({ length: 12 }, () => {
+      const ch = ['0', '1', '❄', '♥', '✦', '5', '2', '0'][Math.floor(Math.random() * 8)]
+      return `<b style="--d:${(-Math.random() * 14).toFixed(1)}s;--t2:${(10 + Math.random() * 8).toFixed(1)}s;--o:${(0.16 + Math.random() * 0.2).toFixed(2)}">${ch}</b>`
+    }).join('')
+    profEl.insertAdjacentHTML('beforeend', `
+      <div class="s005-deco" aria-hidden="true">
+        ${snow}
+        <div class="s005-stream">${stream}</div>
+        <div class="s005-plane"><svg viewBox="0 0 32 26"><path d="M31 1 L1 12 L10 16 L12 25 L17 18 L25 22 Z" /><path d="M31 1 L12 25" /></svg></div>
+      </div>
+      <div class="s005-dusk" aria-hidden="true"></div>
+      <button class="s005-heart" type="button" aria-label="她藏起来的心形">
+        <svg viewBox="0 0 44 40" role="presentation">
+          <defs>
+            <linearGradient id="s005hg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffb9d3" /><stop offset="1" stop-color="#ff7fae" />
+            </linearGradient>
+            <clipPath id="s005hc"><path d="M22 38 C10 28 2 20 2 11.5 C2 5 7 1 12.5 1 C16.5 1 20 3.5 22 7 C24 3.5 27.5 1 31.5 1 C37 1 42 5 42 11.5 C42 20 34 28 22 38 Z" /></clipPath>
+          </defs>
+          <path class="hout" d="M22 38 C10 28 2 20 2 11.5 C2 5 7 1 12.5 1 C16.5 1 20 3.5 22 7 C24 3.5 27.5 1 31.5 1 C37 1 42 5 42 11.5 C42 20 34 28 22 38 Z" />
+          <g clip-path="url(#s005hc)"><rect class="hfill" x="-2" y="-2" width="48" height="44" fill="url(#s005hg)" /></g>
+          <path class="hline" d="M22 38 C10 28 2 20 2 11.5 C2 5 7 1 12.5 1 C16.5 1 20 3.5 22 7 C24 3.5 27.5 1 31.5 1 C37 1 42 5 42 11.5 C42 20 34 28 22 38 Z" />
+          <path class="hgloss" d="M8 8 C10 5 13 3.6 15.5 4.2 C13 6 11 8.5 10.3 11.5 C8.8 10.6 8 9.4 8 8 Z" />
+        </svg>
+        <i class="s005-phase">初遇</i>
+        <em>——悄悄递给你 ♥</em>
+      </button>
+      <span class="s005-case">BON VOYAGE · S-005 · 5.20 // 赠与雪中的你</span>`)
+    const heart = profEl.querySelector('.s005-heart')
+    let heartTimer = null
+    heart.addEventListener('click', () => {
+      heart.classList.add('is-given')
+      gsap.fromTo(heart, { scale: 1 }, { scale: 1.22, duration: 0.16, yoyo: true, repeat: 3, ease: 'power1.inOut', overwrite: true, onComplete: () => gsap.set(heart, { scale: 1 }) })
+      if (heartTimer) clearTimeout(heartTimer)
+      heartTimer = setTimeout(() => heart.classList.remove('is-given'), 2600)
+    })
+    profileCleanups.push(() => { if (heartTimer) clearTimeout(heartTimer) })
+    // 信笺解码入场：内容默认可见，观察器只在滚入视野时叠加一次粉蓝色散的接收动画，
+    // 因此即便观察器漏掉某段（快速滚动），也绝不会让内容永久隐形。减动态时完全跳过。
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return
+        en.target.classList.add('is-received')
+        observer.unobserve(en.target)
+      })
+    }, { root: profEl, threshold: 0.16 })
+    profEl.querySelectorAll('.prof-doc section, .prof-doc .prof-sign').forEach((s) => observer.observe(s))
+    profileCleanups.push(() => observer.disconnect())
+  }
+
+  function s005OnScroll() {
+    if (!profEl.classList.contains('s005')) return
+    const max = profEl.scrollHeight - profEl.clientHeight
+    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
+    profEl.style.setProperty('--s005-p', String(p))
+    // 光与影，是她情绪的读数：裂痕与告别处光线沉下去，触碰时重新亮起
+    const dim = p < .5 ? 0 : p < .72 ? (p - .5) / .22 : p < .88 ? 1 : Math.max(0, 1 - (p - .88) / .09)
+    profEl.style.setProperty('--s005-dim', dim.toFixed(3))
+    const phase = p < .14 ? '初遇' : p < .36 ? '长航' : p < .56 ? '心形' : p < .76 ? '裂痕' : p < .92 ? '告别' : '触碰'
+    if (profEl.dataset.signal !== phase) {
+      profEl.dataset.signal = phase
+      const phaseEl = profEl.querySelector('.s005-phase')
+      if (phaseEl) phaseEl.textContent = phase
+    }
+    // 纸飞机沿滚动自下而上航行：从没有选择的飞行，到人为选择的旅途
+    const plane = profEl.querySelector('.s005-plane')
+    if (plane) {
+      const x = 5 + p * 80 + Math.sin(p * Math.PI * 3) * 4
+      const y = 76 - p * 62 + Math.sin(p * Math.PI * 5) * 7
+      plane.style.setProperty('--pl-x', `${x.toFixed(2)}vw`)
+      plane.style.setProperty('--pl-y', `${y.toFixed(2)}vh`)
+      plane.style.setProperty('--pl-r', `${(-14 + Math.cos(p * Math.PI * 3.4) * 12).toFixed(1)}deg`)
+    }
+  }
+
+  // ── S-006 专属：布景与幻灭（梦境星海舞台，读到威胁评级时梦被撕开一线） ──
+  function renderDreamStage() {
+    profEl.classList.add('s006')
+    // 玻璃泡泡：从梦的底部缓缓上浮
+    const bubbles = Array.from({ length: 14 }, () =>
+      `<span style="--x:${Math.floor(Math.random() * 100)}%;--s:${(8 + Math.random() * 34).toFixed(0)}px;--t:${(12 + Math.random() * 14).toFixed(1)}s;--dl:${(-Math.random() * 24).toFixed(1)}s;--sw:${(Math.random() * 80 - 40).toFixed(0)}px"></span>`).join('')
+    // 星芒：定点闪烁
+    const stars = Array.from({ length: 12 }, () =>
+      `<b style="--x:${Math.floor(Math.random() * 98)}%;--y:${Math.floor(Math.random() * 96)}%;--tw:${(2 + Math.random() * 3.4).toFixed(1)}s;--dl:${(-Math.random() * 5).toFixed(1)}s;--sc:${(0.5 + Math.random() * 0.9).toFixed(2)}">✦</b>`).join('')
+    // 纸片小人：门后那串剪影，幻灭时会被点亮
+    const doll = '<svg viewBox="0 0 12 14"><path d="M6 .4 a2.4 2.4 0 1 0 .01 4.8 a2.4 2.4 0 1 0 -.01 -4.8 M6 5.2 L2.2 8 L.6 12.6 L2.4 13.4 L4 9.6 L4.4 13.6 L7.6 13.6 L8 9.6 L9.6 13.4 L11.4 12.6 L9.8 8 Z"/></svg>'
+    const garland = (n) => Array.from({ length: n }, () => `<i>${doll}</i>`).join('')
+    profEl.insertAdjacentHTML('beforeend', `
+      <div class="s006-deco" aria-hidden="true">
+        ${bubbles}${stars}
+        <div class="s006-garland s006-garland--bl">${garland(7)}</div>
+        <div class="s006-garland s006-garland--tr">${garland(7)}</div>
+        <svg class="s006-chain s006-chain--l" viewBox="0 0 60 400" preserveAspectRatio="none"><path d="M8 -10 C40 90 -10 210 34 410" pathLength="100" /></svg>
+        <svg class="s006-chain s006-chain--r" viewBox="0 0 60 400" preserveAspectRatio="none"><path d="M52 -10 C20 110 66 230 22 410" pathLength="100" /></svg>
+      </div>
+      <div class="s006-sleep" aria-hidden="true">
+        <svg viewBox="0 0 40 26">
+          <g class="eyes-shut"><path d="M6 14 q5 5 10 0" /><path d="M24 14 q5 5 10 0" /></g>
+          <g class="eyes-open"><circle cx="11" cy="14" r="3.2" /><circle cx="29" cy="14" r="3.2" /></g>
+        </svg>
+        <span class="zzz"><b>z</b><b>z</b><b>z</b></span>
+        <span class="alert">⚠</span>
+        <em class="s006-phase">入梦</em>
+      </div>`)
+  }
+
+  function s006OnScroll() {
+    if (!profEl.classList.contains('s006')) return
+    const max = profEl.scrollHeight - profEl.clientHeight
+    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
+    // 幻灭潮：读到海啸级威胁时，梦被撕开一线，随后重新合拢
+    const surge = p < .42 ? 0 : p < .54 ? (p - .42) / .12 : p < .68 ? 1 : p < .8 ? 1 - (p - .68) / .12 : 0
+    profEl.style.setProperty('--s006-surge', surge.toFixed(3))
+    const phase = p < .16 ? '入梦' : p < .42 ? '布景' : p < .72 ? '幻灭' : p < .9 ? '双生' : '归眠'
+    if (profEl.dataset.dream !== phase) {
+      profEl.dataset.dream = phase
+      const phaseEl = profEl.querySelector('.s006-phase')
+      if (phaseEl) phaseEl.textContent = phase
+    }
+  }
+
+  // ── S-007 专属：昭日 · 破晓（开场日出，天色随滚动渐亮，逆风处乌云蔽日） ──
+  const s007Leaf = '<svg viewBox="0 0 20 20"><path d="M2 18 C2 8 10 2 18 2 C18 12 10 18 2 18 Z" /><path d="M2 18 C8 12 12 8 18 2" class="vein" /></svg>'
+  function s007Gust(count) {
+    const deco = profEl.querySelector('.s007-deco')
+    if (!deco) return
+    for (let i = 0; i < count; i++) {
+      const lf = document.createElement('span')
+      lf.className = 'gust-leaf'
+      lf.innerHTML = s007Leaf
+      deco.appendChild(lf)
+      const y0 = window.innerHeight * (0.12 + Math.random() * 0.7)
+      gsap.fromTo(lf,
+        { x: -70, y: y0, rotation: 0, opacity: 0, scale: 0.6 + Math.random() * 0.8 },
+        { x: window.innerWidth + 90, y: y0 + (Math.random() * 180 - 90), rotation: 300 + Math.random() * 260, opacity: .9,
+          duration: 1 + Math.random() * .8, delay: Math.random() * .3, ease: 'power1.in', onComplete: () => lf.remove() })
+    }
+  }
+  function renderSunriseDossier() {
+    profEl.classList.add('s007')
+    // 天空中悬浮的罗伊符文：解译段会一起亮起
+    const runes = ['ᚹ', 'ᛊ', 'ᛉ', 'ᛗ', 'ᛟ', 'ᚱ', 'ᛖ', 'ᛚ', 'ᛃ', 'ᚨ']
+    const runeEls = runes.map((r) =>
+      `<u class="r" style="--x:${4 + Math.floor(Math.random() * 92)}%;--y:${6 + Math.floor(Math.random() * 80)}%;--t:${(5 + Math.random() * 6).toFixed(1)}s;--dl:${(-Math.random() * 8).toFixed(1)}s;--sc:${(0.7 + Math.random() * 0.9).toFixed(2)}">${r}</u>`).join('')
+    // 乘风的叶
+    const leaves = Array.from({ length: 7 }, () =>
+      `<span class="lf" style="--y:${8 + Math.floor(Math.random() * 76)}%;--t:${(14 + Math.random() * 12).toFixed(1)}s;--dl:${(-Math.random() * 24).toFixed(1)}s;--s:${(0.6 + Math.random() * 1).toFixed(2)};--bob:${(Math.random() * 120 - 60).toFixed(0)}px">${s007Leaf}</span>`).join('')
+    profEl.insertAdjacentHTML('beforeend', `
+      <div class="s007-sun" aria-hidden="true"></div>
+      <div class="s007-deco" aria-hidden="true">
+        <svg class="s007-wind" viewBox="0 0 1200 600" preserveAspectRatio="none">
+          <path d="M-40 140 C300 90 520 210 1240 120" />
+          <path d="M-40 380 C380 330 700 470 1240 360" />
+          <path d="M-40 520 C300 480 640 560 1240 500" />
+        </svg>
+        ${runeEls}${leaves}
+      </div>
+      <div class="s007-veil" aria-hidden="true"></div>
+      <button class="s007-dial" type="button" aria-label="唤一阵风">
+        <svg viewBox="0 0 64 40">
+          <path class="arc" d="M6 34 A26 26 0 0 1 58 34" />
+          <line class="hor" x1="2" y1="34" x2="62" y2="34" />
+          <circle class="dot" cx="6" cy="34" r="3.4" />
+        </svg>
+        <em class="s007-phase">拂晓</em>
+      </button>
+      <div class="s007-intro" aria-hidden="true">
+        <i class="horizon"></i><b class="crest"></b><span class="rays"></span><em class="flare"></em>
+      </div>`)
+    profEl.querySelector('.s007-dial').addEventListener('click', () => s007Gust(8))
+    // 开场破晓：暗 → 地平线亮起 → 日冕破出 → 金光一闪，黎明显现（减动态用户跳过整段，直接见到黎明）
+    const intro = profEl.querySelector('.s007-intro')
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { intro.remove(); return }
+    // 遮罩期间不让焦点停在被盖住的返回键上；散去后再交还焦点
+    deferInitialFocus = true
+    const hero = profEl.querySelector('.prof-hero')
+    const tl = gsap.timeline({ onComplete: () => { intro.remove(); profEl.querySelector('.prof-back')?.focus() } })
+    tl.fromTo(intro.querySelector('.horizon'), { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: .55, ease: 'power2.out' }, .18)
+      .fromTo(intro.querySelector('.crest'), { y: 110, opacity: 0 }, { y: 0, opacity: 1, duration: .75, ease: 'power2.out' }, .58)
+      .fromTo(intro.querySelector('.rays'), { opacity: 0, scale: .55, rotation: -16 }, { opacity: .95, scale: 1.18, rotation: 10, duration: .85, ease: 'power1.out' }, .62)
+      .fromTo(intro.querySelector('.flare'), { opacity: 0 }, { opacity: 1, duration: .32, ease: 'power2.in' }, 1.18)
+      .to(intro, { opacity: 0, duration: .65, ease: 'power2.out' }, 1.5)
+    if (hero) tl.fromTo(hero, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .75, ease: 'power2.out' }, 1.4)
+    tl.add(() => s007Gust(9), 1.45)
+    profileCleanups.push(() => tl.kill())
+  }
+
+  function s007OnScroll() {
+    if (!profEl.classList.contains('s007')) return
+    const max = profEl.scrollHeight - profEl.clientHeight
+    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
+    profEl.style.setProperty('--s007-p', String(p))
+    // 逆风：全力之下的段落，乌云压过来遮住太阳；读过后破云
+    const veil = p < .56 ? 0 : p < .64 ? (p - .56) / .08 : p < .72 ? 1 : p < .8 ? 1 - (p - .72) / .08 : 0
+    profEl.style.setProperty('--s007-veil', veil.toFixed(3))
+    const phase = p < .14 ? '拂晓' : p < .36 ? '承光' : p < .56 ? '解译' : p < .76 ? '逆风' : p < .92 ? '破云' : '昭日'
+    if (profEl.dataset.sun !== phase) {
+      profEl.dataset.sun = phase
+      const phaseEl = profEl.querySelector('.s007-phase')
+      if (phaseEl) phaseEl.textContent = phase
+    }
+    // 日晷：太阳圆点沿地平弧爬升
+    const dot = profEl.querySelector('.s007-dial .dot')
+    if (dot) {
+      const ang = Math.PI - p * (Math.PI / 2)
+      dot.setAttribute('cx', (32 + 26 * Math.cos(ang)).toFixed(1))
+      dot.setAttribute('cy', (34 - 26 * Math.sin(ang)).toFixed(1))
+    }
   }
 
   function s002OnScroll() {
@@ -1027,7 +1304,10 @@ export function mountObservation(root, onBack) {
 
   function openProfile(code, trigger) {
     const d = PROFILES[code]; if (!d) return
-    if (clearProfileTimer) clearTimeout(clearProfileTimer)
+    // 若上一个档案的延迟清理还没跑（360ms 内重开），先立即清干净，避免主题 class/变量/监听叠加泄漏
+    if (clearProfileTimer) { clearTimeout(clearProfileTimer); clearProfileTimer = null }
+    resetProfileEl()
+    deferInitialFocus = false
     profileTrigger = trigger || null
     profEl.style.setProperty('--accent', d.accent)
     if (d.dual) renderDualProfile(d, code)
@@ -1048,24 +1328,26 @@ export function mountObservation(root, onBack) {
         ${d.body}
         <p class="prof-end">观测档案 ${code} · 归档完毕　<b>// TETHYS</b></p>
       </div>`
-    if (d.wall) renderWallDeco()
-    if (d.thread) {
-      renderThreadArchive()
-      profEl.removeEventListener('scroll', s002OnScroll)
-      profEl.addEventListener('scroll', s002OnScroll, { passive: true })
-      s002OnScroll()
-    }
-    if (d.chapel) {
-      renderChapelDeco()
-      profEl.removeEventListener('scroll', s009OnScroll)
-      profEl.addEventListener('scroll', s009OnScroll, { passive: true })
-      s009OnScroll()
-    }
-    if (d.ghost) {
-      renderGhostDeco()
-      profEl.removeEventListener('scroll', s005OnScroll)
-      profEl.addEventListener('scroll', s005OnScroll, { passive: true })
-      s005OnScroll()
+    // 专属主题登记表：flag → { render, onScroll }。新增角色只需在此加一行
+    // render 负责挂装饰并 push 自己的 cleanup；onScroll 注册后由此统一绑定/初始化/解绑
+    const THEMES = [
+      { flag: 'wall', render: renderWallDeco },
+      { flag: 'thread', render: renderThreadArchive, onScroll: s002OnScroll },
+      { flag: 'chapel', render: renderChapelDeco, onScroll: s009OnScroll },
+      { flag: 'engineering', render: renderEngineeringDossier, onScroll: s003OnScroll },
+      { flag: 'requiem', render: renderRequiemDossier, onScroll: s004OnScroll },
+      { flag: 'signal', render: renderSignalDossier, onScroll: s005OnScroll },
+      { flag: 'dream', render: renderDreamStage, onScroll: s006OnScroll },
+      { flag: 'sun', render: renderSunriseDossier, onScroll: s007OnScroll },
+    ]
+    for (const t of THEMES) {
+      if (!d[t.flag]) continue
+      t.render()
+      if (t.onScroll) {
+        profEl.addEventListener('scroll', t.onScroll, { passive: true })
+        profileCleanups.push(() => profEl.removeEventListener('scroll', t.onScroll))
+        t.onScroll()
+      }
     }
     profEl.querySelector('.prof-back').addEventListener('click', (e) => { e.preventDefault(); closeProfile() })
     profEl.scrollTop = 0
@@ -1076,7 +1358,7 @@ export function mountObservation(root, onBack) {
     profEl.setAttribute('aria-hidden', 'false')
     requestAnimationFrame(() => {
       profEl.classList.add('show')
-      profEl.querySelector('.prof-back')?.focus()
+      if (!deferInitialFocus) profEl.querySelector('.prof-back')?.focus()
     })
   }
   function closeProfile() {
@@ -1090,17 +1372,7 @@ export function mountObservation(root, onBack) {
     profileTrigger = null
     returnTarget?.focus()
     clearProfileTimer = setTimeout(() => {
-      profEl.innerHTML = ''
-      profEl.classList.remove('s010', 'freq-aero', 'freq-havoc', 'sweeping', 's008', 's009', 's002', 's001', 's005')
-      profEl.style.removeProperty('--p')
-      profEl.style.removeProperty('--s009-p')
-      profEl.style.removeProperty('--s002-p')
-      profEl.style.removeProperty('--s005-p')
-      profEl.removeAttribute('data-ritual')
-      profEl.removeAttribute('data-thread')
-      profEl.removeAttribute('data-signal')
-      if (s001TypeTimer) clearInterval(s001TypeTimer)
-      if (s005HeartTimer) clearTimeout(s005HeartTimer)
+      resetProfileEl()
     }, 360)
   }
   function onProfileKeydown(e) {
@@ -1157,6 +1429,7 @@ export function mountObservation(root, onBack) {
     io.disconnect()
     window.removeEventListener('keydown', onProfileKeydown, true)
     if (clearProfileTimer) clearTimeout(clearProfileTimer)
+    profileCleanups.splice(0).forEach((fn) => { try { fn() } catch { /* 句柄已失效则忽略 */ } })
     if (profEl.classList.contains('show')) root.style.overflow = rootOverflowBeforeProfile
     unlockBackground()
     document.documentElement.classList.remove('prof-lock')

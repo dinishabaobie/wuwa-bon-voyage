@@ -132,8 +132,8 @@ try {
 
   await page.getByRole('link', { name: '群像', exact: true }).click()
   await page.locator('.view-overlay.show').waitFor()
-  assert.equal(await page.locator('.bcard').count(), 96)
-  assert.equal(await page.locator('.bcard[role="button"][tabindex="0"]').count(), 96)
+  assert.equal(await page.locator('.bcard').count(), 107)
+  assert.equal(await page.locator('.bcard[role="button"][tabindex="0"]').count(), 107)
   const firstRelation = page.locator('.bcard').first()
   await firstRelation.focus()
   await firstRelation.press('Enter')
