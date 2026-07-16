@@ -36,10 +36,12 @@
   scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.2) transparent;
 }
 .board-inner { position: relative; width: max-content; min-height: 100%; }
-.board-lines {
+.board-lines,
+.board-labels {
   position: absolute; top: 0; left: 0; z-index: 1;
   pointer-events: none; overflow: visible;
 }
+.board-labels { z-index: 3; }
 .board-cols {
   position: relative; z-index: 2;
   display: flex; gap: 1.8rem; align-items: flex-start;
@@ -77,10 +79,16 @@
 .board-inner.focusing .bcard { opacity: .18; }
 .board-inner.focusing .bcard.hl { opacity: 1; border-color: var(--c); }
 .board-inner.focusing .bcard.is-src { box-shadow: 0 0 22px -3px var(--c); }
+.edge-label-bg {
+  fill: rgba(5, 8, 18, .94);
+  stroke-width: 1px;
+  stroke-opacity: .8;
+}
 .edge-label {
-  font-family: var(--font-main); font-size: 11px;
-  font-weight: 500; opacity: .85;
-  paint-order: stroke; stroke: rgba(5,6,15,.9); stroke-width: 3px;
+  font-family: var(--font-main); font-size: 12px;
+  font-weight: 700; opacity: 1; fill: #eef3ff;
+  paint-order: stroke fill;
+  stroke: rgba(5,6,15,.98); stroke-width: 2px; stroke-linejoin: round;
 }
 
 @media (max-width: 640px) {
