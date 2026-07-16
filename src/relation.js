@@ -18,6 +18,7 @@ export function mountRelation(root, onBack) {
       <div class="board-inner">
         <svg class="board-lines" xmlns="http://www.w3.org/2000/svg"></svg>
         <div class="board-cols"></div>
+        <svg class="board-labels" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
       </div>
     </div>`
   root.querySelector('.back').addEventListener('click', (e) => { e.preventDefault(); onBack && onBack() })
@@ -119,10 +120,15 @@ export function mountRelation(root, onBack) {
 
   const binner = root.querySelector('.board-inner')
   const lines = root.querySelector('.board-lines')
+  const labels = root.querySelector('.board-labels')
   const SVGNS = 'http://www.w3.org/2000/svg'
   function sizeLines() {
-    lines.setAttribute('width', binner.scrollWidth)
-    lines.setAttribute('height', binner.scrollHeight)
+    const width = binner.scrollWidth
+    const height = binner.scrollHeight
+    ;[lines, labels].forEach((layer) => {
+      layer.setAttribute('width', width)
+      layer.setAttribute('height', height)
+    })
   }
   sizeLines()
   // 字体加载完成后列宽会变，重新量一次画布
@@ -131,7 +137,7 @@ export function mountRelation(root, onBack) {
     sizeLines()
     // 窗口变化令列重排：锁定中的连线按新坐标重画，悬停态的直接清掉
     if (pinned) drawRelations(pinned)
-    else lines.innerHTML = ''
+    else { lines.innerHTML = ''; labels.innerHTML = '' }
   }
   window.addEventListener('resize', onResize)
 
@@ -142,6 +148,7 @@ export function mountRelation(root, onBack) {
   }
   function drawRelations(id) {
     lines.innerHTML = ''
+    labels.innerHTML = ''
     const m = rel[id]; if (!m) return
     const a = center(cardById[id])
     m.forEach((info, oid) => {
@@ -156,12 +163,27 @@ export function mountRelation(root, onBack) {
       path.setAttribute('stroke-opacity', '.9')
       lines.appendChild(path)
       if (info.label) {
+        const group = document.createElementNS(SVGNS, 'g')
+        group.setAttribute('class', 'edge-label-group')
         const tx = document.createElementNS(SVGNS, 'text')
-        tx.setAttribute('x', mx); tx.setAttribute('y', (a.y + b.y) / 2 - 4)
+        const ty = (a.y + b.y) / 2 - 4
+        tx.setAttribute('x', mx); tx.setAttribute('y', ty)
         tx.setAttribute('text-anchor', 'middle'); tx.setAttribute('class', 'edge-label')
-        tx.setAttribute('fill', info.color)
         tx.textContent = info.label
-        lines.appendChild(tx)
+        group.appendChild(tx)
+        labels.appendChild(group)
+
+        // 标签单独浮在卡片上方，并用底板隔开卡片正文，避免文字被背景内容吞没。
+        const textWidth = tx.getComputedTextLength()
+        const bg = document.createElementNS(SVGNS, 'rect')
+        bg.setAttribute('class', 'edge-label-bg')
+        bg.setAttribute('x', mx - textWidth / 2 - 7)
+        bg.setAttribute('y', ty - 14)
+        bg.setAttribute('width', textWidth + 14)
+        bg.setAttribute('height', 19)
+        bg.setAttribute('rx', '4')
+        bg.setAttribute('stroke', info.color)
+        group.insertBefore(bg, tx)
       }
     })
   }
@@ -180,6 +202,7 @@ export function mountRelation(root, onBack) {
     binner.classList.remove('focusing')
     root.querySelectorAll('.bcard.hl, .bcard.is-src').forEach((c) => c.classList.remove('hl', 'is-src'))
     lines.innerHTML = ''
+    labels.innerHTML = ''
   }
 
   Object.entries(cardById).forEach(([id, card]) => {

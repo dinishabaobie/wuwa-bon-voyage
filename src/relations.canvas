@@ -1101,33 +1101,6 @@
       "label": "伴随 / 身份谜团"
     },
     {
-      "id": "edge_3",
-      "fromNode": "huanglong",
-      "fromSide": "bottom",
-      "toNode": "jinzhou",
-      "toSide": "top",
-      "color": "#2E7D32",
-      "label": "辖域"
-    },
-    {
-      "id": "edge_4",
-      "fromNode": "huanglong",
-      "fromSide": "bottom",
-      "toNode": "mingting",
-      "toSide": "top",
-      "color": "#2E7D32",
-      "label": "辖域"
-    },
-    {
-      "id": "edge_5",
-      "fromNode": "huanglong",
-      "fromSide": "bottom",
-      "toNode": "huaxu",
-      "toSide": "top",
-      "color": "#2E7D32",
-      "label": "辖域"
-    },
-    {
       "id": "edge_6",
       "fromNode": "jinzhou",
       "fromSide": "bottom",
@@ -1155,15 +1128,6 @@
       "label": "师承 / 参事"
     },
     {
-      "id": "edge_9",
-      "fromNode": "jinhsi",
-      "fromSide": "bottom",
-      "toNode": "sanhua",
-      "toSide": "top",
-      "color": "#2E7D32",
-      "label": "近卫 / 护卫"
-    },
-    {
       "id": "edge_10",
       "fromNode": "jinzhou",
       "fromSide": "bottom",
@@ -1182,42 +1146,6 @@
       "label": "统帅"
     },
     {
-      "id": "edge_12",
-      "fromNode": "midnight",
-      "fromSide": "right",
-      "toNode": "mortefi",
-      "toSide": "left",
-      "color": "#777",
-      "label": "技术 / 军备"
-    },
-    {
-      "id": "edge_13",
-      "fromNode": "jinzhou",
-      "fromSide": "bottom",
-      "toNode": "taoqi",
-      "toSide": "top",
-      "color": "#777",
-      "label": "边防工程"
-    },
-    {
-      "id": "edge_14",
-      "fromNode": "huaxu",
-      "fromSide": "right",
-      "toNode": "xiangli",
-      "toSide": "left",
-      "color": "#777",
-      "label": "研究员"
-    },
-    {
-      "id": "edge_15",
-      "fromNode": "huaxu",
-      "fromSide": "right",
-      "toNode": "baizhi",
-      "toSide": "left",
-      "color": "#777",
-      "label": "研究员"
-    },
-    {
       "id": "edge_16",
       "fromNode": "rover",
       "fromSide": "left",
@@ -1227,15 +1155,6 @@
       "label": "早期引导"
     },
     {
-      "id": "edge_18",
-      "fromNode": "rover",
-      "fromSide": "left",
-      "toNode": "jinzhou",
-      "toSide": "bottom",
-      "color": "#6D5DF6",
-      "label": "1.0–1.1 共同抗灾"
-    },
-    {
       "id": "edge_19",
       "fromNode": "rover",
       "fromSide": "left",
@@ -1243,105 +1162,6 @@
       "toSide": "bottom",
       "color": "#6D5DF6",
       "label": "关键盟友"
-    },
-    {
-      "id": "edge_20",
-      "fromNode": "mingting",
-      "fromSide": "bottom",
-      "toNode": "qiuyuan",
-      "toSide": "top",
-      "color": "#777",
-      "label": "政治线"
-    },
-    {
-      "id": "edge_114",
-      "fromNode": "huanglong",
-      "fromSide": "right",
-      "toNode": "mingting",
-      "toSide": "left",
-      "color": "#2E7D32",
-      "label": "首都"
-    },
-    {
-      "id": "edge_115",
-      "fromNode": "jinzhou",
-      "fromSide": "bottom",
-      "toNode": "peace_bureau",
-      "toSide": "top",
-      "color": "#777",
-      "label": "治安系统"
-    },
-    {
-      "id": "edge_116",
-      "fromNode": "peace_bureau",
-      "fromSide": "left",
-      "toNode": "chixia",
-      "toSide": "right",
-      "color": "#777",
-      "label": "巡尉"
-    },
-    {
-      "id": "edge_117",
-      "fromNode": "peace_bureau",
-      "fromSide": "left",
-      "toNode": "yinlin",
-      "toSide": "right",
-      "color": "#777",
-      "label": "前巡尉 / 潜入调查"
-    },
-    {
-      "id": "edge_118",
-      "fromNode": "jinzhou",
-      "fromSide": "bottom",
-      "toNode": "jinzhou_martial",
-      "toSide": "top",
-      "color": "#777",
-      "label": "民间武学"
-    },
-    {
-      "id": "edge_119",
-      "fromNode": "jinzhou_martial",
-      "fromSide": "bottom",
-      "toNode": "jianxin",
-      "toSide": "top",
-      "color": "#777",
-      "label": "游侠 / 武者"
-    },
-    {
-      "id": "edge_120",
-      "fromNode": "jinzhou_martial",
-      "fromSide": "bottom",
-      "toNode": "lingyang",
-      "toSide": "top",
-      "color": "#777",
-      "label": "瑞狮团"
-    },
-    {
-      "id": "edge_121",
-      "fromNode": "jinzhou_martial",
-      "fromSide": "bottom",
-      "toNode": "yuanwu",
-      "toSide": "top",
-      "color": "#777",
-      "label": "渊武拳馆"
-    },
-    {
-      "id": "edge_122",
-      "fromNode": "yuanwu",
-      "fromSide": "left",
-      "toNode": "lingyang",
-      "toSide": "right",
-      "color": "#777",
-      "label": "师叔 / 师承"
-    },
-    {
-      "id": "edge_123",
-      "fromNode": "huaxu",
-      "fromSide": "right",
-      "toNode": "mortefi",
-      "toSide": "left",
-      "color": "#777",
-      "label": "安全科"
     },
     {
       "id": "edge_24",
@@ -1362,24 +1182,6 @@
       "label": "计算系统"
     },
     {
-      "id": "edge_26",
-      "fromNode": "blackshores",
-      "fromSide": "bottom",
-      "toNode": "encore",
-      "toSide": "top",
-      "color": "#1565C0",
-      "label": "客卿"
-    },
-    {
-      "id": "edge_27",
-      "fromNode": "blackshores",
-      "fromSide": "bottom",
-      "toNode": "aalto",
-      "toSide": "top",
-      "color": "#1565C0",
-      "label": "客卿 / 外勤"
-    },
-    {
       "id": "edge_28",
       "fromNode": "blackshores",
       "fromSide": "bottom",
@@ -1387,15 +1189,6 @@
       "toSide": "top",
       "color": "#1565C0",
       "label": "执花 / 旧缘"
-    },
-    {
-      "id": "edge_29",
-      "fromNode": "blackshores",
-      "fromSide": "bottom",
-      "toNode": "galbrena",
-      "toSide": "top",
-      "color": "#1565C0",
-      "label": "追猎关联"
     },
     {
       "id": "edge_30",
@@ -1413,7 +1206,7 @@
       "toNode": "shorekeeper",
       "toSide": "bottom",
       "color": "#6D5DF6",
-      "label": "强绑定关系"
+      "label": "相互守望 / 深层羁绊"
     },
     {
       "id": "edge_32",
@@ -1506,33 +1299,6 @@
       "label": "被卷入两月"
     },
     {
-      "id": "edge_102",
-      "fromNode": "buling",
-      "fromSide": "top",
-      "toNode": "honami",
-      "toSide": "bottom",
-      "color": "#777",
-      "label": "异常频率定位"
-    },
-    {
-      "id": "edge_101",
-      "fromNode": "chisa",
-      "fromSide": "top",
-      "toNode": "blackshores",
-      "toSide": "bottom",
-      "color": "#1565C0",
-      "label": "封闭治疗"
-    },
-    {
-      "id": "edge_82",
-      "fromNode": "startorch",
-      "fromSide": "left",
-      "toNode": "chisa",
-      "toSide": "right",
-      "color": "#777",
-      "label": "学生"
-    },
-    {
       "id": "edge_99",
       "fromNode": "rover",
       "fromSide": "left",
@@ -1540,15 +1306,6 @@
       "toSide": "right",
       "color": "#6D5DF6",
       "label": "共同脱出"
-    },
-    {
-      "id": "edge_104",
-      "fromNode": "rover",
-      "fromSide": "left",
-      "toNode": "honami",
-      "toSide": "right",
-      "color": "#6D5DF6",
-      "label": "进入索诺拉"
     },
     {
       "id": "edge_40",
@@ -1576,33 +1333,6 @@
       "toSide": "left",
       "color": "#EF6C00",
       "label": "复苏 / 直接牵动"
-    },
-    {
-      "id": "edge_43",
-      "fromNode": "rinascita",
-      "fromSide": "bottom",
-      "toNode": "ragunna",
-      "toSide": "top",
-      "color": "#777",
-      "label": "城邦"
-    },
-    {
-      "id": "edge_44",
-      "fromNode": "rinascita",
-      "fromSide": "bottom",
-      "toNode": "septimont",
-      "toSide": "top",
-      "color": "#777",
-      "label": "城邦"
-    },
-    {
-      "id": "edge_45",
-      "fromNode": "rover",
-      "fromSide": "bottom",
-      "toNode": "rinascita",
-      "toSide": "right",
-      "color": "#6D5DF6",
-      "label": "2.0–2.3 主线"
     },
     {
       "id": "edge_46",
@@ -1641,51 +1371,6 @@
       "label": "主座 / 神启者"
     },
     {
-      "id": "edge_50",
-      "fromNode": "orderdeep",
-      "fromSide": "right",
-      "toNode": "phoebe",
-      "toSide": "left",
-      "color": "#777",
-      "label": "侍祭 / 后续祭司线"
-    },
-    {
-      "id": "edge_51",
-      "fromNode": "ragunna",
-      "fromSide": "bottom",
-      "toNode": "montelli",
-      "toSide": "top",
-      "color": "#777",
-      "label": "大族 / 金融"
-    },
-    {
-      "id": "edge_52",
-      "fromNode": "montelli",
-      "fromSide": "right",
-      "toNode": "carlotta",
-      "toSide": "left",
-      "color": "#777",
-      "label": "二小姐 / 继任家主"
-    },
-    {
-      "id": "edge_53",
-      "fromNode": "ragunna",
-      "fromSide": "bottom",
-      "toNode": "fisalia",
-      "toSide": "top",
-      "color": "#777",
-      "label": "大族"
-    },
-    {
-      "id": "edge_54",
-      "fromNode": "fisalia",
-      "fromSide": "right",
-      "toNode": "cantarella",
-      "toSide": "left",
-      "color": "#777",
-      "label": "第36任家主"
-    },
-    {
       "id": "edge_55",
       "fromNode": "orderdeep",
       "fromSide": "bottom",
@@ -1695,23 +1380,6 @@
       "label": "朝圣船流放"
     },
     {
-      "id": "edge_56",
-      "fromNode": "fools",
-      "fromSide": "right",
-      "toNode": "brant",
-      "toSide": "left",
-      "color": "#777",
-      "label": "团长"
-    },
-    {
-      "id": "edge_57",
-      "fromNode": "fools",
-      "fromSide": "right",
-      "toNode": "roccia",
-      "toSide": "left",
-      "color": "#777"
-    },
-    {
       "id": "edge_58",
       "fromNode": "ragunna",
       "fromSide": "left",
@@ -1719,51 +1387,6 @@
       "toSide": "right",
       "color": "#777",
       "label": "圣女 / 黑潮真相线"
-    },
-    {
-      "id": "edge_59",
-      "fromNode": "ragunna",
-      "fromSide": "bottom",
-      "toNode": "ciaccona",
-      "toSide": "top",
-      "color": "#777",
-      "label": "吟游诗人 / 真相传播"
-    },
-    {
-      "id": "edge_61",
-      "fromNode": "rover",
-      "fromSide": "bottom",
-      "toNode": "phoebe",
-      "toSide": "right",
-      "color": "#6D5DF6",
-      "label": "2.1 信仰盟友"
-    },
-    {
-      "id": "edge_62",
-      "fromNode": "rover",
-      "fromSide": "bottom",
-      "toNode": "carlotta",
-      "toSide": "right",
-      "color": "#6D5DF6",
-      "label": "2.0 金库线"
-    },
-    {
-      "id": "edge_63",
-      "fromNode": "rover",
-      "fromSide": "bottom",
-      "toNode": "cantarella",
-      "toSide": "right",
-      "color": "#6D5DF6",
-      "label": "2.2 家族 / 梦境"
-    },
-    {
-      "id": "edge_64",
-      "fromNode": "rover",
-      "fromSide": "bottom",
-      "toNode": "fools",
-      "toSide": "right",
-      "color": "#6D5DF6",
-      "label": "2.1–2.3 救赎线"
     },
     {
       "id": "edge_65",
@@ -1784,51 +1407,6 @@
       "label": "谕女 / 预言线"
     },
     {
-      "id": "edge_67",
-      "fromNode": "septimont",
-      "fromSide": "bottom",
-      "toNode": "lupa",
-      "toSide": "top",
-      "color": "#777",
-      "label": "角斗士 / 冠军赛"
-    },
-    {
-      "id": "edge_68",
-      "fromNode": "septimont",
-      "fromSide": "bottom",
-      "toNode": "house_silva",
-      "toSide": "top",
-      "color": "#777",
-      "label": "家族 / 角斗线"
-    },
-    {
-      "id": "edge_69",
-      "fromNode": "septimont",
-      "fromSide": "bottom",
-      "toNode": "tetragon",
-      "toSide": "top",
-      "color": "#777",
-      "label": "谕女机构"
-    },
-    {
-      "id": "edge_127",
-      "fromNode": "tetragon",
-      "fromSide": "right",
-      "toNode": "iuno",
-      "toSide": "left",
-      "color": "#777",
-      "label": "谕女"
-    },
-    {
-      "id": "edge_70",
-      "fromNode": "rover",
-      "fromSide": "bottom",
-      "toNode": "septimont",
-      "toSide": "left",
-      "color": "#6D5DF6",
-      "label": "2.4–2.7 七丘线"
-    },
-    {
       "id": "edge_71",
       "fromNode": "septimont",
       "fromSide": "top",
@@ -1836,15 +1414,6 @@
       "toSide": "bottom",
       "color": "#777",
       "label": "同属黎那汐塔 / 英雄与信仰分化"
-    },
-    {
-      "id": "edge_72",
-      "fromNode": "roi",
-      "fromSide": "right",
-      "toNode": "lahai",
-      "toSide": "left",
-      "color": "#777",
-      "label": "所在极地"
     },
     {
       "id": "edge_73",
@@ -1865,51 +1434,6 @@
       "label": "建设"
     },
     {
-      "id": "edge_75",
-      "fromNode": "lahai",
-      "fromSide": "bottom",
-      "toNode": "roya",
-      "toSide": "top",
-      "color": "#777",
-      "label": "原住民"
-    },
-    {
-      "id": "edge_76",
-      "fromNode": "roya",
-      "fromSide": "right",
-      "toNode": "sigrika",
-      "toSide": "left",
-      "color": "#777",
-      "label": "罗伊族少女"
-    },
-    {
-      "id": "edge_77",
-      "fromNode": "startorch",
-      "fromSide": "right",
-      "toNode": "lyn",
-      "toSide": "left",
-      "color": "#777",
-      "label": "预科学生"
-    },
-    {
-      "id": "edge_78",
-      "fromNode": "startorch",
-      "fromSide": "right",
-      "toNode": "monin",
-      "toSide": "left",
-      "color": "#777",
-      "label": "教授"
-    },
-    {
-      "id": "edge_79",
-      "fromNode": "startorch",
-      "fromSide": "bottom",
-      "toNode": "lucilla",
-      "toSide": "top",
-      "color": "#777",
-      "label": "学院长"
-    },
-    {
       "id": "edge_80",
       "fromNode": "startorch",
       "fromSide": "bottom",
@@ -1917,24 +1441,6 @@
       "toSide": "top",
       "color": "#777",
       "label": "隧者适格者"
-    },
-    {
-      "id": "edge_81",
-      "fromNode": "startorch",
-      "fromSide": "bottom",
-      "toNode": "luuk",
-      "toSide": "top",
-      "color": "#777",
-      "label": "主执校医"
-    },
-    {
-      "id": "edge_105",
-      "fromNode": "startorch",
-      "fromSide": "bottom",
-      "toNode": "sigrika",
-      "toSide": "top",
-      "color": "#777",
-      "label": "助教"
     },
     {
       "id": "edge_106",
@@ -1946,31 +1452,13 @@
       "label": "学生身份（伪）"
     },
     {
-      "id": "edge_83",
-      "fromNode": "rover",
-      "fromSide": "bottom",
-      "toNode": "lahai",
-      "toSide": "top",
-      "color": "#6D5DF6",
-      "label": "3.0–3.3 主线"
-    },
-    {
       "id": "edge_85",
       "fromNode": "rover",
       "fromSide": "bottom",
       "toNode": "aemeath",
       "toSide": "top",
       "color": "1",
-      "label": "3.1 主线"
-    },
-    {
-      "id": "edge_86",
-      "fromNode": "rover",
-      "fromSide": "bottom",
-      "toNode": "sigrika",
-      "toSide": "top",
-      "color": "#6D5DF6",
-      "label": "3.2 学院暗面"
+      "label": "互为救赎 / 因果闭环"
     },
     {
       "id": "edge_87",
@@ -1991,114 +1479,6 @@
       "label": "因其诞生"
     },
     {
-      "id": "edge_89",
-      "fromNode": "daniya",
-      "fromSide": "bottom",
-      "toNode": "hixue",
-      "toSide": "top",
-      "color": "#777",
-      "label": "3.3 主线交汇"
-    },
-    {
-      "id": "edge_107",
-      "fromNode": "hixue",
-      "fromSide": "bottom",
-      "toNode": "darkplain",
-      "toSide": "top",
-      "color": "#777",
-      "label": "3.3 黯原线"
-    },
-    {
-      "id": "edge_108",
-      "fromNode": "daniya",
-      "fromSide": "bottom",
-      "toNode": "darkplain",
-      "toSide": "top",
-      "color": "#777",
-      "label": "卷入黯原"
-    },
-    {
-      "id": "edge_109",
-      "fromNode": "hixue",
-      "fromSide": "left",
-      "toNode": "special",
-      "toSide": "right",
-      "color": "#777",
-      "label": "成员"
-    },
-    {
-      "id": "edge_110",
-      "fromNode": "hixue",
-      "fromSide": "left",
-      "toNode": "ashihara",
-      "toSide": "right",
-      "color": "#777",
-      "label": "苇原出身"
-    },
-    {
-      "id": "edge_90",
-      "fromNode": "blackshores",
-      "fromSide": "bottom",
-      "toNode": "lahai",
-      "toSide": "top",
-      "color": "#777",
-      "label": "鸣式监测 / 外部关注"
-    },
-    {
-      "id": "edge_21",
-      "fromNode": "lollo",
-      "fromSide": "right",
-      "toNode": "lumi",
-      "toSide": "left",
-      "color": "#777",
-      "label": "成员"
-    },
-    {
-      "id": "edge_22",
-      "fromNode": "lollo",
-      "fromSide": "top",
-      "toNode": "rinascita",
-      "toSide": "top",
-      "color": "#777",
-      "label": "跨区域扩张"
-    },
-    {
-      "id": "edge_23",
-      "fromNode": "lollo",
-      "fromSide": "top",
-      "toNode": "huanglong",
-      "toSide": "bottom",
-      "color": "#777",
-      "label": "瑝珑业务网络"
-    },
-    {
-      "id": "edge_91",
-      "fromNode": "newfed",
-      "fromSide": "right",
-      "toNode": "lahai",
-      "toSide": "left",
-      "color": "#777",
-      "label": "科研 / 企业背景"
-    },
-    {
-      "id": "edge_92",
-      "fromNode": "newfed",
-      "fromSide": "right",
-      "toNode": "ghost",
-      "toSide": "left",
-      "color": "#777",
-      "label": "无法地带 / 雇佣兵"
-    },
-    {
-      "id": "edge_93",
-      "fromNode": "ghost",
-      "fromSide": "right",
-      "toNode": "calcharo",
-      "toSide": "left",
-      "color": "#777",
-      "label": "团长"
-    },
-    {
       "id": "edge_94",
       "fromNode": "savantae",
       "fromSide": "top",
@@ -2106,51 +1486,6 @@
       "toSide": "bottom",
       "color": "#777",
       "label": "悲鸣 / 无音区研究遗产"
-    },
-    {
-      "id": "edge_95",
-      "fromNode": "newfed",
-      "fromSide": "top",
-      "toNode": "blackshores",
-      "toSide": "bottom",
-      "color": "#777",
-      "label": "国际联系"
-    },
-    {
-      "id": "edge_111",
-      "fromNode": "newfed",
-      "fromSide": "top",
-      "toNode": "encore",
-      "toSide": "bottom",
-      "color": "#777",
-      "label": "出身"
-    },
-    {
-      "id": "edge_112",
-      "fromNode": "newfed",
-      "fromSide": "top",
-      "toNode": "aalto",
-      "toSide": "bottom",
-      "color": "#777",
-      "label": "出身"
-    },
-    {
-      "id": "edge_96",
-      "fromNode": "newfed",
-      "fromSide": "top",
-      "toNode": "fract",
-      "toSide": "bottom",
-      "color": "#777",
-      "label": "潜在冲突 / 阴影线"
-    },
-    {
-      "id": "edge_113",
-      "fromNode": "special",
-      "fromSide": "top",
-      "toNode": "spacetrek",
-      "toSide": "left",
-      "color": "#777",
-      "label": "深空联合下设"
     },
     {
       "id": "d34f544d10c610f8",
@@ -2167,15 +1502,7 @@
       "toNode": "daniya",
       "toSide": "top",
       "color": "#8E24AA",
-      "label": "娜波摩好友线"
-    },
-    {
-      "id": "a1e5bbe7d2719f0e",
-      "fromNode": "carlotta",
-      "fromSide": "right",
-      "toNode": "zani",
-      "toSide": "left",
-      "label": "银行牛马/ 护卫导游"
+      "label": "伪装娜波摩 / 渗透学院"
     },
     {
       "id": "edge_grand_sigrika_nivora",
@@ -2184,7 +1511,7 @@
       "toNode": "sigrika",
       "toSide": "top",
       "color": "#8E24AA",
-      "label": "娜波摩好友线"
+      "label": "伪装娜波摩 / 渗透学院"
     },
     {
       "id": "edge_threnodian_leviathan",
@@ -2241,15 +1568,6 @@
       "label": "黑潮剧本 / 协助复苏"
     },
     {
-      "id": "edge_128",
-      "fromNode": "bozi",
-      "fromSide": "left",
-      "toNode": "honami",
-      "toSide": "right",
-      "color": "#777",
-      "label": "吉祥物 / 守护神"
-    },
-    {
       "id": "edge_129",
       "fromNode": "chengxia",
       "fromSide": "top",
@@ -2266,24 +1584,6 @@
       "toSide": "right",
       "color": "#777",
       "label": "协助寻出口"
-    },
-    {
-      "id": "edge_131",
-      "fromNode": "chengxia",
-      "fromSide": "top",
-      "toNode": "blackshores",
-      "toSide": "right",
-      "color": "#1565C0",
-      "label": "精英执花"
-    },
-    {
-      "id": "edge_132",
-      "fromNode": "buling",
-      "fromSide": "top",
-      "toNode": "blackshores",
-      "toSide": "bottom",
-      "color": "#1565C0",
-      "label": "客卿"
     },
     {
       "id": "e_threnodian_wx",
@@ -2312,20 +1612,68 @@
       "color": "#EF6C00",
       "label": "1.x 率众击败"
     },
-    {"id":"e_dreamzhou_xuanfang","fromNode":"dreamzhou","fromSide":"right","toNode":"xuanfang","toSide":"left","color":"#777","label":"3.5 开放区域"},
-    {"id":"e_xuanfang_city","fromNode":"xuanfang","fromSide":"right","toNode":"xuanfang_city","toSide":"left","color":"#777","label":"核心城池"},
-    {"id":"e_xuanfang_houxuan","fromNode":"xuanfang","fromSide":"right","toNode":"houxuan_army","toSide":"left","color":"#777","label":"镇守边境"},
-    {"id":"e_dreamzhou_fox","fromNode":"dreamzhou","fromSide":"bottom","toNode":"heart_moon_fox","toSide":"top","color":"#00838F","label":"岁主"},
-    {"id":"e_fox_suisui","fromNode":"heart_moon_fox","fromSide":"right","toNode":"suisui","toSide":"left","color":"#00838F","label":"试炼 / 共鸣线"},
-    {"id":"e_suisui_yangyang","fromNode":"suisui","fromSide":"right","toNode":"yangyang_xuanling","toSide":"left","color":"#6D5DF6","label":"姐妹"},
-    {"id":"e_rover_dreamzhou","fromNode":"rover","fromSide":"left","toNode":"dreamzhou","toSide":"right","color":"#6D5DF6","label":"3.5 玄方主线"},
-    {"id":"e_rover_suisui","fromNode":"rover","fromSide":"left","toNode":"suisui","toSide":"right","color":"#6D5DF6","label":"共赴梦州 / 寻找秧秧"},
-    {"id":"e_rover_yangyang_x","fromNode":"rover","fromSide":"left","toNode":"yangyang_xuanling","toSide":"right","color":"#6D5DF6","label":"3.5 二次共鸣"},
-    {"id":"e_dream_qingxiao","fromNode":"dreamzhou","fromSide":"bottom","toNode":"qingxiao","toSide":"top","color":"#777","label":"梦州阵营"},
-    {"id":"e_dream_jingran","fromNode":"dreamzhou","fromSide":"bottom","toNode":"jingran","toSide":"top","color":"#777","label":"梦州阵营"},
-    {"id":"e_dream_suoming","fromNode":"dreamzhou","fromSide":"bottom","toNode":"suoming","toSide":"top","color":"#777","label":"梦州阵营"},
-    {"id":"e_dream_xin","fromNode":"dreamzhou","fromSide":"bottom","toNode":"xin_dreamzhou","toSide":"top","color":"#777","label":"梦州阵营"},
-    {"id":"e_xin_fox","fromNode":"xin_dreamzhou","fromSide":"left","toNode":"heart_moon_fox","toSide":"right","color":"#00838F","label":"心月狐线索"},
-    {"id":"e_houxuan_qingxiao","fromNode":"houxuan_army","fromSide":"bottom","toNode":"qingxiao","toSide":"top","color":"#2E7D32","label":"玄方军势线"}
+    {
+      "id": "e_dreamzhou_fox",
+      "fromNode": "dreamzhou",
+      "fromSide": "bottom",
+      "toNode": "heart_moon_fox",
+      "toSide": "top",
+      "color": "#00838F",
+      "label": "岁主"
+    },
+    {
+      "id": "e_fox_suisui",
+      "fromNode": "heart_moon_fox",
+      "fromSide": "right",
+      "toNode": "suisui",
+      "toSide": "left",
+      "color": "#00838F",
+      "label": "试炼 / 共鸣线"
+    },
+    {
+      "id": "e_suisui_yangyang",
+      "fromNode": "suisui",
+      "fromSide": "right",
+      "toNode": "yangyang_xuanling",
+      "toSide": "left",
+      "color": "#6D5DF6",
+      "label": "姐妹"
+    },
+    {
+      "id": "e_rover_suisui",
+      "fromNode": "rover",
+      "fromSide": "left",
+      "toNode": "suisui",
+      "toSide": "right",
+      "color": "#6D5DF6",
+      "label": "共赴梦州 / 寻找秧秧"
+    },
+    {
+      "id": "e_rover_yangyang_x",
+      "fromNode": "rover",
+      "fromSide": "left",
+      "toNode": "yangyang_xuanling",
+      "toSide": "right",
+      "color": "#6D5DF6",
+      "label": "3.5 二次共鸣"
+    },
+    {
+      "id": "edge_rover_cartethyia_core",
+      "fromNode": "rover",
+      "fromSide": "bottom",
+      "toNode": "cartethyia",
+      "toSide": "top",
+      "color": "#6D5DF6",
+      "label": "黑潮主线 / 命运共鸣"
+    },
+    {
+      "id": "edge_rover_camellya_core",
+      "fromNode": "rover",
+      "fromSide": "top",
+      "toNode": "camellya",
+      "toSide": "bottom",
+      "color": "#6D5DF6",
+      "label": "命运牵引 / 旧缘"
+    }
   ]
 }
