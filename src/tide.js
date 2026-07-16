@@ -1,5 +1,6 @@
 import './view-chrome.css' // 返回按钮等通用外壳
 import './tide.css'
+import { TIMELINE_EVENTS, TIMELINE_PHASES } from './timeline.js'
 
 // ── 推演档案数据：新增版本解析只需往这里加一条 ────────────────────
 // body = 接入语 + 推演结论 + 各章节 + 收束（不含 meta / 标题，由模板生成）
@@ -258,7 +259,7 @@ const ENTRIES = [
   },
 ]
 
-// 观潮 · 版本推演档案。目录 + 详情。渲染进 root（root 同时是滚动容器）。
+// 观潮 · 航程纪年 + 版本推演档案。渲染进 root（root 同时是滚动容器）。
 export function mountTide(root, onBack) {
   root.innerHTML = `
     <a class="back" href="./index.html#home"><span aria-hidden="true">◂</span> 返回泰提斯终端</a>
@@ -266,16 +267,172 @@ export function mountTide(root, onBack) {
   const stage = root.querySelector('.tide-stage')
   root.querySelector('.back').addEventListener('click', (e) => { e.preventDefault(); onBack && onBack() })
 
-  function showIndex() {
-    root.scrollTop = 0
-    stage.innerHTML = `
+  let activeView = 'timeline'
+  let activePhase = 'all'
+  let returnView = 'timeline'
+
+  const phaseById = (id) => TIMELINE_PHASES.find((phase) => phase.id === id)
+  const phaseCount = (id) => id === 'all'
+    ? TIMELINE_EVENTS.length
+    : TIMELINE_EVENTS.filter((event) => event.phase === id).length
+
+  function renderHeader(view) {
+    return `
       <header class="tide-head">
         <p class="tide-kicker">TETHYS · TIDE ARCHIVE</p>
         <h1 class="tide-title">观潮</h1>
         <p class="tide-sub">版本回溯 · 因果推演 · 残响归档</p>
       </header>
+      <nav class="tide-modebar" aria-label="观潮视图">
+        <button type="button" class="tide-mode-btn ${view === 'timeline' ? 'is-active' : ''}" data-view="timeline" aria-pressed="${view === 'timeline'}">
+          <span>航程纪年</span><em>${String(TIMELINE_EVENTS.length).padStart(2, '0')}</em>
+        </button>
+        <button type="button" class="tide-mode-btn ${view === 'archive' ? 'is-active' : ''}" data-view="archive" aria-pressed="${view === 'archive'}">
+          <span>深度推演</span><em>${String(ENTRIES.length).padStart(2, '0')}</em>
+        </button>
+      </nav>`
+  }
+
+  function bindModebar() {
+    stage.querySelectorAll('.tide-mode-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (button.dataset.view === activeView) return
+        button.dataset.view === 'timeline' ? showTimeline() : showArchive()
+      })
+    })
+  }
+
+  function renderTimelineEvent(event) {
+    const eventIndex = TIMELINE_EVENTS.indexOf(event)
+    const phase = phaseById(event.phase)
+    const analysisIndex = event.analysisVer
+      ? ENTRIES.findIndex((entry) => entry.ver === event.analysisVer)
+      : -1
+    const panelId = `tide-event-${event.id}`
+    const side = eventIndex % 2 === 0 ? 'left' : 'right'
+
+    return `
+      <li class="tide-timeline-item is-${side}">
+        <span class="tide-timeline-node" aria-hidden="true"><i></i></span>
+        <article class="tide-event ${analysisIndex > -1 ? 'has-analysis' : ''}">
+          ${analysisIndex > -1 ? '<span class="tide-event-flag">DEEP ARCHIVE</span>' : ''}
+          <button type="button" class="tide-event-toggle" aria-expanded="false" aria-controls="${panelId}">
+            <span class="tide-event-topline">
+              <span class="tide-event-version">${event.version.startsWith('TEST') || event.version.startsWith('PRE') ? event.version : `VER ${event.version}`}</span>
+              <time datetime="${event.date.slice(0, 10).replaceAll('.', '-')}">${event.date}</time>
+            </span>
+            <span class="tide-event-phase">${phase.label} · ${phase.range}</span>
+            <span class="tide-event-title">${event.title}</span>
+            ${event.signal ? `<span class="tide-event-signal">${event.signal}</span>` : ''}
+            <span class="tide-event-teaser">${event.summary}</span>
+            <span class="tide-event-action"><span>展开事件读数</span><i aria-hidden="true">＋</i></span>
+          </button>
+          <div class="tide-event-panel" id="${panelId}" hidden>
+            <dl>
+              ${event.meta.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')}
+            </dl>
+            ${analysisIndex > -1 ? `
+              <button type="button" class="tide-deep-link" data-entry="${analysisIndex}">
+                <span>TETHYS · CAUSAL ANALYSIS</span>
+                进入深度推演 <i aria-hidden="true">→</i>
+              </button>` : ''}
+          </div>
+        </article>
+      </li>`
+  }
+
+  function bindTimelineCards() {
+    const setExpanded = (toggle, expanded) => {
+      const panel = stage.querySelector(`#${toggle.getAttribute('aria-controls')}`)
+      toggle.setAttribute('aria-expanded', String(expanded))
+      panel.hidden = !expanded
+      toggle.querySelector('.tide-event-action span').textContent = expanded ? '收束事件读数' : '展开事件读数'
+      toggle.querySelector('.tide-event-action i').textContent = expanded ? '−' : '＋'
+    }
+
+    stage.querySelectorAll('.tide-event-toggle').forEach((toggle) => {
+      toggle.addEventListener('click', () => {
+        const willExpand = toggle.getAttribute('aria-expanded') !== 'true'
+        stage.querySelectorAll('.tide-event-toggle[aria-expanded="true"]').forEach((openToggle) => {
+          if (openToggle !== toggle) setExpanded(openToggle, false)
+        })
+        setExpanded(toggle, willExpand)
+      })
+    })
+
+    stage.querySelectorAll('.tide-deep-link').forEach((button) => {
+      button.addEventListener('click', () => {
+        returnView = 'timeline'
+        showEntry(+button.dataset.entry)
+      })
+    })
+  }
+
+  function applyPhase(phaseId) {
+    activePhase = phaseId
+    const visibleEvents = phaseId === 'all'
+      ? TIMELINE_EVENTS
+      : TIMELINE_EVENTS.filter((event) => event.phase === phaseId)
+
+    stage.querySelectorAll('.tide-filter').forEach((button) => {
+      const active = button.dataset.phase === phaseId
+      button.classList.toggle('is-active', active)
+      button.setAttribute('aria-pressed', String(active))
+    })
+    stage.querySelector('.tide-timeline-readout').textContent = `显示 ${visibleEvents.length} / ${TIMELINE_EVENTS.length} 条记录`
+    stage.querySelector('.tide-timeline').innerHTML = visibleEvents.map(renderTimelineEvent).join('')
+    bindTimelineCards()
+  }
+
+  function showTimeline() {
+    activeView = 'timeline'
+    root.scrollTop = 0
+    stage.innerHTML = `
+      ${renderHeader('timeline')}
+      <section class="tide-chronicle" aria-labelledby="tide-chronicle-title">
+        <div class="tide-chronicle-intro">
+          <div>
+            <p class="tide-section-code">CHRONICLE // 001—${String(TIMELINE_EVENTS.length).padStart(3, '0')}</p>
+            <h2 id="tide-chronicle-title">航程纪年</h2>
+            <p>从第一次技术测试，到梦州玄方城。版本不是编号，而是漂泊者与文明共同留下的坐标。</p>
+          </div>
+          <div class="tide-chronicle-stats" aria-label="时间轴统计">
+            <span><b>${TIMELINE_EVENTS.length}</b> VERSION NODES</span>
+            <span><b>${ENTRIES.length}</b> DEEP ARCHIVES</span>
+          </div>
+        </div>
+        <div class="tide-filterbar">
+          <div class="tide-filters" aria-label="按篇章筛选">
+            ${TIMELINE_PHASES.map((phase) => `
+              <button type="button" class="tide-filter" data-phase="${phase.id}" aria-pressed="false">
+                <span>${phase.label}</span><em>${String(phaseCount(phase.id)).padStart(2, '0')}</em>
+              </button>`).join('')}
+          </div>
+          <p class="tide-timeline-readout" aria-live="polite"></p>
+        </div>
+        <ol class="tide-timeline" aria-label="鸣潮版本时间轴"></ol>
+      </section>`
+
+    bindModebar()
+    stage.querySelectorAll('.tide-filter').forEach((button) => {
+      button.addEventListener('click', () => applyPhase(button.dataset.phase))
+    })
+    applyPhase(activePhase)
+  }
+
+  function showArchive() {
+    activeView = 'archive'
+    root.scrollTop = 0
+    stage.innerHTML = `
+      ${renderHeader('archive')}
       <div class="tide-index">
-        <p class="tide-index-hint">// 选择一则记录，展开推演</p>
+        <div class="tide-index-heading">
+          <div>
+            <p class="tide-section-code">CAUSAL ANALYSIS // VERIFIED</p>
+            <h2>深度推演</h2>
+          </div>
+          <p class="tide-index-hint">// 选择一则记录，展开完整因果链</p>
+        </div>
         ${ENTRIES.map((e, i) => `
           <button class="tide-card" data-i="${i}">
             <span class="tide-card-ver">VER ${e.ver}</span>
@@ -287,15 +444,19 @@ export function mountTide(root, onBack) {
             <span class="tide-card-go" aria-hidden="true">→</span>
           </button>`).join('')}
       </div>`
+    bindModebar()
     stage.querySelectorAll('.tide-card').forEach((c) =>
-      c.addEventListener('click', () => showEntry(+c.dataset.i)))
+      c.addEventListener('click', () => {
+        returnView = 'archive'
+        showEntry(+c.dataset.i)
+      }))
   }
 
   function showEntry(i) {
     const e = ENTRIES[i]
     root.scrollTop = 0
     stage.innerHTML = `
-      <a class="tide-toindex" href="#"><span aria-hidden="true">◂</span> 观潮 · 目录</a>
+      <a class="tide-toindex" href="#"><span aria-hidden="true">◂</span> ${returnView === 'timeline' ? '观潮 · 航程纪年' : '观潮 · 推演目录'}</a>
       <div class="tide-doc">
         <div class="tide-meta">
           <span class="tide-ver">VER ${e.ver}</span>
@@ -306,9 +467,12 @@ export function mountTide(root, onBack) {
         ${e.body}
         <p class="tide-end">推演 VER ${e.ver} · 归档完毕　<b>// TETHYS</b></p>
       </div>`
-    stage.querySelector('.tide-toindex').addEventListener('click', (ev) => { ev.preventDefault(); showIndex() })
+    stage.querySelector('.tide-toindex').addEventListener('click', (ev) => {
+      ev.preventDefault()
+      returnView === 'timeline' ? showTimeline() : showArchive()
+    })
   }
 
-  showIndex()
+  showTimeline()
   return () => {}
 }

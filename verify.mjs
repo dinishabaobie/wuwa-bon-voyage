@@ -127,6 +127,11 @@ try {
 
   await page.getByRole('link', { name: '观潮', exact: true }).click()
   await page.locator('.view-overlay.show').waitFor()
+  assert.equal(await page.locator('.tide-timeline-item').count(), 21)
+  const firstTimelineEvent = page.locator('.tide-event-toggle').first()
+  await firstTimelineEvent.click()
+  assert.equal(await firstTimelineEvent.getAttribute('aria-expanded'), 'true')
+  await page.locator('.tide-mode-btn[data-view="archive"]').click()
   assert.equal(await page.locator('.tide-card').count(), 2)
   await closeModule(page)
 
@@ -140,7 +145,7 @@ try {
   assert.equal(await firstRelation.evaluate((element) => element.classList.contains('is-src')), true)
 
   assert.deepEqual(consoleErrors, [], `browser errors:\n${consoleErrors.join('\n')}`)
-  console.log('PASS: navigation, module content, modal focus, and observation trackpad scrolling')
+  console.log('PASS: navigation, timeline, module content, modal focus, and observation trackpad scrolling')
 } finally {
   await browser?.close()
   server.kill('SIGTERM')
