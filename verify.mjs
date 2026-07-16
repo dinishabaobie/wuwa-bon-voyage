@@ -134,7 +134,7 @@ try {
   await page.locator('.tide-mode-btn[data-view="archive"]').click()
   assert.equal(await page.locator('.tide-card').count(), 2)
   await page.locator('.tide-mode-btn[data-view="chronology"]').click()
-  assert.equal(await page.locator('.tide-chrono-item').count(), 40)
+  assert.equal(await page.locator('.tide-chrono-item').count(), 42)
   assert.equal(await page.locator('.tide-chrono-item .tide-deep-link').count(), 2)
   await page.locator('.tide-filter[data-era="present"]').click()
   assert.equal(await page.locator('.tide-chrono-item').count(), 14)
