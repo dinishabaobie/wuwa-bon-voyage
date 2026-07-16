@@ -6,7 +6,7 @@ export const CHRONOLOGY_ERAS = [
   { id: 'ancient', label: '远古纪元', range: '悲鸣之始', color: '#b39ddb' },
   { id: 'historic', label: '建城纪年', range: '文明立足', color: '#64b5f6' },
   { id: 'recent', label: '近世残响', range: '灾厄与伏笔', color: '#ffb74d' },
-  { id: 'present', label: '本次苏醒', range: '进行中', color: '#81c784' },
+  { id: 'present', label: '本次苏醒', range: '当前航程', color: '#81c784' },
 ]
 
 export const CHRONOLOGY_EVENTS = [
@@ -169,6 +169,7 @@ export const CHRONOLOGY_EVENTS = [
   },
   {
     id: 'present-xuanfang', era: 'present', epoch: '旅程 · 梦州', title: '玄方地界',
+    signal: '进行中 · 当前坐标',
     body: '漂泊者为寻找失踪的秧秧，与穗穗前往梦州玄方地界，查明并平息机傀暴乱。危机解除后，秧秧留在玄方协助军民，暂代后玄骑使一职。',
   },
 ]

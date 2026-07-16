@@ -87,3 +87,12 @@
   .board-wrap { padding-top: 9rem; }
   .board-col { width: 220px; }
 }
+
+/* ---------- 移动端：页头让位给返回/音乐按钮 ---------- */
+@media (max-width: 640px) {
+  .rel-head { top: 4.6rem; }
+  .rel-head::before { height: 13rem; }
+  .rel-kicker { letter-spacing: .34em; }
+  .rel-hint { padding: 0 1.2rem; line-height: 1.7; }
+  .board-wrap { padding-top: 11.5rem; }
+}

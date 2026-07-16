@@ -747,6 +747,43 @@ button:focus-visible,
 .view-overlay.show { opacity: 1; }
 .view-overlay.prof-lock { overflow: hidden; }
 
+/* ---------- 移动端：版本章节折叠为单栏 ---------- */
+@media (max-width: 860px) {
+  #timeline { display: none; } /* 桌面右缘章节导航：小屏隐藏 */
+
+  .chapter { padding: 9vh 7vw; }
+  .chapter-inner,
+  .chapter:nth-child(even) .chapter-inner,
+  .chapter--bigfig .chapter-inner,
+  .chapter--bigfig:nth-child(even) .chapter-inner {
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+  }
+  .chapter:nth-child(even) .ch-text { order: 1; }
+  .chapter:nth-child(even) .ch-figure { order: 2; }
+
+  .ver-num { top: -11vh; left: -2vw; font-size: clamp(4.2rem, 19vw, 7.5rem); }
+  .chapter:nth-child(even) .ver-num { left: auto; right: -2vw; }
+  #cyberpunk .ver-num { font-size: clamp(2rem, 8.5vw, 4rem); }
+
+  #v30 .ch-title, #v31 .ch-title, #v32 .ch-title,
+  #v33 .ch-title, #v34 .ch-title, #anyuan .ch-title { white-space: normal; }
+  .ch-title { margin-bottom: 1.3rem; }
+  .ch-kicker { letter-spacing: .34em; margin-bottom: 1.1rem; }
+  .ch-desc { line-height: 1.95; }
+
+  .ch-status { flex-wrap: wrap; row-gap: .55rem; }
+  .ch-metrics { gap: .8rem 1.4rem; }
+
+  .chapter--figfull .figfull-cols { flex-direction: column; gap: 2rem; margin-top: 1rem; }
+  .chapter--figfull .figfull-status,
+  .chapter--figfull .ch-aside { flex: none; width: 100%; min-width: 0; margin-top: 0; }
+  .ch-wide { margin-top: 1rem; }
+
+  #ending { padding: 0 1.6rem; }
+  .end-figure { width: min(88vw, 980px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;
