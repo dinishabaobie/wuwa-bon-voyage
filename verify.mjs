@@ -133,6 +133,11 @@ try {
   assert.equal(await firstTimelineEvent.getAttribute('aria-expanded'), 'true')
   await page.locator('.tide-mode-btn[data-view="archive"]').click()
   assert.equal(await page.locator('.tide-card').count(), 2)
+  await page.locator('.tide-mode-btn[data-view="chronology"]').click()
+  assert.equal(await page.locator('.tide-chrono-item').count(), 31)
+  assert.equal(await page.locator('.tide-chrono-item .tide-deep-link').count(), 2)
+  await page.locator('.tide-filter[data-era="present"]').click()
+  assert.equal(await page.locator('.tide-chrono-item').count(), 14)
   await closeModule(page)
 
   await page.getByRole('link', { name: '群像', exact: true }).click()

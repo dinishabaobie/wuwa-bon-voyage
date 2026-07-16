@@ -1,4 +1,4 @@
-// 观潮 · 航程纪年数据。内容整理自「事件时间轴」白板。
+// 观潮 · 航程纪年数据。内容整理自「⏱️ 版本时间轴」白板（现实版本纪年）。
 export const TIMELINE_PHASES = [
   { id: 'all', label: '全部记录', range: '2022—2026' },
   { id: 'test', label: '测试纪', range: 'PRELUDE' },

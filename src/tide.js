@@ -1,6 +1,7 @@
 import './view-chrome.css' // 返回按钮等通用外壳
 import './tide.css'
 import { TIMELINE_EVENTS, TIMELINE_PHASES } from './timeline.js'
+import { CHRONOLOGY_EVENTS, CHRONOLOGY_ERAS } from './chronology.js'
 
 // ── 推演档案数据：新增版本解析只需往这里加一条 ────────────────────
 // body = 接入语 + 推演结论 + 各章节 + 收束（不含 meta / 标题，由模板生成）
@@ -269,12 +270,18 @@ export function mountTide(root, onBack) {
 
   let activeView = 'timeline'
   let activePhase = 'all'
+  let activeEra = 'all'
   let returnView = 'timeline'
 
   const phaseById = (id) => TIMELINE_PHASES.find((phase) => phase.id === id)
   const phaseCount = (id) => id === 'all'
     ? TIMELINE_EVENTS.length
     : TIMELINE_EVENTS.filter((event) => event.phase === id).length
+
+  const eraById = (id) => CHRONOLOGY_ERAS.find((era) => era.id === id)
+  const eraCount = (id) => id === 'all'
+    ? CHRONOLOGY_EVENTS.length
+    : CHRONOLOGY_EVENTS.filter((event) => event.era === id).length
 
   function renderHeader(view) {
     return `
@@ -287,6 +294,9 @@ export function mountTide(root, onBack) {
         <button type="button" class="tide-mode-btn ${view === 'timeline' ? 'is-active' : ''}" data-view="timeline" aria-pressed="${view === 'timeline'}">
           <span>航程纪年</span><em>${String(TIMELINE_EVENTS.length).padStart(2, '0')}</em>
         </button>
+        <button type="button" class="tide-mode-btn ${view === 'chronology' ? 'is-active' : ''}" data-view="chronology" aria-pressed="${view === 'chronology'}">
+          <span>溯洄纪年</span><em>${String(CHRONOLOGY_EVENTS.length).padStart(2, '0')}</em>
+        </button>
         <button type="button" class="tide-mode-btn ${view === 'archive' ? 'is-active' : ''}" data-view="archive" aria-pressed="${view === 'archive'}">
           <span>深度推演</span><em>${String(ENTRIES.length).padStart(2, '0')}</em>
         </button>
@@ -294,10 +304,11 @@ export function mountTide(root, onBack) {
   }
 
   function bindModebar() {
+    const views = { timeline: showTimeline, chronology: showChronology, archive: showArchive }
     stage.querySelectorAll('.tide-mode-btn').forEach((button) => {
       button.addEventListener('click', () => {
         if (button.dataset.view === activeView) return
-        button.dataset.view === 'timeline' ? showTimeline() : showArchive()
+        views[button.dataset.view]()
       })
     })
   }
@@ -420,6 +431,96 @@ export function mountTide(root, onBack) {
     applyPhase(activePhase)
   }
 
+  // ── 溯洄纪年：索拉里斯世界观内的纪事（整理自「游戏内事件时间轴」白板）──
+  function renderChronologyEvent(event) {
+    const eventIndex = CHRONOLOGY_EVENTS.indexOf(event)
+    const era = eraById(event.era)
+    const analysisIndex = event.analysisVer
+      ? ENTRIES.findIndex((entry) => entry.ver === event.analysisVer)
+      : -1
+    const side = eventIndex % 2 === 0 ? 'left' : 'right'
+
+    return `
+      <li class="tide-timeline-item tide-chrono-item is-${side}" style="--era:${event.tint || era.color}">
+        <span class="tide-timeline-node" aria-hidden="true"><i></i></span>
+        <article class="tide-event tide-chrono ${analysisIndex > -1 ? 'has-analysis' : ''}">
+          ${analysisIndex > -1 ? '<span class="tide-event-flag">DEEP ARCHIVE</span>' : ''}
+          <div class="tide-chrono-inner">
+            <span class="tide-event-topline">
+              <span class="tide-event-version">${event.epoch}</span>
+              <span class="tide-chrono-code">ECHO ${String(eventIndex + 1).padStart(2, '0')}</span>
+            </span>
+            <span class="tide-event-phase">${era.label} · ${era.range}</span>
+            <h3 class="tide-event-title">${event.title}</h3>
+            ${event.signal ? `<span class="tide-event-signal">${event.signal}</span>` : ''}
+            <p class="tide-chrono-body">${event.body}</p>
+            ${analysisIndex > -1 ? `
+              <button type="button" class="tide-deep-link" data-entry="${analysisIndex}">
+                <span>TETHYS · CAUSAL ANALYSIS</span>
+                进入深度推演 <i aria-hidden="true">→</i>
+              </button>` : ''}
+          </div>
+        </article>
+      </li>`
+  }
+
+  function applyEra(eraId) {
+    activeEra = eraId
+    const visibleEvents = eraId === 'all'
+      ? CHRONOLOGY_EVENTS
+      : CHRONOLOGY_EVENTS.filter((event) => event.era === eraId)
+
+    stage.querySelectorAll('.tide-filter').forEach((button) => {
+      const active = button.dataset.era === eraId
+      button.classList.toggle('is-active', active)
+      button.setAttribute('aria-pressed', String(active))
+    })
+    stage.querySelector('.tide-timeline-readout').textContent = `显示 ${visibleEvents.length} / ${CHRONOLOGY_EVENTS.length} 条残响`
+    stage.querySelector('.tide-timeline').innerHTML = visibleEvents.map(renderChronologyEvent).join('')
+    stage.querySelectorAll('.tide-deep-link').forEach((button) => {
+      button.addEventListener('click', () => {
+        returnView = 'chronology'
+        showEntry(+button.dataset.entry)
+      })
+    })
+  }
+
+  function showChronology() {
+    activeView = 'chronology'
+    root.scrollTop = 0
+    stage.innerHTML = `
+      ${renderHeader('chronology')}
+      <section class="tide-chronicle" aria-labelledby="tide-chronology-title">
+        <div class="tide-chronicle-intro">
+          <div>
+            <p class="tide-section-code">RETRACE // 001—${String(CHRONOLOGY_EVENTS.length).padStart(3, '0')}</p>
+            <h2 id="tide-chronology-title">溯洄纪年</h2>
+            <p>并非版本编号，而是索拉里斯自身的记忆——从悲鸣纪元的第一道残响，到此刻仍在延展的旅程。</p>
+          </div>
+          <div class="tide-chronicle-stats" aria-label="纪年统计">
+            <span><b>${CHRONOLOGY_EVENTS.length}</b> ECHO NODES</span>
+            <span><b>${CHRONOLOGY_ERAS.length - 1}</b> ERA PHASES</span>
+          </div>
+        </div>
+        <div class="tide-filterbar">
+          <div class="tide-filters" aria-label="按纪元筛选">
+            ${CHRONOLOGY_ERAS.map((era) => `
+              <button type="button" class="tide-filter" data-era="${era.id}" aria-pressed="false">
+                <span>${era.label}</span><em>${String(eraCount(era.id)).padStart(2, '0')}</em>
+              </button>`).join('')}
+          </div>
+          <p class="tide-timeline-readout" aria-live="polite"></p>
+        </div>
+        <ol class="tide-timeline" aria-label="索拉里斯世界纪年"></ol>
+      </section>`
+
+    bindModebar()
+    stage.querySelectorAll('.tide-filter').forEach((button) => {
+      button.addEventListener('click', () => applyEra(button.dataset.era))
+    })
+    applyEra(activeEra)
+  }
+
   function showArchive() {
     activeView = 'archive'
     root.scrollTop = 0
@@ -454,9 +555,10 @@ export function mountTide(root, onBack) {
 
   function showEntry(i) {
     const e = ENTRIES[i]
+    const returnLabel = { timeline: '观潮 · 航程纪年', chronology: '观潮 · 溯洄纪年', archive: '观潮 · 推演目录' }[returnView]
     root.scrollTop = 0
     stage.innerHTML = `
-      <a class="tide-toindex" href="#"><span aria-hidden="true">◂</span> ${returnView === 'timeline' ? '观潮 · 航程纪年' : '观潮 · 推演目录'}</a>
+      <a class="tide-toindex" href="#"><span aria-hidden="true">◂</span> ${returnLabel}</a>
       <div class="tide-doc">
         <div class="tide-meta">
           <span class="tide-ver">VER ${e.ver}</span>
@@ -469,7 +571,8 @@ export function mountTide(root, onBack) {
       </div>`
     stage.querySelector('.tide-toindex').addEventListener('click', (ev) => {
       ev.preventDefault()
-      returnView === 'timeline' ? showTimeline() : showArchive()
+      const views = { timeline: showTimeline, chronology: showChronology, archive: showArchive }
+      views[returnView]()
     })
   }
 

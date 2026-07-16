@@ -246,11 +246,11 @@
 }
 .tide-end b { color: var(--accent); font-weight: 400; }
 
-/* ── 观潮双视图 ─────────────────────────────────────────────── */
+/* ── 观潮三视图 ─────────────────────────────────────────────── */
 .tide-modebar {
   width: min(620px, calc(100% - 2.8rem));
   margin: 0 auto clamp(3.5rem, 8vh, 5rem);
-  display: grid; grid-template-columns: 1fr 1fr;
+  display: grid; grid-template-columns: repeat(3, 1fr);
   padding: 4px;
   border: 1px solid rgba(232,233,242,.12);
   background: rgba(4,8,19,.72);
@@ -463,6 +463,36 @@
 .tide-deep-link i { color: var(--accent); font-style: normal; }
 .tide-deep-link:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); border-color: var(--accent); }
 
+/* ── 溯洄纪年（索拉里斯世界纪事）───────────────────────────── */
+.tide-chrono-item { --era: var(--accent); }
+.tide-chrono-item .tide-timeline-node {
+  border-color: color-mix(in srgb, var(--era) 65%, rgba(232,233,242,.2));
+}
+.tide-chrono-item .tide-timeline-node i {
+  background: var(--era); box-shadow: 0 0 11px var(--era);
+}
+.tide-chrono-inner { padding: 1.15rem 1.2rem 1.25rem; }
+.tide-chrono .tide-event-version { color: var(--era); letter-spacing: .12em; }
+.tide-chrono-code {
+  color: rgba(232,233,242,.32);
+  font-family: var(--font-tech); font-size: .6rem; letter-spacing: .12em;
+}
+.tide-chrono .tide-event-title { margin: 0; }
+.tide-chrono .tide-event-signal {
+  border-color: color-mix(in srgb, var(--era) 30%, transparent);
+  color: color-mix(in srgb, var(--era) 72%, #dfe9ff);
+}
+.tide-chrono-body {
+  margin: .8rem 0 0;
+  color: rgba(232,233,242,.55); font-size: .82rem; line-height: 1.85;
+}
+.tide-chrono.has-analysis {
+  border-color: color-mix(in srgb, var(--era) 45%, transparent);
+  box-shadow: 0 0 34px color-mix(in srgb, var(--era) 8%, transparent);
+}
+.tide-chrono .tide-event-flag { background: var(--era); }
+.tide-chrono .tide-deep-link { margin-top: 1.05rem; }
+
 /* ── 深度推演目录标题 ──────────────────────────────────────── */
 .tide-index-heading {
   display: flex; align-items: end; justify-content: space-between; gap: 2rem;
@@ -498,6 +528,11 @@
   .tide-event-flag { right: .7rem; }
   .tide-index-heading { align-items: flex-start; flex-direction: column; gap: .8rem; }
   .tide-index-heading .tide-index-hint { text-align: left; }
+}
+
+@media (max-width: 520px) {
+  .tide-mode-btn { gap: 0; }
+  .tide-mode-btn em { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
