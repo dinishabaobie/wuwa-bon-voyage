@@ -19,7 +19,7 @@ const ENTRIES = [
 
       <section>
         <h3 class="tide-h">互为救世主 <i>// 核心命题</i></h3>
-        <p>泰提斯标定：本则推演的内核并非单向的「漂泊者拯救爱弥斯」，亦非「爱弥斯牺牲自己完成封印」，而是双向闭合——<strong>二者互为对方的救世主</strong>。</p>
+        <p>档案标定：本则推演的内核并非单向的「漂泊者拯救爱弥斯」，亦非「爱弥斯牺牲自己完成封印」，而是双向闭合——<strong>二者互为对方的救世主</strong>。</p>
         <ul>
           <li><b>漂泊者之于爱弥斯</b>：孤独电子幽灵漫长纪元里「独一无二的光」，是让她重新锚定「身为人」这一坐标的支点。</li>
           <li><b>爱弥斯之于漂泊者</b>：是洞见旧日漂泊者孤独、愿悄然靠近予以慰藉之人；是纵知结局，仍逆时为他兜底的家人。</li>
@@ -28,7 +28,7 @@ const ENTRIES = [
 
       <section>
         <h3 class="tide-h">光影博弈 <i>// 镜头语言</i></h3>
-        <p>泰提斯逐帧观测：本则记录中，光与影即爱弥斯情绪的读数。</p>
+        <p>逐帧回放本则记录：光与影，即爱弥斯情绪的读数。</p>
         <table class="tide-table">
           <thead><tr><th>场景</th><th>光影</th><th>读数</th></tr></thead>
           <tbody>
@@ -41,12 +41,12 @@ const ENTRIES = [
             <tr><td>学院告别 · 走在阳光下</td><td>扭头时光线渐变为阴影</td><td>已做好离别的准备</td></tr>
           </tbody>
         </table>
-        <div class="tide-note"><b>关键构图 · 已交叉比对</b>　爱弥斯在冰原中心与漂泊者对话时，前后左右尽是尖锐冰刺。同构画面亦见于 2.7「大伟哥」与漂泊者对话（背立残枝）——泰提斯判定：此为制作组对角色结局的视觉预告。</div>
+        <div class="tide-note"><b>关键构图 · 已交叉比对</b>　爱弥斯在冰原中心与漂泊者对话时，前后左右尽是尖锐冰刺。同构画面亦见于 2.7「大伟哥」与漂泊者对话（背立残枝）——本档案判定：此为制作组对角色结局的视觉预告。</div>
       </section>
 
       <section>
         <h3 class="tide-h">触碰母题 <i>// 情感温度计</i></h3>
-        <p>「触碰」是贯穿全篇的核心动作。泰提斯追踪到五次读数，每一次都不相同：</p>
+        <p>「触碰」是贯穿全篇的核心动作。我追踪到五次读数，每一次都不相同：</p>
         <ol>
           <li>救下漂泊者后的<b>第一次触碰</b> → 摸空。「果然还是不稳定呢」，手藏到身后，掩盖失落。</li>
           <li>联运椎骨等候时，雪花落在漂泊者鼻头，爱弥斯再次伸手——<b>最后关头停下</b>。这正是过去的漂泊者常对她做的动作。触而不得，既是维度的隔离，也是隧门相隔的终局。</li>
@@ -99,7 +99,7 @@ const ENTRIES = [
 
       <section>
         <h3 class="tide-h">故乡的伏笔 <i>// 待解变量</i></h3>
-        <p>泰提斯收束散落的线索：</p>
+        <p>将散落的线索收束如下：</p>
         <ul>
           <li>空间站旧影像中，漂泊者为「溯洄雨」形象，而溯洄雨可生成旧日影像 → 此乃漂泊者<b>曾抵达索拉里斯的过去记录</b>。</li>
           <li><b>天空海的另一端＝漂泊者故乡</b>：坠落的石头自天空海出现；1.0 序章中，漂泊者穿越前的空间已有大量星球碎石 → 故乡曾遭世界级灾难。</li>
@@ -147,7 +147,7 @@ const ENTRIES = [
           <p>「在更向后的时间维度中，须知空间的末端开始坍缩。」</p>
           <cite>—— 爱弥斯的临别留言</cite>
         </blockquote>
-        <p><strong>泰提斯解读</strong>：在更遥远的未来，阿列夫一并不存在——囚禁爱弥斯循环的牢笼，末端正在崩塌。与此同时，现在的漂泊者拿回了幼年爱弥斯的护身符，在热烈引导下拼凑出她的身躯——这正是二人共同创造的希望。</p>
+        <p><strong>本档案解读</strong>：在更遥远的未来，阿列夫一并不存在——囚禁爱弥斯循环的牢笼，末端正在崩塌。与此同时，现在的漂泊者拿回了幼年爱弥斯的护身符，在热烈引导下拼凑出她的身躯——这正是二人共同创造的希望。</p>
         <div class="tide-note"><b>// 主题落点</b>　3.1 的内核是拯救，也是因果循环；但包裹这一切的，是更纯粹之物——幼年爱弥斯为家人分担重量的小小愿望、旧日漂泊者对索拉里斯不求回报的守护、爱弥斯漫长孤独中对拉海洛众生的珍视、现在漂泊者对爱弥斯的接纳。<br/><br/><b>即便知道结局，即便身处因果之中，也依然会选择与你同行，直到时间的尽头。</b></div>
       </section>
 
@@ -198,7 +198,7 @@ const ENTRIES = [
 
       <section>
         <h3 class="tide-h">曾经失败的救世主 <i>// 绯雪</i></h3>
-        <p>泰提斯标定绯雪为「曾经失败过的救世主」。她有力量，也有责任感；她曾被无数人寄托希望，被唤作「巫女大人」，被期待去拯救穗波。但她失败了。</p>
+        <p>本档案将绯雪标定为「曾经失败过的救世主」。她有力量，也有责任感；她曾被无数人寄托希望，被唤作「巫女大人」，被期待去拯救穗波。但她失败了。</p>
         <p>穗波的亡魂、残留的枉然、那些「巫女大人一定会来救我们」的期待，都成了压在她身上的负担。她抵触这个称呼，不是冷漠，而是其下压着太多未完成的守护与愧疚。她痛苦的根源，不是自己受伤，而是<b>没能救下别人</b>。</p>
         <blockquote class="tide-quote">
           <p>「如果我已拼尽全力却仍失败，是不是说明我还不够强？」</p>
@@ -260,13 +260,79 @@ const ENTRIES = [
   },
 ]
 
-// 观潮 · 航程纪年 + 版本推演档案。渲染进 root（root 同时是滚动容器）。
+// 观潮 · 潮位记录纸：航程纪年 / 溯洄纪年 / 深度推演。渲染进 root（root 同时是滚动容器）。
 export function mountTide(root, onBack) {
+  root.classList.add('tide-root')
   root.innerHTML = `
+    <div class="tide-sea" aria-hidden="true"><i class="tide-glow"></i></div>
     <a class="back" href="./index.html#home"><span aria-hidden="true">◂</span> 返回泰提斯终端</a>
     <div class="tide-stage"></div>`
   const stage = root.querySelector('.tide-stage')
   root.querySelector('.back').addEventListener('click', (e) => { e.preventDefault(); onBack && onBack() })
+
+  // ── 潮汐波形仪：页头 canvas 记录笔（多层正弦潮汐）────────────
+  let waveStop = null
+  function startWave() {
+    if (waveStop) { waveStop(); waveStop = null }
+    const canvas = stage.querySelector('.tide-wave')
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    const pen = getComputedStyle(canvas).color
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+    let raf = 0
+    let t = Math.random() * 900
+    let visible = true
+    const io = new IntersectionObserver((entries) => { visible = entries[0].isIntersecting })
+    io.observe(canvas)
+
+    function draw() {
+      const dpr = Math.min(devicePixelRatio || 1, 2)
+      const w = canvas.clientWidth * dpr
+      const h = canvas.clientHeight * dpr
+      if (!w || !h) return
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h }
+      ctx.clearRect(0, 0, w, h)
+      const mid = h * 0.56
+      const layers = [
+        { amp: h * 0.28, wl: 540 * dpr, sp: 0.010, alpha: 0.42, lw: 1.6 * dpr, fill: 0.10 },
+        { amp: h * 0.17, wl: 250 * dpr, sp: 0.017, alpha: 0.30, lw: 1.1 * dpr, fill: 0 },
+        { amp: h * 0.08, wl: 130 * dpr, sp: 0.028, alpha: 0.18, lw: 1 * dpr, fill: 0 },
+      ]
+      for (const layer of layers) {
+        ctx.beginPath()
+        for (let x = 0; x <= w; x += 4 * dpr) {
+          const y = mid
+            + Math.sin((x / layer.wl) * Math.PI * 2 + t * layer.sp) * layer.amp
+            + Math.sin((x / (layer.wl * 0.41)) * Math.PI * 2 - t * layer.sp * 1.6) * layer.amp * 0.38
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+        }
+        ctx.strokeStyle = pen
+        ctx.globalAlpha = layer.alpha
+        ctx.lineWidth = layer.lw
+        ctx.stroke()
+        if (layer.fill) {
+          ctx.lineTo(w, h)
+          ctx.lineTo(0, h)
+          ctx.closePath()
+          const grad = ctx.createLinearGradient(0, mid - layer.amp, 0, h)
+          grad.addColorStop(0, pen)
+          grad.addColorStop(1, 'transparent')
+          ctx.globalAlpha = layer.fill
+          ctx.fillStyle = grad
+          ctx.fill()
+        }
+      }
+      ctx.globalAlpha = 1
+    }
+    function frame() {
+      raf = requestAnimationFrame(frame)
+      if (!visible) return
+      t += 1
+      draw()
+    }
+    reduced ? draw() : frame()
+    waveStop = () => { cancelAnimationFrame(raf); io.disconnect() }
+  }
 
   let activeView = 'timeline'
   let activePhase = 'all'
@@ -283,23 +349,36 @@ export function mountTide(root, onBack) {
     ? CHRONOLOGY_EVENTS.length
     : CHRONOLOGY_EVENTS.filter((event) => event.era === id).length
 
+  // 刻度带：每个通道有自己的量程
+  const RULERS = {
+    timeline: ['2022 · 技术测试', '瑝珑', '黎那汐塔', '拉海洛', '梦州 · 2026'],
+    chronology: ['−10000Y · 悲鸣纪元', '远古', '建城', '近世', 'NOW · 本次苏醒'],
+    archive: ['CH·03 深度信道', 'VER 3.1', '⚠', 'VER 3.3', 'VERIFIED × 02'],
+  }
+  const CHANNELS = [
+    ['timeline', 'CH·01', '航程纪年', () => TIMELINE_EVENTS.length],
+    ['chronology', 'CH·02', '溯洄纪年', () => CHRONOLOGY_EVENTS.length],
+    ['archive', 'CH·03', '深度推演', () => ENTRIES.length],
+  ]
+
   function renderHeader(view) {
     return `
       <header class="tide-head">
-        <p class="tide-kicker">TETHYS · TIDE ARCHIVE</p>
+        <p class="tide-kicker">TETHYS · TIDE GAUGE</p>
         <h1 class="tide-title">观潮</h1>
         <p class="tide-sub">版本回溯 · 因果推演 · 残响归档</p>
+        <div class="tide-gauge" aria-hidden="true">
+          <canvas class="tide-wave"></canvas>
+          <div class="tide-ruler">${RULERS[view].map((label) => `<span>${label}</span>`).join('')}</div>
+        </div>
       </header>
       <nav class="tide-modebar" aria-label="观潮视图">
-        <button type="button" class="tide-mode-btn ${view === 'timeline' ? 'is-active' : ''}" data-view="timeline" aria-pressed="${view === 'timeline'}">
-          <span>航程纪年</span><em>${String(TIMELINE_EVENTS.length).padStart(2, '0')}</em>
-        </button>
-        <button type="button" class="tide-mode-btn ${view === 'chronology' ? 'is-active' : ''}" data-view="chronology" aria-pressed="${view === 'chronology'}">
-          <span>溯洄纪年</span><em>${String(CHRONOLOGY_EVENTS.length).padStart(2, '0')}</em>
-        </button>
-        <button type="button" class="tide-mode-btn ${view === 'archive' ? 'is-active' : ''}" data-view="archive" aria-pressed="${view === 'archive'}">
-          <span>深度推演</span><em>${String(ENTRIES.length).padStart(2, '0')}</em>
-        </button>
+        ${CHANNELS.map(([id, ch, label, count]) => `
+          <button type="button" class="tide-mode-btn ${view === id ? 'is-active' : ''}" data-view="${id}" aria-pressed="${view === id}">
+            <i class="tide-mode-led" aria-hidden="true"></i>
+            <span class="tide-mode-ch">${ch}</span>
+            <span>${label}</span><em>${String(count()).padStart(2, '0')}</em>
+          </button>`).join('')}
       </nav>`
   }
 
@@ -326,7 +405,7 @@ export function mountTide(root, onBack) {
       <li class="tide-timeline-item is-${side}">
         <span class="tide-timeline-node" aria-hidden="true"><i></i></span>
         <article class="tide-event ${analysisIndex > -1 ? 'has-analysis' : ''}">
-          ${analysisIndex > -1 ? '<span class="tide-event-flag">DEEP ARCHIVE</span>' : ''}
+          ${analysisIndex > -1 ? '<span class="tide-event-flag">⚠ ANOMALY · 深度档案</span>' : ''}
           <button type="button" class="tide-event-toggle" aria-expanded="false" aria-controls="${panelId}">
             <span class="tide-event-topline">
               <span class="tide-event-version">${event.version.startsWith('TEST') || event.version.startsWith('PRE') ? event.version : `VER ${event.version}`}</span>
@@ -429,6 +508,7 @@ export function mountTide(root, onBack) {
       button.addEventListener('click', () => applyPhase(button.dataset.phase))
     })
     applyPhase(activePhase)
+    startWave()
   }
 
   // ── 溯洄纪年：索拉里斯世界观内的纪事（整理自「游戏内事件时间轴」白板）──
@@ -444,7 +524,7 @@ export function mountTide(root, onBack) {
       <li class="tide-timeline-item tide-chrono-item is-${side}" style="--era:${event.tint || era.color}">
         <span class="tide-timeline-node" aria-hidden="true"><i></i></span>
         <article class="tide-event tide-chrono ${analysisIndex > -1 ? 'has-analysis' : ''}">
-          ${analysisIndex > -1 ? '<span class="tide-event-flag">DEEP ARCHIVE</span>' : ''}
+          ${analysisIndex > -1 ? '<span class="tide-event-flag">⚠ ANOMALY · 深度档案</span>' : ''}
           <div class="tide-chrono-inner">
             <span class="tide-event-topline">
               <span class="tide-event-version">${event.epoch}</span>
@@ -505,7 +585,7 @@ export function mountTide(root, onBack) {
         <div class="tide-filterbar">
           <div class="tide-filters" aria-label="按纪元筛选">
             ${CHRONOLOGY_ERAS.map((era) => `
-              <button type="button" class="tide-filter" data-era="${era.id}" aria-pressed="false">
+              <button type="button" class="tide-filter" data-era="${era.id}" style="--era:${era.color}" aria-pressed="false">
                 <span>${era.label}</span><em>${String(eraCount(era.id)).padStart(2, '0')}</em>
               </button>`).join('')}
           </div>
@@ -519,6 +599,7 @@ export function mountTide(root, onBack) {
       button.addEventListener('click', () => applyEra(button.dataset.era))
     })
     applyEra(activeEra)
+    startWave()
   }
 
   function showArchive() {
@@ -551,6 +632,7 @@ export function mountTide(root, onBack) {
         returnView = 'archive'
         showEntry(+c.dataset.i)
       }))
+    startWave()
   }
 
   function showEntry(i) {
@@ -574,8 +656,12 @@ export function mountTide(root, onBack) {
       const views = { timeline: showTimeline, chronology: showChronology, archive: showArchive }
       views[returnView]()
     })
+    startWave() // 长文页无波形仪：停掉上一视图的记录笔
   }
 
   showTimeline()
-  return () => {}
+  return () => {
+    if (waveStop) { waveStop(); waveStop = null }
+    root.classList.remove('tide-root')
+  }
 }

@@ -1,4 +1,5 @@
-// 观潮 · 溯洄纪年数据。内容整理自「⏳ 游戏内事件时间轴」白板：
+// 观潮 · 溯洄纪年数据。内容整理自「⏳ 游戏内事件时间轴」白板，
+// 并融入自制「漂泊者苏醒前时间线」（瑝珑秘史：椿、长离师傅、今州建州等）。
 // 索拉里斯世界观内的纪事，与航程纪年（现实版本时间轴）互为表里。
 export const CHRONOLOGY_ERAS = [
   { id: 'all', label: '全部残响', range: '万年之前 — 现在', color: '#3a9fe8' },
@@ -11,7 +12,7 @@ export const CHRONOLOGY_ERAS = [
 export const CHRONOLOGY_EVENTS = [
   {
     id: 'lament-era', era: 'ancient', epoch: '约一万年前起', title: '悲鸣纪元',
-    body: '泰缇斯记录显示，从约一万年前至今，索拉里斯至少经历了 5 次全球性悲鸣与 30 万次以上区域性悲鸣。旧世界法则由此失效，无音区、残象与海蚀现象成为文明必须长期面对的常态。',
+    body: '自约一万年前至今，索拉里斯至少经历了 5 次全球性悲鸣，与 30 万次以上的区域性悲鸣——这份读数，至今仍在本档案中累积。旧世界法则由此失效，无音区、残象与海蚀现象成为文明必须长期面对的常态。',
   },
   {
     id: 'rover-arrival', era: 'ancient', epoch: '远古 · 年代未明', title: '漂泊者抵达索拉里斯',
@@ -22,8 +23,8 @@ export const CHRONOLOGY_EVENTS = [
     body: '罗伊冰原在第一次有记录的悲鸣后成为极地；第二次悲鸣中，来自未来的爱弥斯与隧者共鸣，将阿列夫一封在隧门之外。隧者随后分化出隧群，修复拉海洛生态并引导罗伊人迁居地下。',
   },
   {
-    id: 'black-shores-founded', era: 'ancient', epoch: '远古 · 年代未明', title: '黑海岸建立',
-    body: '漂泊者唤醒守岸人，并以泰缇斯系统为核心建立黑海岸。组织由此开始观测悲鸣、救援灾区并收集回音数据，为寻找终止悲鸣的方法积累样本。',
+    id: 'black-shores-founded', era: 'ancient', epoch: '约一万年前', title: '黑海岸建立',
+    body: '漂泊者唤醒守岸人，启动泰缇斯系统并以其为核心建立黑海岸。组织由此开始观测悲鸣、救援灾区并收集回音数据，为寻找终止悲鸣的方法积累样本。',
   },
   {
     id: 'mt-firmament-ancient', era: 'ancient', epoch: '上古', title: '角降临乘霄山',
@@ -34,12 +35,40 @@ export const CHRONOLOGY_EVENTS = [
     body: '逃难者乘「方舟」抵达千岛之境，在创世纽带指引下建立拉古那等城邦。岁主英白拉多与鸣式利维亚坦的争斗引发黑潮，古拉古那沉没，隐海修会及其预言体系由此成形。',
   },
   {
+    id: 'camellya-blackshores', era: 'historic', epoch: '约 500 年前', title: '椿加入黑海岸',
+    body: '在漂泊者的引导下，椿加入黑海岸。这位后来被称作「花女」的共鸣者，自此与组织及漂泊者的命运缠绕在一起。',
+  },
+  {
+    id: 'guixu-port-fall', era: 'historic', epoch: '数百年前', title: '归墟港覆灭',
+    body: '繁盛一时的归墟港市毁于灾难，整座城市就此沉入历史。它留下的数据与残响，将在数百年后重新浮出水面，成为污染泰缇斯的源头。',
+  },
+  {
+    id: 'suizhu-hongzhen', era: 'historic', epoch: '约 200 年前', title: '岁主拯救虹镇',
+    body: '虹镇罹难之际，岁主出手拯救，镇民得以离开故土。这批虹镇人的后裔，日后将与漂泊者一同见证今州的诞生。',
+  },
+  {
+    id: 'rescue-changli-master', era: 'historic', epoch: '约 200 年前', title: '漂泊者救援长离的师傅',
+    body: '漂泊者出手救援了长离的师傅。这段旧缘在此后的岁月里反复回响——从再逢、共谋，直到多年后的另一场拜师。',
+  },
+  {
     id: 'xuanfang-founded', era: 'historic', epoch: '今州建城前后', title: '渊城与玄方城',
     body: '为阻止北落野残象潮向梦州扩散，梦州先在玄方地界修建机关要塞「渊城」。云渊之役中渊城被毁，战后在其废墟上建成玄方城，并以咎庭、咎笼持续分流和收容残象。',
   },
   {
-    id: 'jinzhou-founded', era: 'historic', epoch: '近百年内', title: '今州建城',
-    body: '瑝珑军队在云陵谷阻击残象时，一位神秘共鸣者降临并击败无冠者；三日后战事告捷。今州于同年建立，逐渐成为抵御鸣式与残象潮的北境前线。',
+    id: 'meet-changli-master', era: 'historic', epoch: '100—199 年前', title: '再遇长离的师傅',
+    body: '数年之隔，漂泊者与长离的师傅再次相逢。旧识重逢于今州建州前夕，两人的轨迹自此与这座新城捆在一起。',
+  },
+  {
+    id: 'jinzhou-founded', era: 'historic', epoch: '100—199 年前', title: '今州建城',
+    body: '瑝珑军队在云陵谷阻击残象时，一位神秘共鸣者降临并击败无冠者；三日后战事告捷。今州于同年建立——漂泊者与虹镇原住民一同，参与了这座北境前线之城的奠基。',
+  },
+  {
+    id: 'jiting-tracer', era: 'historic', epoch: '约百年前', title: '稽庭研究溯流仪',
+    body: '稽庭着手研究溯流仪。以频率回溯过去的技术自此萌芽，也为日后追索漂泊者旧日行迹的诸多「记录」埋下伏笔。',
+  },
+  {
+    id: 'snow-hotspring', era: 'historic', epoch: '约百年前', title: '漂泊者开辟雪山温泉',
+    body: '漂泊者在雪山开辟温泉。这处看似闲笔的旧迹，是失忆之前的漂泊者在瑝珑留下的又一道生活印记。',
   },
   {
     id: 'honami-lament', era: 'historic', epoch: '数十年前', title: '穗波市悲鸣',
@@ -54,8 +83,12 @@ export const CHRONOLOGY_EVENTS = [
     body: '传染性极强的「蜚热」主要侵袭幼童，华胥研究院研发出糖丸疫苗，七个月大的相里要成为早期试验对象。唯一及时抵达的运输队由一名未登记共鸣者护送；其波形与古代「第一份共鸣者报告」高度相似，暗示此人可能是漂泊者。',
   },
   {
+    id: 'pre-amnesia-plan', era: 'recent', epoch: '失忆之前', title: '与长离师傅共谋布局',
+    body: '失忆之前，漂泊者与长离的师傅提前布局了二十年后的一切；小长离亦在此时拜入师门。此后种种「巧合」，多半是这盘棋落下的子。',
+  },
+  {
     id: 'rover-departure', era: 'recent', epoch: '近 20 年前', title: '漂泊者舍弃记忆',
-    body: '漂泊者为跳出既定循环，主动舍弃记忆并离开黑海岸，将组织与泰缇斯的维系交给守岸人。当前旅程的苏醒，是这次抹除记忆后的第一次苏醒。',
+    body: '漂泊者为跳出既定循环，主动舍弃记忆并离开黑海岸，将组织与泰缇斯的维系交给守岸人。同一时期，椿（花女）也失去了记忆。当前旅程的苏醒，是这次抹除记忆后的第一次苏醒。',
   },
   {
     id: 'second-dark-tide', era: 'recent', epoch: '20 年前', title: '黎那汐塔第二次黑潮',
@@ -76,6 +109,10 @@ export const CHRONOLOGY_EVENTS = [
   {
     id: 'crescent-battle', era: 'recent', epoch: '3 年前', title: '弯刀之役',
     body: '哥舒临率夜归军迎战无相燹主，倒悬雨首次被大幅强化并造成惨烈伤亡；他重创敌人后失踪。忌炎带残部撤退，随后与今汐分别被角选为将军与今州令尹。',
+  },
+  {
+    id: 'beiluoye-battle', era: 'recent', epoch: '三天前', title: '北洛野大战',
+    body: '本次苏醒前三天，今州军队在北洛野与残象爆发大战。战火尚未熄灭，云陵谷中，漂泊者即将睁开双眼。',
   },
   {
     id: 'present-jinzhou', era: 'present', epoch: '本次苏醒', title: '今州 · 云陵谷—北落野',
