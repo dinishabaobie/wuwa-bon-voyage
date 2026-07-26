@@ -42,6 +42,7 @@ async function centerHits(page) {
 async function closeModule(page) {
   await page.locator('.view-overlay .back').click()
   await page.locator('.view-overlay').waitFor({ state: 'detached' })
+  await page.waitForURL(/\/(?:index\.html)?(?:#home)?$/)
 }
 
 let browser
@@ -85,6 +86,7 @@ try {
 
   await page.getByRole('link', { name: '观测对象', exact: true }).click()
   await page.locator('.view-overlay.show').waitFor()
+  await page.waitForURL(/\/observation\.html$/)
   assert.equal(await page.locator('.subject-card').count(), 15)
   assert.equal(await page.locator('.subject-card[role="button"][tabindex="0"]').count(), 15)
 
@@ -127,6 +129,18 @@ try {
 
   await page.getByRole('link', { name: '观潮', exact: true }).click()
   await page.locator('.view-overlay.show').waitFor()
+  await page.waitForURL(/\/tide\.html$/)
+  await page.mouse.move(320, 220)
+  assert.equal(
+    await page.locator('#cursor').evaluate((element) => getComputedStyle(element).display),
+    'block',
+    'the shared custom cursor must remain visible in the tide view',
+  )
+  assert.equal(
+    await page.locator('#cursor').evaluate((element) => element.style.translate),
+    '320px 220px',
+    'the shared custom cursor must track the pointer without interpolation',
+  )
   assert.equal(await page.locator('.tide-timeline-item').count(), 21)
   const firstTimelineEvent = page.locator('.tide-event-toggle').first()
   await firstTimelineEvent.click()
@@ -142,6 +156,7 @@ try {
 
   await page.getByRole('link', { name: '群像', exact: true }).click()
   await page.locator('.view-overlay.show').waitFor()
+  await page.waitForURL(/\/relation\.html$/)
   assert.equal(await page.locator('.bcard').count(), 107)
   assert.equal(await page.locator('.bcard[role="button"][tabindex="0"]').count(), 107)
   const firstRelation = page.locator('.bcard').first()

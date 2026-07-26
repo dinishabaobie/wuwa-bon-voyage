@@ -554,12 +554,14 @@ gsap.to('.hero-title', {
 // ============================================================
 {
   const VIEWS = {
-    'observation.html': { load: () => import('./observation.js'), fn: 'mountObservation', accent: '#8b9aff' },
-    'tide.html':        { load: () => import('./tide.js'),        fn: 'mountTide',        accent: '#3a9fe8' },
-    'relation.html':    { load: () => import('./relation.js'),    fn: 'mountRelation',    accent: '#ffb066' },
+    'observation.html': { load: () => import('./observation.js'), fn: 'mountObservation', accent: '#8b9aff', title: '观测对象 | 泰提斯终端' },
+    'tide.html':        { load: () => import('./tide.js'),        fn: 'mountTide',        accent: '#3a9fe8', title: '观潮 | 泰提斯终端' },
+    'relation.html':    { load: () => import('./relation.js'),    fn: 'mountRelation',    accent: '#ffb066', title: '群像 | 泰提斯终端' },
   }
+  const homeTitle = document.title
   let viewCleanup = null
   let viewTrigger = null
+  let activeViewKey = null
   let busy = false
   let openId = 0        // 每次 openView 递增；closeView 令加载中的挂载失效
   let viewInert = null  // 视图打开期间被 inert 的背景元素 → 原 inert 值
@@ -579,7 +581,7 @@ gsap.to('.hero-title', {
     viewInert = null
   }
 
-  async function openView(key, trigger) {
+  async function openView(key, trigger, { pushHistory = true } = {}) {
     if (busy || document.querySelector('.view-overlay')) return
     const v = VIEWS[key]; if (!v) return
     busy = true
@@ -590,29 +592,51 @@ gsap.to('.hero-title', {
     ov.className = 'view-overlay'
     ov.setAttribute('role', 'dialog')
     ov.setAttribute('aria-modal', 'true')
+    ov.setAttribute('aria-label', `正在载入${v.title.split(' | ')[0]}`)
     ov.style.setProperty('--accent', v.accent)
+    ov.innerHTML = `
+      <div class="view-loading" role="status" aria-live="polite">
+        <i aria-hidden="true"></i>
+        <p>正在接入${v.title.split(' | ')[0]}档案</p>
+      </div>`
     document.body.appendChild(ov)
     lockBehind(ov)
+    requestAnimationFrame(() => ov.classList.add('show'))
     try {
       const mod = await v.load()
       // 动态加载期间可能已被 Esc 关闭（closeView 使 openId 失效）：放弃挂载，
       // 否则模块给 window/body 加的监听器与节点将无人清理
       if (id !== openId || !ov.isConnected) return
-      viewCleanup = mod[v.fn](ov, closeView)
+      viewCleanup = mod[v.fn](ov, requestCloseView)
+      activeViewKey = key
+      ov.setAttribute('aria-label', v.title.split(' | ')[0])
+      document.title = v.title
+      if (pushHistory) history.pushState({ tethysView: key }, '', `./${key}`)
       requestAnimationFrame(() => {
-        ov.classList.add('show')
         ov.querySelector('.back')?.focus()
       })
     } catch (error) {
       console.error(`模块加载失败: ${key}`, error)
-      unlockBehind()
-      ov.remove()
-      lenis.start()
-      viewTrigger?.focus()
-      viewTrigger = null
+      ov.setAttribute('aria-label', `${v.title.split(' | ')[0]}载入失败`)
+      ov.innerHTML = `
+        <section class="view-load-error" role="alert">
+          <p class="view-load-error-code">SIGNAL LOST</p>
+          <h2>${v.title.split(' | ')[0]}暂时无法接入</h2>
+          <p>档案模块未能载入。请返回终端后重试。</p>
+          <button type="button">返回泰提斯终端</button>
+        </section>`
+      ov.querySelector('button').addEventListener('click', closeView)
+      ov.querySelector('button').focus()
     } finally {
       busy = false
     }
+  }
+  function requestCloseView() {
+    if (history.state?.tethysView === activeViewKey) {
+      history.back()
+      return
+    }
+    closeView()
   }
   function closeView() {
     const ov = document.querySelector('.view-overlay')
@@ -620,6 +644,8 @@ gsap.to('.hero-title', {
     openId++
     const returnTarget = viewTrigger
     viewTrigger = null
+    activeViewKey = null
+    document.title = homeTitle
     ov.classList.remove('show')
     if (viewCleanup) { try { viewCleanup() } catch {} viewCleanup = null }
     unlockBehind()
@@ -637,5 +663,11 @@ gsap.to('.hero-title', {
       openView(key, a)
     })
   })
-  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeView() })
+  window.addEventListener('popstate', (event) => {
+    const key = event.state?.tethysView
+    const hasView = Boolean(document.querySelector('.view-overlay'))
+    if (!key && hasView) closeView()
+    else if (key && VIEWS[key] && !hasView) openView(key, null, { pushHistory: false })
+  })
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') requestCloseView() })
 }
