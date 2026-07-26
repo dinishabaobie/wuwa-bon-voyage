@@ -264,11 +264,28 @@ const ENTRIES = [
 export function mountTide(root, onBack) {
   root.classList.add('tide-root')
   root.innerHTML = `
+    <!--
+    THESIS: 观潮是一条从海面潜入记忆深处的潮线，拒绝居中仪表盘式首屏。
+    OWN-WORLD: 冷银海雾、钴蓝深海、青色潮线、锐利边界与真实航程影像。
+    STORY: 用户先看见潮汐，再选择纪年通道，沿潮线阅读事件并进入深度推演。
+    FIRST VIEWPORT: 标题贴左跨越水线，动态潮汐横贯首屏，通道导航在下方接入纵向记录。
+    FORM: 潮线剖面，以海面横线和左侧纵向故事脊柱统领所有视图。
+    -->
     <div class="tide-sea" aria-hidden="true"><i class="tide-glow"></i></div>
     <a class="back" href="./index.html#home"><span aria-hidden="true">◂</span> 返回泰提斯终端</a>
+    <p class="tide-view-announcer" aria-live="polite" aria-atomic="true"></p>
     <div class="tide-stage"></div>`
   const stage = root.querySelector('.tide-stage')
+  const announcer = root.querySelector('.tide-view-announcer')
   root.querySelector('.back').addEventListener('click', (e) => { e.preventDefault(); onBack && onBack() })
+
+  function focusView(message) {
+    requestAnimationFrame(() => {
+      const heading = stage.querySelector('h2[tabindex="-1"]')
+      heading?.focus()
+      announcer.textContent = message
+    })
+  }
 
   // ── 潮汐波形仪：页头 canvas 记录笔（多层正弦潮汐）────────────
   let waveStop = null
@@ -353,7 +370,7 @@ export function mountTide(root, onBack) {
   const RULERS = {
     timeline: ['2022 · 技术测试', '瑝珑', '黎那汐塔', '拉海洛', '梦州 · 2026'],
     chronology: ['−10000Y · 悲鸣纪元', '远古', '建城', '近世', 'NOW · 本次苏醒'],
-    archive: ['CH·03 深度信道', 'VER 3.1', '⚠', 'VER 3.3', 'VERIFIED × 02'],
+    archive: ['CH·03 深度信道', 'VER 3.1', '异常潮位', 'VER 3.3', 'VERIFIED × 02'],
   }
   const CHANNELS = [
     ['timeline', 'CH·01', '航程纪年', () => TIMELINE_EVENTS.length],
@@ -363,13 +380,16 @@ export function mountTide(root, onBack) {
 
   function renderHeader(view) {
     return `
-      <header class="tide-head">
-        <p class="tide-kicker">TETHYS · TIDE GAUGE</p>
+      <header class="tide-head" data-view="${view}">
+        <p class="tide-kicker">泰提斯潮汐档案</p>
         <h1 class="tide-title">观潮</h1>
-        <p class="tide-sub">版本回溯 · 因果推演 · 残响归档</p>
+        <p class="tide-sub">版本回溯，因果推演，残响归档。</p>
         <div class="tide-gauge" aria-hidden="true">
           <canvas class="tide-wave"></canvas>
           <div class="tide-ruler">${RULERS[view].map((label) => `<span>${label}</span>`).join('')}</div>
+        </div>
+        <div class="tide-depth-scale" aria-hidden="true">
+          <span>海面</span><span>浅层</span><span>深层</span>
         </div>
       </header>
       <nav class="tide-modebar" aria-label="观潮视图">
@@ -387,7 +407,9 @@ export function mountTide(root, onBack) {
     stage.querySelectorAll('.tide-mode-btn').forEach((button) => {
       button.addEventListener('click', () => {
         if (button.dataset.view === activeView) return
+        const label = button.querySelector('span:not(.tide-mode-ch)').textContent
         views[button.dataset.view]()
+        focusView(`已切换至${label}`)
       })
     })
   }
@@ -405,7 +427,7 @@ export function mountTide(root, onBack) {
       <li class="tide-timeline-item is-${side}">
         <span class="tide-timeline-node" aria-hidden="true"><i></i></span>
         <article class="tide-event ${analysisIndex > -1 ? 'has-analysis' : ''}">
-          ${analysisIndex > -1 ? '<span class="tide-event-flag">⚠ ANOMALY · 深度档案</span>' : ''}
+          ${analysisIndex > -1 ? '<span class="tide-event-flag">深度档案</span>' : ''}
           <button type="button" class="tide-event-toggle" aria-expanded="false" aria-controls="${panelId}">
             <span class="tide-event-topline">
               <span class="tide-event-version">${event.version.startsWith('TEST') || event.version.startsWith('PRE') ? event.version : `VER ${event.version}`}</span>
@@ -477,13 +499,14 @@ export function mountTide(root, onBack) {
   function showTimeline() {
     activeView = 'timeline'
     root.scrollTop = 0
+    stage.dataset.view = activeView
     stage.innerHTML = `
       ${renderHeader('timeline')}
       <section class="tide-chronicle" aria-labelledby="tide-chronicle-title">
         <div class="tide-chronicle-intro">
           <div>
-            <p class="tide-section-code">CHRONICLE // 001—${String(TIMELINE_EVENTS.length).padStart(3, '0')}</p>
-            <h2 id="tide-chronicle-title">航程纪年</h2>
+            <p class="tide-section-code">CHRONICLE // 001-${String(TIMELINE_EVENTS.length).padStart(3, '0')}</p>
+            <h2 id="tide-chronicle-title" tabindex="-1">航程纪年</h2>
             <p>从第一次技术测试，到梦州玄方城。版本不是编号，而是漂泊者与文明共同留下的坐标。</p>
           </div>
           <div class="tide-chronicle-stats" aria-label="时间轴统计">
@@ -492,7 +515,7 @@ export function mountTide(root, onBack) {
           </div>
         </div>
         <div class="tide-filterbar">
-          <div class="tide-filters" aria-label="按篇章筛选">
+          <div class="tide-filters" role="group" aria-label="按篇章筛选">
             ${TIMELINE_PHASES.map((phase) => `
               <button type="button" class="tide-filter" data-phase="${phase.id}" aria-pressed="false">
                 <span>${phase.label}</span><em>${String(phaseCount(phase.id)).padStart(2, '0')}</em>
@@ -524,7 +547,7 @@ export function mountTide(root, onBack) {
       <li class="tide-timeline-item tide-chrono-item is-${side}" style="--era:${event.tint || era.color}">
         <span class="tide-timeline-node" aria-hidden="true"><i></i></span>
         <article class="tide-event tide-chrono ${analysisIndex > -1 ? 'has-analysis' : ''}">
-          ${analysisIndex > -1 ? '<span class="tide-event-flag">⚠ ANOMALY · 深度档案</span>' : ''}
+          ${analysisIndex > -1 ? '<span class="tide-event-flag">深度档案</span>' : ''}
           <div class="tide-chrono-inner">
             <span class="tide-event-topline">
               <span class="tide-event-version">${event.epoch}</span>
@@ -568,13 +591,14 @@ export function mountTide(root, onBack) {
   function showChronology() {
     activeView = 'chronology'
     root.scrollTop = 0
+    stage.dataset.view = activeView
     stage.innerHTML = `
       ${renderHeader('chronology')}
       <section class="tide-chronicle" aria-labelledby="tide-chronology-title">
         <div class="tide-chronicle-intro">
           <div>
-            <p class="tide-section-code">RETRACE // 001—${String(CHRONOLOGY_EVENTS.length).padStart(3, '0')}</p>
-            <h2 id="tide-chronology-title">溯洄纪年</h2>
+            <p class="tide-section-code">RETRACE // 001-${String(CHRONOLOGY_EVENTS.length).padStart(3, '0')}</p>
+            <h2 id="tide-chronology-title" tabindex="-1">溯洄纪年</h2>
             <p>并非版本编号，而是索拉里斯自身的记忆——从悲鸣纪元的第一道残响，到此刻仍在延展的旅程。</p>
           </div>
           <div class="tide-chronicle-stats" aria-label="纪年统计">
@@ -583,7 +607,7 @@ export function mountTide(root, onBack) {
           </div>
         </div>
         <div class="tide-filterbar">
-          <div class="tide-filters" aria-label="按纪元筛选">
+          <div class="tide-filters" role="group" aria-label="按纪元筛选">
             ${CHRONOLOGY_ERAS.map((era) => `
               <button type="button" class="tide-filter" data-era="${era.id}" style="--era:${era.color}" aria-pressed="false">
                 <span>${era.label}</span><em>${String(eraCount(era.id)).padStart(2, '0')}</em>
@@ -605,13 +629,14 @@ export function mountTide(root, onBack) {
   function showArchive() {
     activeView = 'archive'
     root.scrollTop = 0
+    stage.dataset.view = activeView
     stage.innerHTML = `
       ${renderHeader('archive')}
       <div class="tide-index">
         <div class="tide-index-heading">
           <div>
             <p class="tide-section-code">CAUSAL ANALYSIS // VERIFIED</p>
-            <h2>深度推演</h2>
+            <h2 tabindex="-1">深度推演</h2>
           </div>
           <p class="tide-index-hint">// 选择一则记录，展开完整因果链</p>
         </div>
@@ -639,6 +664,7 @@ export function mountTide(root, onBack) {
     const e = ENTRIES[i]
     const returnLabel = { timeline: '观潮 · 航程纪年', chronology: '观潮 · 溯洄纪年', archive: '观潮 · 推演目录' }[returnView]
     root.scrollTop = 0
+    stage.dataset.view = 'entry'
     stage.innerHTML = `
       <a class="tide-toindex" href="#"><span aria-hidden="true">◂</span> ${returnLabel}</a>
       <div class="tide-doc">
@@ -647,7 +673,7 @@ export function mountTide(root, onBack) {
           <span class="tide-name">${e.name}</span>
           <span class="tide-region">${e.region}</span>
         </div>
-        <h2 class="tide-entry-title">${e.title}</h2>
+        <h2 class="tide-entry-title" tabindex="-1">${e.title}</h2>
         ${e.body}
         <p class="tide-end">推演 VER ${e.ver} · 归档完毕　<b>// TETHYS</b></p>
       </div>`
@@ -655,7 +681,9 @@ export function mountTide(root, onBack) {
       ev.preventDefault()
       const views = { timeline: showTimeline, chronology: showChronology, archive: showArchive }
       views[returnView]()
+      focusView('已返回观潮目录')
     })
+    focusView(`已打开深度档案：${e.title}`)
     startWave() // 长文页无波形仪：停掉上一视图的记录笔
   }
 

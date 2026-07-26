@@ -31,6 +31,7 @@ a, button { cursor: none; }
   mask: var(--black-flower-icon) center / contain no-repeat;
   pointer-events: none;
   mix-blend-mode: difference;
+  will-change: translate, transform;
   transition: transform .25s ease;
 }
 #cursor.is-active { transform: scale(2.2); }

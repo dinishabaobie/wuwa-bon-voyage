@@ -4,24 +4,16 @@
 // 悬停放大的交互元素（主页与子页的并集，页面里不存在的选择器自然匹配不到）
 const HOVER_SEL = 'a, button, .bcard, .subject-card, .wall-chip, .hero-module, .tl-item'
 
-// 接管 #cursor 元素：lerp 跟随 + 悬停放大。初始隐藏，首次移动时在指针处现身，
+// 接管 #cursor 元素：指针同步跟随 + 悬停放大。初始隐藏，首次移动时在指针处现身，
 // 避免开屏时一颗四芒星孤零零停在屏幕正中。
 export function setupCursor(cursor) {
-  const pos = { x: innerWidth / 2, y: innerHeight / 2 }
-  const tgt = { ...pos }
   let ready = false
   cursor.style.opacity = '0'
   window.addEventListener('pointermove', (e) => {
-    tgt.x = e.clientX
-    tgt.y = e.clientY
-    if (!ready) { pos.x = tgt.x; pos.y = tgt.y; cursor.style.opacity = '1'; ready = true }
-  })
-  ;(function loop() {
-    pos.x += (tgt.x - pos.x) * 0.18
-    pos.y += (tgt.y - pos.y) * 0.18
-    cursor.style.translate = `${pos.x}px ${pos.y}px`
-    requestAnimationFrame(loop)
-  })()
+    if (e.pointerType === 'touch') return
+    cursor.style.translate = `${e.clientX}px ${e.clientY}px`
+    if (!ready) { cursor.style.opacity = '1'; ready = true }
+  }, { passive: true })
   document.addEventListener('pointerover', (e) => { if (e.target.closest(HOVER_SEL)) cursor.classList.add('is-active') })
   document.addEventListener('pointerout', (e) => {
     if (e.target.closest(HOVER_SEL) && !e.relatedTarget?.closest(HOVER_SEL)) cursor.classList.remove('is-active')
