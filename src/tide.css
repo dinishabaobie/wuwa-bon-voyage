@@ -718,14 +718,8 @@
 }
 
 /* ── 潮线剖面 / direction A ───────────────────────────────────
-   海面横线切开首屏，纵向潮线接续全部记录；锐利、克制、无仪表盘卡片。 */
-body:has(.tide-root) { cursor: auto; }
-body:has(.tide-root) #cursor { display: none; }
-.tide-root,
-.tide-root a,
-.tide-root button { cursor: auto; }
-.tide-root a,
-.tide-root button { cursor: pointer; }
+   海面横线切开首屏，纵向潮线接续全部记录；锐利、克制、无仪表盘卡片。
+   光标沿用 shell.js 的全站四芒星，不在观潮视图内另行覆盖。 */
 
 .tide-root {
   --tide-ink: #061322;
