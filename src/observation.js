@@ -26,7 +26,7 @@ const SUBJECTS = [
   { code: 'S-012', name: '锁暝', element: '待解密', photo: 'photos/suoming.jpg', tagline: '故锁旧契囚执念', author: '鸣潮', href: '', status: 'locked' },
   { code: 'S-013', name: '景燃', element: '待解密', photo: 'photos/jingran.jpg', tagline: '幽境今人亦独行', author: '鸣潮', href: '', status: 'locked' },
   { code: 'S-014', name: '穗穗', element: '待解密', photo: 'photos/suisui.jpg', tagline: '扇间朝晖道谜情', author: '鸣潮', href: '', status: 'locked' },
-  { code: 'S-015', name: '清宵', element: '待解密', photo: 'photos/qingxiao.jpg', tagline: '仙音寒芒镇云关', author: '鸣潮', href: '', status: 'locked' },
+  { code: 'S-015', name: '清宵', element: '气动', accent: '#7ec8ff', photo: 'photos/qingxiao.jpg', tagline: '仙音寒芒镇云关', author: '鸣潮', fx: 'focus', href: '#', status: 'archived' },
 ]
 
 // ── 个人观测档案（点角色卡打开）。新增角色往这里加一条，key 为卡片 code ──
@@ -511,7 +511,7 @@ const PROFILES = {
     name: '菲比', full: 'Phoebe', element: '衍射', accent: '#e8c84f',
     photo: 'photos/phoebe.jpg', author: 'HA',
     tagline: '在洒满阳光的海岸，把一个秘密轻轻藏进光里。',
-    chapel: true, // 专属 UI：晨光礼拜堂（彩窗棱镜 + 祷文书页）
+    logbook: true, // 专属 UI：守塔手记（灯塔值守日志 + 光特性铭牌）
     body: `
       <p class="prof-access">// 接入泰提斯 · 观测档案 S-009<br/>守岸人在此。观测对象 S-009，菲比。<br/>档案标识：五星共鸣者｜衍射｜音感仪。<br/>隐海修会的正式教士。优雅、友善、虔诚；比起宣讲信仰，她更习惯先把光送到需要的人手中。</p>
       <section>
@@ -525,15 +525,27 @@ const PROFILES = {
       <section>
         <h3 class="prof-h">赦罪与告解 <i>// 给予，也倾听</i></h3>
         <p>她的频率可以走向两种状态：「赦罪」让光成为更锋利的裁决；「告解」则削弱阻隔，让同伴的光更容易抵达目标。对教士而言，这两个词同样重要——既要给予宽慰，也要为他人的秘密留出被倾听的位置。</p>
-        <div class="s009-spectrum" aria-label="菲比的两种频率状态">
-          <div class="s009-confession">
-            <span>CONFESSIO</span><b>告解</b>
+        <div class="s009-characteristic" aria-label="菲比的两种频率状态">
+          <div class="s009-beam s009-beam--confessio">
+            <svg class="s009-fan" viewBox="0 0 100 72" aria-hidden="true">
+              <path d="M50 64 L4 46 A50 50 0 0 1 96 46 Z" />
+              <path class="s009-fan-tick" d="M50 64 L50 6" />
+            </svg>
+            <span class="s009-beam-code">CONFESSIO</span>
+            <b>告解</b>
             <small>让阻隔变得透明，让他人的光得以抵达。</small>
+            <em>扩散角 138° · 低强度</em>
           </div>
-          <i aria-hidden="true"><em></em></i>
-          <div class="s009-absolution">
-            <span>ABSOLUTIO</span><b>赦罪</b>
+          <div class="s009-characteristic-mid" aria-hidden="true"><span></span><i>S-009</i><span></span></div>
+          <div class="s009-beam s009-beam--absolutio">
+            <svg class="s009-fan" viewBox="0 0 100 72" aria-hidden="true">
+              <path d="M50 64 L42 15 A50 50 0 0 1 58 15 Z" />
+              <path class="s009-fan-tick" d="M50 64 L50 6" />
+            </svg>
+            <span class="s009-beam-code">ABSOLUTIO</span>
+            <b>赦罪</b>
             <small>让温柔凝成锋芒，为应当守护之物作出裁决。</small>
+            <em>扩散角 16° · 高强度</em>
           </div>
         </div>
         <div class="prof-note">真正的信仰，不只是确信自己拥有答案。它也意味着，在别人尚未找到答案时，愿意陪对方多走一段路。</div>
@@ -604,6 +616,50 @@ const PROFILES = {
       </div>
       <p class="s010-hint">// 湮灭记录归档完毕。最初的那段风声，仍在档案底层轻响——想再听一次，随时拨回气动。</p>`,
     },
+  },
+
+  'S-015': {
+    name: '清宵', full: 'Qingxiao', element: '气动 · 迅刀', accent: '#7ec8ff',
+    photo: 'photos/qingxiao.jpg', author: '鸣潮',
+    tagline: '她把万籁收进一根弦，再把不能沉默的部分，交给剑。',
+    heartSword: true,
+    body: `
+      <section class="s015-act s015-act--qin" aria-labelledby="s015-qin-title">
+        <div class="s015-act-mark" aria-hidden="true"><span>壹</span><b>琴</b></div>
+        <div class="s015-act-copy">
+          <p class="s015-act-kicker">第一幕 · 听弦</p>
+          <h2 id="s015-qin-title">她不是没有波澜。<br/>只是从不让波澜替她回答。</h2>
+          <p>山中百年，清宵把心绪收束得极静。言语淡，神情淡，连共鸣的曲线也常年停在危险边界之前。旁人于是把这种平静叫作无情。</p>
+          <p>可琴弦不会说谎。弦音之所以清，是因为每一次震颤都被她听见、接住，再慢慢放回安静。她修的不是遗忘，而是让强烈的心仍能保持方向。</p>
+        </div>
+        <blockquote class="s015-whisper"><p>清冷，是她安放情绪的方式。</p><cite>不是她的心里空无一物。</cite></blockquote>
+      </section>
+
+      <section class="s015-act s015-act--sword" aria-labelledby="s015-sword-title">
+        <div class="s015-act-mark" aria-hidden="true"><span>贰</span><b>剑</b></div>
+        <div class="s015-sword-word" aria-hidden="true">剑</div>
+        <div class="s015-act-copy">
+          <p class="s015-act-kicker">第二幕 · 见剑</p>
+          <h2 id="s015-sword-title">她很少说自己在意谁。<br/>剑却总比言语更早抵达。</h2>
+          <p>心念所至，皆可为剑。琴弦、落花、风中一叶，在她手里都能凝成寒芒。所谓无剑之境，并非手中空无一物，而是她终于不必借一件兵器证明锋利。</p>
+          <p>修行者说，不应轻易干预他人的因果。她懂。可玄方山河之外有人陷入灾厄时，她仍一次次下山。她知道一剑救不尽天下人，也仍不肯把眼前的生命视作可以略过的数字。</p>
+        </div>
+        <p class="s015-vow">剑的方向，暴露了心的方向。</p>
+      </section>
+
+      <section class="s015-act s015-act--heart" aria-labelledby="s015-heart-title">
+        <div class="s015-act-mark" aria-hidden="true"><span>叁</span><b>心</b></div>
+        <div class="s015-act-copy">
+          <p class="s015-act-kicker">第三幕 · 知心</p>
+          <h2 id="s015-heart-title">真正的破境，<br/>不是斩去心魔。</h2>
+          <p>那道与她相似的声音，并没有凭空制造软弱。它只是替清宵保存了曾被隔在心外的痛苦、牵挂、冲动与迟疑。她最终没有把它当作敌人，而是承认：那也是自己。</p>
+          <p>从此，澄明不再来自割舍。她愿意建立玄元门，愿意教徒儿起居与修行，也愿意让另一个人走近自己的日常。琴与剑没有消失，只是第一次同归一颗完整的心。</p>
+        </div>
+        <blockquote class="s015-final-verse">
+          <p>弦声不是为了压住心。<br/>剑，也不是为了斩断心。</p>
+          <cite>清宵仍在山河之前。如今，她带着完整的自己。</cite>
+        </blockquote>
+      </section>`,
   },
 }
 
@@ -953,29 +1009,32 @@ export function mountObservation(root, onBack) {
       </div>`)
   }
 
-  // ── S-009 专属：晨光礼拜堂（彩窗棱镜、光尘与海岸弧光） ──
-  function renderChapelDeco() {
+  // ── S-009 专属：守塔手记（灯塔值守日志、海况铭牌与光束扫描） ──
+  function renderKeeperLogDeco() {
     profEl.classList.add('s009')
-    const motes = Array.from({ length: 18 }, (_, i) =>
-      `<i style="--x:${4 + Math.floor(Math.random() * 92)}%;--y:${8 + Math.floor(Math.random() * 86)}%;--s:${(0.45 + Math.random() * 1.15).toFixed(2)};--d:${(-Math.random() * 8).toFixed(1)}s;--t:${(7 + Math.random() * 7).toFixed(1)}s;--r:${(i * 29) % 180}deg"></i>`
-    ).join('')
     profEl.insertAdjacentHTML('beforeend', `
+      <!--
+      THESIS: 菲比的档案不是被翻阅的百科资料，而是一本真实在用的灯塔值守日志；拒绝拱窗礼拜堂与印记贴纸式的甜美古风。
+      OWN-WORLD: 账页米褐纸、铁胆墨黑棕字、警示琥珀金与暴雨蓝，宋体标题＋仿宋正文＋等宽戳记标签。
+      STORY: 先看到贴入的证件照与登记铭牌，翻阅值守日志各节，途经暴雨守夜与光特性铭牌，最终在日志背后发现一张手写私笔。
+      FIRST VIEWPORT: 登记封面——虚线登记框内左证件照、右身份铭牌，装订线固定于左侧页边。
+      FORM: 守塔手记；灯塔看守人值班日志，七个方向候选中的第三项；concept-seed key ba1e72d1，assigned index 3。
+      -->
       <div class="s009-deco" aria-hidden="true">
-        <div class="s009-window">
-          <svg viewBox="0 0 260 430" role="presentation">
-            <path d="M18 412V154C18 80 68 18 130 18S242 80 242 154v258Z" />
-            <path d="M130 20v392M20 168h220M42 94l176 244M218 94 42 338" />
-            <circle cx="130" cy="168" r="45" />
-          </svg>
+        <div class="s009-margin-rule"></div>
+        <div class="s009-sweep"></div>
+        <div class="s009-tide">
+          <span>SEA STATE · S-009</span>
+          <div class="s009-wind"><b>风力</b><i>3</i></div>
+          <div class="s009-tideh"><b>潮高</b><i>1.1 M</i></div>
+          <div class="s009-vis"><b>能见度</b><i>良好</i></div>
         </div>
-        <div class="s009-rays"></div>
-        <div class="s009-motes">${motes}</div>
-        <div class="s009-ritual">
-          <span>RITE OF LIGHT</span>
-          <div class="s009-ritual-rail"><i></i><b></b><b></b><b></b></div>
-          <em>入堂</em>
+        <div class="s009-watch">
+          <span>WATCH LOG</span>
+          <div class="s009-watch-rail"><i></i><b></b><b></b><b></b><b></b></div>
+          <em>交班</em>
         </div>
-        <span class="s009-verse">LUX · CONFESSIO · ABSOLUTIO</span>
+        <span class="s009-code">灯塔看守 · S-009 · 已备案</span>
       </div>`)
   }
 
@@ -1296,10 +1355,73 @@ export function mountObservation(root, onBack) {
     const max = profEl.scrollHeight - profEl.clientHeight
     const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
     profEl.style.setProperty('--s009-p', String(p))
-    const phase = p < .28 ? '入堂' : p < .68 ? '告解' : '赦罪'
-    const phaseEl = profEl.querySelector('.s009-ritual em')
+    const phase = p < .22 ? '交班' : p < .5 ? '值守' : p < .78 ? '裁光' : '封卷'
+    const phaseEl = profEl.querySelector('.s009-watch em')
     if (phaseEl && phaseEl.textContent !== phase) phaseEl.textContent = phase
-    profEl.dataset.ritual = phase
+    profEl.dataset.watch = phase
+    const windEl = profEl.querySelector('.s009-wind i')
+    const tideEl = profEl.querySelector('.s009-tideh i')
+    const visEl = profEl.querySelector('.s009-vis i')
+    if (windEl) windEl.textContent = String(Math.round(3 + Math.min(1, p / .55) * 5))
+    if (tideEl) tideEl.textContent = (1.1 + Math.sin(p * Math.PI) * .6).toFixed(1) + ' M'
+    if (visEl) visEl.textContent = p > .22 && p < .55 ? '受限' : p >= .55 && p < .8 ? '恢复' : '良好'
+  }
+
+  // ── S-015 专属：水袖排演场，滚动时幕翼收束为心剑 ──
+  function renderHeartSwordDossier(d, code) {
+    profEl.classList.add('s015')
+    profEl.innerHTML = `
+      <!--
+      THESIS: 清宵不是一份被阅读的档案，而是一场由静入心的启幕；拒绝角色卡与科技卷宗。
+      OWN-WORLD: 墨蓝舞台、冷白绢幕、冰蓝剑线与一点旧金，文字悬于不对称留白。
+      STORY: 先看见清冷，再听见琴弦，随后理解她为何出剑，最终抵达完整的心。
+      FIRST VIEWPORT: 全高人物被四道竖向幕翼切分，“清／宵”退至幕后，返回在左上，进程在右侧。
+      FORM: 水袖排演场；七个方向中的第六项，采用分层幕翼冷开场；seed e8a2bad8。
+      -->
+      <a class="prof-back" href="#"><span aria-hidden="true">←</span><span>退场</span></a>
+      <article class="s015-dossier">
+        <header class="s015-stage" aria-labelledby="profile-title">
+          <div class="s015-glyphs" aria-hidden="true"><span>清</span><span>宵</span></div>
+          <figure class="s015-figure">
+            <img src="${d.photo}" alt="清宵手持长剑，着蓝白衣装立于冷色舞台中央" />
+            <figcaption>观测对象 ${code} · 立绘 @${d.author}</figcaption>
+          </figure>
+          <div class="s015-wings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <div class="s015-stage-copy">
+            <p class="s015-stage-kicker">私人观测 · ${code}</p>
+            <h1 id="profile-title"><span>清宵</span><em>${d.full}</em></h1>
+            <p>${d.tagline}</p>
+          </div>
+          <div class="s015-cold-open" aria-hidden="true"><span>向下启幕</span><i></i></div>
+        </header>
+        <main class="s015-script">${d.body}</main>
+        <footer class="s015-curtain-call">
+          <span>水袖收尽，心剑未眠。</span>
+          <b>清宵 · 观测终</b>
+        </footer>
+      </article>
+      <div class="s015-tension" aria-hidden="true"><i></i></div>
+      <aside class="s015-phase" aria-label="档案阅读进度">
+        <span data-phase="静">静</span><span data-phase="弦">弦</span><span data-phase="剑">剑</span><span data-phase="心">心</span>
+        <i aria-hidden="true"></i>
+      </aside>`
+  }
+
+  function s015OnScroll() {
+    if (!profEl.classList.contains('s015')) return
+    const max = profEl.scrollHeight - profEl.clientHeight
+    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
+    const open = Math.min(1, Math.max(0, profEl.scrollTop / (profEl.clientHeight * .72 || 1)))
+    profEl.style.setProperty('--s015-p', String(p))
+    profEl.style.setProperty('--s015-open', String(open))
+    const phase = p < .16 ? '静' : p < .42 ? '弦' : p < .7 ? '剑' : '心'
+    profEl.querySelectorAll('.s015-phase [data-phase]').forEach((item) => {
+      const active = item.dataset.phase === phase
+      item.classList.toggle('is-current', active)
+      if (active) item.setAttribute('aria-current', 'step')
+      else item.removeAttribute('aria-current')
+    })
+    profEl.dataset.heart = phase
   }
 
   function openProfile(code, trigger) {
@@ -1312,8 +1434,14 @@ export function mountObservation(root, onBack) {
     profEl.style.setProperty('--accent', d.accent)
     if (d.dual) renderDualProfile(d, code)
     else if (d.metamorph) renderMetamorphProfile(d, code)
+    else if (d.heartSword) {
+      renderHeartSwordDossier(d, code)
+      profEl.addEventListener('scroll', s015OnScroll, { passive: true })
+      profileCleanups.push(() => profEl.removeEventListener('scroll', s015OnScroll))
+      s015OnScroll()
+    }
     else profEl.innerHTML = `
-      <a class="prof-back" href="#"><span aria-hidden="true">◂</span> 观测对象</a>
+      <a class="prof-back" href="#"><span aria-hidden="true">◂</span> ${d.logbook ? '合上日志' : '观测对象'}</a>
       <div class="prof-doc">
         <div class="prof-hero">
           <div class="prof-portrait"><img src="${d.photo}" alt="${d.name}" /></div>
@@ -1333,7 +1461,7 @@ export function mountObservation(root, onBack) {
     const THEMES = [
       { flag: 'wall', render: renderWallDeco },
       { flag: 'thread', render: renderThreadArchive, onScroll: s002OnScroll },
-      { flag: 'chapel', render: renderChapelDeco, onScroll: s009OnScroll },
+      { flag: 'logbook', render: renderKeeperLogDeco, onScroll: s009OnScroll },
       { flag: 'engineering', render: renderEngineeringDossier, onScroll: s003OnScroll },
       { flag: 'requiem', render: renderRequiemDossier, onScroll: s004OnScroll },
       { flag: 'signal', render: renderSignalDossier, onScroll: s005OnScroll },
