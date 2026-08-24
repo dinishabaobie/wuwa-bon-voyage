@@ -1288,14 +1288,23 @@ html.prof-lock { overflow: hidden; }
   text-shadow: 0 0 14px rgba(53,200,216,.6);
 }
 
-/* ---------- S-009 菲比 · 晨光礼拜堂 ---------- */
+/* ---------- S-009 菲比 · 守塔手记 ---------- */
 .prof-overlay.s009 {
   --s009-p: 0;
-  background-color: #eef6f4;
+  --s009-paper: #e9dfc4;
+  --s009-paper-deep: #ddcfa8;
+  --s009-ink: #2c2115;
+  --s009-ink-soft: rgba(44,33,21,.68);
+  --s009-rule: rgba(44,33,21,.1);
+  --s009-margin: #8a3b2c;
+  --s009-brass: #a8752c;
+  --s009-brass-bright: #c99436;
+  --s009-dusk: #35506b;
+  background-color: var(--s009-paper);
   background-image:
-    radial-gradient(70% 52% at 78% 2%, rgba(255,232,151,.58), transparent 72%),
-    radial-gradient(52% 58% at 7% 62%, rgba(129,202,225,.24), transparent 74%),
-    linear-gradient(180deg, rgba(255,255,255,.78), rgba(226,242,239,.94));
+    repeating-linear-gradient(180deg, transparent 0 37px, var(--s009-rule) 37px 38px),
+    radial-gradient(120% 60% at 50% -8%, rgba(255,255,255,.35), transparent 62%),
+    linear-gradient(175deg, var(--s009-paper) 0%, var(--s009-paper-deep) 100%);
 }
 
 /* ---------- S-002 千咲 · 命运卷宗 ---------- */
@@ -1473,216 +1482,179 @@ html.prof-lock { overflow: hidden; }
   .s002 .prof-doc section, .s002 .prof-doc section:nth-of-type(even) { transform: none; padding-inline: 1.45rem 1.15rem; }
   .s002-timeline, .s002-case, .s002-scissors { display: none; }
 }
-.prof-overlay.s009::before {
-  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background:
-    radial-gradient(70% 55% at 72% 18%, rgba(255,208,73,.42), transparent 68%),
-    linear-gradient(180deg, rgba(255,250,222,.2), rgba(255,216,105,.25));
-  opacity: calc(var(--s009-p) * .78); transition: opacity .12s linear;
-}
-.s009 .prof-doc { position: relative; z-index: 2; }
-.s009 .prof-back { color: rgba(40,76,91,.62); }
-.s009 .prof-back:hover { color: #c9992d; }
+.s009 .prof-doc { position: relative; z-index: 2; counter-reset: s009entry; }
+.s009 .prof-back { color: var(--s009-ink-soft); }
+.s009 .prof-back:hover { color: var(--s009-margin); }
 
-/* 档案头：拱窗肖像与日轮 */
+/* 档案头：登记封面 —— 值守铭牌 + 贴入的证件照 */
 .s009 .prof-hero {
-  align-items: center; min-height: 360px; padding: 2rem 1.4rem 3rem;
-  border: 1px solid rgba(96,158,181,.25); border-radius: 180px 180px 22px 22px;
-  background: linear-gradient(145deg, rgba(255,255,255,.82), rgba(231,246,247,.54));
-  box-shadow: 0 26px 70px -38px rgba(42,94,113,.48), inset 0 0 60px rgba(255,255,255,.7);
-  position: relative; overflow: hidden;
+  align-items: center; gap: clamp(1.8rem, 4vw, 3.2rem);
+  padding: 1.7rem 1.9rem 2.5rem; margin-bottom: 1.2rem;
+  border: 1px solid rgba(44,33,21,.22);
+  background: linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,.05));
+  position: relative;
 }
 .s009 .prof-hero::before {
-  content: ""; position: absolute; width: 360px; height: 360px; left: -74px; top: -92px;
-  border-radius: 50%; border: 1px solid rgba(219,177,73,.3);
-  box-shadow: 0 0 0 24px rgba(255,235,166,.08), 0 0 0 58px rgba(111,191,218,.06);
-}
-.s009 .prof-hero::after {
-  content: ""; position: absolute; width: 410px; height: 410px; left: -99px; top: -117px;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0 13deg, rgba(214,169,48,.35) 14deg 15deg, transparent 16deg 43deg, rgba(92,180,213,.25) 44deg 46deg, transparent 47deg 100%);
-  opacity: calc(.28 + var(--s009-p) * .58);
-  transform: rotate(calc(var(--s009-p) * 90deg));
-  transition: opacity .2s linear; pointer-events: none;
+  content: ""; position: absolute; inset: 9px; pointer-events: none;
+  border: 1px dashed rgba(44,33,21,.16);
 }
 .s009 .prof-portrait {
-  width: clamp(170px, 24vw, 235px); aspect-ratio: 3 / 4;
-  border: 5px solid rgba(255,255,255,.9); border-radius: 120px 120px 18px 18px;
-  box-shadow: 0 20px 52px -22px rgba(44,99,118,.5), 0 0 0 1px rgba(211,169,63,.38), 0 0 45px rgba(255,223,128,.38);
-  position: relative; z-index: 1;
+  width: clamp(150px, 19vw, 200px); aspect-ratio: 3 / 4;
+  border: 8px solid #f7f2e4; border-radius: 2px;
+  box-shadow: 0 2px 0 rgba(0,0,0,.05), 0 16px 32px -16px rgba(20,14,6,.48), 0 0 0 1px rgba(44,33,21,.18);
+  transform: rotate(-1.4deg); position: relative; z-index: 1;
 }
+.s009 .prof-portrait::after {
+  content: ""; position: absolute; right: -22px; bottom: -18px; width: 62px; height: 62px;
+  border: 2px solid var(--s009-margin); border-radius: 50%; opacity: .55; mix-blend-mode: multiply;
+  transform: rotate(-12deg); box-shadow: inset 0 0 0 5px rgba(255,255,255,.35);
+}
+.s009 .prof-portrait img { filter: sepia(.16) saturate(.85) contrast(1.04) brightness(.98); }
 .s009 .prof-id { position: relative; z-index: 1; }
-.s009 .prof-code { color: rgba(54,103,119,.48); }
+.s009 .prof-code { color: var(--s009-ink-soft); }
 .s009 .prof-name {
-  color: #214c5c; font-family: "Songti SC", "STSong", serif; font-weight: 600;
-  letter-spacing: .16em; text-shadow: 0 0 28px rgba(255,211,95,.58);
+  color: var(--s009-ink); font-family: "Songti SC", "STSong", serif; font-weight: 600;
+  letter-spacing: .14em; text-shadow: none;
 }
-.s009 .prof-name em { color: rgba(52,102,119,.48); font-family: var(--font-tech); }
+.s009 .prof-name em { color: rgba(44,33,21,.5); font-family: var(--font-tech); }
 .s009 .prof-badge {
-  color: #9a721c; border-color: rgba(196,146,35,.55); border-radius: 999px;
-  background: rgba(255,246,207,.72); padding: .28rem .78rem;
+  color: #f7f2e4; background: var(--s009-brass); border-color: var(--s009-brass);
+  border-radius: 2px; padding: .24rem .68rem; letter-spacing: .22em;
 }
 .s009 .prof-tagline {
-  color: rgba(39,79,94,.7); font-family: "Songti SC", "STSong", serif;
-  font-size: 1.05rem; letter-spacing: .05em;
+  color: var(--s009-ink-soft); font-family: "Songti SC", "STSong", serif;
+  font-size: 1rem; letter-spacing: .04em;
 }
-.s009 .prof-author { color: rgba(47,88,103,.4); }
+.s009 .prof-author { color: rgba(44,33,21,.42); }
 .s009 .prof-access {
-  margin: 2.4rem .7rem 3.4rem; padding: 1.25rem 1.5rem;
-  color: rgba(47,102,121,.72); border-left: 2px solid rgba(205,157,45,.52);
-  background: linear-gradient(90deg, rgba(255,255,255,.6), transparent);
+  margin: 2rem 0 3.2rem; padding: 1rem 0;
+  color: var(--s009-ink-soft);
+  border-top: 1px solid rgba(44,33,21,.18); border-bottom: 1px solid rgba(44,33,21,.18);
 }
 
-/* 章节：摊开的祷文书页 */
+/* 章节：连续翻过的值守日志页 */
 .s009 .prof-doc section {
-  margin-top: 2.2rem; padding: 1.65rem 1.9rem 1.15rem 2.2rem;
-  border: 1px solid rgba(86,151,175,.18); border-radius: 4px 38px 4px 38px;
-  background: rgba(255,255,255,.66);
-  box-shadow: 0 15px 45px -32px rgba(42,94,113,.68);
-  position: relative; overflow: hidden;
-}
-.s009 .prof-doc section:nth-of-type(3) {
-  padding-bottom: 1.8rem;
-  background: linear-gradient(135deg, rgba(224,245,250,.84), rgba(255,248,218,.9));
-  border-color: rgba(203,158,42,.28);
+  position: relative; margin-top: 3rem; padding-top: 1.4rem;
+  border-top: 1px solid rgba(44,33,21,.22);
 }
 .s009 .prof-doc section::before {
-  content: "✦"; position: absolute; left: .72rem; top: 1.6rem;
-  color: rgba(201,151,36,.7); font-size: .75rem;
-}
-.s009 .prof-doc section::after {
-  content: ""; position: absolute; right: -35px; bottom: -62px; width: 150px; height: 150px;
-  border: 1px solid rgba(103,183,211,.18); border-radius: 50%;
-  box-shadow: 0 0 0 18px rgba(103,183,211,.035), 0 0 0 38px rgba(225,181,70,.025);
+  counter-increment: s009entry;
+  content: "ENTRY " counter(s009entry, decimal-leading-zero);
+  position: absolute; right: 0; top: -1.5rem;
+  font: .6rem/1 var(--font-tech); letter-spacing: .2em; color: rgba(44,33,21,.35);
 }
 .s009 .prof-h {
-  color: #255366; font-family: "Songti SC", "STSong", serif;
-  font-size: 1.34rem; letter-spacing: .14em;
+  color: var(--s009-ink); font-family: "Songti SC", "STSong", serif;
+  font-size: 1.3rem; letter-spacing: .1em;
 }
-.s009 .prof-h i { color: #b58624; font-family: var(--font-tech); }
-.s009 .prof-doc p { color: rgba(32,70,84,.76); }
-.s009 .prof-doc p b { color: #173f4e; }
+.s009 .prof-h i { color: var(--s009-brass); font-family: var(--font-tech); }
+.s009 .prof-doc p { color: var(--s009-ink-soft); font-family: "FangSong", "STFangsong", serif; }
+.s009 .prof-doc p b { color: var(--s009-ink); }
 .s009 .prof-note {
-  border: 1px solid rgba(94,166,192,.27); border-left: 3px solid rgba(219,177,73,.72);
-  border-radius: 3px 22px 3px 22px; background: rgba(228,244,247,.78);
-  color: rgba(37,79,94,.7); font-family: "Songti SC", "STSong", serif;
+  border: 1px solid rgba(44,33,21,.22);
+  background: rgba(53,80,107,.07); color: var(--s009-ink-soft);
+  font-family: "FangSong", "STFangsong", serif;
 }
 
-/* 告解 / 赦罪：将角色机制化成一枚可见的双面圣印 */
-.s009-spectrum {
-  display: grid; grid-template-columns: minmax(0,1fr) 82px minmax(0,1fr);
-  align-items: stretch; gap: 1rem; margin: 1.8rem 0 1.6rem;
+/* 告解 / 赦罪：化作灯塔的官方光特性铭牌，而非印记贴纸 */
+.s009-characteristic {
+  display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+  align-items: stretch; gap: 1.2rem; margin: 2rem 0 1.6rem;
+  padding: 1.4rem 0; border-top: 1px solid rgba(44,33,21,.22); border-bottom: 1px solid rgba(44,33,21,.22);
 }
-.s009-spectrum > div {
-  min-height: 150px; padding: 1.15rem 1.2rem; display: flex; flex-direction: column; justify-content: center;
-  border-radius: 44px 6px 44px 6px; position: relative; overflow: hidden;
-}
-.s009-spectrum > div::after {
-  content: ""; position: absolute; width: 100px; height: 100px; right: -48px; top: -48px;
-  border: 1px solid currentColor; border-radius: 50%; opacity: .16;
-  box-shadow: 0 0 0 12px currentColor, 0 0 0 28px currentColor;
-}
-.s009-confession {
-  color: #287c9b; border: 1px solid rgba(62,157,190,.28);
-  background: linear-gradient(145deg, rgba(224,249,255,.92), rgba(255,255,255,.62));
-}
-.s009-absolution {
-  color: #a5750f; border: 1px solid rgba(205,158,43,.3);
-  background: linear-gradient(145deg, rgba(255,250,220,.94), rgba(255,255,255,.68));
-}
-.s009-spectrum span { font: .58rem/1.2 var(--font-tech); letter-spacing: .25em; opacity: .68; }
-.s009-spectrum b { margin: .45rem 0 .5rem; font: 600 1.4rem/1.2 "Songti SC", "STSong", serif; letter-spacing: .18em; }
-.s009-spectrum small { font-size: .78rem; line-height: 1.75; color: rgba(31,70,84,.62); }
-.s009-spectrum > i {
-  align-self: center; width: 70px; height: 70px; display: grid; place-items: center;
-  border: 1px solid rgba(203,157,42,.45); border-radius: 50%;
-  background: rgba(255,255,255,.75); box-shadow: 0 0 30px rgba(255,211,88,.38);
-  animation: s009seal 12s linear infinite;
-}
-.s009-spectrum > i::before,
-.s009-spectrum > i::after { content: ""; position: absolute; width: 46px; height: 46px; border: 1px solid rgba(81,166,197,.38); transform: rotate(45deg); }
-.s009-spectrum > i::after { width: 28px; height: 28px; border-color: rgba(203,157,42,.56); transform: rotate(22.5deg); }
-.s009-spectrum > i em { width: 8px; height: 8px; border-radius: 50%; background: #e2b847; box-shadow: 0 0 15px #f5d674; }
-@keyframes s009seal { to { rotate: 360deg; } }
+.s009-beam { display: flex; flex-direction: column; align-items: center; text-align: center; padding: .3rem .5rem; }
+.s009-beam--confessio { --beam-color: var(--s009-dusk); }
+.s009-beam--absolutio { --beam-color: var(--s009-brass); }
+.s009-fan { width: 96px; height: 66px; margin-bottom: .5rem; }
+.s009-fan path:first-child { fill: color-mix(in srgb, var(--beam-color) 22%, transparent); stroke: var(--beam-color); stroke-width: 1.4; }
+.s009-fan-tick { fill: none; stroke: var(--beam-color); stroke-width: 1; stroke-dasharray: 2 3; opacity: .55; }
+.s009-beam-code { font: .58rem/1.2 var(--font-tech); letter-spacing: .26em; color: var(--beam-color); opacity: .85; }
+.s009-beam b { margin: .5rem 0 .4rem; font: 600 1.3rem/1 "Songti SC", "STSong", serif; letter-spacing: .16em; color: var(--s009-ink); }
+.s009-beam small { font-size: .78rem; line-height: 1.75; color: var(--s009-ink-soft); max-width: 24ch; }
+.s009-beam em { margin-top: .65rem; font: .66rem/1 var(--font-tech); font-style: normal; letter-spacing: .08em; color: var(--beam-color); opacity: .8; }
+.s009-characteristic-mid { display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: .2rem 0; }
+.s009-characteristic-mid span { width: 1px; flex: 1; background: rgba(44,33,21,.2); }
+.s009-characteristic-mid i { margin: .5rem 0; font: .6rem/1 var(--font-tech); font-style: normal; letter-spacing: .2em; color: rgba(44,33,21,.4); writing-mode: vertical-rl; }
+
+/* 秘密：从盖印记录切换成塞在日志背后的私人便签 */
 .s009 .prof-sign {
-  border: 1px solid rgba(207,164,60,.32); border-left: none; border-radius: 90px 12px 90px 12px;
-  background: linear-gradient(135deg, rgba(255,250,226,.9), rgba(224,243,246,.72));
-  box-shadow: 0 22px 55px -38px rgba(187,139,28,.65); text-align: center;
+  max-width: 32rem; margin: 4rem auto 0; padding: 1.6rem 1.8rem;
+  background: #f7f1de; border: 1px solid rgba(44,33,21,.16);
+  box-shadow: 0 20px 44px -26px rgba(20,14,6,.4);
+  transform: rotate(-1.1deg); text-align: left; position: relative;
 }
 .s009 .prof-sign::before {
-  content: "◇"; display: block; margin: -.2rem auto .6rem; color: #c3962d;
-  font-size: 1.4rem; text-shadow: 0 0 16px rgba(239,195,75,.6);
+  content: ""; position: absolute; right: 0; top: 0; width: 26px; height: 26px;
+  background: linear-gradient(135deg, transparent 50%, rgba(44,33,21,.14) 50%);
 }
-.s009 .prof-sign p { color: rgba(34,72,86,.75); font-family: "Songti SC", "STSong", serif; }
-.s009 .prof-sign p:last-child { color: #a67918; text-shadow: 0 0 16px rgba(232,190,77,.45); }
-.s009 .prof-end { color: rgba(46,91,107,.45); border-top-color: rgba(74,139,163,.2); }
-.s009 .prof-end b { color: #b48622; }
+.s009 .prof-sign p { color: var(--s009-ink-soft); font-family: "FangSong", "STFangsong", serif; font-style: italic; }
+.s009 .prof-sign p:last-child { color: var(--s009-margin); font-weight: 600; font-style: italic; text-shadow: none; }
+.s009 .prof-end { color: rgba(44,33,21,.4); border-top-color: rgba(44,33,21,.18); }
+.s009 .prof-end b { color: var(--s009-brass); }
 
-/* 彩窗投影与缓慢漂浮的棱镜光尘 */
+/* 装订线、灯束扫描与固定的海况铭牌 */
 .s009-deco { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
-.s009-window {
-  position: absolute; width: min(28vw, 270px); right: 2.2vw; top: 8vh;
-  opacity: .14; color: #3c9abb;
+.s009-margin-rule {
+  position: absolute; left: clamp(2.6rem, 9vw, 6.4rem); top: 0; bottom: 0; width: 1px;
+  background: rgba(139,58,44,.16);
 }
-.s009-window svg { width: 100%; fill: rgba(255,255,255,.24); stroke: currentColor; stroke-width: 2; }
-.s009-rays {
-  position: absolute; width: 72vw; height: 42vh; right: -12vw; top: -5vh;
-  background: conic-gradient(from 212deg at 100% 0%, transparent 0 7deg, rgba(255,222,119,.18) 8deg 11deg, transparent 12deg 20deg, rgba(109,198,226,.12) 21deg 25deg, transparent 26deg 100%);
-  filter: blur(1px); transform: rotate(calc(-4deg + var(--s009-p) * 7deg));
-  opacity: calc(.28 + var(--s009-p) * .72);
+.s009-sweep {
+  position: absolute; top: -20vh; right: -20vw; width: 70vw; height: 70vh;
+  background: conic-gradient(from calc(200deg + var(--s009-p) * 40deg) at 100% 0%, transparent 0 4deg, rgba(168,117,44,.16) 5deg 7deg, transparent 8deg 100%);
+  filter: blur(1px); opacity: calc(.4 + var(--s009-p) * .5); transition: opacity .2s linear, background .4s linear;
 }
-.s009-motes i {
-  position: absolute; left: var(--x); top: var(--y); width: calc(9px * var(--s)); height: calc(14px * var(--s));
-  border-radius: 70% 10% 70% 10%; transform: rotate(var(--r));
-  background: linear-gradient(145deg, rgba(255,226,128,.9), rgba(109,196,226,.55));
-  box-shadow: 0 0 14px rgba(255,214,96,.5); opacity: .22;
-  animation: s009float var(--t) ease-in-out var(--d) infinite alternate;
+.s009[data-watch="值守"] .s009-sweep {
+  background: conic-gradient(from calc(200deg + var(--s009-p) * 40deg) at 100% 0%, transparent 0 4deg, rgba(53,80,107,.18) 5deg 8deg, transparent 9deg 100%);
 }
-@keyframes s009float {
-  from { translate: 0 10px; rotate: -8deg; opacity: .12; }
-  to { translate: 10px -16px; rotate: 10deg; opacity: .48; }
+.s009-tide {
+  position: fixed; left: clamp(16px, 3vw, 40px); bottom: clamp(16px, 4vh, 40px);
+  display: flex; flex-direction: column; gap: .35rem;
+  font-family: var(--font-tech); font-size: .62rem; letter-spacing: .06em; color: rgba(44,33,21,.5);
+  background: rgba(233,223,196,.72); padding: .7rem .85rem; border: 1px solid rgba(44,33,21,.15);
 }
-.s009-verse {
-  position: fixed; right: 2.4vw; bottom: 5vh; writing-mode: vertical-rl;
-  font-family: var(--font-tech); font-size: .58rem; letter-spacing: .32em; color: rgba(57,124,147,.32);
+.s009-tide > span:first-child { letter-spacing: .22em; font-size: .56rem; color: rgba(44,33,21,.4); margin-bottom: .15rem; }
+.s009-tide div { display: flex; justify-content: space-between; gap: 1.2rem; }
+.s009-tide div b { font-weight: 500; color: rgba(44,33,21,.62); }
+.s009-tide div i { font-style: normal; color: var(--s009-brass); }
+.s009-code {
+  position: fixed; right: 2.2vw; bottom: 5vh; writing-mode: vertical-rl;
+  font-family: var(--font-tech); font-size: .56rem; letter-spacing: .3em; color: rgba(44,33,21,.32);
 }
 
-/* 固定在页面右侧的祈光进度：入堂 → 告解 → 赦罪 */
-.s009-ritual {
+/* 固定在页面右侧的值守进度：交班 → 值守 → 裁光 → 封卷 */
+.s009-watch {
   position: fixed; right: clamp(18px, 3vw, 46px); top: 50%; translate: 0 -50%;
   display: flex; flex-direction: column; align-items: center; gap: .8rem;
-  color: rgba(42,99,119,.46);
+  color: rgba(44,33,21,.46);
 }
-.s009-ritual > span {
-  writing-mode: vertical-rl; font: .52rem/1 var(--font-tech); letter-spacing: .3em;
-}
-.s009-ritual-rail {
-  position: relative; width: 2px; height: 150px; background: rgba(61,125,148,.18);
-}
-.s009-ritual-rail i {
+.s009-watch > span { writing-mode: vertical-rl; font: .52rem/1 var(--font-tech); letter-spacing: .3em; }
+.s009-watch-rail { position: relative; width: 2px; height: 170px; background: rgba(44,33,21,.16); }
+.s009-watch-rail i {
   position: absolute; left: 0; top: 0; width: 100%; height: calc(var(--s009-p) * 100%);
-  background: linear-gradient(#59afd0, #e2b443); box-shadow: 0 0 10px rgba(224,177,58,.42);
+  background: linear-gradient(var(--s009-dusk), var(--s009-brass-bright)); box-shadow: 0 0 8px rgba(168,117,44,.4);
 }
-.s009-ritual-rail b {
+.s009-watch-rail b {
   position: absolute; left: 50%; translate: -50% -50%; width: 7px; height: 7px;
-  border: 1px solid #75aabe; border-radius: 50%; background: #eef6f4;
+  border: 1px solid rgba(44,33,21,.4); border-radius: 50%; background: var(--s009-paper);
 }
-.s009-ritual-rail b:nth-of-type(1) { top: 0; }
-.s009-ritual-rail b:nth-of-type(2) { top: 50%; }
-.s009-ritual-rail b:nth-of-type(3) { top: 100%; border-color: #c59828; }
-.s009-ritual > em {
-  min-width: 3.5em; text-align: center; font: normal 600 .72rem/1.2 "Songti SC", "STSong", serif;
-  letter-spacing: .18em; color: #a2761d; transition: color .3s;
+.s009-watch-rail b:nth-of-type(1) { top: 0; }
+.s009-watch-rail b:nth-of-type(2) { top: 33.3%; }
+.s009-watch-rail b:nth-of-type(3) { top: 66.6%; }
+.s009-watch-rail b:nth-of-type(4) { top: 100%; border-color: var(--s009-margin); }
+.s009-watch > em {
+  min-width: 3.6em; text-align: center; font: 600 .72rem/1.2 "Songti SC", "STSong", serif;
+  letter-spacing: .16em; color: var(--s009-ink); transition: color .3s;
 }
-.s009[data-ritual="告解"] .s009-ritual > em { color: #2b87a9; }
-.s009[data-ritual="赦罪"] .s009-ritual > em { color: #c38b16; text-shadow: 0 0 14px rgba(230,184,63,.65); }
+.s009[data-watch="值守"] .s009-watch > em { color: var(--s009-dusk); }
+.s009[data-watch="裁光"] .s009-watch > em { color: var(--s009-brass); text-shadow: 0 0 12px rgba(168,117,44,.4); }
+.s009[data-watch="封卷"] .s009-watch > em { color: var(--s009-margin); }
 
-@media (max-width: 640px) {
-  .s009 .prof-hero { border-radius: 100px 100px 18px 18px; padding-inline: 1rem; }
-  .s009 .prof-doc section { padding-inline: 1.7rem 1.2rem; border-radius: 3px 26px 3px 26px; }
-  .s009-window, .s009-verse, .s009-ritual { display: none; }
-  .s009-spectrum { grid-template-columns: 1fr; }
-  .s009-spectrum > i { width: 54px; height: 54px; }
+@media (max-width: 700px) {
+  .s009-margin-rule, .s009-tide, .s009-watch, .s009-code { display: none; }
+  .s009-characteristic { grid-template-columns: 1fr; }
+  .s009-characteristic-mid { flex-direction: row; padding: .4rem 0; }
+  .s009-characteristic-mid span { width: auto; height: 1px; flex: 1; }
+  .s009-characteristic-mid i { writing-mode: horizontal-tb; margin: 0 .6rem; }
 }
 
 /* 频率分段显隐 + 提示行 */
@@ -2161,4 +2133,559 @@ html.prof-lock { overflow: hidden; }
     justify-content: center; align-items: center;
   }
   .aimi-meta { text-align: left; }
+}
+
+/* ---------- S-015 清宵 · 弦心入剑 ---------- */
+.prof-overlay.s015 {
+  --s015-p: 0;
+  --s015-blue: #7ec8ff;
+  --s015-white: #f8fbff;
+  --s015-deep: #071528;
+  --s015-text: #d8eafb;
+  --s015-muted: #97b8d9;
+  background:
+    radial-gradient(58% 48% at 68% 6%, rgba(126,200,255,.2), transparent 74%),
+    radial-gradient(48% 70% at -8% 72%, rgba(202,229,255,.09), transparent 78%),
+    linear-gradient(180deg, #081a31 0%, #0a1d35 38%, #061225 100%);
+}
+.s015 .prof-doc {
+  position: relative; z-index: 3; max-width: 1040px;
+  padding-top: clamp(5.5rem, 11vh, 7rem);
+}
+.s015 .prof-doc::before {
+  content: "天地弦心剑";
+  position: absolute; right: clamp(1.4rem,5vw,2.4rem); top: 2.4rem;
+  font: 500 .66rem/1.2 "Songti SC", "STSong", serif;
+  letter-spacing: .42em; color: rgba(204,230,255,.56);
+}
+.s015 .prof-hero {
+  position: relative; isolation: isolate;
+  min-height: min(66vh, 680px); padding: clamp(1.2rem,3vw,2.2rem) 0 3rem;
+  display: grid; grid-template-columns: minmax(260px,.82fr) minmax(320px,1.18fr);
+  align-items: center; gap: clamp(2rem,6vw,6rem);
+  border-bottom: 1px solid rgba(126,200,255,.28);
+}
+.s015 .prof-back {
+  min-width: 44px; min-height: 44px; padding: 0 .35rem;
+  touch-action: manipulation;
+}
+.s015 .prof-hero::after {
+  content: ""; position: absolute; z-index: -1; left: -12vw; right: -12vw; top: 15%; height: 52%;
+  background: linear-gradient(90deg, transparent, rgba(248,251,255,.07) 38%, rgba(126,200,255,.08) 62%, transparent);
+  filter: blur(28px); pointer-events: none;
+}
+.s015 .prof-portrait {
+  position: relative; justify-self: end; width: min(31vw, 340px); aspect-ratio: 3 / 4;
+  border: 1px solid rgba(183,220,255,.62); border-radius: 48% 48% 10px 10px;
+  box-shadow: 0 30px 80px -42px rgba(126,200,255,.58);
+  clip-path: polygon(8% 0,92% 0,100% 16%,96% 88%,79% 100%,21% 100%,4% 88%,0 16%);
+  transform: translateY(calc(var(--s015-p) * -18px));
+}
+.s015 .prof-portrait::before {
+  content: ""; position: absolute; inset: 7%; z-index: 2; pointer-events: none;
+  border: 1px solid rgba(248,251,255,.36); border-radius: 50% 50% 8px 8px;
+}
+.s015 .prof-portrait img {
+  object-position: center 10%; filter: saturate(.78) contrast(1.04) brightness(.88);
+  transform: scale(1.035);
+}
+.s015 .prof-id { position: relative; padding: 1rem 0; }
+.s015 .prof-code { color: rgba(168,211,249,.7); }
+.s015 .prof-name {
+  display: block; margin: .55rem 0 .8rem;
+  font: 500 clamp(4.4rem, 9vw, 8rem)/.86 "Songti SC", "STSong", serif;
+  letter-spacing: .04em; color: var(--s015-white); text-shadow: none;
+}
+.s015 .prof-name em {
+  display: block; margin-top: 1rem;
+  font: 500 .72rem/1 var(--font-tech); letter-spacing: .52em; color: rgba(168,211,249,.62);
+}
+.s015 .prof-badge {
+  padding: .28rem 0; border: 0; border-bottom: 1px solid rgba(126,200,255,.65);
+  font-family: "Songti SC", "STSong", serif; color: var(--s015-blue);
+}
+.s015 .prof-tagline {
+  max-width: 28rem; margin-top: 1.25rem;
+  font-family: "Songti SC", "STSong", serif; font-size: 1rem; line-height: 1.9;
+  color: rgba(225,239,255,.82);
+}
+.s015 .prof-author { color: rgba(170,198,226,.48); }
+.s015 .prof-access {
+  max-width: 76ch; margin: 3.2rem auto 7rem; padding: 1.2rem 0;
+  border-top: 1px solid rgba(126,200,255,.22); border-bottom: 1px solid rgba(126,200,255,.22);
+  color: rgba(174,207,237,.76);
+}
+.s015 section {
+  position: relative; max-width: 70ch; margin: 0 0 clamp(6rem, 13vh, 10rem);
+  padding: clamp(1.4rem,3vw,2.4rem) 0;
+}
+.s015 section:nth-of-type(even) { margin-left: auto; }
+.s015 section::before {
+  content: ""; position: absolute; left: -32px; top: 2.25rem;
+  width: 14px; height: 1px; background: rgba(126,200,255,.65);
+}
+.s015 section:nth-of-type(even)::before { left: auto; right: -32px; }
+.s015 .prof-h {
+  margin-bottom: 1.35rem; gap: 1rem;
+  font: 500 clamp(1.45rem,3vw,2.05rem)/1.25 "Songti SC", "STSong", serif;
+  letter-spacing: .08em; color: var(--s015-white);
+}
+.s015 .prof-h i { color: rgba(126,200,255,.75); }
+.s015 .prof-doc p { max-width: 70ch; color: rgba(216,234,251,.78); }
+.s015 .prof-doc p b { color: #ffffff; }
+.s015 .prof-note {
+  margin: 1.7rem 0; padding: 1.1rem 1.2rem;
+  border: 1px solid rgba(126,200,255,.28); border-radius: 12px;
+  background: rgba(126,200,255,.07); color: rgba(218,236,253,.82);
+}
+.s015 .prof-quote {
+  margin: 2rem 0; padding: 1rem 0; border: 0;
+  border-top: 1px solid rgba(126,200,255,.25); border-bottom: 1px solid rgba(126,200,255,.25);
+  text-align: center;
+}
+.s015 .prof-quote p {
+  margin-inline: auto; font: 500 1.08rem/1.9 "Songti SC", "STSong", serif;
+  color: rgba(238,247,255,.92);
+}
+.s015 .prof-quote cite { color: rgba(151,184,217,.62); }
+
+.s015-duality {
+  display: grid; grid-template-columns: minmax(0,1fr) 72px minmax(0,1fr);
+  align-items: stretch; gap: 1rem; margin: 2rem 0;
+}
+.s015-duality > div {
+  position: relative; min-height: 154px; padding: 1.3rem;
+  display: flex; flex-direction: column; justify-content: center;
+  border: 1px solid rgba(126,200,255,.26); border-radius: 14px;
+  background: linear-gradient(145deg, rgba(248,251,255,.085), rgba(18,47,78,.22));
+}
+.s015-duality > div:last-child { background: linear-gradient(215deg, rgba(126,200,255,.12), rgba(18,47,78,.22)); }
+.s015-duality span { font: .56rem/1 var(--font-tech); letter-spacing: .22em; color: rgba(126,200,255,.7); }
+.s015-duality b { margin: .5rem 0 .45rem; font: 500 1.5rem/1.2 "Songti SC", "STSong", serif; letter-spacing: .18em; color: var(--s015-white); }
+.s015-duality small { font-size: .78rem; line-height: 1.75; color: rgba(193,216,240,.72); }
+.s015-duality > i {
+  position: relative; align-self: center; width: 72px; height: 72px; border: 1px solid rgba(126,200,255,.42); border-radius: 50%;
+  display: grid; place-items: center; transform: rotate(45deg);
+}
+.s015-duality > i::before, .s015-duality > i::after {
+  content: ""; position: absolute; width: 50px; height: 1px; background: rgba(126,200,255,.4);
+}
+.s015-duality > i::after { transform: rotate(90deg); }
+.s015-duality > i em { width: 9px; height: 9px; border: 1px solid var(--s015-blue); transform: rotate(45deg); }
+.s015 .prof-sign {
+  position: relative; margin-top: 6rem; padding: clamp(1.5rem,4vw,2.6rem);
+  border: 1px solid rgba(126,200,255,.32); border-radius: 14px;
+  background: linear-gradient(135deg, rgba(248,251,255,.09), rgba(18,47,78,.36));
+  text-align: center;
+}
+.s015 .prof-sign::before {
+  content: "心剑归一"; display: block; margin-bottom: 1rem;
+  font: 500 .68rem/1 "Songti SC", "STSong", serif; letter-spacing: .52em; color: rgba(126,200,255,.78);
+}
+.s015 .prof-sign p { margin-inline: auto; color: rgba(216,234,251,.82); }
+.s015 .prof-sign p:last-child { color: var(--s015-white); text-shadow: none; }
+.s015 .prof-end { border-top-color: rgba(126,200,255,.2); }
+
+/* 琴弦在滚动中靠拢，最终成为一线心剑 */
+.s015-deco { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.s015-cloud-ring {
+  position: absolute; right: max(-17vw,-230px); top: -11vh; width: min(61vw,780px); aspect-ratio: 1;
+  border: 1px solid rgba(126,200,255,.2); border-radius: 50%;
+  transform: rotate(calc(-18deg + var(--s015-p) * 52deg));
+}
+.s015-cloud-ring i { position: absolute; inset: 13%; border: 1px solid rgba(126,200,255,.13); border-radius: 50%; }
+.s015-cloud-ring i:nth-child(2) { inset: 31%; }
+.s015-cloud-ring b { position: absolute; inset: 46%; border: 1px solid rgba(248,251,255,.34); transform: rotate(45deg); }
+.s015-strings {
+  position: absolute; inset: 0; opacity: calc(.18 + var(--s015-p) * .22);
+}
+.s015-strings i {
+  position: absolute; left: 50%; top: -12vh; width: 1px; height: 124vh;
+  background: linear-gradient(transparent, rgba(167,213,255,.42) 16%, rgba(167,213,255,.22) 82%, transparent);
+  transform-origin: 50% 40%;
+}
+.s015-strings i:nth-child(1) { transform: translateX(calc(-40vw + var(--s015-p) * 40vw)) rotate(-13deg); }
+.s015-strings i:nth-child(2) { transform: translateX(calc(-27vw + var(--s015-p) * 27vw)) rotate(-8deg); }
+.s015-strings i:nth-child(3) { transform: translateX(calc(-14vw + var(--s015-p) * 14vw)) rotate(-4deg); }
+.s015-strings i:nth-child(4) { transform: translateX(0); }
+.s015-strings i:nth-child(5) { transform: translateX(calc(14vw - var(--s015-p) * 14vw)) rotate(4deg); }
+.s015-strings i:nth-child(6) { transform: translateX(calc(27vw - var(--s015-p) * 27vw)) rotate(8deg); }
+.s015-strings i:nth-child(7) { transform: translateX(calc(40vw - var(--s015-p) * 40vw)) rotate(13deg); }
+.s015-heart-blade {
+  position: absolute; left: 50%; top: 8vh; width: 1px; height: 84vh;
+  opacity: clamp(0, calc((var(--s015-p) - .46) * 1.9), .9);
+  background: linear-gradient(transparent, rgba(248,251,255,.9) 20%, var(--s015-blue) 74%, transparent);
+  transform: translateX(-50%) scaleY(calc(.5 + var(--s015-p) * .5)); transform-origin: top;
+  box-shadow: 14px 0 36px rgba(126,200,255,.24);
+}
+.s015-heart-blade::before {
+  content: ""; position: absolute; left: 50%; bottom: 10%; width: 16px; height: 16px;
+  border: 1px solid rgba(248,251,255,.76); transform: translateX(-50%) rotate(45deg);
+}
+.s015-heart-blade i, .s015-heart-blade b {
+  position: absolute; left: 50%; bottom: 5%; width: 82px; height: 1px; background: rgba(126,200,255,.42); transform: translateX(-50%);
+}
+.s015-heart-blade b { transform: translateX(-50%) rotate(90deg); }
+.s015-petals i {
+  position: absolute; left: var(--x); top: var(--y); width: 10px; height: 17px;
+  border: 1px solid rgba(204,230,255,.42); border-radius: 78% 8% 70% 12%;
+  transform: translate(calc(var(--s015-p) * 18px), calc(var(--s015-p) * -38px)) rotate(calc(var(--r) + var(--s015-p) * 70deg));
+  opacity: calc(.08 + var(--s015-p) * .26);
+}
+.s015-phase {
+  position: fixed; right: clamp(18px,3vw,46px); top: 50%; translate: 0 -50%;
+  display: flex; flex-direction: column; align-items: center; gap: .85rem;
+  color: rgba(164,204,242,.6);
+}
+.s015-phase span { writing-mode: vertical-rl; font: .52rem/1 var(--font-tech); letter-spacing: .28em; }
+.s015-phase strong { min-width: 3em; font: 500 .8rem/1.2 "Songti SC", "STSong", serif; letter-spacing: .22em; color: #a9d8ff; }
+.s015-phase i { width: 1px; height: 110px; background: linear-gradient(var(--s015-blue) calc(var(--s015-p) * 100%), rgba(126,200,255,.2) 0); }
+.s015[data-heart="同心"] .s015-phase strong { color: var(--s015-white); }
+
+@media (max-width: 900px) {
+  .s015 .prof-hero { grid-template-columns: minmax(220px,.8fr) minmax(260px,1.2fr); gap: 2rem; }
+  .s015 .prof-name { font-size: clamp(3.8rem,12vw,6.5rem); }
+  .s015-phase { display: none; }
+}
+@media (max-width: 680px) {
+  .s015 .prof-doc::before { display: none; }
+  .s015 .prof-hero { min-height: 0; display: flex; padding-top: 1rem; }
+  .s015 .prof-portrait { justify-self: center; width: min(70vw,300px); }
+  .s015 .prof-id { width: 100%; padding-inline: .2rem; }
+  .s015 .prof-name { font-size: clamp(4rem,22vw,6rem); }
+  .s015 .prof-doc p { font-size: 1rem; }
+  .s015 .prof-access { margin-bottom: 5rem; }
+  .s015 section, .s015 section:nth-of-type(even) { margin-left: 0; margin-right: 0; }
+  .s015 section::before, .s015 section:nth-of-type(even)::before { display: none; }
+  .s015-duality { grid-template-columns: 1fr; }
+  .s015-duality > i { width: 52px; height: 52px; }
+  .s015-duality > i::before, .s015-duality > i::after { width: 34px; }
+  .s015-cloud-ring { width: 92vw; right: -48vw; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s015 .prof-portrait, .s015-cloud-ring, .s015-strings i, .s015-heart-blade, .s015-petals i { transform: none; }
+  .s015-heart-blade { opacity: .22; }
+}
+
+/* ---------- S-015 4.0 · 水袖排演场（完整替换视觉） ---------- */
+.prof-overlay.s015 {
+  --s015-open: 0;
+  --s015-ink: #07131f;
+  --s015-night: #0b2038;
+  --s015-rice: #edf5f5;
+  --s015-ice: #93cced;
+  --s015-jade: #62b9b4;
+  --s015-gold: #c5a66a;
+  --s015-body: #c9dce8;
+  background: var(--s015-ink);
+  color: var(--s015-rice);
+  scrollbar-color: rgba(147,204,237,.48) var(--s015-ink);
+}
+.s015 .prof-back {
+  left: clamp(1.5rem, 3.6vw, 3.75rem); top: clamp(1.25rem, 3.5vh, 2.5rem);
+  z-index: 20; min-width: 44px; min-height: 44px; padding: 0;
+  display: inline-flex; align-items: center; gap: .7rem;
+  color: rgba(237,245,245,.72); font-family: "FangSong", "STFangsong", serif;
+  font-size: .86rem; letter-spacing: .14em;
+  transition: color .28s ease, gap .42s cubic-bezier(.16,1,.3,1);
+}
+.s015 .prof-back:hover { color: #fff; gap: 1rem; }
+.s015 .prof-back:focus-visible { outline-color: var(--s015-rice); }
+
+.s015-dossier { position: relative; z-index: 2; overflow: clip; }
+.s015-stage {
+  position: relative; isolation: isolate; min-height: 100svh; overflow: hidden;
+  background:
+    radial-gradient(52% 78% at 52% 42%, rgba(76,133,180,.48), transparent 72%),
+    linear-gradient(105deg, #07131f 0%, #102b49 48%, #071626 100%);
+}
+.s015-stage::before {
+  content: ""; position: absolute; z-index: 0; inset: 0;
+  background: linear-gradient(180deg, rgba(4,13,24,.12), transparent 52%, rgba(3,10,18,.74));
+  pointer-events: none;
+}
+.s015-stage::after {
+  content: ""; position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 17vh;
+  background: linear-gradient(180deg, transparent, rgba(7,19,31,.92));
+  pointer-events: none;
+}
+.s015-glyphs {
+  position: absolute; z-index: 3; inset: 8vh 2vw 4vh;
+  display: flex; align-items: center; justify-content: space-between;
+  color: rgba(222,240,250,.2); font-family: "Songti SC", "STSong", serif;
+  font-size: min(31vw, 29rem); line-height: .75; letter-spacing: -.04em;
+  mix-blend-mode: screen; pointer-events: none; user-select: none;
+}
+.s015-glyphs span:first-child { translate: -2vw -4vh; }
+.s015-glyphs span:last-child { translate: 2vw 8vh; }
+
+.s015-figure {
+  position: absolute; z-index: 2; top: 0; bottom: -4vh; left: 50%;
+  width: min(66vw, 850px); margin: 0; overflow: hidden;
+  translate: -50% 0;
+  -webkit-mask-image: linear-gradient(#000 0 76%, transparent 98%);
+  mask-image: linear-gradient(#000 0 76%, transparent 98%);
+}
+.s015-figure::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(7,19,31,.46), transparent 18% 80%, rgba(7,19,31,.38));
+  pointer-events: none;
+}
+.s015-figure img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 22%; display: block;
+  filter: saturate(.78) contrast(1.05) brightness(.9);
+  scale: calc(1.035 + var(--s015-open) * .025);
+  translate: 0 calc(var(--s015-open) * -1.6vh);
+  transition: filter .4s ease;
+}
+.s015-figure figcaption {
+  position: absolute; z-index: 2; left: 1.2rem; bottom: 10vh;
+  color: rgba(224,239,247,.5); font: .66rem/1.4 "FangSong", "STFangsong", serif;
+  letter-spacing: .14em;
+}
+
+.s015-wings { position: absolute; z-index: 4; inset: -8vh -5vw; pointer-events: none; }
+.s015-wings i {
+  position: absolute; top: 0; bottom: 0; width: 31vw;
+  background: url('/photos/qingxiao-silk-wing.png') center / 100% 100% no-repeat;
+  filter: drop-shadow(10px 18px 22px rgba(3,15,27,.26));
+  opacity: .84; transform-origin: 50% 0;
+  will-change: transform;
+}
+.s015-wings i:nth-child(1) {
+  left: -5vw; transform: translateX(calc(var(--s015-open) * -25vw)) rotate(-5deg) scaleX(.9);
+}
+.s015-wings i:nth-child(2) {
+  left: 21vw; transform: translateX(calc(var(--s015-open) * -18vw)) rotate(4deg) scaleX(.72);
+  opacity: .68;
+}
+.s015-wings i:nth-child(3) {
+  right: 20vw; transform: translateX(calc(var(--s015-open) * 18vw)) rotate(-3deg) scaleX(.78);
+  opacity: .72;
+}
+.s015-wings i:nth-child(4) {
+  right: -6vw; transform: translateX(calc(var(--s015-open) * 25vw)) rotate(6deg) scaleX(.96);
+}
+
+.s015-stage-copy {
+  position: absolute; z-index: 7; left: clamp(2rem, 6vw, 6.8rem); bottom: clamp(5.8rem, 11vh, 8.4rem);
+  width: min(27rem, 35vw); color: var(--s015-rice);
+}
+.s015-stage-kicker {
+  margin: 0 0 1.2rem; color: rgba(185,216,235,.68);
+  font: .72rem/1.2 "FangSong", "STFangsong", serif; letter-spacing: .22em;
+}
+.s015-stage-copy h1 { margin: 0; }
+.s015-stage-copy h1 span {
+  display: block; font: 400 clamp(4.6rem, 8vw, 6rem)/.88 "Songti SC", "STSong", serif;
+  letter-spacing: -.03em; text-wrap: balance;
+}
+.s015-stage-copy h1 em {
+  display: block; margin: .9rem 0 1.6rem; color: var(--s015-ice);
+  font: 500 .72rem/1 var(--font-tech); letter-spacing: .48em;
+}
+.s015-stage-copy > p:last-child {
+  max-width: 29rem; margin: 0; color: rgba(222,237,244,.82);
+  font: 1rem/1.9 "FangSong", "STFangsong", serif;
+}
+.s015-cold-open {
+  position: absolute; z-index: 7; right: clamp(2.1rem, 5vw, 5.4rem); bottom: clamp(4.8rem, 9vh, 7rem);
+  display: grid; justify-items: center; gap: .8rem;
+  color: rgba(220,237,247,.62); font: .7rem/1 "FangSong", "STFangsong", serif; letter-spacing: .24em;
+}
+.s015-cold-open i { display: block; width: 1px; height: 72px; background: linear-gradient(var(--s015-gold), transparent); }
+
+.s015-tension {
+  position: fixed; z-index: 3; inset: 0; pointer-events: none;
+  opacity: clamp(.12, calc(.12 + var(--s015-p) * .72), .84);
+}
+.s015-tension::before,
+.s015-tension::after {
+  content: ""; position: absolute; left: 50%; translate: -50% 0; width: 13px; height: 13px;
+  border: 1px solid rgba(197,166,106,.72); rotate: 45deg;
+}
+.s015-tension::before { top: 2.8vh; }
+.s015-tension::after { bottom: 2.8vh; }
+.s015-tension i {
+  position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(transparent, rgba(147,204,237,.52) 12%, rgba(246,251,251,.94) 50%, rgba(147,204,237,.52) 88%, transparent);
+  box-shadow: 9px 0 28px rgba(112,190,232,.22);
+  transition: width .55s cubic-bezier(.16,1,.3,1), box-shadow .55s ease;
+}
+.s015-tension i::before,
+.s015-tension i::after {
+  content: ""; position: absolute; left: 50%; opacity: 0;
+  transition: opacity .45s ease, transform .55s cubic-bezier(.16,1,.3,1);
+}
+.s015-tension i::before {
+  top: 63%; width: 68px; height: 11px; translate: -50% -50%;
+  background: linear-gradient(90deg, transparent, var(--s015-gold) 18% 82%, transparent);
+  clip-path: polygon(0 50%, 18% 16%, 44% 40%, 50% 0, 56% 40%, 82% 16%, 100% 50%, 82% 84%, 56% 60%, 50% 100%, 44% 60%, 18% 84%);
+  transform: scaleX(.45);
+}
+.s015-tension i::after {
+  top: 63%; width: 7px; height: 66px; translate: -50% 0;
+  border-bottom: 1px solid var(--s015-gold);
+  background: linear-gradient(90deg, rgba(197,166,106,.18), rgba(237,245,245,.82), rgba(197,166,106,.18));
+  clip-path: polygon(20% 0,80% 0,100% 82%,50% 100%,0 82%);
+  transform: scaleY(.35); transform-origin: top;
+}
+.s015[data-heart="剑"] .s015-tension i,
+.s015[data-heart="心"] .s015-tension i {
+  width: 2px; box-shadow: 0 0 18px rgba(147,204,237,.5), 13px 0 34px rgba(112,190,232,.22);
+}
+.s015[data-heart="剑"] .s015-tension i::before,
+.s015[data-heart="剑"] .s015-tension i::after,
+.s015[data-heart="心"] .s015-tension i::before,
+.s015[data-heart="心"] .s015-tension i::after {
+  opacity: .92; transform: scale(1);
+}
+
+.s015-phase {
+  position: fixed; z-index: 12; right: clamp(1.5rem, 3.4vw, 3.6rem); top: 50%; translate: 0 -50%;
+  display: flex; flex-direction: column; align-items: center; gap: 1.05rem;
+  color: rgba(193,220,235,.38);
+}
+.s015-phase span {
+  position: relative; writing-mode: initial; min-width: 1.7rem; padding: .2rem;
+  color: inherit; font: 400 .76rem/1 "FangSong", "STFangsong", serif;
+  letter-spacing: .08em; text-align: center;
+  transition: color .3s ease, translate .3s cubic-bezier(.16,1,.3,1);
+}
+.s015-phase span.is-current { color: var(--s015-rice); translate: -.35rem 0; }
+.s015-phase span.is-current::after {
+  content: ""; position: absolute; right: -.6rem; top: 50%; width: 5px; height: 5px;
+  border: 1px solid var(--s015-gold); rotate: 45deg; translate: 0 -50%;
+}
+.s015-phase > i { order: -1; width: 1px; height: 64px; background: rgba(147,204,237,.32); }
+.s015[data-heart="心"] .s015-phase { color: rgba(29,72,96,.54); }
+.s015[data-heart="心"] .s015-phase span.is-current { color: #102f43; }
+.s015[data-heart="心"] .s015-phase > i { background: rgba(28,77,102,.38); }
+
+.s015-script { position: relative; z-index: 4; background: var(--s015-ink); }
+.s015 .s015-act,
+.s015 .s015-act:nth-of-type(even) {
+  position: relative; min-height: 104svh; margin: 0; padding: clamp(8rem, 16vh, 12rem) clamp(4.5rem, 10vw, 11rem);
+  width: 100%; max-width: none;
+  display: grid; grid-template-columns: minmax(8rem, .55fr) minmax(32rem, 1.35fr) minmax(14rem, .65fr);
+  align-items: center; gap: clamp(2rem, 5vw, 6rem); overflow: hidden;
+}
+.s015 .s015-act::before,
+.s015 .s015-act:nth-of-type(even)::before { display: none; }
+.s015-act-mark { align-self: start; color: rgba(182,211,229,.46); }
+.s015-act-mark span {
+  display: block; margin-bottom: .75rem; font: .72rem/1 "FangSong", "STFangsong", serif; letter-spacing: .2em;
+}
+.s015-act-mark b {
+  display: block; color: rgba(237,245,245,.14);
+  font: 400 clamp(5.2rem, 9vw, 6rem)/.82 "Songti SC", "STSong", serif;
+}
+.s015-act-copy { position: relative; max-width: 68ch; }
+.s015-act-kicker {
+  margin: 0 0 2.2rem; color: var(--s015-ice);
+  font: .8rem/1.2 "FangSong", "STFangsong", serif; letter-spacing: .2em;
+}
+.s015-act-copy h2 {
+  max-width: 14em; margin: 0 0 3.3rem; color: var(--s015-rice);
+  font: 400 clamp(2.65rem, 5vw, 5.2rem)/1.16 "Songti SC", "STSong", serif;
+  letter-spacing: -.03em; text-wrap: balance;
+}
+.s015 .s015-act-copy > p:not(.s015-act-kicker) {
+  max-width: 68ch; margin: 0 0 1.4rem; color: var(--s015-body);
+  font: 1.04rem/2 "FangSong", "STFangsong", serif;
+}
+.s015-whisper {
+  align-self: end; margin: 0 0 5vh; padding: 0; border: 0; color: rgba(219,236,245,.74);
+}
+.s015-whisper::before { content: "“"; display: block; color: var(--s015-gold); font: 4rem/.7 Georgia, serif; }
+.s015-whisper p { margin: 1rem 0 .5rem; color: inherit; font: 1.16rem/1.75 "FangSong", "STFangsong", serif; }
+.s015-whisper cite { color: rgba(171,207,228,.54); font: .84rem/1.7 "FangSong", "STFangsong", serif; }
+
+.s015-act--qin {
+  background:
+    radial-gradient(44% 64% at 14% 76%, rgba(72,130,164,.18), transparent 76%),
+    linear-gradient(180deg, #07131f, #0a1c2e);
+}
+.s015-act--sword {
+  min-height: 118svh; grid-template-columns: minmax(8rem,.48fr) minmax(28rem,1.2fr) minmax(14rem,.62fr);
+  background:
+    linear-gradient(90deg, rgba(4,13,22,.88), rgba(8,31,52,.38) 48%, rgba(4,14,25,.92)),
+    #0a2139;
+}
+.s015-sword-word {
+  position: absolute; left: 45%; top: 50%; translate: -50% -50%;
+  color: rgba(226,242,249,.055); font: 400 min(46vw, 38rem)/.8 "Songti SC", "STSong", serif;
+  pointer-events: none; user-select: none;
+}
+.s015-act--sword .s015-act-copy { grid-column: 2; }
+.s015-vow {
+  grid-column: 3; align-self: end; max-width: 11em; margin: 0 0 6vh;
+  color: rgba(232,243,247,.82); font: 1.12rem/1.9 "FangSong", "STFangsong", serif;
+  writing-mode: vertical-rl; letter-spacing: .12em;
+}
+
+.s015-act--heart {
+  min-height: 112svh; color: #102b3f;
+  background:
+    radial-gradient(42% 66% at 76% 32%, rgba(119,188,210,.24), transparent 76%),
+    #eaf2f2;
+}
+.s015-act--heart .s015-act-mark { color: rgba(31,83,112,.52); }
+.s015-act--heart .s015-act-mark b { color: rgba(22,73,101,.12); }
+.s015-act--heart .s015-act-kicker { color: #2f7898; }
+.s015-act--heart .s015-act-copy h2 { color: #0b2639; }
+.s015 .s015-act--heart .s015-act-copy > p:not(.s015-act-kicker) { color: #34576b; }
+.s015-final-verse { align-self: end; margin: 0 0 3vh; padding: 0; border: 0; }
+.s015-final-verse p {
+  margin: 0 0 1rem; color: #12364a;
+  font: 400 clamp(1.45rem, 2.5vw, 2.2rem)/1.65 "Songti SC", "STSong", serif;
+}
+.s015-final-verse cite { color: #55798b; font: .9rem/1.8 "FangSong", "STFangsong", serif; }
+
+.s015-curtain-call {
+  position: relative; z-index: 4; min-height: 54svh; padding: 12vh clamp(4rem,10vw,11rem);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.3rem;
+  background: #07131f; color: var(--s015-rice); text-align: center;
+}
+.s015-curtain-call::before {
+  content: ""; width: 1px; height: 88px; margin-bottom: 1.5rem;
+  background: linear-gradient(transparent, var(--s015-gold));
+}
+.s015-curtain-call span { color: rgba(203,224,235,.68); font: 1rem/1.8 "FangSong", "STFangsong", serif; }
+.s015-curtain-call b { font: 400 clamp(2rem,4vw,3.6rem)/1.2 "Songti SC", "STSong", serif; letter-spacing: .12em; }
+
+@media (max-width: 1280px) {
+  .s015-figure { width: 82vw; }
+  .s015-stage-copy { width: min(30rem, 48vw); }
+  .s015 .s015-act, .s015 .s015-act:nth-of-type(even) {
+    grid-template-columns: 7rem minmax(0,1fr); padding-inline: clamp(2rem,7vw,5rem);
+  }
+  .s015-act-copy { grid-column: 2; }
+  .s015-whisper, .s015-final-verse, .s015-vow { grid-column: 2; writing-mode: initial; }
+}
+@media (max-width: 900px) {
+  .s015-phase { display: none; }
+}
+@media (max-width: 680px) {
+  .s015-stage-copy { left: 1.5rem; bottom: 5rem; width: calc(100vw - 3rem); }
+  .s015-stage-copy h1 span { font-size: clamp(3.8rem, 20vw, 5rem); }
+  .s015-stage-copy > p:last-child { max-width: 17rem; }
+  .s015-cold-open { right: 1.5rem; bottom: 4.8rem; }
+  .s015-figure { left: 62%; width: 108vw; }
+  .s015-glyphs { font-size: 50vw; }
+  .s015-wings i { width: 52vw; }
+  .s015-wings i:nth-child(2) { left: 12vw; }
+  .s015-wings i:nth-child(3) { right: 10vw; }
+  .s015 .s015-act, .s015 .s015-act:nth-of-type(even) { min-height: 0; display: block; padding: 7rem 1.5rem; }
+  .s015-act-mark { margin-bottom: 3rem; }
+  .s015-act-mark b { font-size: 4.8rem; }
+  .s015-act-copy h2 { margin-bottom: 2.2rem; font-size: clamp(2.2rem, 11vw, 3.5rem); }
+  .s015 .s015-act-copy > p:not(.s015-act-kicker) { font-size: 1rem; }
+  .s015-whisper, .s015-final-verse, .s015-vow { margin-top: 3.5rem; }
+  .s015-curtain-call { padding-inline: 1.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s015-figure img { scale: 1.035; translate: 0; }
+  .s015-wings i:nth-child(n) { transform: none; }
+  .s015-tension { opacity: .4; }
 }
