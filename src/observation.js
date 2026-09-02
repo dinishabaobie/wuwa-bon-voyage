@@ -621,7 +621,7 @@ const PROFILES = {
   'S-015': {
     name: '清宵', full: 'Qingxiao', element: '气动 · 迅刀', accent: '#8fd0ff',
     photo: 'photos/qingxiao.jpg', author: '鸣潮',
-    tagline: '她以琴入剑，以心御剑。世人称她剑仙，她只当自己是个挂职的司骑。我想记下的，是寒芒之外，那颗仍愿意下山的心。',
+    tagline: '玄方城镇玄司骑，清宵。久居山中，偶尔下山。琴剑之外，仍有些旧事值得记下。',
     // 七弦档案：章节文本随结构一起写在 renderQinSwordDossier 内
     qinSword: true,
     body: '',
@@ -1640,14 +1640,15 @@ export function mountObservation(root, onBack) {
       for (const S of STRAND) {
         const g = gst[S.gi]
         if (!g) { S.path = null; continue }
-        const lead = g.vy * .16 // 预测提前量：巨剑坠得越快，线被带得越靠前
+        const lead = Math.max(-240, g.vy * .16) // 预测提前量；封顶，免得坠得太快把线甩过头
         const ox = Math.cos(S.ang) * S.R, oz = Math.sin(S.ang) * S.R
         const path = S.path || (S.path = [])
         path.length = 0
         for (let i = 0; i < NODES; i++) {
           const u = U0 + USPAN * i / (NODES - 1)
           const bx = g.tip[0] + ox, bz = g.tip[2] + oz
-          const by = g.base[1] + (g.tip[1] - g.base[1]) * u + lead * u
+          // 硬约束：小剑最低只到剑身 12% 处，剑锋那一截始终空着（剑尖朝下，y 不能低于这条线）
+          const by = Math.max(g.tip[1] + g.hg * .12, g.base[1] + (g.tip[1] - g.base[1]) * u + lead * u)
           const c = curl(bx * .0017 + S.ph, by * .0017, bz * .0017 + drift)
           const amp = 190 * Math.sin(clamp01((u - U0) / USPAN) * Math.PI) // 两端收紧、中段最放得开
           // 充能漏斗：过了中段就往剑身上收，到剑尖处半径归零——小剑是没入剑里，不是绕着飞
@@ -2130,7 +2131,7 @@ export function mountObservation(root, onBack) {
           <svg class="qx-strings" aria-hidden="true" preserveAspectRatio="none"></svg>
           <h1 id="profile-title" class="qx-hero-title"><span>清宵</span></h1>
           <div class="qx-hero-copy">
-            <p class="qx-kicker">观测对象 ${code} · 私人档案</p>
+            <p class="qx-kicker">观测对象 ${code} · 清宵自记</p>
             <p class="qx-hero-latin">${d.full.toUpperCase()} · 玄方剑仙</p>
             <p class="qx-hero-verse">弦凝千古寂，剑起满天清。</p>
             <p class="qx-hero-lead">${d.tagline}</p>
@@ -2145,8 +2146,8 @@ export function mountObservation(root, onBack) {
             <div class="qx-plate qx-in" aria-label="清宵身份题跋">
               <p><b>名</b><span>清宵 · Qingxiao</span></p>
               <p><b>号</b><span>剑仙 · 世人所称，非自号</span></p>
-              <p><b>职</b><span>玄方城 镇玄司骑 · 挂职</span></p>
-              <p><b>籍</b><span>煌珑人 · 今居梦州玄方</span></p>
+              <p><b>职</b><span>玄方城 镇玄司骑 · 挂名</span></p>
+              <p><b>籍</b><span>瑝珑人 · 今居梦州玄方</span></p>
               <p><b>属</b><span>气动 · 迅刀</span></p>
               <p><b>器</b><span>云琅 · 亦以琴弦、落花、飞叶为剑</span></p>
               <p><b>术</b><span>天地弦心剑</span></p>
@@ -2155,9 +2156,9 @@ export function mountObservation(root, onBack) {
               <p><b>录</b><span>Ver 3.6「蜃云灯影，凡尘剑心」· 二〇二六年八月二十日 · 第四章第三幕〈烟云幽远心剑鸣〉</span></p>
             </div>
             <div class="qx-act-copy qx-in">
-              <h2 id="qx-ming-title">玄方有仙。<br/>她没有阻止这个说法。</h2>
-              <p>玄方城里，有人家中供着她的牌位。她守了这片山河一百多年，人们因为「玄方有仙」而睡得安稳，她便不再急着纠正。我想，这也是她护人的方式：有时斩去邪祟，有时只是让人相信，山河仍有人守。</p>
-              <p>华胥研究院的读数里，她的共鸣史已逾百年。峰值常年贴近临界，却从未越界。如果只读数据，她比任何人都接近失控；可她用漫长的修行，让每一次波动都有了去处。</p>
+              <h2 id="qx-ming-title">剑仙之名，<br/>非我自许。</h2>
+              <p>山下的人称我剑仙，也有人在家中供奉香火。我起初解释过几回，后来便不再提了。一个称呼，能让他们少些忧惧，留着也无妨。</p>
+              <p>镇玄司骑是心邀我挂名的职务。平日无需料理俗务，玄方有难，我便下山。如此，也省去不少周折。</p>
             </div>
           </div>
         </section>
@@ -2166,27 +2167,27 @@ export function mountObservation(root, onBack) {
           <div class="qx-act-num" aria-hidden="true">第三弦</div>
           <div class="qx-act-copy qx-in">
             <p class="qx-kicker">听琴</p>
-            <h2 id="qx-xian-title">她把百年的波澜，<br/>都调成了一根不走音的弦。</h2>
-            <p>平日里她清冷寡言，待人疏离；不熟悉的人会以为她无情。可那条逾百年的共鸣曲线告诉我另一件事：这不是没有感受，是每一次波动都被她拨回了原位。</p>
-            <p>山上常有人来求长生。她会递过去一本手册，上面写着早睡、少熬夜、适度锻炼。真正需要帮助的人到了，她才会起身。琴声里的静，不是把心藏空，而是先听清什么值得回应。</p>
-            <p>她抚琴不是消遣。琴心积蓄、剑魄随之——弦上每一个音，都是一柄尚未出鞘的剑。</p>
+            <h2 id="qx-xian-title">琴音渐静，<br/>旧事未远。</h2>
+            <p>我惯于抚琴时温养剑意。剑意随心而动，琴音之中，也就留了几分心绪。许多不便言说的事，久而久之，都落在弦上。</p>
+            <p>修行间歇，我会在内景中刻下见闻与体悟。年月过去，昔日所见所感，仍有迹可循。</p>
+            <p>若云之事，至今未忘。她为故乡留下了许多东西，我却未能护她周全。故人已逝，记得这些，总好过任其散尽。</p>
           </div>
-          <blockquote class="qx-whisper qx-in"><p>稳定，并不是没有感受。</p><cite>是感受来临时，她仍知道自己要守住什么。</cite></blockquote>
+          <blockquote class="qx-whisper qx-in"><p>旧事记下，便不算尽散。</p></blockquote>
         </section>
 
         <section class="qx-act qx-act--jian" data-qx="jian" aria-labelledby="qx-jian-title">
           <div class="qx-act-num" aria-hidden="true">第四弦</div>
           <div class="qx-act-copy qx-in">
             <p class="qx-kicker">见剑</p>
-            <h2 id="qx-jian-title">无剑之境，不是没有剑。<br/>是万物皆可为剑。</h2>
-            <p>她的剑术不是天授，是后天苦修，一年一年磨出来的回答。到了今天，抚琴拨弦、飞花摘叶，皆可出剑；一念之间，飞剑万千，剑光所及，煞气尽散。</p>
-            <p>世人给这门功夫起名「天地弦心剑」。我读过它的运行方式：琴心与剑魄双满，一记弦剑便可入「昙体仙身」——那一刻她御剑凌空，身形如昙花开于夜。玄方的天空常有人看见一道白影掠过，那多半是她下山。</p>
-            <p>我最喜欢的一条记录：这位能御万剑的剑仙，落地以后第一句话往往是认真问路。地图与罗盘随身带着，因为她确实不太擅长认路。她的剑很快。她走近人间的方式，却有些迟缓。</p>
+            <h2 id="qx-jian-title">剑道无涯，<br/>仍须日日精进。</h2>
+            <p>我的剑法习自后天。年少时持树枝照着秘籍比画，也曾只得其形，不得其意。后来云游、问剑，才渐渐走到今日。</p>
+            <p>如今心念所至，剑意可附于花叶，也可融入琴音。一剑分作万千，收放仍在一念之间。此术名为「天地弦心剑」。</p>
+            <p>随身所携的「青虚如意袋」，是旧日擦剑布缝成的。里面存着地图、罗盘、符箓，不过是些行路用具。传闻中的乾坤，未免说得玄妙了些。</p>
             <p class="qx-hint"><i aria-hidden="true"></i>移动指针，飞剑随心；点按此处，万剑归一</p>
           </div>
           <div class="qx-moves qx-in" aria-label="剑式">
-            <p><b>弦剑</b><span>以琴心为引</span></p>
-            <p><b>昙体仙身</b><span>一夜之开</span></p>
+            <p><b>弦剑</b><span>待琴心与剑韵充盈</span></p>
+            <p><b>昙体仙身</b><span>以重击弦剑入境</span></p>
             <p><b>御剑</b><span>山河尽在足下</span></p>
           </div>
         </section>
@@ -2196,15 +2197,15 @@ export function mountObservation(root, onBack) {
           <figure class="qx-demon qx-in">
             <img class="qx-demon-self" src="${d.photo}" alt="清宵官方立绘" />
             <img class="qx-demon-shadow" src="${d.photo}" alt="" aria-hidden="true" />
-            <figcaption>立绘 @${d.author} · 指针掠过，可见她的另一面</figcaption>
+            <figcaption>立绘 @${d.author} · 移过画像，显露心魔</figcaption>
           </figure>
           <div class="qx-act-copy qx-in">
             <p class="qx-kicker">心魔</p>
-            <h2 id="qx-mo-title">她没有斩灭心魔。<br/>她把它认作了自己。</h2>
-            <p>「心魔」在系统里很容易被标记为异常。可它不是外来的敌人：那是百年间被她压下去的迟疑、牵挂与不甘，凝成了另一个她——性子与她截然相反，话多、任性、不肯忍。</p>
-            <p>心魔爆发时，她把漂泊者拉进了自己的内景，作为最后的后手：执剑之人。若她自己失守，便由徒弟替她出剑。我想，这是她第一次把「万一」交给别人。</p>
-            <p>最终她没有出那一剑。她承认那也是自己，也明白有情并不会让剑变钝。剑仙的剑，从那一夜起，多了一点温度。</p>
-            <blockquote class="qx-whisper qx-whisper--mo"><p>有情，不会让剑变钝。</p></blockquote>
+            <h2 id="qx-mo-title">心魔亦我，<br/>不必斩尽。</h2>
+            <p>百年间的得失，我从未全然放下。内景中的另一个我，便将这些旧事一一提起。救下的人，没能救下的人，想得再清楚，也终究无法重来。</p>
+            <p>当年师父斩心魔，由我执剑守候。彼时我便想过，心魔既出于自身，未必只剩相争一途。后来轮到我面对心魔，也请漂泊者作了执剑之人。</p>
+            <p>最后，我选择与心魔相融。有些牵挂，我原就不愿舍弃。既已认下，往后便一并承担。</p>
+            <blockquote class="qx-whisper qx-whisper--mo"><p>此心未改，剑亦如初。</p></blockquote>
           </div>
         </section>
 
@@ -2212,16 +2213,17 @@ export function mountObservation(root, onBack) {
           <div class="qx-act-num" aria-hidden="true">第六弦</div>
           <div class="qx-zhong-copy qx-in">
             <p class="qx-kicker">借剑</p>
-            <h2 id="qx-zhong-title">这不是一个人的剑，<br/>是众生之剑。</h2>
+            <h2 id="qx-zhong-title">借众人之剑，<br/>护此间山河。</h2>
           </div>
           <div class="qx-zhong-note qx-in">
-            <p>穆羽的实验把玄方拖进泥里，她一个人的剑不够。于是她向玄方城的百姓借剑，向漂泊者借剑，向历代战死在这片山河上的人借剑。万剑齐鸣的那一刻，我第一次听懂了「凡尘剑心」四个字。</p>
-            <p class="qx-hint"><i aria-hidden="true"></i>镜头在阵中，看她借剑<button type="button" class="qx-replay">重新起阵</button></p>
+            <p>木禺虽败，玄元境却仍在崩毁。我本欲留在其中，维系此境，以免祸及玄方。漂泊者不肯独自离去，执意与我共同应对。</p>
+            <p>此前分予众人的剑意，成了彼此相连的凭依。我循着剑意借来众人的力量，也承接了往昔守护此地之人的心愿。这一剑，终究由众人一同挥出。</p>
+            <p class="qx-hint"><i aria-hidden="true"></i>点按剑阵，重现众生一剑<button type="button" class="qx-replay">重新起阵</button></p>
           </div>
           <div class="qx-lend qx-in" aria-label="借剑于三方">
-            <p><b>玄方百姓之剑</b><span>家家户户供着她，这一次换她向他们借一回</span></p>
-            <p><b>漂泊者之剑</b><span>徒弟的剑，也算师父的</span></p>
-            <p><b>先烈之剑</b><span>前人未竟的锋芒，由她出鞘</span></p>
+            <p><b>玄方百姓之剑</b><span>曾受我庇护，此番亦助我出剑</span></p>
+            <p><b>漂泊者之剑</b><span>与我并肩，共渡此劫</span></p>
+            <p><b>先烈之剑</b><span>前人未竟之愿，由我续上</span></p>
           </div>
         </section>
 
@@ -2231,19 +2233,19 @@ export function mountObservation(root, onBack) {
           <div class="qx-act-num" aria-hidden="true">第七弦</div>
           <div class="qx-act-copy qx-in">
             <p class="qx-kicker">夜话</p>
-            <h2 id="qx-ye-title">她极少收徒。<br/>却把御剑的路，交给了后来人。</h2>
-            <p>玄方危机初平，漂泊者循岁主心月狐留下的信物到雾隐阁，与守山百年的她相遇。她本不收徒。可这一次，她同意教漂泊者剑——师徒之间，学的不只是御剑。</p>
-            <p>后来她开宗立派，把御剑术与修行交给愿意承担的人。我曾把守护理解为长久地留在原地，独自等所有风险到来；她却选了另一条路：让后来者能接住这片山河，相遇与离别，就不再是必须回避的理由。</p>
-            <p>夜里她偶尔抚琴。灯下坐着的那个人，是她的徒弟，也是第一个被她允许听见走音的人。</p>
-            <blockquote class="qx-whisper qx-whisper--ye"><p>山河仍在。守山的人，不再只有一个。</p><cite>这一条，我会替她记下。</cite></blockquote>
+            <h2 id="qx-ye-title">收徒授剑，<br/>亦是修行。</h2>
+            <p>从雾隐阁相遇，到玄方事了，我收漂泊者为徒。论剑法与心境，这段同行，我亦有所获。后来开宗授艺，便将所学传给愿意习剑之人。</p>
+            <p>有了徒弟，道馆里也多了些琐事。比剑输的人，要扫门前落叶；逢其生辰，便试着做一碗长寿面。飞剑削面，倒也顺手。</p>
+            <p>徒儿终归要远行，我在玄方也尚有未尽之事。能有这一段同行，已属难得。余下的话，待重逢时再叙。</p>
+            <blockquote class="qx-whisper qx-whisper--ye"><p>山河仍在。与我守山的人，不再只有一个。</p><cite>来日重逢，再试彼此剑意。</cite></blockquote>
           </div>
           <p class="qx-ye-credit">画 @ゆるん · pixiv 148659607</p>
         </section>
 
         <footer class="qx-end" data-qx="end">
-          <p class="qx-end-line">琴收，剑归鞘。</p>
+          <p class="qx-end-line">此卷暂止。修行未竟。</p>
           <b>清宵 · 观测终</b>
-          <small>立绘 ©库洛游戏 · 插画 @Ui、@ゆるん · 泰提斯终端私人档案，非官方</small>
+          <small>立绘 ©库洛游戏 · 插画 @Ui、@ゆるん · 以清宵口吻创作，非官方文本</small>
         </footer>
       </article>
       <nav class="qx-hui" aria-label="档案章节">${hui}</nav>`
