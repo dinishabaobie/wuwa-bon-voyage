@@ -1012,7 +1012,7 @@
     {
       "id": "jinhsi_ally",
       "type": "text",
-      "text": "**1.0–1.4 今州 → 1.3 黑海岸 → 1.4 乘霄山**\n→ 2.7 黎那汐塔 → 2.8 穗波市 → 3.0–3.4 拉海洛 → 3.5 梦州",
+      "text": "**1.0–1.4 今州 → 1.3 黑海岸 → 1.4 乘霄山**\n→ 2.7 黎那汐塔 → 2.8 穗波市 → 3.0–3.4 拉海洛 → 3.5–3.6 梦州",
       "x": 11300,
       "y": 3418,
       "width": 380,
@@ -1059,18 +1059,20 @@
       "color": "#EF6C00",
       "text": "**无相燹主**\n今州主线核心鸣式（1.0–1.4）\n吞噬兵器自强 · 化亡者残响为残象\n忌炎率众击败 · 哥舒临决战失踪"
     },
-    {"id":"group_9","type":"group","label":"梦州 / 玄方地界（3.5）","x":9000,"y":4500,"width":1700,"height":1750,"color":"#BFA35A"},
-    {"id":"dreamzhou","type":"text","text":"**梦州**\n瑼珑诸州之一\n3.5 第四章主线新舞台","x":9040,"y":4550,"width":280,"height":100,"color":"#BFA35A"},
+    {"id":"group_9","type":"group","label":"梦州 / 玄方地界（3.5—3.6）","x":9000,"y":4500,"width":1700,"height":1750,"color":"#BFA35A"},
+    {"id":"dreamzhou","type":"text","text":"**梦州**\n瑼珑诸州之一\n3.5—3.6 第四章主线舞台","x":9040,"y":4550,"width":280,"height":100,"color":"#BFA35A"},
     {"id":"xuanfang","type":"text","text":"**玄方地界**\n梦州与今州之间的新开放区域\n第四章主线起点","x":9360,"y":4550,"width":300,"height":110,"color":"#5D4037"},
-    {"id":"xuanfang_city","type":"text","text":"**玄方城**\n玄方地界核心城池\n以机巧闻名诸州","x":9700,"y":4550,"width":270,"height":100,"color":"#1565C0"},
+    {"id":"xuanfang_city","type":"text","text":"**玄方城 / 云梭**\n玄方地界核心城池\n巡游天际的机巧巨舰","x":9700,"y":4550,"width":270,"height":100,"color":"#1565C0"},
     {"id":"houxuan_army","type":"text","text":"**后玄军**\n镇守玄方边境的军事力量\n卷入残象危机","x":10010,"y":4550,"width":270,"height":100,"color":"#2E7D32"},
-    {"id":"heart_moon_fox","type":"text","text":"**心月狐**\n梦州岁主\n与玄方试炼及穗穗线相关","x":9040,"y":4730,"width":280,"height":100,"color":"#00838F"},
+    {"id":"heart_moon_fox","type":"text","text":"**心月狐**\n梦州岁主 · 当前失联\n留下的信物指向雾隐阁","x":9040,"y":4730,"width":280,"height":100,"color":"#00838F"},
     {"id":"suisui","type":"text","text":"**穗穗**\n秧秧的姐姐\n昭明商会大小姐 · 心月狐试炼线","x":9360,"y":4730,"width":300,"height":110,"color":"#455A64"},
     {"id":"yangyang_xuanling","type":"text","text":"**秧秧·玄翎**\n梦州危机中完成二次共鸣\n获得不可逆的新形态","x":9700,"y":4730,"width":280,"height":110,"color":"#455A64"},
-    {"id":"qingxiao","type":"text","text":"**清宵**\n梦州阵营\n玄方线重要人物","x":9040,"y":4910,"width":260,"height":90,"color":"#455A64"},
-    {"id":"jingran","type":"text","text":"**景燃**\n梦州阵营\n提灯独行的玄方人物","x":9340,"y":4910,"width":260,"height":90,"color":"#455A64"},
+    {"id":"qingxiao","type":"text","text":"**清宵**\n隐世剑修 · 挂名镇玄司骑\n琴剑双绝，长守玄方山河","x":9040,"y":4910,"width":260,"height":90,"color":"#455A64"},
+    {"id":"jingran","type":"text","text":"**景燃**\n生于梦州的寻幽客\n穿行蜃境遗墟，窥察旧世余响","x":9340,"y":4910,"width":260,"height":90,"color":"#455A64"},
     {"id":"suoming","type":"text","text":"**锁暝**\n梦州阵营\n与旧契及执念相关","x":9640,"y":4910,"width":260,"height":90,"color":"#455A64"},
-    {"id":"xin_dreamzhou","type":"text","text":"**心**\n梦州阵营\n与心月狐线索紧密相连","x":9940,"y":4910,"width":260,"height":90,"color":"#455A64"}
+    {"id":"xin_dreamzhou","type":"text","text":"**心**\n梦州阵营\n与心月狐线索紧密相连","x":9940,"y":4910,"width":260,"height":90,"color":"#455A64"},
+    {"id":"wuyin_pavilion","type":"text","text":"**雾隐阁**\n清宵隐修与守望之地\n心月狐信物引出的 3.6 坐标","x":9040,"y":5080,"width":280,"height":100,"color":"#5D4037"},
+    {"id":"muyu","type":"text","text":"**木禺**\n玄方主线敌对者\n侵入云梭中枢，受残星会利用","x":9360,"y":5080,"width":280,"height":100,"color":"#EF6C00"}
   ],
   "edges": [
     {
@@ -1656,6 +1658,87 @@
       "toSide": "right",
       "color": "#6D5DF6",
       "label": "3.5 二次共鸣"
+    },
+    {
+      "id": "e_rover_qingxiao",
+      "fromNode": "rover",
+      "fromSide": "left",
+      "toNode": "qingxiao",
+      "toSide": "right",
+      "color": "#6D5DF6",
+      "label": "雾隐阁同行 / 心剑共鸣"
+    },
+    {
+      "id": "e_qingxiao_xuanfang",
+      "fromNode": "qingxiao",
+      "fromSide": "top",
+      "toNode": "xuanfang_city",
+      "toSide": "bottom",
+      "color": "#53dfdd",
+      "label": "镇玄司骑 / 长年护佑"
+    },
+    {
+      "id": "e_qingxiao_wuyin",
+      "fromNode": "qingxiao",
+      "fromSide": "bottom",
+      "toNode": "wuyin_pavilion",
+      "toSide": "top",
+      "color": "#53dfdd",
+      "label": "隐修 / 琴剑传承"
+    },
+    {
+      "id": "e_fox_wuyin",
+      "fromNode": "heart_moon_fox",
+      "fromSide": "bottom",
+      "toNode": "wuyin_pavilion",
+      "toSide": "top",
+      "color": "#00838F",
+      "label": "信物指向"
+    },
+    {
+      "id": "e_rover_fox_36",
+      "fromNode": "rover",
+      "fromSide": "left",
+      "toNode": "heart_moon_fox",
+      "toSide": "right",
+      "color": "#6D5DF6",
+      "label": "循信物追索失联岁主"
+    },
+    {
+      "id": "e_rover_jingran",
+      "fromNode": "rover",
+      "fromSide": "left",
+      "toNode": "jingran",
+      "toSide": "right",
+      "color": "#6D5DF6",
+      "label": "3.6 联手调查 / 幕间"
+    },
+    {
+      "id": "e_jingran_xuanfang",
+      "fromNode": "jingran",
+      "fromSide": "top",
+      "toNode": "xuanfang",
+      "toSide": "bottom",
+      "color": "#e9973f",
+      "label": "寻幽 / 追索旧世遗痕"
+    },
+    {
+      "id": "e_muyu_xuanfang",
+      "fromNode": "muyu",
+      "fromSide": "top",
+      "toNode": "xuanfang_city",
+      "toSide": "bottom",
+      "color": "#EF6C00",
+      "label": "入侵云梭中枢"
+    },
+    {
+      "id": "e_muyu_fract",
+      "fromNode": "muyu",
+      "fromSide": "left",
+      "toNode": "fract",
+      "toSide": "right",
+      "color": "#EF6C00",
+      "label": "被利用 / 残星会暗线"
     },
     {
       "id": "edge_rover_cartethyia_core",

@@ -177,7 +177,12 @@ export const CHRONOLOGY_EVENTS = [
   },
   {
     id: 'present-xuanfang', era: 'present', epoch: '旅程 · 梦州', title: '玄方地界',
-    signal: '进行中 · 当前坐标',
+    signal: 'VER 3.5 · 危机初平',
     body: '漂泊者为寻找失踪的秧秧，与穗穗前往梦州玄方地界，查明并平息机傀暴乱。危机解除后，秧秧留在玄方协助军民，暂代后玄骑使一职。',
+  },
+  {
+    id: 'present-cloud-shuttle', era: 'present', epoch: '旅程 · 梦州', title: '云梭与凡尘剑心',
+    signal: 'VER 3.6 · 当前坐标',
+    body: '玄方危机初平后，岁主心月狐仍然杳无音讯。漂泊者循其留下的信物前往雾隐阁，与守护玄方数百年的清宵相遇；玄方城也以「云梭」之姿巡游天际。第四章第三幕「烟云幽远心剑鸣」与幕间「幽客销残声」由此展开，旅程继续追索玄方失落的「心」。',
   },
 ]

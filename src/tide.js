@@ -507,7 +507,7 @@ export function mountTide(root, onBack) {
           <div>
             <p class="tide-section-code">CHRONICLE // 001-${String(TIMELINE_EVENTS.length).padStart(3, '0')}</p>
             <h2 id="tide-chronicle-title" tabindex="-1">航程纪年</h2>
-            <p>从第一次技术测试，到梦州玄方城。版本不是编号，而是漂泊者与文明共同留下的坐标。</p>
+            <p>从第一次技术测试，到巡游天际的梦州云梭。版本不是编号，而是漂泊者与文明共同留下的坐标。</p>
           </div>
           <div class="tide-chronicle-stats" aria-label="时间轴统计">
             <span><b>${TIMELINE_EVENTS.length}</b> VERSION NODES</span>

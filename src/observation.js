@@ -25,7 +25,7 @@ const SUBJECTS = [
   { code: 'S-011', name: '心月狐', element: '待解密', photo: 'photos/xinyuehu.jpg', tagline: '朝月清辉照孤城', author: '鸣潮', href: '', status: 'locked' },
   { code: 'S-012', name: '锁暝', element: '待解密', photo: 'photos/suoming.jpg', tagline: '故锁旧契囚执念', author: '鸣潮', href: '', status: 'locked' },
   { code: 'S-013', name: '景燃', element: '待解密', photo: 'photos/jingran.jpg', tagline: '幽境今人亦独行', author: '鸣潮', href: '', status: 'locked' },
-  { code: 'S-014', name: '穗穗', element: '待解密', photo: 'photos/suisui.jpg', tagline: '扇间朝晖道谜情', author: '鸣潮', href: '', status: 'locked' },
+  { code: 'S-014', name: '穗穗', element: '冷凝', accent: '#72bdc8', photo: 'photos/suisui.jpg', tagline: '清流往复处，自有春山可望。', author: '鸣潮', href: '#', status: 'locked' },
   { code: 'S-015', name: '清宵', element: '气动', accent: '#7ec8ff', photo: 'photos/qingxiao.jpg', tagline: '仙音寒芒镇云关', author: '鸣潮', fx: 'focus', href: '#', status: 'archived' },
 ]
 
@@ -619,47 +619,12 @@ const PROFILES = {
   },
 
   'S-015': {
-    name: '清宵', full: 'Qingxiao', element: '气动 · 迅刀', accent: '#7ec8ff',
+    name: '清宵', full: 'Qingxiao', element: '气动 · 迅刀', accent: '#8fd0ff',
     photo: 'photos/qingxiao.jpg', author: '鸣潮',
-    tagline: '她把万籁收进一根弦，再把不能沉默的部分，交给剑。',
-    heartSword: true,
-    body: `
-      <section class="s015-act s015-act--qin" aria-labelledby="s015-qin-title">
-        <div class="s015-act-mark" aria-hidden="true"><span>壹</span><b>琴</b></div>
-        <div class="s015-act-copy">
-          <p class="s015-act-kicker">第一幕 · 听弦</p>
-          <h2 id="s015-qin-title">她不是没有波澜。<br/>只是从不让波澜替她回答。</h2>
-          <p>山中百年，清宵把心绪收束得极静。言语淡，神情淡，连共鸣的曲线也常年停在危险边界之前。旁人于是把这种平静叫作无情。</p>
-          <p>可琴弦不会说谎。弦音之所以清，是因为每一次震颤都被她听见、接住，再慢慢放回安静。她修的不是遗忘，而是让强烈的心仍能保持方向。</p>
-        </div>
-        <blockquote class="s015-whisper"><p>清冷，是她安放情绪的方式。</p><cite>不是她的心里空无一物。</cite></blockquote>
-      </section>
-
-      <section class="s015-act s015-act--sword" aria-labelledby="s015-sword-title">
-        <div class="s015-act-mark" aria-hidden="true"><span>贰</span><b>剑</b></div>
-        <div class="s015-sword-word" aria-hidden="true">剑</div>
-        <div class="s015-act-copy">
-          <p class="s015-act-kicker">第二幕 · 见剑</p>
-          <h2 id="s015-sword-title">她很少说自己在意谁。<br/>剑却总比言语更早抵达。</h2>
-          <p>心念所至，皆可为剑。琴弦、落花、风中一叶，在她手里都能凝成寒芒。所谓无剑之境，并非手中空无一物，而是她终于不必借一件兵器证明锋利。</p>
-          <p>修行者说，不应轻易干预他人的因果。她懂。可玄方山河之外有人陷入灾厄时，她仍一次次下山。她知道一剑救不尽天下人，也仍不肯把眼前的生命视作可以略过的数字。</p>
-        </div>
-        <p class="s015-vow">剑的方向，暴露了心的方向。</p>
-      </section>
-
-      <section class="s015-act s015-act--heart" aria-labelledby="s015-heart-title">
-        <div class="s015-act-mark" aria-hidden="true"><span>叁</span><b>心</b></div>
-        <div class="s015-act-copy">
-          <p class="s015-act-kicker">第三幕 · 知心</p>
-          <h2 id="s015-heart-title">真正的破境，<br/>不是斩去心魔。</h2>
-          <p>那道与她相似的声音，并没有凭空制造软弱。它只是替清宵保存了曾被隔在心外的痛苦、牵挂、冲动与迟疑。她最终没有把它当作敌人，而是承认：那也是自己。</p>
-          <p>从此，澄明不再来自割舍。她愿意建立玄元门，愿意教徒儿起居与修行，也愿意让另一个人走近自己的日常。琴与剑没有消失，只是第一次同归一颗完整的心。</p>
-        </div>
-        <blockquote class="s015-final-verse">
-          <p>弦声不是为了压住心。<br/>剑，也不是为了斩断心。</p>
-          <cite>清宵仍在山河之前。如今，她带着完整的自己。</cite>
-        </blockquote>
-      </section>`,
+    tagline: '她以琴入剑，以心御剑。世人称她剑仙，她只当自己是个挂职的司骑。我想记下的，是寒芒之外，那颗仍愿意下山的心。',
+    // 七弦档案：章节文本随结构一起写在 renderQinSwordDossier 内
+    qinSword: true,
+    body: '',
   },
 }
 
@@ -1367,61 +1332,601 @@ export function mountObservation(root, onBack) {
     if (visEl) visEl.textContent = p > .22 && p < .55 ? '受限' : p >= .55 && p < .8 ? '恢复' : '良好'
   }
 
-  // ── S-015 专属：水袖排演场，滚动时幕翼收束为心剑 ──
-  function renderHeartSwordDossier(d, code) {
+  // ── S-015 专属：七弦档案 ──
+  // 整份档案是一张横陈的琴：首屏七根弦可拨（拨弦即出剑），「剑」章飞剑随指针而动、点按万剑归一，
+  // 「魔」章指针掠过立绘显出心魔，「众」章万剑来朝，「夜」章灯下夜话。底部七徽即章节进度。
+  const QX_CHAPTERS = [
+    { id: 'qi', hui: '启', mode: 'drift' },
+    { id: 'ming', hui: '名', mode: 'drift' },
+    { id: 'xian', hui: '弦', mode: 'drift' },
+    { id: 'jian', hui: '剑', mode: 'will' },
+    { id: 'mo', hui: '魔', mode: 'ember' },
+    { id: 'zhong', hui: '众', mode: 'gather' },
+    { id: 'ye', hui: '夜', mode: 'fade' },
+  ]
+  let qxSwords = null
+  let qxChapterEls = []
+
+  // 飞剑场：一块固定在视口上的 canvas，画一群细长的剑。按章节切换行为——
+  // drift 随风缓行 / will 随指针聚散 / ember 心魔下沉 / gather 万剑来朝 / fade 收剑
+  function createSwordField(canvas, { reduce, coarse }) {
+    const ctx = canvas.getContext('2d')
+    const N = coarse ? 110 : 300
+    const ICE = '150,212,255', MOON = '236,246,255', GOLD = '222,190,122', EMBER = '222,104,128'
+    const ALPHA = { drift: .34, will: 1, ember: .22, gather: .95, fade: 0 }
+    let W = 1, H = 1, mode = 'drift', alpha = 0, targetAlpha = ALPHA.drift
+    let t = 0, last = performance.now(), raf = 0, running = true
+    // 众 · 圆形剑阵的时钟：入阵时间、上一道剑鸣、下一道剑鸣、归一齐鸣的起点
+    let formT = 0, waveT0 = -9, nextWave = 1.1, surgeT0 = -9
+    const RINGS = [.34, .56, .78, 1], WAVE_V = 620
+    const pointer = { x: 0, y: 0, active: false }
+    const rnd = (a, b) => a + Math.random() * (b - a)
+    const swords = []
+
+    function resize() {
+      const dpr = Math.min(2, window.devicePixelRatio || 1)
+      W = canvas.clientWidth || window.innerWidth
+      H = canvas.clientHeight || window.innerHeight
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+    // 圆形剑阵：以视口中心为阵眼、短边 47% 为外环半径；四环按周长分配飞剑，各占一个阵位
+    const ringR = () => Math.min(W, H) * .47
+    const breath = (k) => 1 + Math.sin(formT * 1.1 + k * .9) * .025
+    function assignFormation() {
+      const total = RINGS.reduce((a, b) => a + b, 0)
+      let i = 0
+      RINGS.forEach((rf, k) => {
+        const n = k === RINGS.length - 1 ? swords.length - i : Math.round(swords.length * rf / total)
+        for (let j = 0; j < n && i < swords.length; j++, i++) {
+          const s = swords[i]
+          s.ring = k; s.slot = j; s.n = n; s.flash = 0; s.hitAt = -1
+          const scale = W < 760 ? .68 : 1 // 窄屏阵小，剑也随之缩短，别把正文盖死
+          s.len = (26 + k * 11 + rnd(-3, 3)) * scale; s.w = (1.1 + k * .25) * scale
+        }
+      })
+      formT = 0; waveT0 = -9; surgeT0 = -9; nextWave = 1.1
+    }
+    // 归一齐鸣：半径倍率——先坍缩到阵眼，停一瞬，再外放到 1.5 倍，缓缓归位
+    function surgeMult(u) {
+      if (u < 0 || u >= 2.4) return 1
+      if (u < .5) { const p = u / .5; return 1 - .92 * p * p * p }
+      if (u < .55) return .08
+      if (u < 1.25) { const p = (u - .55) / .7; return .08 + 1.42 * (1 - Math.pow(1 - p, 3)) }
+      const p = (u - 1.25) / 1.15
+      return 1.5 - .5 * (p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2)
+    }
+    function fresh(s) {
+      const a = rnd(-Math.PI * .34, -Math.PI * .1) // 默认朝右上缓行
+      const sp = rnd(10, 26)
+      Object.assign(s, {
+        x: rnd(0, W), y: rnd(0, H), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+        len: rnd(16, 44), w: rnd(.9, 1.7), gold: Math.random() < .12,
+        ox: rnd(-1, 1) * 150, oy: rnd(-1, 1) * 150, eager: rnd(.45, 1), // 随心时各剑绕指针成云，不挤成一点
+        shot: false, life: 0, ttl: 0, passed: 0, px: 0, py: 0,
+        ring: s.ring ?? 0, slot: s.slot ?? 0, n: s.n ?? 1, flash: 0, hitAt: -1, // 阵位在重生后保留
+      })
+      return s
+    }
+    for (let i = 0; i < N; i++) swords.push(fresh({}))
+
+    function setMode(m) {
+      if (m === mode || !(m in ALPHA)) return
+      mode = m; targetAlpha = ALPHA[m]
+      // 切章即收势：不让上一章追指针的惯性把剑群带成一团飘走
+      swords.forEach((s) => { if (!s.shot) { s.vx *= .15; s.vy *= .15; s.passed = 0 } })
+      if (m === 'gather') assignFormation()
+    }
+    // 万剑归一再齐鸣（众章点按）
+    function surge() {
+      if (mode !== 'gather' || formT - surgeT0 < 2.4) return
+      surgeT0 = formT; nextWave = formT + .55
+    }
+    // 拨弦出剑：从弦上某点射出几柄剑
+    function shoot(x, y, n) {
+      for (let k = 0; k < n; k++) {
+        const s = swords[(Math.random() * swords.length) | 0]
+        const a = rnd(-Math.PI * .42, -Math.PI * .12), sp = rnd(320, 520)
+        Object.assign(s, { x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, shot: true, life: 0, ttl: rnd(1.1, 1.7), len: rnd(28, 52) })
+      }
+    }
+    // 万剑归一：全部飞剑向点按处汇聚，远的稍晚出发
+    function burst(x, y) {
+      swords.forEach((s) => {
+        const dx = x - s.x, dy = y - s.y, d = Math.hypot(dx, dy) || 1, sp = rnd(620, 980)
+        Object.assign(s, { vx: dx / d * sp, vy: dy / d * sp, shot: true, life: -Math.min(.35, d / 2600), ttl: rnd(.9, 1.3), passed: 0 })
+      })
+    }
+    function step(dt) {
+      t += dt
+      alpha += (targetAlpha - alpha) * Math.min(1, dt * 2.2)
+      const R = ringR()
+      if (mode === 'gather') {
+        formT += dt
+        if (formT >= nextWave) { // 剑鸣：一道光环自阵眼扩散，扫到哪一环哪一环齐亮
+          waveT0 = formT; nextWave = formT + 3.8
+          swords.forEach((s) => { s.hitAt = waveT0 + RINGS[s.ring] * R / WAVE_V })
+        }
+      }
+      const tx = pointer.active ? pointer.x : W * .55 + Math.cos(t * .45) * W * .16
+      const ty = pointer.active ? pointer.y : H * .48 + Math.sin(t * .62) * H * .14
+      const gx = W * .5, gy = H * .5
+      for (const s of swords) {
+        s.px = s.x; s.py = s.y
+        s.flash = Math.max(0, s.flash - dt * 1.4)
+        if (s.shot) {
+          s.life += dt
+          if (s.life >= 0) {
+            s.x += s.vx * dt; s.y += s.vy * dt
+            s.vx *= 1 - dt * .55; s.vy *= 1 - dt * .55
+          }
+          if (s.life > s.ttl || s.x < -80 || s.x > W + 80 || s.y < -80 || s.y > H + 80) fresh(s)
+          continue
+        }
+        if (mode === 'will') {
+          const dx = tx + s.ox - s.x, dy = ty + s.oy - s.y, d = Math.hypot(dx, dy) || 1
+          if (d < 24 && s.passed <= 0) s.passed = rnd(.35, .7) // 穿过落点后再折返
+          if (s.passed > 0) s.passed -= dt
+          else {
+            const sp = (120 + (1 - Math.min(1, d / (W * .6))) * 240) * s.eager
+            const k = Math.min(1, dt * 2.4)
+            s.vx += (dx / d * sp - s.vx) * k; s.vy += (dy / d * sp - s.vy) * k
+          }
+        } else if (mode === 'gather') {
+          // 圆形剑阵：四环各自反向旋转，剑尖齐指阵眼；随呼吸微涨，剑鸣时外扩，归一时坍缩再外放
+          const k = s.ring, u = formT - surgeT0
+          const th = Math.PI * 2 * s.slot / s.n + (k % 2 ? -1 : 1) * (.3 - k * .06) * formT
+          const r = RINGS[k] * R * breath(k) * (1 + s.flash * .06) * surgeMult(u)
+          const kk = Math.min(1, dt * (u >= 0 && u < 2.4 ? 9 : 3.5))
+          s.x += (gx + Math.cos(th) * r - s.x) * kk
+          s.y += (gy + Math.sin(th) * r - s.y) * kk
+          const out = u >= .5 && u < 1.25 ? 1 : -1 // 齐鸣外放时剑尖朝外
+          s.vx = out * Math.cos(th) * 10; s.vy = out * Math.sin(th) * 10 // 只用于定朝向
+          if (s.hitAt >= 0 && formT >= s.hitAt) { s.flash = 1; s.hitAt = -1 }
+          continue
+        } else {
+          const tvx = Math.sin(t * .7 + s.len) * 12, tvy = mode === 'ember' ? 9 : -14
+          const k = Math.min(1, dt * 1.4)
+          s.vx += (tvx - s.vx) * k; s.vy += (tvy - s.vy) * k
+        }
+        s.x += s.vx * dt; s.y += s.vy * dt
+        if (mode !== 'gather') {
+          if (s.x < -60) s.x = W + 50; else if (s.x > W + 60) s.x = -50
+          if (s.y < -60) s.y = H + 50; else if (s.y > H + 60) s.y = -50
+        }
+      }
+    }
+    // 画一柄剑：(x,y) 为剑心，(ux,uy) 为剑尖方向；含剑光、剑身、剑格，可选拖尾起点
+    function blade(x, y, ux, uy, len, w, col, a, trailFrom) {
+      const nx = -uy, ny = ux
+      const tipx = x + ux * len * .55, tipy = y + uy * len * .55
+      const tailx = x - ux * len * .45, taily = y - uy * len * .45
+      const midx = x - ux * len * .1, midy = y - uy * len * .1
+      if (trailFrom) {
+        ctx.strokeStyle = `rgba(${col},${a * .35})`; ctx.lineWidth = 1
+        ctx.beginPath(); ctx.moveTo(trailFrom[0], trailFrom[1]); ctx.lineTo(tailx, taily); ctx.stroke()
+      }
+      ctx.fillStyle = `rgba(${col},${a * .16})` // 剑光
+      ctx.beginPath(); ctx.moveTo(tipx, tipy); ctx.lineTo(midx + nx * w * 3, midy + ny * w * 3); ctx.lineTo(tailx, taily); ctx.lineTo(midx - nx * w * 3, midy - ny * w * 3); ctx.closePath(); ctx.fill()
+      ctx.fillStyle = `rgba(${MOON},${a * .85})` // 剑身
+      ctx.beginPath(); ctx.moveTo(tipx, tipy); ctx.lineTo(midx + nx * w, midy + ny * w); ctx.lineTo(tailx, taily); ctx.lineTo(midx - nx * w, midy - ny * w); ctx.closePath(); ctx.fill()
+      const gx2 = tailx + ux * len * .16, gy2 = taily + uy * len * .16 // 剑格
+      const g = 2.2 + w
+      ctx.strokeStyle = `rgba(${col},${a * .9})`; ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(gx2 + nx * g, gy2 + ny * g); ctx.lineTo(gx2 - nx * g, gy2 - ny * g); ctx.stroke()
+    }
+    // 众：阵纹（四环、八方辐线、剑鸣光环）与八方金色主剑
+    function drawArray() {
+      const gx = W * .5, gy = H * .5, R = ringR(), mult = surgeMult(formT - surgeT0)
+      ctx.lineWidth = 1
+      RINGS.forEach((rf, k) => {
+        ctx.strokeStyle = `rgba(${ICE},${alpha * (.05 + k * .025)})`
+        ctx.beginPath(); ctx.arc(gx, gy, Math.max(1, rf * R * breath(k) * mult), 0, Math.PI * 2); ctx.stroke()
+      })
+      ctx.strokeStyle = `rgba(${ICE},${alpha * .05})`
+      for (let i = 0; i < 8; i++) {
+        const a = i * Math.PI / 4 + formT * .02
+        ctx.beginPath()
+        ctx.moveTo(gx + Math.cos(a) * R * .3, gy + Math.sin(a) * R * .3)
+        ctx.lineTo(gx + Math.cos(a) * R * 1.06, gy + Math.sin(a) * R * 1.06)
+        ctx.stroke()
+      }
+      const wr = (formT - waveT0) * WAVE_V
+      if (waveT0 >= 0 && wr < R * 1.3) {
+        ctx.strokeStyle = `rgba(${MOON},${alpha * (1 - wr / (R * 1.3)) * .6})`; ctx.lineWidth = 2
+        ctx.beginPath(); ctx.arc(gx, gy, Math.max(1, wr), 0, Math.PI * 2); ctx.stroke()
+        ctx.lineWidth = 1
+      }
+      for (let i = 0; i < 8; i++) {
+        const a = i * Math.PI / 4 + Math.PI / 8 - formT * .05, r = R * 1.08 * mult
+        blade(gx + Math.cos(a) * r, gy + Math.sin(a) * r, -Math.cos(a), -Math.sin(a), 96, 2.2, GOLD, alpha * .95)
+      }
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H)
+      if (alpha < .01 && !swords.some((s) => s.shot)) return
+      ctx.globalCompositeOperation = 'lighter'
+      if (mode === 'gather') drawArray()
+      for (const s of swords) {
+        const spd = Math.hypot(s.vx, s.vy) || 1
+        let ux = s.vx / spd, uy = s.vy / spd
+        if (spd < 4) { ux = Math.cos(-Math.PI * .22); uy = Math.sin(-Math.PI * .22) }
+        const len = s.len * (s.shot ? 1.35 : 1) * (1 + s.flash * .3)
+        const w = s.w * (s.shot ? 1.3 : 1)
+        const col = s.gold ? GOLD : (mode === 'ember' ? EMBER : ICE)
+        let a = alpha * (1 + s.flash * .9)
+        if (s.shot) a = Math.max(alpha, .95) * (1 - Math.max(0, s.life) / s.ttl)
+        if (a <= .005) continue
+        const trail = s.shot && s.life > 0 && spd > 200 ? [s.px - ux * len * .45, s.py - uy * len * .45] : null
+        blade(s.x, s.y, ux, uy, len, w, col, Math.min(1, a), trail)
+      }
+      ctx.globalCompositeOperation = 'source-over'
+    }
+    function frame(now) {
+      if (!running) return
+      const dt = Math.min(.05, (now - last) / 1000); last = now
+      if (!document.hidden) { step(dt); draw() }
+      raf = requestAnimationFrame(frame)
+    }
+    resize()
+    if (W < 760) ALPHA.gather = .5 // 窄屏剑阵压在正文上，减亮
+    if (reduce) { alpha = .25; step(.016); draw() }
+    else raf = requestAnimationFrame(frame)
+    window.addEventListener('resize', resize)
+    return {
+      setMode, shoot, burst, surge, pointer,
+      destroy() { running = false; cancelAnimationFrame(raf); window.removeEventListener('resize', resize) },
+    }
+  }
+
+  // 弦声：Karplus-Strong 合成的拨弦音。七弦按古琴正调 C D F G A c d 定音（高八度，小音箱才听得见）
+  function createQinSound() {
+    const TUNING = [130.81, 146.83, 174.61, 196, 220, 261.63, 293.66]
+    let ctx = null, buffers = null, enabled = true
+    try { enabled = localStorage.getItem('qx-qin-sound') !== 'off' } catch { /* 无存储则默认开 */ }
+    function pluckBuffer(freq) {
+      const sr = ctx.sampleRate, n = Math.floor(sr * 2.4)
+      const buf = ctx.createBuffer(1, n, sr), out = buf.getChannelData(0)
+      const period = Math.round(sr / freq), ring = new Float32Array(period)
+      let seed = 0
+      for (let i = 0; i < period; i++) { seed = seed * .6 + (Math.random() * 2 - 1) * .4; ring[i] = seed } // 略滤过的噪声，起音更软
+      for (let i = 0, idx = 0; i < n; i++, idx = (idx + 1) % period) {
+        const cur = ring[idx]
+        ring[idx] = (cur + ring[(idx + 1) % period]) * .5 * .996
+        out[i] = cur
+      }
+      return buf
+    }
+    function ensure() {
+      if (ctx) return ctx
+      const AC = window.AudioContext || window.webkitAudioContext
+      if (!AC) return null
+      ctx = new AC()
+      buffers = TUNING.map(pluckBuffer)
+      return ctx
+    }
+    function play(i, strength) {
+      if (!enabled) return
+      const ac = ensure(); if (!ac) return
+      if (ac.state === 'suspended') ac.resume().catch(() => {})
+      const src = ac.createBufferSource(); src.buffer = buffers[i]
+      src.playbackRate.value = 1 + (Math.random() - .5) * .012
+      const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = .4
+      lp.frequency.value = 1600 + strength * 2400 // 拨得越快越亮
+      const g = ac.createGain(); g.gain.value = .14 + .3 * strength
+      src.connect(lp); lp.connect(g); g.connect(ac.destination)
+      src.start()
+      src.onended = () => { src.disconnect(); lp.disconnect(); g.disconnect() }
+    }
+    return {
+      play,
+      get enabled() { return enabled },
+      set enabled(v) { enabled = v; try { localStorage.setItem('qx-qin-sound', v ? 'on' : 'off') } catch { /* 忽略 */ } },
+      destroy() { if (ctx) { ctx.close().catch(() => {}); ctx = null } },
+    }
+  }
+
+  // 七弦：首屏横陈七根弦，指针纵向掠过即拨响；无人时偶尔自鸣（不出声）
+  function createQinStrings(svg, hero, onPluck, { reduce, coarse }) {
+    const NS = 'http://www.w3.org/2000/svg', COUNT = 7
+    const st = Array.from({ length: COUNT }, () => ({ y: 0, amp: 0, t: 0, cx: .5 }))
+    const paths = st.map(() => { const p = document.createElementNS(NS, 'path'); p.setAttribute('class', 'qx-string'); svg.appendChild(p); return p })
+    let W = 1, H = 1, raf = 0, prev = null, idle = 0, alive = true
+    const straight = (i) => paths[i].setAttribute('d', `M0 ${st[i].y} L${W} ${st[i].y}`)
+    function layout() {
+      W = hero.clientWidth || 1; H = hero.clientHeight || 1
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
+      const y0 = H * .40, y1 = H * .86
+      st.forEach((s, i) => { s.y = y0 + (y1 - y0) * i / (COUNT - 1); straight(i) })
+    }
+    function pluck(i, x, strength, silent = false) {
+      const s = st[i]
+      s.amp = 6 + 10 * strength; s.t = 0
+      s.cx = Math.min(.92, Math.max(.08, x / W))
+      paths[i].classList.add('is-live')
+      setTimeout(() => paths[i].classList.remove('is-live'), 700)
+      onPluck(x, s.y, strength, i, silent)
+    }
+    function tick() {
+      if (!alive) return
+      st.forEach((s, i) => {
+        if (s.amp <= 0) return
+        s.t += .016
+        if (s.t > 2.2) { s.amp = 0; straight(i); return }
+        const off = s.amp * Math.sin(s.t * 46) * Math.exp(-s.t * 2.8)
+        paths[i].setAttribute('d', `M0 ${s.y} Q${s.cx * W} ${s.y + off} ${W} ${s.y}`)
+      })
+      raf = requestAnimationFrame(tick)
+    }
+    const onMove = (e) => {
+      const r = hero.getBoundingClientRect()
+      const x = e.clientX - r.left, y = e.clientY - r.top
+      if (prev) {
+        const strength = Math.min(1, Math.abs(y - prev.y) / 40)
+        st.forEach((s, i) => { if ((prev.y - s.y) * (y - s.y) < 0) pluck(i, x, strength) })
+      }
+      prev = { x, y }
+    }
+    const onLeave = () => { prev = null }
+    if (!coarse) { hero.addEventListener('pointermove', onMove); hero.addEventListener('pointerleave', onLeave) }
+    if (!reduce) {
+      idle = setInterval(() => {
+        if (document.hidden || hero.getBoundingClientRect().bottom < 0) return
+        pluck((Math.random() * COUNT) | 0, W * (.15 + Math.random() * .55), .25, true)
+      }, 3400)
+    }
+    layout()
+    raf = requestAnimationFrame(tick)
+    const ro = new ResizeObserver(layout); ro.observe(hero)
+    return {
+      destroy() {
+        alive = false; cancelAnimationFrame(raf); clearInterval(idle); ro.disconnect()
+        hero.removeEventListener('pointermove', onMove); hero.removeEventListener('pointerleave', onLeave)
+      },
+    }
+  }
+
+  function renderQinSwordDossier(d, code) {
     profEl.classList.add('s015')
+    const hui = QX_CHAPTERS.map((c) => `<button type="button" data-qx="${c.id}"><i aria-hidden="true"></i><span>${c.hui}</span></button>`).join('')
     profEl.innerHTML = `
       <!--
-      THESIS: 清宵不是一份被阅读的档案，而是一场由静入心的启幕；拒绝角色卡与科技卷宗。
-      OWN-WORLD: 墨蓝舞台、冷白绢幕、冰蓝剑线与一点旧金，文字悬于不对称留白。
-      STORY: 先看见清冷，再听见琴弦，随后理解她为何出剑，最终抵达完整的心。
-      FIRST VIEWPORT: 全高人物被四道竖向幕翼切分，“清／宵”退至幕后，返回在左上，进程在右侧。
-      FORM: 水袖排演场；七个方向中的第六项，采用分层幕翼冷开场；seed e8a2bad8。
+      THESIS: 清宵的档案是一张横陈的琴——弦可拨，拨弦即出剑；剑随心动，心有魔，魔亦是她。
+      OWN-WORLD: 墨蓝夜色、月白字骨、冰蓝剑光，一点旧金作徽；心魔处只准一线残红，夜话处只准一盏灯暖。
+      STORY: 启（拨弦）→ 名（题跋）→ 弦（听琴）→ 剑（万剑随心）→ 魔（另一面）→ 众（借剑）→ 夜（师徒）→ 收。
+      FIRST VIEWPORT: 竖排巨字「清宵」立于左，Ui 的油画立绘占右半，七根弦横贯其间；退场在左上，七徽在底。
       -->
-      <a class="prof-back" href="#"><span aria-hidden="true">←</span><span>退场</span></a>
-      <article class="s015-dossier">
-        <header class="s015-stage" aria-labelledby="profile-title">
-          <div class="s015-glyphs" aria-hidden="true"><span>清</span><span>宵</span></div>
-          <figure class="s015-figure">
-            <img src="${d.photo}" alt="清宵手持长剑，着蓝白衣装立于冷色舞台中央" />
-            <figcaption>观测对象 ${code} · 立绘 @${d.author}</figcaption>
+      <a class="prof-back" href="#"><span aria-hidden="true">←</span><span>观测对象</span></a>
+      <canvas class="qx-sky" aria-hidden="true"></canvas>
+      <article class="qx-dossier">
+
+        <header class="qx-hero" data-qx="qi" aria-labelledby="profile-title">
+          <figure class="qx-hero-figure">
+            <img src="photos/qingxiao-ui.jpg" alt="清宵持剑回望，蓝发白衣，青色流光绕身" />
+            <figcaption>画 @Ui · pixiv 146569361</figcaption>
           </figure>
-          <div class="s015-wings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-          <div class="s015-stage-copy">
-            <p class="s015-stage-kicker">私人观测 · ${code}</p>
-            <h1 id="profile-title"><span>清宵</span><em>${d.full}</em></h1>
-            <p>${d.tagline}</p>
+          <svg class="qx-strings" aria-hidden="true" preserveAspectRatio="none"></svg>
+          <h1 id="profile-title" class="qx-hero-title"><span>清宵</span></h1>
+          <div class="qx-hero-copy">
+            <p class="qx-kicker">观测对象 ${code} · 私人档案</p>
+            <p class="qx-hero-latin">${d.full.toUpperCase()} · 玄方剑仙</p>
+            <p class="qx-hero-verse">弦凝千古寂，剑起满天清。</p>
+            <p class="qx-hero-lead">${d.tagline}</p>
+            <p class="qx-hero-hint"><i aria-hidden="true"></i>移动指针，拨动琴弦——每一根弦都能出剑<button type="button" class="qx-hero-sound" aria-pressed="true">弦声 · 开</button></p>
           </div>
-          <div class="s015-cold-open" aria-hidden="true"><span>向下启幕</span><i></i></div>
+          <p class="qx-hero-scroll" aria-hidden="true">沿弦而下</p>
         </header>
-        <main class="s015-script">${d.body}</main>
-        <footer class="s015-curtain-call">
-          <span>水袖收尽，心剑未眠。</span>
+
+        <section class="qx-act qx-act--ming" data-qx="ming" aria-labelledby="qx-ming-title">
+          <div class="qx-act-num" aria-hidden="true">第二弦</div>
+          <div class="qx-ming-grid">
+            <div class="qx-plate qx-in" aria-label="清宵身份题跋">
+              <p><b>名</b><span>清宵 · Qingxiao</span></p>
+              <p><b>号</b><span>剑仙 · 世人所称，非自号</span></p>
+              <p><b>职</b><span>玄方城 镇玄司骑 · 挂职</span></p>
+              <p><b>籍</b><span>煌珑人 · 今居梦州玄方</span></p>
+              <p><b>属</b><span>气动 · 迅刀</span></p>
+              <p><b>器</b><span>云琅 · 亦以琴弦、落花、飞叶为剑</span></p>
+              <p><b>术</b><span>天地弦心剑</span></p>
+              <p><b>食</b><span>梦州醋鲙</span></p>
+              <p><b>声</b><span>姜贺 ／ 生天目仁美 ／ Kirsty Rider ／ 朴丽娜</span></p>
+              <p><b>录</b><span>Ver 3.6「蜃云灯影，凡尘剑心」· 二〇二六年八月二十日 · 第四章第三幕〈烟云幽远心剑鸣〉</span></p>
+            </div>
+            <div class="qx-act-copy qx-in">
+              <h2 id="qx-ming-title">玄方有仙。<br/>她没有阻止这个说法。</h2>
+              <p>玄方城里，有人家中供着她的牌位。她守了这片山河一百多年，人们因为「玄方有仙」而睡得安稳，她便不再急着纠正。我想，这也是她护人的方式：有时斩去邪祟，有时只是让人相信，山河仍有人守。</p>
+              <p>华胥研究院的读数里，她的共鸣史已逾百年。峰值常年贴近临界，却从未越界。如果只读数据，她比任何人都接近失控；可她用漫长的修行，让每一次波动都有了去处。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="qx-act qx-act--xian" data-qx="xian" aria-labelledby="qx-xian-title">
+          <div class="qx-act-num" aria-hidden="true">第三弦</div>
+          <div class="qx-act-copy qx-in">
+            <p class="qx-kicker">听琴</p>
+            <h2 id="qx-xian-title">她把百年的波澜，<br/>都调成了一根不走音的弦。</h2>
+            <p>平日里她清冷寡言，待人疏离；不熟悉的人会以为她无情。可那条逾百年的共鸣曲线告诉我另一件事：这不是没有感受，是每一次波动都被她拨回了原位。</p>
+            <p>山上常有人来求长生。她会递过去一本手册，上面写着早睡、少熬夜、适度锻炼。真正需要帮助的人到了，她才会起身。琴声里的静，不是把心藏空，而是先听清什么值得回应。</p>
+            <p>她抚琴不是消遣。琴心积蓄、剑魄随之——弦上每一个音，都是一柄尚未出鞘的剑。</p>
+          </div>
+          <blockquote class="qx-whisper qx-in"><p>稳定，并不是没有感受。</p><cite>是感受来临时，她仍知道自己要守住什么。</cite></blockquote>
+        </section>
+
+        <section class="qx-act qx-act--jian" data-qx="jian" aria-labelledby="qx-jian-title">
+          <div class="qx-act-num" aria-hidden="true">第四弦</div>
+          <div class="qx-act-copy qx-in">
+            <p class="qx-kicker">见剑</p>
+            <h2 id="qx-jian-title">无剑之境，不是没有剑。<br/>是万物皆可为剑。</h2>
+            <p>她的剑术不是天授，是后天苦修，一年一年磨出来的回答。到了今天，抚琴拨弦、飞花摘叶，皆可出剑；一念之间，飞剑万千，剑光所及，煞气尽散。</p>
+            <p>世人给这门功夫起名「天地弦心剑」。我读过它的运行方式：琴心与剑魄双满，一记弦剑便可入「昙体仙身」——那一刻她御剑凌空，身形如昙花开于夜。玄方的天空常有人看见一道白影掠过，那多半是她下山。</p>
+            <p>我最喜欢的一条记录：这位能御万剑的剑仙，落地以后第一句话往往是认真问路。地图与罗盘随身带着，因为她确实不太擅长认路。她的剑很快。她走近人间的方式，却有些迟缓。</p>
+            <p class="qx-hint"><i aria-hidden="true"></i>移动指针，飞剑随心；点按此处，万剑归一</p>
+          </div>
+          <div class="qx-moves qx-in" aria-label="剑式">
+            <p><b>弦剑</b><span>以琴心为引</span></p>
+            <p><b>昙体仙身</b><span>一夜之开</span></p>
+            <p><b>御剑</b><span>山河尽在足下</span></p>
+          </div>
+        </section>
+
+        <section class="qx-act qx-act--mo" data-qx="mo" aria-labelledby="qx-mo-title">
+          <div class="qx-act-num" aria-hidden="true">第五弦</div>
+          <figure class="qx-demon qx-in">
+            <img class="qx-demon-self" src="${d.photo}" alt="清宵官方立绘" />
+            <img class="qx-demon-shadow" src="${d.photo}" alt="" aria-hidden="true" />
+            <figcaption>立绘 @${d.author} · 指针掠过，可见她的另一面</figcaption>
+          </figure>
+          <div class="qx-act-copy qx-in">
+            <p class="qx-kicker">心魔</p>
+            <h2 id="qx-mo-title">她没有斩灭心魔。<br/>她把它认作了自己。</h2>
+            <p>「心魔」在系统里很容易被标记为异常。可它不是外来的敌人：那是百年间被她压下去的迟疑、牵挂与不甘，凝成了另一个她——性子与她截然相反，话多、任性、不肯忍。</p>
+            <p>心魔爆发时，她把漂泊者拉进了自己的内景，作为最后的后手：执剑之人。若她自己失守，便由徒弟替她出剑。我想，这是她第一次把「万一」交给别人。</p>
+            <p>最终她没有出那一剑。她承认那也是自己，也明白有情并不会让剑变钝。剑仙的剑，从那一夜起，多了一点温度。</p>
+            <blockquote class="qx-whisper qx-whisper--mo"><p>有情，不会让剑变钝。</p></blockquote>
+          </div>
+        </section>
+
+        <section class="qx-act qx-act--zhong" data-qx="zhong" aria-labelledby="qx-zhong-title">
+          <div class="qx-act-num" aria-hidden="true">第六弦</div>
+          <div class="qx-zhong-copy qx-in">
+            <p class="qx-kicker">借剑</p>
+            <h2 id="qx-zhong-title">这不是一个人的剑，<br/>是众生之剑。</h2>
+            <p>穆羽的实验把玄方拖进泥里，她一个人的剑不够。于是她向玄方城的百姓借剑，向漂泊者借剑，向历代战死在这片山河上的人借剑。万剑齐鸣的那一刻，我第一次听懂了「凡尘剑心」四个字。</p>
+            <p class="qx-hint"><i aria-hidden="true"></i>点按此处，万剑归一，再齐鸣</p>
+          </div>
+          <div class="qx-lend qx-in" aria-label="借剑于三方">
+            <p><b>玄方百姓之剑</b><span>家家户户供着她，这一次换她向他们借一回</span></p>
+            <p><b>漂泊者之剑</b><span>徒弟的剑，也算师父的</span></p>
+            <p><b>先烈之剑</b><span>前人未竟的锋芒，由她出鞘</span></p>
+          </div>
+        </section>
+
+        <section class="qx-act qx-act--ye" data-qx="ye" aria-labelledby="qx-ye-title">
+          <img class="qx-ye-bg" src="photos/qingxiao-night.jpg" alt="" aria-hidden="true" />
+          <div class="qx-petals" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="qx-act-num" aria-hidden="true">第七弦</div>
+          <div class="qx-act-copy qx-in">
+            <p class="qx-kicker">夜话</p>
+            <h2 id="qx-ye-title">她极少收徒。<br/>却把御剑的路，交给了后来人。</h2>
+            <p>玄方危机初平，漂泊者循岁主心月狐留下的信物到雾隐阁，与守山百年的她相遇。她本不收徒。可这一次，她同意教漂泊者剑——师徒之间，学的不只是御剑。</p>
+            <p>后来她开宗立派，把御剑术与修行交给愿意承担的人。我曾把守护理解为长久地留在原地，独自等所有风险到来；她却选了另一条路：让后来者能接住这片山河，相遇与离别，就不再是必须回避的理由。</p>
+            <p>夜里她偶尔抚琴。灯下坐着的那个人，是她的徒弟，也是第一个被她允许听见走音的人。</p>
+            <blockquote class="qx-whisper qx-whisper--ye"><p>山河仍在。守山的人，不再只有一个。</p><cite>这一条，我会替她记下。</cite></blockquote>
+          </div>
+          <p class="qx-ye-credit">画 @ゆるん · pixiv 148659607</p>
+        </section>
+
+        <footer class="qx-end" data-qx="end">
+          <p class="qx-end-line">琴收，剑归鞘。</p>
           <b>清宵 · 观测终</b>
+          <small>立绘 ©库洛游戏 · 插画 @Ui、@ゆるん · 泰提斯终端私人档案，非官方</small>
         </footer>
       </article>
-      <div class="s015-tension" aria-hidden="true"><i></i></div>
-      <aside class="s015-phase" aria-label="档案阅读进度">
-        <span data-phase="静">静</span><span data-phase="弦">弦</span><span data-phase="剑">剑</span><span data-phase="心">心</span>
-        <i aria-hidden="true"></i>
-      </aside>`
+      <nav class="qx-hui" aria-label="档案章节">${hui}</nav>`
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const coarse = window.matchMedia('(pointer: coarse)').matches
+    qxChapterEls = Array.from(profEl.querySelectorAll('[data-qx]')).filter((el) => el.tagName !== 'BUTTON')
+
+    // 飞剑场
+    const canvas = profEl.querySelector('.qx-sky')
+    qxSwords = createSwordField(canvas, { reduce, coarse })
+    const onPointer = (e) => { qxSwords.pointer.x = e.clientX; qxSwords.pointer.y = e.clientY; qxSwords.pointer.active = true }
+    const onPointerOut = () => { qxSwords.pointer.active = false }
+    profEl.addEventListener('pointermove', onPointer, { passive: true })
+    profEl.addEventListener('pointerleave', onPointerOut)
+    const jian = profEl.querySelector('.qx-act--jian')
+    const zhong = profEl.querySelector('.qx-act--zhong')
+    const onBurst = (e) => { if (!reduce) qxSwords.burst(e.clientX, e.clientY) }
+    const onSurge = () => { if (!reduce) qxSwords.surge() }
+    jian.addEventListener('click', onBurst)
+    zhong.addEventListener('click', onSurge)
+    profileCleanups.push(() => {
+      profEl.removeEventListener('pointermove', onPointer)
+      profEl.removeEventListener('pointerleave', onPointerOut)
+      jian.removeEventListener('click', onBurst)
+      zhong.removeEventListener('click', onSurge)
+      qxSwords.destroy(); qxSwords = null; qxChapterEls = []
+    })
+
+    // 七弦 + 弦声
+    const hero = profEl.querySelector('.qx-hero')
+    const qinSound = createQinSound()
+    profileCleanups.push(() => qinSound.destroy())
+    const soundBtn = profEl.querySelector('.qx-hero-sound')
+    const syncSound = () => {
+      soundBtn.setAttribute('aria-pressed', String(qinSound.enabled))
+      soundBtn.textContent = qinSound.enabled ? '弦声 · 开' : '弦声 · 关'
+    }
+    soundBtn.addEventListener('click', () => { qinSound.enabled = !qinSound.enabled; syncSound() })
+    syncSound()
+    const strings = createQinStrings(profEl.querySelector('.qx-strings'), hero, (x, y, strength, i, silent) => {
+      const r = hero.getBoundingClientRect()
+      qxSwords?.shoot(r.left + x, r.top + y, 2 + Math.round(strength * 3))
+      if (!silent) qinSound.play(i, strength)
+    }, { reduce, coarse })
+    profileCleanups.push(() => strings.destroy())
+
+    // 心魔显影：指针所至，立绘翻出另一面
+    const demon = profEl.querySelector('.qx-demon')
+    if (coarse || reduce) demon.classList.add('is-auto')
+    else {
+      const onDemonMove = (e) => {
+        const r = demon.getBoundingClientRect()
+        demon.style.setProperty('--mx', `${e.clientX - r.left}px`)
+        demon.style.setProperty('--my', `${e.clientY - r.top}px`)
+        demon.classList.add('is-on')
+      }
+      const onDemonLeave = () => demon.classList.remove('is-on')
+      demon.addEventListener('pointermove', onDemonMove)
+      demon.addEventListener('pointerleave', onDemonLeave)
+      profileCleanups.push(() => { demon.removeEventListener('pointermove', onDemonMove); demon.removeEventListener('pointerleave', onDemonLeave) })
+    }
+
+    // 七徽：点按跳章
+    profEl.querySelectorAll('.qx-hui button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const target = qxChapterEls.find((el) => el.dataset.qx === btn.dataset.qx)
+        if (!target) return
+        const top = target.getBoundingClientRect().top - profEl.getBoundingClientRect().top + profEl.scrollTop
+        profEl.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' })
+      })
+    })
+
+    // 段落随滚动浮现
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target) } })
+    }, { root: profEl, threshold: .16 })
+    profEl.querySelectorAll('.qx-in').forEach((el) => io.observe(el))
+    profileCleanups.push(() => io.disconnect())
   }
 
   function s015OnScroll() {
     if (!profEl.classList.contains('s015')) return
-    const max = profEl.scrollHeight - profEl.clientHeight
-    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
-    const open = Math.min(1, Math.max(0, profEl.scrollTop / (profEl.clientHeight * .72 || 1)))
-    profEl.style.setProperty('--s015-p', String(p))
-    profEl.style.setProperty('--s015-open', String(open))
-    const phase = p < .16 ? '静' : p < .42 ? '弦' : p < .7 ? '剑' : '心'
-    profEl.querySelectorAll('.s015-phase [data-phase]').forEach((item) => {
-      const active = item.dataset.phase === phase
-      item.classList.toggle('is-current', active)
-      if (active) item.setAttribute('aria-current', 'step')
-      else item.removeAttribute('aria-current')
-    })
-    profEl.dataset.heart = phase
+    const top = profEl.scrollTop, vh = profEl.clientHeight || 1
+    const rootTop = profEl.getBoundingClientRect().top
+    profEl.style.setProperty('--qx-hero', String(Math.min(1, Math.max(0, top / (vh * .9)))))
+    // 当前章：最后一个越过视口 45% 线的章节
+    let current = 'qi'
+    let ye = null
+    for (const el of qxChapterEls) {
+      const elTop = el.getBoundingClientRect().top - rootTop + top
+      if (elTop - vh * .45 <= top) current = el.dataset.qx
+      if (el.dataset.qx === 'ye') ye = { top: elTop, h: el.offsetHeight }
+    }
+    if (ye) {
+      const p = (top + vh - ye.top) / (ye.h + vh)
+      profEl.style.setProperty('--qx-ye', String(Math.min(1, Math.max(0, p))))
+    }
+    if (profEl.dataset.qx !== current) {
+      profEl.dataset.qx = current
+      const chapter = QX_CHAPTERS.find((c) => c.id === current)
+      qxSwords?.setMode(chapter ? chapter.mode : 'fade')
+      profEl.querySelectorAll('.qx-hui button').forEach((btn) => {
+        if (btn.dataset.qx === current) btn.setAttribute('aria-current', 'true')
+        else btn.removeAttribute('aria-current')
+      })
+    }
   }
 
   function openProfile(code, trigger) {
@@ -1434,8 +1939,8 @@ export function mountObservation(root, onBack) {
     profEl.style.setProperty('--accent', d.accent)
     if (d.dual) renderDualProfile(d, code)
     else if (d.metamorph) renderMetamorphProfile(d, code)
-    else if (d.heartSword) {
-      renderHeartSwordDossier(d, code)
+    else if (d.qinSword) {
+      renderQinSwordDossier(d, code)
       profEl.addEventListener('scroll', s015OnScroll, { passive: true })
       profileCleanups.push(() => profEl.removeEventListener('scroll', s015OnScroll))
       s015OnScroll()

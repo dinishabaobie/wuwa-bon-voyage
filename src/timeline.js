@@ -5,7 +5,7 @@ export const TIMELINE_PHASES = [
   { id: 'huanglong', label: '瑝珑', range: 'VER 1.X' },
   { id: 'rinascita', label: '黎那汐塔', range: 'VER 2.X' },
   { id: 'lahairoy', label: '拉海洛', range: 'VER 3.0—3.4' },
-  { id: 'mengzhou', label: '梦州', range: 'VER 3.5+' },
+  { id: 'mengzhou', label: '梦州', range: 'VER 3.5—3.6' },
 ]
 
 export const TIMELINE_EVENTS = [
@@ -138,5 +138,16 @@ export const TIMELINE_EVENTS = [
     date: '2026.07.10', signal: 'Xbox',
     meta: [['区域', '梦州 · 玄方地界（玄方城）'], ['共鸣者', '秧秧·玄翎 · 穗穗 · 漂泊者·导电'], ['主线', '第四章 1—2 幕 + 间章']],
     summary: '第四章转入梦州玄方地界，围绕替诸州分担残象威胁的机巧城展开危机，并让秧秧·玄翎接过新的守护之责。',
+  },
+  {
+    id: 'v3-6', phase: 'mengzhou', version: '3.6', title: '蜃云灯影，凡尘剑心',
+    date: '2026.08.20', signal: '当前版本',
+    meta: [
+      ['区域', '梦州 · 玄方地界（云梭 · 雾隐阁）'],
+      ['共鸣者', '清宵 · 景燃'],
+      ['主线', '第四章 3 幕「烟云幽远心剑鸣」+ 幕间「幽客销残声」'],
+      ['探索', '御剑飞行 · 七弦琴演奏'],
+    ],
+    summary: '玄方危机初平，漂泊者循岁主心月狐留下的信物前往雾隐阁，与守护玄方数百年的清宵相遇；玄方城也以「云梭」之姿巡游天际。',
   },
 ]
