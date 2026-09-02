@@ -2137,7 +2137,7 @@ html.prof-lock { overflow: hidden; }
 
 /* ---------- S-015 清宵 · 七弦档案 ----------
    整份档案是一张横陈的琴：墨蓝夜色为底，月白字骨，冰蓝剑光，旧金只作徽。
-   首屏七弦可拨；「剑」章飞剑随指针；「魔」章指针显影心魔；「夜」章灯暖。 */
+   「弦」章琴区可拨；「剑」章飞剑随指针；「魔」章指针显影心魔；「夜」章灯暖。 */
 .prof-overlay.s015 {
   --qx-hero: 0;
   --qx-ye: 0;
@@ -2240,8 +2240,7 @@ html.prof-lock { overflow: hidden; }
 }
 .qx-strings {
   position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: none; mask-image: none;
   opacity: 0; transition: opacity 1.4s ease .2s;
 }
 .s015[data-qx="xian"] .qx-strings, .s015[data-qx="ming"] .qx-strings { opacity: 1; }
@@ -2268,8 +2267,9 @@ html.prof-lock { overflow: hidden; }
 
 .qx-hero-title {
   position: absolute; z-index: 3; left: clamp(2rem, 5.2vw, 5.6rem); top: 50%; translate: 0 -52%;
-  margin: 0; writing-mode: vertical-rl; text-orientation: upright;
-  font: 400 clamp(6rem, 13.5vw, 12.5rem)/1 var(--qx-serif); letter-spacing: .06em;
+  margin: 0; writing-mode: vertical-rl; text-orientation: upright; white-space: nowrap;
+  inline-size: max-content;
+  font: 400 clamp(6rem, min(13.5vw, 23svh), 12.5rem)/1 var(--qx-serif); letter-spacing: .06em;
   color: var(--qx-moon);
   text-shadow: 0 0 60px rgba(143,208,255,.18);
 }
@@ -2362,12 +2362,14 @@ html.prof-lock { overflow: hidden; }
 }
 .qx-plate p:first-child span { color: var(--qx-moon); font-size: 1.05rem; font-family: var(--qx-serif); }
 
-/* ── 弦：听琴。七弦就铺在这一章上，可拨 ── */
-.qx-act--xian .qx-act-copy, .qx-act--xian .qx-whisper, .qx-act--xian .qx-act-num { position: relative; z-index: 1; }
-.qx-act--xian::before {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 14%; height: 1px; pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(143,208,255,.22) 30%, rgba(143,208,255,.22) 70%, transparent);
-}
+/* ── 弦：正文左、琴区右；窄屏顺序下排，琴弦始终避开文字。 ── */
+/* 琴区与正文共同分配横向空间，不再受通用侧栏 18rem 的宽度限制。 */
+.qx-act--xian { grid-template-columns: minmax(3rem, 5rem) minmax(0, 1fr) minmax(0, 1.15fr); }
+.qx-listen-aside { min-width: 0; width: 100%; align-self: center; }
+.qx-listen-aside .qx-whisper { grid-column: auto; max-width: none; margin: 0; }
+.qx-qin { position: relative; height: clamp(16rem, 40vh, 20rem); margin: 1.5rem 0; }
+.qx-listen-aside .qx-hint { display: flex; flex-wrap: wrap; margin: 0 !important; letter-spacing: .08em; }
+.qx-listen-aside .qx-hero-sound { margin-left: 0; }
 
 /* ── 剑：飞剑随心 ── */
 .qx-act--jian { min-height: 108svh; cursor: crosshair; }
@@ -2457,9 +2459,8 @@ html.prof-lock { overflow: hidden; }
 
 .qx-act--zhong {
   min-height: 100svh; cursor: pointer; text-align: left;
-  /* 镜头在阵内，画面上下都是剑光——标题与正文所在的上下两带压一层暗，保证可读。
-     顶端必须从透明起（上一章「魔」的底也是透明），否则章节交界会出现一条硬边 */
-  background: linear-gradient(180deg, transparent 0%, rgba(4,16,28,.5) 13%, transparent 32%, transparent 76%, rgba(4,16,28,.92) 100%);
+  /* 剑阵完整显现，只在底端轻收进夜色；文字本身用字影保持清晰。 */
+  background: linear-gradient(180deg, transparent 76%, rgba(4,16,28,.72) 100%);
   grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); grid-template-rows: auto 1fr auto;
   align-items: end; padding-top: clamp(4.5rem, 9vh, 6rem); padding-bottom: clamp(5.5rem, 10vh, 7rem);
 }
@@ -2467,11 +2468,11 @@ html.prof-lock { overflow: hidden; }
 .qx-zhong-copy { grid-column: 1 / 3; grid-row: 1; align-self: start; justify-self: start; margin-left: clamp(4rem, 8vw, 8rem); }
 .qx-zhong-copy h2 {
   max-width: 12em; margin: 0; font-size: clamp(2.2rem, 4.2vw, 3.9rem); line-height: 1.2;
-  text-shadow: 0 2px 28px rgba(4,16,28,.95);
+  text-shadow: 0 2px 3px rgba(4,16,28,.9), 0 4px 14px rgba(4,16,28,.8);
 }
 .qx-zhong-copy h2 br + * { color: var(--qx-ice); }
 .qx-zhong-note { grid-column: 1; grid-row: 3; max-width: 32rem; margin-left: clamp(4rem, 8vw, 8rem); }
-.s015 .qx-zhong-note > p:not(.qx-hint) { text-shadow: 0 2px 18px rgba(4,16,28,.95); }
+.s015 .qx-zhong-note > p:not(.qx-hint), .qx-act--zhong .qx-lend p { text-shadow: 0 2px 3px rgba(4,16,28,.95), 0 3px 10px rgba(4,16,28,.8); }
 .qx-lend {
   grid-column: 2; grid-row: 3; justify-self: end; align-self: end; margin: 0;
   display: flex; flex-direction: column; justify-content: center;
@@ -2585,6 +2586,7 @@ html.prof-lock { overflow: hidden; }
 @media (max-width: 1180px) {
   .qx-act { grid-template-columns: 5rem minmax(0, 1fr); }
   .qx-whisper, .qx-moves { grid-column: 2; margin-top: 3rem; }
+  .qx-listen-aside { grid-column: 2; width: 100%; max-width: none; }
   .qx-moves { writing-mode: initial; height: auto; gap: 2.4rem; }
   .qx-act--mo { grid-template-columns: 5rem minmax(0, 1fr); }
   .qx-demon { grid-column: 2; justify-self: start; max-width: 20rem; margin-bottom: 3rem; }
@@ -2604,7 +2606,8 @@ html.prof-lock { overflow: hidden; }
   .qx-hero-title { left: 1.4rem; top: 16vh; translate: 0 0; font-size: clamp(4.6rem, 22vw, 7rem); }
   .qx-hero-copy { left: 1.5rem; right: 1.5rem; bottom: 5.4rem; width: auto; }
   .qx-hero-scroll { display: none; }
-  .qx-strings { -webkit-mask-image: none; mask-image: none; opacity: .6; }
+  .qx-strings { opacity: .6; }
+  .qx-listen-aside { margin-top: 2.5rem; }
   /* 底部 6.5rem 给固定的七徽让位 */
   .qx-act, .qx-act--mo, .qx-act--ye { display: block; min-height: 0; padding: 5.5rem 1.5rem 6.5rem; }
   .qx-act-num { writing-mode: initial; margin-bottom: 2.2rem; }

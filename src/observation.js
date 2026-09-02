@@ -1333,12 +1333,12 @@ export function mountObservation(root, onBack) {
   }
 
   // ── S-015 专属：七弦档案 ──
-  // 整份档案是一张横陈的琴：首屏七根弦可拨（拨弦即出剑），「剑」章飞剑随指针而动、点按万剑归一，
+  // 整份档案以七弦分章：「弦」章独立琴区可拨，「剑」章飞剑随指针而动、点按万剑归一，
   // 「魔」章指针掠过立绘显出心魔，「众」章万剑来朝，「夜」章灯下夜话。底部七徽即章节进度。
   const QX_CHAPTERS = [
     { id: 'qi', hui: '启', mode: 'drift' },
-    { id: 'ming', hui: '名', mode: 'drift' },
-    { id: 'xian', hui: '弦', mode: 'drift' },
+    { id: 'ming', hui: '名', mode: 'rest' },
+    { id: 'xian', hui: '弦', mode: 'rest' },
     { id: 'jian', hui: '剑', mode: 'will' },
     { id: 'mo', hui: '魔', mode: 'ember' },
     { id: 'zhong', hui: '众', mode: 'array' },
@@ -1348,14 +1348,14 @@ export function mountObservation(root, onBack) {
   let qxChapterEls = []
 
   // 飞剑场：一块固定在视口上的 canvas，画一群细长的剑。按章节切换行为——
-  // drift 随风缓行 / will 随指针聚散 / ember 心魔下沉 / array 让位给侧视布阵场景 / fade 收剑
+  // drift 随风缓行 / rest 稀疏静读 / will 随指针聚散 / ember 心魔下沉 / array 让位给侧视布阵场景 / fade 收剑
   function createSwordField(canvas, { reduce, coarse }) {
     const ctx = canvas.getContext('2d')
     const N = coarse ? 110 : 300
     const ICE = '150,212,255', EMBER = '222,104,128'
-    const ALPHA = { drift: .34, will: 1, ember: .22, array: 0, fade: 0 } // array：剑群让位给布阵场景
+    const ALPHA = { drift: .34, rest: .16, will: 1, ember: .22, array: 0, fade: 0 } // array：剑群让位给布阵场景
     let W = 1, H = 1, dpr = 1, mode = 'drift', alpha = 0, targetAlpha = ALPHA.drift
-    let t = 0, last = performance.now(), raf = 0, running = true
+    let t = 0, quiet = 0, last = performance.now(), raf = 0, running = true
     const pointer = { x: 0, y: 0, active: false }
     const rnd = (a, b) => a + Math.random() * (b - a)
     const swords = []
@@ -1854,6 +1854,7 @@ export function mountObservation(root, onBack) {
       // 切章即收势：不让上一章追指针的惯性把剑群带成一团飘走
       swords.forEach((s) => { if (!s.shot) { s.vx *= .15; s.vy *= .15; s.passed = 0 } })
       if (m === 'array' && arrOn < .05) resetArray()
+      if (reduce) { alpha = targetAlpha; quiet = m === 'rest' ? 1 : 0; draw() }
     }
     // 万剑归一：全部飞剑向点按处汇聚，远的稍晚出发
     function burst(x, y) {
@@ -1865,6 +1866,7 @@ export function mountObservation(root, onBack) {
     function step(dt) {
       t += dt
       alpha += (targetAlpha - alpha) * Math.min(1, dt * 2.2)
+      quiet += ((mode === 'rest' ? 1 : 0) - quiet) * Math.min(1, dt * 2.2)
       const tx = pointer.active ? pointer.x : W * .55 + Math.cos(t * .45) * W * .16
       const ty = pointer.active ? pointer.y : H * .48 + Math.sin(t * .62) * H * .14
       for (const s of swords) {
@@ -1947,13 +1949,15 @@ export function mountObservation(root, onBack) {
         return
       }
       ctx.globalCompositeOperation = 'lighter'
-      for (const s of swords) {
+      for (let i = 0; i < swords.length; i++) {
+        const s = swords[i]
         const spd = Math.hypot(s.vx, s.vy) || 1
         let ux = s.vx / spd, uy = s.vy / spd
         if (spd < 4) { ux = Math.cos(-Math.PI * .22); uy = Math.sin(-Math.PI * .22) }
         const len = s.len * (s.shot ? 1.2 : 1)
         const col = mode === 'ember' ? EMBER : ICE // 心魔章的剑格泛残红，其余都是本色云琅
-        let a = alpha
+        // 名、弦只留下六分之一的散剑；进出章节时平滑收放。
+        let a = alpha * (i % 6 === 0 ? 1 : 1 - quiet)
         if (s.shot) a = Math.max(alpha, .95) * (1 - Math.max(0, s.life) / s.ttl)
         if (a <= .005) continue
         const trail = s.shot && s.life > 0 && spd > 200 ? [s.px - ux * len * .45, s.py - uy * len * .45] : null
@@ -2026,8 +2030,8 @@ export function mountObservation(root, onBack) {
     }
   }
 
-  // 七弦：首屏横陈七根弦，指针纵向掠过即拨响；无人时偶尔自鸣（不出声）
-  function createQinStrings(svg, hero, onPluck, { reduce, coarse }) {
+  // 七弦：独立琴区内纵向掠过即拨响；不穿过正文。
+  function createQinStrings(svg, surface, onPluck, { reduce, coarse }) {
     const NS = 'http://www.w3.org/2000/svg', COUNT = 7
     const st = Array.from({ length: COUNT }, () => ({ y: 0, amp: 0, t: 0, cx: .5 }))
     const paths = st.map(() => { const p = document.createElementNS(NS, 'path'); p.setAttribute('class', 'qx-string'); svg.appendChild(p); return p })
@@ -2049,12 +2053,12 @@ export function mountObservation(root, onBack) {
     let travel = 0
     const straight = (i) => paths[i].setAttribute('d', `M0 ${st[i].y} L${W} ${st[i].y}`)
     function layout() {
-      W = hero.clientWidth || 1; H = hero.clientHeight || 1
+      W = surface.clientWidth || 1; H = surface.clientHeight || 1
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
-      const y0 = H * .58, y1 = H * .93 // 只占下部：进档案时指针多半落在中上区，不至于一进来就误触
+      const y0 = 20, y1 = H - 20 // 琴区两端留出振幅，七弦均匀排开
       st.forEach((s, i) => {
         s.y = y0 + (y1 - y0) * i / (COUNT - 1); straight(i)
-        const kx = 40, ky = s.y - KH / 2
+        const kx = 12, ky = s.y - KH / 2
         keys[i].r.setAttribute('x', String(kx)); keys[i].r.setAttribute('y', String(ky))
         keys[i].t.setAttribute('x', String(kx + KW / 2)); keys[i].t.setAttribute('y', String(s.y))
       })
@@ -2080,7 +2084,7 @@ export function mountObservation(root, onBack) {
       raf = requestAnimationFrame(tick)
     }
     const onMove = (e) => {
-      const r = hero.getBoundingClientRect()
+      const r = surface.getBoundingClientRect()
       const x = e.clientX - r.left, y = e.clientY - r.top
       if (prev) {
         travel += Math.hypot(x - prev.x, y - prev.y)
@@ -2095,16 +2099,17 @@ export function mountObservation(root, onBack) {
       prev = { x, y }
     }
     const onLeave = () => { prev = null }
-    if (!coarse) { hero.addEventListener('pointermove', onMove); hero.addEventListener('pointerleave', onLeave) }
+    if (!coarse) { surface.addEventListener('pointermove', onMove); surface.addEventListener('pointerleave', onLeave) }
     if (!reduce) {
       idle = setInterval(() => {
-        if (document.hidden || hero.getBoundingClientRect().bottom < 0) return
+        const r = surface.getBoundingClientRect()
+        if (document.hidden || r.bottom < 0 || r.top > window.innerHeight) return
         pluck((Math.random() * COUNT) | 0, W * (.15 + Math.random() * .55), .25, true)
-      }, 3400)
+      }, 6000)
     }
     layout()
     raf = requestAnimationFrame(tick)
-    const ro = new ResizeObserver(layout); ro.observe(hero)
+    const ro = new ResizeObserver(layout); ro.observe(surface)
     return {
       // 按键拨弦：落点随机偏左，力度中上，听感和手拨一致
       pluckKey(i) {
@@ -2113,7 +2118,7 @@ export function mountObservation(root, onBack) {
       },
       destroy() {
         alive = false; cancelAnimationFrame(raf); clearInterval(idle); ro.disconnect()
-        hero.removeEventListener('pointermove', onMove); hero.removeEventListener('pointerleave', onLeave)
+        surface.removeEventListener('pointermove', onMove); surface.removeEventListener('pointerleave', onLeave)
       },
     }
   }
@@ -2123,10 +2128,10 @@ export function mountObservation(root, onBack) {
     const hui = QX_CHAPTERS.map((c) => `<button type="button" data-qx="${c.id}"><i aria-hidden="true"></i><span>${c.hui}</span></button>`).join('')
     profEl.innerHTML = `
       <!--
-      THESIS: 清宵的档案是一张横陈的琴——弦可拨，拨弦即出剑；剑随心动，心有魔，魔亦是她。
+      THESIS: 清宵的档案以七弦分章——弦可拨，旧事留于琴音；剑随心动，心有魔，魔亦是她。
       OWN-WORLD: 墨蓝夜色、月白字骨、冰蓝剑光，一点旧金作徽；心魔处只准一线残红，夜话处只准一盏灯暖。
-      STORY: 启（拨弦）→ 名（题跋）→ 弦（听琴）→ 剑（万剑随心）→ 魔（另一面）→ 众（借剑）→ 夜（师徒）→ 收。
-      FIRST VIEWPORT: 竖排巨字「清宵」立于左，Ui 的油画立绘占右半，七根弦横贯其间；退场在左上，七徽在底。
+      STORY: 启（初见）→ 名（题跋）→ 弦（听琴）→ 剑（万剑随心）→ 魔（另一面）→ 众（借剑）→ 夜（师徒）→ 收。
+      FIRST VIEWPORT: 单列竖排「清宵」立于左，Ui 的油画立绘占右半；退场在左上，七徽在底。
       -->
       <a class="prof-back" href="#"><span aria-hidden="true">←</span><span>观测对象</span></a>
       <canvas class="qx-sky" aria-hidden="true"></canvas>
@@ -2171,7 +2176,6 @@ export function mountObservation(root, onBack) {
         </section>
 
         <section class="qx-act qx-act--xian" data-qx="xian" aria-labelledby="qx-xian-title">
-          <svg class="qx-strings" aria-hidden="true" preserveAspectRatio="none"></svg>
           <div class="qx-act-num" aria-hidden="true">第三弦</div>
           <div class="qx-act-copy qx-in">
             <p class="qx-kicker">听琴</p>
@@ -2179,9 +2183,14 @@ export function mountObservation(root, onBack) {
             <p>我惯于抚琴时温养剑意。剑意随心而动，琴音之中，也就留了几分心绪。许多不便言说的事，久而久之，都落在弦上。</p>
             <p>修行间歇，我会在内景中刻下见闻与体悟。年月过去，昔日所见所感，仍有迹可循。</p>
             <p>若云之事，至今未忘。她为故乡留下了许多东西，我却未能护她周全。故人已逝，记得这些，总好过任其散尽。</p>
+          </div>
+          <div class="qx-listen-aside qx-in">
+            <blockquote class="qx-whisper"><p>旧事记下，便不算尽散。</p></blockquote>
+            <div class="qx-qin">
+              <svg class="qx-strings" aria-hidden="true" preserveAspectRatio="none"></svg>
+            </div>
             <p class="qx-hint"><i aria-hidden="true"></i>移动指针，或按 1 – 7 拨弦<button type="button" class="qx-hero-sound" aria-pressed="true">弦声 · 开</button></p>
           </div>
-          <blockquote class="qx-whisper qx-in"><p>旧事记下，便不算尽散。</p></blockquote>
         </section>
 
         <section class="qx-act qx-act--jian" data-qx="jian" aria-labelledby="qx-jian-title">
@@ -2285,8 +2294,7 @@ export function mountObservation(root, onBack) {
     })
 
     // 七弦 + 弦声
-    const hero = profEl.querySelector('.qx-hero')
-    const strEl = profEl.querySelector('.qx-act--xian') // 七弦长在「弦 · 听琴」这一章上，不在首屏
+    const strEl = profEl.querySelector('.qx-qin') // 独立琴区，指针读正文时不会误拨
     const qinSound = createQinSound()
     profileCleanups.push(() => qinSound.destroy())
     const soundBtn = profEl.querySelector('.qx-hero-sound')
