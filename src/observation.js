@@ -1379,6 +1379,7 @@ export function mountObservation(root, onBack) {
       canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.imageSmoothingQuality = 'high'
+      horizonY = H * HORIZ + CAM_PITCH * 13
       buildArray()
     }
 
@@ -1490,9 +1491,9 @@ export function mountObservation(root, onBack) {
     // ── 众 · 借剑阵：镜头在阵内——低机位站在外环边上望向阵心 ──
     // 阵心一点白光瞬间爆开，炸成上下九层剑环（下四层剑尖朝天的碗阵，上五层倒悬成穹顶，从头顶掠过）；
     // 随后六柄巨剑自天而降，悬停片刻，一齐沉入地底消失；阵光渐熄，再起。全程不抖镜头。
-    // 世界坐标：x 左右、y 向上（0 为地面）、z 纵深；相机在原点、高 CAMH；阵眼在 (0,0,ZC)，剑仙悬于 (0,EYE_H,ZC)
+    // 世界坐标：x 左右、y 向上（0 为地面）、z 纵深；相机在原点、高 CAM_H；阵眼在 (0,0,ZC)，剑仙悬于 (0,EYE_H,ZC)
     const ARR = { GIANT: 2.4, PLUNGE: 8.2, FADE: 11.2, END: 12.5 }
-    const ZC = 1150, CAMH = 200, EYE_H = 300, HORIZ = .66, NEAR = 140 // 地平线压到 66%，等于镜头微微仰起看穹顶
+    const ZC = 1150, EYE_H = 300, HORIZ = .66, NEAR = 140 // 地平线压到 66%，等于镜头微微仰起看穹顶
     // 九层穹顶剑环（只有头顶这一组，剑尖朝下倒悬，越高越收拢）：r 半径、h 高度、len 剑长、sp 间距（世界单位）
     const LAYERS = [
       { r: 1600, h: 600, len: 42, up: false, sp: 21 }, { r: 1480, h: 700, len: 40, up: false, sp: 20 },
@@ -1514,25 +1515,10 @@ export function mountObservation(root, onBack) {
     const easeOutQuart = (p) => 1 - Math.pow(1 - p, 4)
     const easeOutExpo = (p) => p >= 1 ? 1 : 1 - Math.pow(2, -10 * p)
     const easeInOut = (p) => p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2
-    // 摄影机：一炷香的长镜头。四幕各有自己的焦距、俯仰与机位高度，指数缓出地推过去
-    const CAM = [
-      { t: 0, f: 1.05, pitch: 0, h: 200 },      // 幕一 远景：起阵，阵在远处
-      { t: 2.4, f: 1.36, pitch: 6, h: 240 },    // 幕二 中景：巨剑降，镜头推近
-      { t: 5.4, f: 1.56, pitch: 14, h: 300 },   // 幕三 仰视：充能，抬头看
-      { t: 8.2, f: 1.14, pitch: -7, h: 150 },   // 幕四 俯冲：落地，机位压低让地平线进画
-      { t: 11.2, f: 1.06, pitch: 0, h: 200 },   // 收
-    ]
-    let camF = CAM[0].f, camPitch = CAM[0].pitch, camH = CAM[0].h, horizonY = H * HORIZ
-    function stepCamera(dt) {
-      let tgt = CAM[0]
-      for (const k of CAM) if (arrT >= k.t) tgt = k
-      if (reduce) { camF = CAM[0].f; camPitch = CAM[0].pitch; camH = CAM[0].h } // 减弱动效时镜头不动
-      else {
-        const k = 1 - Math.pow(.055, dt) // 指数缓出，越接近目标越慢
-        camF += (tgt.f - camF) * k; camPitch += (tgt.pitch - camPitch) * k; camH += (tgt.h - camH) * k
-      }
-      horizonY = H * HORIZ + camPitch * 13 // 抬头 → 地平线下移，看见更多天
-    }
+    // 摄影机固定不动：不推拉、不俯仰、不升降。阵法自己演，镜头只是那扇窗
+    const CAM_F = 1.22, CAM_PITCH = 4, CAM_H = 210
+    const camF = CAM_F, camH = CAM_H
+    let horizonY = H * HORIZ + CAM_PITCH * 13
     const proj = (x, y, z) => { const s = H * camF / z; return [W * .5 + x * s, horizonY + (camH - y) * s, s] }
     // 空气透视：越远越淡；背光（阵心之后）的剑更亮，面光的压成剪影
     const depthLit = (z) => (1 - clamp01((z - NEAR) / 3400) * .72) * (z > ZC ? 1.22 : .74)
@@ -1586,7 +1572,6 @@ export function mountObservation(root, onBack) {
       if (arrOn < .01) return
       arrT += dt
       arrDt = dt
-      stepCamera(dt)
       if (arrT >= ARR.END) resetArray()
       flash = Math.max(0, flash - dt * 1.8)
     }
@@ -1870,14 +1855,6 @@ export function mountObservation(root, onBack) {
       swords.forEach((s) => { if (!s.shot) { s.vx *= .15; s.vy *= .15; s.passed = 0 } })
       if (m === 'array' && arrOn < .05) resetArray()
     }
-    // 拨弦出剑：从弦上某点射出几柄剑
-    function shoot(x, y, n) {
-      for (let k = 0; k < n; k++) {
-        const s = swords[(Math.random() * swords.length) | 0]
-        const a = rnd(-Math.PI * .42, -Math.PI * .12), sp = rnd(320, 520)
-        Object.assign(s, { x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, shot: true, life: 0, ttl: rnd(1.1, 1.7), len: rnd(56, 88) })
-      }
-    }
     // 万剑归一：全部飞剑向点按处汇聚，远的稍晚出发
     function burst(x, y) {
       swords.forEach((s) => {
@@ -1997,7 +1974,7 @@ export function mountObservation(root, onBack) {
     else raf = requestAnimationFrame(frame)
     window.addEventListener('resize', resize)
     return {
-      setMode, shoot, burst, restartArray, pointer,
+      setMode, burst, restartArray, pointer,
       destroy() { running = false; cancelAnimationFrame(raf); window.removeEventListener('resize', resize) },
     }
   }
@@ -2054,21 +2031,42 @@ export function mountObservation(root, onBack) {
     const NS = 'http://www.w3.org/2000/svg', COUNT = 7
     const st = Array.from({ length: COUNT }, () => ({ y: 0, amp: 0, t: 0, cx: .5 }))
     const paths = st.map(() => { const p = document.createElementNS(NS, 'path'); p.setAttribute('class', 'qx-string'); svg.appendChild(p); return p })
+    // 弦左端的键帽：一到七弦对应键盘 1–7。深底金边加居中数字，弦上才看得清
+    const KW = 32, KH = 28
+    const keys = st.map((_, i) => {
+      const g = document.createElementNS(NS, 'g')
+      g.setAttribute('class', 'qx-keyg')
+      const r = document.createElementNS(NS, 'rect')
+      r.setAttribute('class', 'qx-keycap'); r.setAttribute('rx', '4')
+      r.setAttribute('width', String(KW)); r.setAttribute('height', String(KH))
+      const t = document.createElementNS(NS, 'text')
+      t.setAttribute('class', 'qx-key'); t.textContent = String(i + 1)
+      g.appendChild(r); g.appendChild(t); svg.appendChild(g)
+      return { g, r, t }
+    })
     let W = 1, H = 1, raf = 0, prev = null, idle = 0, alive = true
+    const born = performance.now() // 刚进档案时指针可能正压在弦上，先静默一会儿再上弦
+    let travel = 0
     const straight = (i) => paths[i].setAttribute('d', `M0 ${st[i].y} L${W} ${st[i].y}`)
     function layout() {
       W = hero.clientWidth || 1; H = hero.clientHeight || 1
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`)
-      const y0 = H * .40, y1 = H * .86
-      st.forEach((s, i) => { s.y = y0 + (y1 - y0) * i / (COUNT - 1); straight(i) })
+      const y0 = H * .58, y1 = H * .93 // 只占下部：进档案时指针多半落在中上区，不至于一进来就误触
+      st.forEach((s, i) => {
+        s.y = y0 + (y1 - y0) * i / (COUNT - 1); straight(i)
+        const kx = 40, ky = s.y - KH / 2
+        keys[i].r.setAttribute('x', String(kx)); keys[i].r.setAttribute('y', String(ky))
+        keys[i].t.setAttribute('x', String(kx + KW / 2)); keys[i].t.setAttribute('y', String(s.y))
+      })
     }
-    function pluck(i, x, strength, silent = false) {
+    function pluck(i, x, strength, silent = false, dir) {
       const s = st[i]
       s.amp = 6 + 10 * strength; s.t = 0
       s.cx = Math.min(.92, Math.max(.08, x / W))
       paths[i].classList.add('is-live')
-      setTimeout(() => paths[i].classList.remove('is-live'), 700)
-      onPluck(x, s.y, strength, i, silent)
+      keys[i].g.classList.add('is-hit')
+      setTimeout(() => { paths[i].classList.remove('is-live'); keys[i].g.classList.remove('is-hit') }, 700)
+      onPluck(x, s.y, strength, i, silent, dir)
     }
     function tick() {
       if (!alive) return
@@ -2085,8 +2083,14 @@ export function mountObservation(root, onBack) {
       const r = hero.getBoundingClientRect()
       const x = e.clientX - r.left, y = e.clientY - r.top
       if (prev) {
-        const strength = Math.min(1, Math.abs(y - prev.y) / 40)
-        st.forEach((s, i) => { if ((prev.y - s.y) * (y - s.y) < 0) pluck(i, x, strength) })
+        travel += Math.hypot(x - prev.x, y - prev.y)
+        // 上弦条件：开档 700ms 之后，且指针已经真的走了一段。否则打开的瞬间随手一动就响
+        const armed = performance.now() - born > 700 && travel > 70
+        if (armed) {
+          const strength = Math.min(1, Math.abs(y - prev.y) / 40)
+          const dir = Math.atan2(y - prev.y, x - prev.x) // 剑顺着指针划过的方向飞出去
+          st.forEach((s, i) => { if ((prev.y - s.y) * (y - s.y) < 0) pluck(i, x, strength, false, dir) })
+        }
       }
       prev = { x, y }
     }
@@ -2102,6 +2106,11 @@ export function mountObservation(root, onBack) {
     raf = requestAnimationFrame(tick)
     const ro = new ResizeObserver(layout); ro.observe(hero)
     return {
+      // 按键拨弦：落点随机偏左，力度中上，听感和手拨一致
+      pluckKey(i) {
+        if (i < 0 || i >= COUNT) return
+        pluck(i, 58 + Math.random() * 26, .8 + Math.random() * .2) // 从键号处起手，力度偏大，看得见
+      },
       destroy() {
         alive = false; cancelAnimationFrame(raf); clearInterval(idle); ro.disconnect()
         hero.removeEventListener('pointermove', onMove); hero.removeEventListener('pointerleave', onLeave)
@@ -2128,14 +2137,12 @@ export function mountObservation(root, onBack) {
             <img src="photos/qingxiao-ui.jpg" alt="清宵持剑回望，蓝发白衣，青色流光绕身" />
             <figcaption>画 @Ui · pixiv 146569361</figcaption>
           </figure>
-          <svg class="qx-strings" aria-hidden="true" preserveAspectRatio="none"></svg>
           <h1 id="profile-title" class="qx-hero-title"><span>清宵</span></h1>
           <div class="qx-hero-copy">
             <p class="qx-kicker">观测对象 ${code} · 清宵自记</p>
             <p class="qx-hero-latin">${d.full.toUpperCase()} · 玄方剑仙</p>
             <p class="qx-hero-verse">弦凝千古寂，剑起满天清。</p>
             <p class="qx-hero-lead">${d.tagline}</p>
-            <p class="qx-hero-hint"><i aria-hidden="true"></i>移动指针，拨动琴弦——每一根弦都能出剑<button type="button" class="qx-hero-sound" aria-pressed="true">弦声 · 开</button></p>
           </div>
           <p class="qx-hero-scroll" aria-hidden="true">沿弦而下</p>
         </header>
@@ -2164,6 +2171,7 @@ export function mountObservation(root, onBack) {
         </section>
 
         <section class="qx-act qx-act--xian" data-qx="xian" aria-labelledby="qx-xian-title">
+          <svg class="qx-strings" aria-hidden="true" preserveAspectRatio="none"></svg>
           <div class="qx-act-num" aria-hidden="true">第三弦</div>
           <div class="qx-act-copy qx-in">
             <p class="qx-kicker">听琴</p>
@@ -2171,6 +2179,7 @@ export function mountObservation(root, onBack) {
             <p>我惯于抚琴时温养剑意。剑意随心而动，琴音之中，也就留了几分心绪。许多不便言说的事，久而久之，都落在弦上。</p>
             <p>修行间歇，我会在内景中刻下见闻与体悟。年月过去，昔日所见所感，仍有迹可循。</p>
             <p>若云之事，至今未忘。她为故乡留下了许多东西，我却未能护她周全。故人已逝，记得这些，总好过任其散尽。</p>
+            <p class="qx-hint"><i aria-hidden="true"></i>移动指针，或按 1 – 7 拨弦<button type="button" class="qx-hero-sound" aria-pressed="true">弦声 · 开</button></p>
           </div>
           <blockquote class="qx-whisper qx-in"><p>旧事记下，便不算尽散。</p></blockquote>
         </section>
@@ -2277,6 +2286,7 @@ export function mountObservation(root, onBack) {
 
     // 七弦 + 弦声
     const hero = profEl.querySelector('.qx-hero')
+    const strEl = profEl.querySelector('.qx-act--xian') // 七弦长在「弦 · 听琴」这一章上，不在首屏
     const qinSound = createQinSound()
     profileCleanups.push(() => qinSound.destroy())
     const soundBtn = profEl.querySelector('.qx-hero-sound')
@@ -2286,12 +2296,22 @@ export function mountObservation(root, onBack) {
     }
     soundBtn.addEventListener('click', () => { qinSound.enabled = !qinSound.enabled; syncSound() })
     syncSound()
-    const strings = createQinStrings(profEl.querySelector('.qx-strings'), hero, (x, y, strength, i, silent) => {
-      const r = hero.getBoundingClientRect()
-      qxSwords?.shoot(r.left + x, r.top + y, 2 + Math.round(strength * 3))
-      if (!silent) qinSound.play(i, strength)
+    const strings = createQinStrings(profEl.querySelector('.qx-strings'), strEl, (x, y, strength, i, silent) => {
+      if (!silent) qinSound.play(i, strength) // 拨弦只出声、弦只振，不再射剑
     }, { reduce, coarse })
     profileCleanups.push(() => strings.destroy())
+    const onStringKey = (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return
+      if (profEl.dataset.qx !== 'xian') return // 只有滚到「弦」这一章才接管数字键
+      const t = e.target
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
+      const i = '1234567'.indexOf(e.key)
+      if (i < 0) return
+      e.preventDefault()
+      strings.pluckKey(i)
+    }
+    window.addEventListener('keydown', onStringKey)
+    profileCleanups.push(() => window.removeEventListener('keydown', onStringKey))
 
     // 心魔显影：指针所至，立绘翻出另一面
     const demon = profEl.querySelector('.qx-demon')

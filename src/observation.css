@@ -2239,18 +2239,32 @@ html.prof-lock { overflow: hidden; }
   color: rgba(200,222,238,.5); font: .66rem/1.4 var(--qx-fang); letter-spacing: .16em;
 }
 .qx-strings {
-  position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, #000 48%, transparent 90%);
-  mask-image: linear-gradient(90deg, #000 48%, transparent 90%);
-  opacity: 0; transition: opacity 1.6s ease .5s;
+  position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  opacity: 0; transition: opacity 1.4s ease .2s;
 }
-.s015.show .qx-strings { opacity: 1; }
+.s015[data-qx="xian"] .qx-strings, .s015[data-qx="ming"] .qx-strings { opacity: 1; }
+/* 深底上最稳的读法是反过来：浅底深字。暗底描边字在剑雨里怎么调都糊 */
+.qx-keycap {
+  fill: rgba(236,228,211,.9); stroke: rgba(255,255,255,.35); stroke-width: 1;
+  filter: drop-shadow(0 2px 7px rgba(0,0,0,.6));
+  transition: fill .45s ease;
+}
+.qx-key {
+  fill: #12242f; font: 600 16px/1 "FangSong", "STFangsong", serif;
+  text-anchor: middle; dominant-baseline: central; user-select: none;
+  transition: fill .45s ease;
+}
+/* 按下时转成金色键帽 */
+.qx-keyg.is-hit .qx-keycap { fill: #f0c86a; transition: none; }
+.qx-keyg.is-hit .qx-key { fill: #2a1c05; transition: none; }
 .qx-string {
   fill: none; stroke: rgba(143,208,255,.36); stroke-width: 1; vector-effect: non-scaling-stroke;
   transition: stroke .25s ease, filter .25s ease;
 }
 .qx-string:nth-child(odd) { stroke: rgba(143,208,255,.28); }
-.qx-string.is-live { stroke: #eef8ff; filter: drop-shadow(0 0 6px rgba(143,208,255,.95)); }
+.qx-string.is-live { stroke: #f4fbff; stroke-width: 2; filter: drop-shadow(0 0 10px rgba(180,225,255,1)); }
 
 .qx-hero-title {
   position: absolute; z-index: 3; left: clamp(2rem, 5.2vw, 5.6rem); top: 50%; translate: 0 -52%;
@@ -2348,7 +2362,8 @@ html.prof-lock { overflow: hidden; }
 }
 .qx-plate p:first-child span { color: var(--qx-moon); font-size: 1.05rem; font-family: var(--qx-serif); }
 
-/* ── 弦：听琴 ── */
+/* ── 弦：听琴。七弦就铺在这一章上，可拨 ── */
+.qx-act--xian .qx-act-copy, .qx-act--xian .qx-whisper, .qx-act--xian .qx-act-num { position: relative; z-index: 1; }
 .qx-act--xian::before {
   content: ""; position: absolute; left: 0; right: 0; bottom: 14%; height: 1px; pointer-events: none;
   background: linear-gradient(90deg, transparent, rgba(143,208,255,.22) 30%, rgba(143,208,255,.22) 70%, transparent);
@@ -2588,7 +2603,6 @@ html.prof-lock { overflow: hidden; }
   }
   .qx-hero-title { left: 1.4rem; top: 16vh; translate: 0 0; font-size: clamp(4.6rem, 22vw, 7rem); }
   .qx-hero-copy { left: 1.5rem; right: 1.5rem; bottom: 5.4rem; width: auto; }
-  .qx-hero-hint { display: none; }
   .qx-hero-scroll { display: none; }
   .qx-strings { -webkit-mask-image: none; mask-image: none; opacity: .6; }
   /* 底部 6.5rem 给固定的七徽让位 */
