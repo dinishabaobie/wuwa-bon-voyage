@@ -1491,7 +1491,7 @@ export function mountObservation(root, onBack) {
     // 阵心一点白光瞬间爆开，炸成上下九层剑环（下四层剑尖朝天的碗阵，上五层倒悬成穹顶，从头顶掠过）；
     // 随后六柄巨剑自天而降，悬停片刻，一齐沉入地底消失；阵光渐熄，再起。全程不抖镜头。
     // 世界坐标：x 左右、y 向上（0 为地面）、z 纵深；相机在原点、高 CAMH；阵眼在 (0,0,ZC)，剑仙悬于 (0,EYE_H,ZC)
-    const ARR = { GIANT: 2.4, PLUNGE: 8.2, FADE: 9.5, END: 10.8 }
+    const ARR = { GIANT: 2.4, PLUNGE: 8.2, FADE: 11.2, END: 12.5 }
     const ZC = 1150, CAMH = 200, EYE_H = 300, HORIZ = .66, NEAR = 140 // 地平线压到 66%，等于镜头微微仰起看穹顶
     // 九层穹顶剑环（只有头顶这一组，剑尖朝下倒悬，越高越收拢）：r 半径、h 高度、len 剑长、sp 间距（世界单位）
     const LAYERS = [
@@ -1505,7 +1505,7 @@ export function mountObservation(root, onBack) {
     // 每项：x、z、全长、悬停时剑尖高度
     // 三柄按纵深拉开：470 / 1350 / 1950，投影缩放依次约 3.0 / 1.0 / 0.72，一眼看得出前后。
     // x 是按「悬停那一幕的焦距」反推的，保证三柄都落在画面里、横向也不挤在一起
-    const GIANTS = [[-131, 470, 1100, 215], [38, 1350, 1050, 330], [514, 1950, 1000, 340]]
+    const GIANTS = [[-131, 470, 1100, 390], [38, 1350, 1050, 435], [514, 1950, 1000, 465]]
     let arrT = 0, arrOn = 0, flash = 0, arrDt = .016
     const prevTipY = []
     const field = [], STRAND = [], streaks = [], glints = [], items = [], sunk = []
@@ -1519,8 +1519,8 @@ export function mountObservation(root, onBack) {
       { t: 0, f: 1.05, pitch: 0, h: 200 },      // 幕一 远景：起阵，阵在远处
       { t: 2.4, f: 1.36, pitch: 6, h: 240 },    // 幕二 中景：巨剑降，镜头推近
       { t: 5.4, f: 1.56, pitch: 14, h: 300 },   // 幕三 仰视：充能，抬头看
-      { t: 8.2, f: 1.18, pitch: -4, h: 200 },   // 幕四 俯冲：落地，甩下
-      { t: 9.5, f: 1.06, pitch: 0, h: 200 },    // 收
+      { t: 8.2, f: 1.14, pitch: -7, h: 150 },   // 幕四 俯冲：落地，机位压低让地平线进画
+      { t: 11.2, f: 1.06, pitch: 0, h: 200 },   // 收
     ]
     let camF = CAM[0].f, camPitch = CAM[0].pitch, camH = CAM[0].h, horizonY = H * HORIZ
     function stepCamera(dt) {
@@ -1595,9 +1595,9 @@ export function mountObservation(root, onBack) {
       const desc = easeOutQuart(clamp01((arrT - ARR.GIANT - i * .4) / 2.6))
       if (desc <= 0) return null
       let tipY = 2600 + (hoverTip - 2600) * desc + Math.sin(arrT * .9 + i) * 8 * desc
-      const pl = clamp01((arrT - ARR.PLUNGE - i * .12) / 1)
+      const pl = clamp01((arrT - ARR.PLUNGE - i * .18) / 2)
       let al = 1
-      if (pl > 0) { tipY = hoverTip + (-1700 - hoverTip) * pl * pl * pl; al = 1 - clamp01(-tipY / 200) } // 入地即淡尽
+      if (pl > 0) { tipY = hoverTip + (-2400 - hoverTip) * Math.pow(pl, 2.2); al = 1 - clamp01((-tipY - 1100) / 700) } // 缓一点的加速曲线；入土很深之后才开始淡
       const tip = [gx, tipY, gz], base = [gx, tipY + hg, gz] // 剑尖朝下，笔直垂立
       const vy = (tipY - (prevTipY[i] === undefined ? tipY : prevTipY[i])) / Math.max(.001, arrDt)
       prevTipY[i] = tipY
@@ -1634,7 +1634,7 @@ export function mountObservation(root, onBack) {
     }
     // 每帧给每条线重算一条被流场平流出来的中轴线。起点不是巨剑当前位置，而是它按速度
     // 预测出来的位置再加偏移——Reynolds 的 offset pursuit，剑追的是「它要去哪」而不是「它在哪」
-    const NODES = 12, U0 = -.1, USPAN = .95 // 走到剑身下段就没入剑里；剑尖那一截留干净
+    const NODES = 16, U0 = -.1, USPAN = .95 // 走到剑身下段就没入剑里；剑尖那一截留干净
     function buildStrandPaths(gst) {
       const drift = arrT * .1
       for (const S of STRAND) {
@@ -1661,40 +1661,17 @@ export function mountObservation(root, onBack) {
       const P = S.path
       if (!P) return [g.tip[0], g.tip[1], g.tip[2], S.ang]
       const f = clamp01(u) * (NODES - 1), i = Math.min(NODES - 2, f | 0), t = f - i
-      const a = P[i], b = P[i + 1]
-      const x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t, z = a[2] + (b[2] - a[2]) * t
+      // Catmull-Rom 样条：节点之间用三次曲线过渡，不是直线相连——直线相连放大就是一段段折角
+      const a = P[i], b = P[i + 1], q = P[i > 0 ? i - 1 : 0], r = P[Math.min(NODES - 1, i + 2)]
+      const t2 = t * t, t3 = t2 * t
+      const cr = (k) => .5 * (2 * a[k] + (b[k] - q[k]) * t
+        + (2 * q[k] - 5 * a[k] + 4 * b[k] - r[k]) * t2
+        + (-q[k] + 3 * a[k] - 3 * b[k] + r[k]) * t3)
+      const x = cr(0), y = cr(1), z = cr(2)
       if (!lane) return [x, y, z, S.ang]
       // 并排的股：沿局部切线的水平法向偏开，一束线才有宽度
       const dx = b[0] - a[0], dz = b[2] - a[2], d = Math.hypot(dx, dz) || 1
       return [x - dz / d * lane * 13, y, z + dx / d * lane * 13, S.ang]
-    }
-    // 每条线铺一层柔光丝：外圈宽而淡、内芯细而亮，两端用渐变淡出
-    function drawStrandWisps(gst, A) {
-      ctx.lineCap = 'round'
-      for (const S of STRAND) {
-        const g = gst[S.gi]
-        if (!g) continue
-        const m = easeInOut(clamp01((arrT - ARR.GIANT - S.gi * .4 - .7) / 1.6))
-        if (m < .05) continue
-        const pts = []
-        for (let i = 0; i <= 34; i++) {
-          const u = i / 34, [px, py, pz, ang] = strandPoint(g, S, u)
-          if (pz < NEAR) continue
-          pts.push([...proj(px, py, pz), ang])
-        }
-        if (pts.length < 2) continue
-        const face = .35 + .65 * Math.abs(Math.cos(pts[0][3]))
-        const a = g.al * A * m * face * depthLit(g.tip[2]) * (.7 + .5 * (g.charge || 0))
-        const gr = ctx.createLinearGradient(pts[0][0], pts[0][1], pts[pts.length - 1][0], pts[pts.length - 1][1])
-        gr.addColorStop(0, 'rgba(190,228,255,0)'); gr.addColorStop(.18, `rgba(190,228,255,${a})`)
-        gr.addColorStop(.8, `rgba(190,228,255,${a})`); gr.addColorStop(1, 'rgba(190,228,255,0)')
-        ctx.beginPath()
-        pts.forEach(([sx, sy], i) => i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy))
-        ctx.strokeStyle = gr; ctx.lineWidth = 17; ctx.globalAlpha = .14; ctx.stroke()
-        ctx.lineWidth = 4.5; ctx.globalAlpha = .34; ctx.stroke()
-        ctx.lineWidth = 1; ctx.globalAlpha = .8; ctx.stroke()
-      }
-      ctx.globalAlpha = 1; ctx.lineCap = 'butt'
     }
     // 把一柄小剑送进绘制队列：够大的用云琅贴图，细小的并入批量光线
     const TIER_A = [.4, .8, 1.25] // 三档明度：远/中/背光，够表达纵深又只需三次描边
@@ -1843,7 +1820,6 @@ export function mountObservation(root, onBack) {
         const nearFade = clamp01((z - NEAR) / 220) // 贴着镜头掠过时淡入淡出
         pushSmall([x, y, z], [x, y - len, z], A * al * nearFade, tiers)
       }
-      drawStrandWisps(gst, A)
       gst.forEach((g) => { if (g) items.push({ z: g.z, b: g.base, t: g.tip, a: Math.min(1, g.al * A * (1 - clamp01((g.z - NEAR) / 4200) * .5)), giant: true, pl: g.pl, hg: g.hg, charge: g.charge }) })
       tiers.forEach((T, i) => {
         const v = Math.min(1, TIER_A[i])
@@ -1854,28 +1830,25 @@ export function mountObservation(root, onBack) {
       items.sort((p, q) => q.z - p.z)
       for (const it of items) {
         if (it.giant && !GIANT_SPRITE) continue // 贴图还没到
-        if (it.giant) { // 剑身外一团四面渐隐的冷光（不能用矩形，会在天上留下硬边色块）；下沉时拖出光尾
+        if (it.giant) { // 剑身外的冷光与充能白光；整块先按该深度的地平线裁剪，沉下去的部分不该发光
           const [tx, ty] = proj(...it.t), [bx, by] = proj(...it.b)
           const sl = Math.hypot(bx - tx, by - ty)
-          // 光晕是个椭圆，圆底会扣在剑尖上把锋磨圆。所以让它偏向剑首、只覆盖剑身 84%，
-          // 剑尖那一截交给贴图本身的锋
+          const ch = it.charge || 0
+          // 光晕是个椭圆，圆底会扣在剑尖上把锋磨圆，所以让它偏向剑首、只覆盖剑身 84%
           const R = sl * .42
           ctx.save(); ctx.translate(bx + (tx - bx) * .42, by + (ty - by) * .42); ctx.scale(.17, 1)
           const halo = ctx.createRadialGradient(0, 0, 0, 0, 0, R)
-          halo.addColorStop(0, `rgba(150,210,255,${.26 * it.a})`); halo.addColorStop(.55, `rgba(150,210,255,${.1 * it.a})`); halo.addColorStop(1, 'rgba(150,210,255,0)')
-          const ch = it.charge || 0
           halo.addColorStop(0, `rgba(150,210,255,${(.24 + .3 * ch) * it.a})`)
-          ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill(); ctx.restore()
-          ctx.lineCap = 'round'
-          if (ch > .02) { // 吃饱了的剑，刃心透出一条越来越亮的白光
-            // 平头线帽：圆帽会在剑尖外扣出一个半圆，把锋变成圆底胶囊。两端也各让开一截
+          halo.addColorStop(.55, `rgba(150,210,255,${.1 * it.a})`); halo.addColorStop(1, 'rgba(150,210,255,0)')
+          ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill()
+          ctx.restore()
+          if (ch > .02) { // 吃饱了的剑，刃心透出一条越来越亮的白光。平头线帽，两端各让开一截
             ctx.lineCap = 'butt'
             ctx.strokeStyle = `rgba(232,246,255,${.55 * ch * it.a})`; ctx.lineWidth = Math.max(1, sl * .009)
             ctx.beginPath()
             ctx.moveTo(bx + (tx - bx) * .06, by + (ty - by) * .06)
             ctx.lineTo(bx + (tx - bx) * .86, by + (ty - by) * .86)
             ctx.stroke()
-            ctx.lineCap = 'round'
           }
           ctx.lineCap = 'butt'
         }
