@@ -1341,93 +1341,567 @@ export function mountObservation(root, onBack) {
     { id: 'xian', hui: '弦', mode: 'drift' },
     { id: 'jian', hui: '剑', mode: 'will' },
     { id: 'mo', hui: '魔', mode: 'ember' },
-    { id: 'zhong', hui: '众', mode: 'gather' },
+    { id: 'zhong', hui: '众', mode: 'array' },
     { id: 'ye', hui: '夜', mode: 'fade' },
   ]
   let qxSwords = null
   let qxChapterEls = []
 
   // 飞剑场：一块固定在视口上的 canvas，画一群细长的剑。按章节切换行为——
-  // drift 随风缓行 / will 随指针聚散 / ember 心魔下沉 / gather 万剑来朝 / fade 收剑
+  // drift 随风缓行 / will 随指针聚散 / ember 心魔下沉 / array 让位给侧视布阵场景 / fade 收剑
   function createSwordField(canvas, { reduce, coarse }) {
     const ctx = canvas.getContext('2d')
     const N = coarse ? 110 : 300
-    const ICE = '150,212,255', MOON = '236,246,255', GOLD = '222,190,122', EMBER = '222,104,128'
-    const ALPHA = { drift: .34, will: 1, ember: .22, gather: .95, fade: 0 }
-    let W = 1, H = 1, mode = 'drift', alpha = 0, targetAlpha = ALPHA.drift
+    const ICE = '150,212,255', EMBER = '222,104,128'
+    const ALPHA = { drift: .34, will: 1, ember: .22, array: 0, fade: 0 } // array：剑群让位给布阵场景
+    let W = 1, H = 1, dpr = 1, mode = 'drift', alpha = 0, targetAlpha = ALPHA.drift
     let t = 0, last = performance.now(), raf = 0, running = true
-    // 众 · 圆形剑阵的时钟：入阵时间、上一道剑鸣、下一道剑鸣、归一齐鸣的起点
-    let formT = 0, waveT0 = -9, nextWave = 1.1, surgeT0 = -9
-    const RINGS = [.34, .56, .78, 1], WAVE_V = 620
     const pointer = { x: 0, y: 0, active: false }
     const rnd = (a, b) => a + Math.random() * (b - a)
     const swords = []
-
-    function resize() {
-      const dpr = Math.min(2, window.devicePixelRatio || 1)
-      W = canvas.clientWidth || window.innerWidth
-      H = canvas.clientHeight || window.innerHeight
-      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr)
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    }
-    // 圆形剑阵：以视口中心为阵眼、短边 47% 为外环半径；四环按周长分配飞剑，各占一个阵位
-    const ringR = () => Math.min(W, H) * .47
-    const breath = (k) => 1 + Math.sin(formT * 1.1 + k * .9) * .025
-    function assignFormation() {
-      const total = RINGS.reduce((a, b) => a + b, 0)
-      let i = 0
-      RINGS.forEach((rf, k) => {
-        const n = k === RINGS.length - 1 ? swords.length - i : Math.round(swords.length * rf / total)
-        for (let j = 0; j < n && i < swords.length; j++, i++) {
-          const s = swords[i]
-          s.ring = k; s.slot = j; s.n = n; s.flash = 0; s.hitAt = -1
-          const scale = W < 760 ? .68 : 1 // 窄屏阵小，剑也随之缩短，别把正文盖死
-          s.len = (26 + k * 11 + rnd(-3, 3)) * scale; s.w = (1.1 + k * .25) * scale
-        }
-      })
-      formT = 0; waveT0 = -9; surgeT0 = -9; nextWave = 1.1
-    }
-    // 归一齐鸣：半径倍率——先坍缩到阵眼，停一瞬，再外放到 1.5 倍，缓缓归位
-    function surgeMult(u) {
-      if (u < 0 || u >= 2.4) return 1
-      if (u < .5) { const p = u / .5; return 1 - .92 * p * p * p }
-      if (u < .55) return .08
-      if (u < 1.25) { const p = (u - .55) / .7; return .08 + 1.42 * (1 - Math.pow(1 - p, 3)) }
-      const p = (u - 1.25) / 1.15
-      return 1.5 - .5 * (p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2)
-    }
+    // 一柄散剑的初始状态：随机位置、朝右上缓行；ox/oy/eager 让「随心」时各剑绕指针成云而不挤成一点
     function fresh(s) {
-      const a = rnd(-Math.PI * .34, -Math.PI * .1) // 默认朝右上缓行
-      const sp = rnd(10, 26)
+      const a = rnd(-Math.PI * .34, -Math.PI * .1), sp = rnd(10, 26)
       Object.assign(s, {
         x: rnd(0, W), y: rnd(0, H), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
-        len: rnd(16, 44), w: rnd(.9, 1.7), gold: Math.random() < .12,
-        ox: rnd(-1, 1) * 150, oy: rnd(-1, 1) * 150, eager: rnd(.45, 1), // 随心时各剑绕指针成云，不挤成一点
+        len: rnd(30, 66),
+        ox: rnd(-1, 1) * 150, oy: rnd(-1, 1) * 150, eager: rnd(.45, 1),
         shot: false, life: 0, ttl: 0, passed: 0, px: 0, py: 0,
-        ring: s.ring ?? 0, slot: s.slot ?? 0, n: s.n ?? 1, flash: 0, hitAt: -1, // 阵位在重生后保留
       })
       return s
     }
     for (let i = 0; i < N; i++) swords.push(fresh({}))
 
+    function resize() {
+      dpr = Math.min(2, window.devicePixelRatio || 1)
+      W = canvas.clientWidth || window.innerWidth
+      H = canvas.clientHeight || window.innerHeight
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.imageSmoothingQuality = 'high'
+      buildArray()
+    }
+
+    // ── 云琅贴图：按实物照片在离屏画布上精绘一柄（剑尖朝 +x），再做多级缩略供各尺寸取用 ──
+    // 全长 SL=1024：剑首 0–80 · 剑柄 80–318 · 剑格 318–390 · 刃身 390–1024；剑心（t=0）在 x=461
+    const SL = 1024, SPAD = 24, SH = 200, SCY = 100, SANCHOR = 461
+    function makeSwordSprite(tint) {
+      const c = document.createElement('canvas'); c.width = SL + SPAD * 2; c.height = SH
+      const g = c.getContext('2d'); g.translate(SPAD, 0)
+      const ember = tint === EMBER
+      const guardFill = ember ? '#d7566f' : '#f4f7f9'
+      const guardEdge = ember ? '#8a2340' : '#b7c6d0'
+      const core = ember ? '#ff7390' : '#62ff9e', coreGlow = ember ? '255,115,144' : '98,255,158'
+      const bladePath = () => { g.beginPath(); g.moveTo(390, SCY - 16); g.lineTo(896, SCY - 16); g.lineTo(SL, SCY); g.lineTo(896, SCY + 16); g.lineTo(390, SCY + 16); g.closePath() }
+      // 剑光：整片刃身背后一层冷光
+      g.save(); g.shadowColor = 'rgba(140,210,255,.95)'; g.shadowBlur = 26; g.fillStyle = 'rgba(160,215,255,.5)'; bladePath(); g.fill(); g.restore()
+      // 刃身：冰蓝渐变，刃口偏白，脊线高光
+      const bg = g.createLinearGradient(0, SCY - 16, 0, SCY + 16)
+      bg.addColorStop(0, '#e2eff6'); bg.addColorStop(.42, '#a6cbde'); bg.addColorStop(.58, '#b7d6e6'); bg.addColorStop(1, '#e2eff6')
+      g.fillStyle = bg; bladePath(); g.fill()
+      g.strokeStyle = 'rgba(236,246,251,.95)'; g.lineWidth = 1.6; bladePath(); g.stroke()
+      g.strokeStyle = 'rgba(255,255,255,.9)'; g.lineWidth = 3; g.beginPath(); g.moveTo(478, SCY); g.lineTo(986, SCY); g.stroke()
+      g.strokeStyle = 'rgba(120,160,185,.55)'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(478, SCY - 7); g.lineTo(880, SCY - 7); g.moveTo(478, SCY + 7); g.lineTo(880, SCY + 7); g.stroke()
+      // 近格纹饰：白底、金云、一点蓝
+      g.fillStyle = '#eef3f6'; g.beginPath(); g.roundRect(388, SCY - 19, 86, 38, 8); g.fill()
+      g.strokeStyle = '#c9d4dc'; g.lineWidth = 1; g.stroke()
+      g.strokeStyle = '#c99f4e'; g.lineWidth = 2.6; g.lineCap = 'round'
+      g.beginPath(); g.moveTo(398, SCY - 9); g.bezierCurveTo(414, SCY - 22, 428, SCY + 4, 446, SCY - 8); g.bezierCurveTo(456, SCY - 14, 462, SCY - 4, 468, SCY - 10); g.stroke()
+      g.beginPath(); g.moveTo(400, SCY + 10); g.bezierCurveTo(418, SCY + 20, 430, SCY - 2, 450, SCY + 9); g.bezierCurveTo(458, SCY + 13, 464, SCY + 6, 470, SCY + 11); g.stroke()
+      g.fillStyle = '#3aa9e6'; g.beginPath(); g.arc(432, SCY, 3.2, 0, Math.PI * 2); g.fill()
+      // 剑柄：蓝光透芯 + 黑色藤纹缠绕 + 两端金属护环
+      g.save(); g.shadowColor = 'rgba(60,200,255,.95)'; g.shadowBlur = 18
+      const hg = g.createLinearGradient(0, SCY - 10, 0, SCY + 10)
+      hg.addColorStop(0, '#2a9be0'); hg.addColorStop(.5, '#8fe6ff'); hg.addColorStop(1, '#2a9be0')
+      g.fillStyle = hg; g.beginPath(); g.roundRect(82, SCY - 10, 236, 20, 10); g.fill(); g.restore()
+      g.strokeStyle = '#0c1620'; g.lineWidth = 5.2
+      for (const ph of [0, Math.PI]) {
+        g.beginPath()
+        for (let x = 88; x <= 312; x += 3) { const y = SCY + 9 * Math.sin((x - 88) / 16 + ph); x === 88 ? g.moveTo(x, y) : g.lineTo(x, y) }
+        g.stroke()
+      }
+      g.strokeStyle = '#2a3a48'; g.lineWidth = 1.2
+      for (const ph of [0, Math.PI]) {
+        g.beginPath()
+        for (let x = 88; x <= 312; x += 3) { const y = SCY + 9 * Math.sin((x - 88) / 16 + ph) - 2; x === 88 ? g.moveTo(x, y) : g.lineTo(x, y) }
+        g.stroke()
+      }
+      for (const [x0, w0] of [[308, 14], [74, 12]]) {
+        g.fillStyle = '#1b2732'; g.fillRect(x0, SCY - 13, w0, 26)
+        g.strokeStyle = '#63768a'; g.lineWidth = 1.2; g.strokeRect(x0 + .5, SCY - 12.5, w0 - 1, 25)
+      }
+      // 剑首：暗金属锥 + 护环 + 蓝珠
+      g.fillStyle = '#243040'; g.beginPath(); g.moveTo(74, SCY - 12); g.lineTo(44, SCY - 7); g.lineTo(44, SCY + 7); g.lineTo(74, SCY + 12); g.closePath(); g.fill()
+      g.strokeStyle = '#6b7f92'; g.lineWidth = 1.2; g.stroke()
+      g.strokeStyle = '#3b4a58'; g.lineWidth = 5; g.beginPath(); g.arc(24, SCY, 15, 0, Math.PI * 2); g.stroke()
+      g.strokeStyle = '#8093a3'; g.lineWidth = 1; g.beginPath(); g.arc(24, SCY, 18, 0, Math.PI * 2); g.stroke()
+      g.save(); g.shadowColor = 'rgba(80,190,255,.95)'; g.shadowBlur = 10; g.fillStyle = '#4fc6ff'; g.beginPath(); g.arc(24, SCY, 5.5, 0, Math.PI * 2); g.fill(); g.restore()
+      // 剑格：云形（几团圆相叠 + 向刃一侧的云头）、描边、金色螺旋纹
+      const cloud = () => {
+        g.beginPath()
+        g.arc(352, SCY, 34, 0, Math.PI * 2)
+        g.arc(338, SCY - 30, 21, 0, Math.PI * 2)
+        g.arc(366, SCY + 30, 23, 0, Math.PI * 2)
+        g.arc(392, SCY - 20, 15, 0, Math.PI * 2)
+        g.arc(322, SCY + 16, 17, 0, Math.PI * 2)
+      }
+      g.save(); g.shadowColor = 'rgba(0,0,0,.35)'; g.shadowBlur = 6; g.fillStyle = guardFill; cloud(); g.fill(); g.restore()
+      g.strokeStyle = guardEdge; g.lineWidth = 1.6; cloud(); g.stroke()
+      g.strokeStyle = ember ? '#ffb3c2' : '#b98a3e'; g.lineWidth = 3; g.lineCap = 'round'
+      g.beginPath()
+      for (let a = 0; a <= Math.PI * 4; a += .15) { const r = 2.5 + a * 2.2, x = 350 + Math.cos(a) * r, y = SCY - 4 + Math.sin(a) * r; a === 0 ? g.moveTo(x, y) : g.lineTo(x, y) }
+      g.stroke()
+      // 格心碧光：从剑格下侧透出来的一团绿
+      const gl = g.createRadialGradient(374, SCY + 22, 2, 374, SCY + 22, 40)
+      gl.addColorStop(0, `rgba(${coreGlow},1)`); gl.addColorStop(.35, `rgba(${coreGlow},.75)`); gl.addColorStop(1, `rgba(${coreGlow},0)`)
+      g.fillStyle = gl; g.beginPath(); g.arc(374, SCY + 22, 40, 0, Math.PI * 2); g.fill()
+      g.fillStyle = core; g.beginPath(); g.arc(374, SCY + 22, 9, 0, Math.PI * 2); g.fill()
+      g.fillStyle = 'rgba(255,255,255,.9)'; g.beginPath(); g.arc(372, SCY + 20, 3.2, 0, Math.PI * 2); g.fill()
+      // 多级缩略：逐次减半，缩到几十像素时不闪不糊
+      const levels = [{ c, len: c.width }]
+      let prev = c
+      while (prev.width > 96) {
+        const m = document.createElement('canvas'); m.width = Math.round(prev.width / 2); m.height = Math.round(prev.height / 2)
+        const mg = m.getContext('2d'); mg.imageSmoothingQuality = 'high'; mg.drawImage(prev, 0, 0, m.width, m.height)
+        levels.push({ c: m, len: m.width }); prev = m
+      }
+      return levels
+    }
+    const SPRITES = { [ICE]: makeSwordSprite(ICE), [EMBER]: makeSwordSprite(EMBER) }
+    // ── 巨剑贴图：清宵那柄巨剑的实物图去黑底、压成暗钢蓝、转成剑尖朝 +x（public/photos/qingxiao-giant-sword.png）──
+    // 贴图里剑身正好横跨 SL，两侧各留 GPAD；GCY 是刃身中轴在贴图中的高度。异步载入，载入前不画巨剑
+    const GPAD = 170, GH = 186, GCY = 86
+    let GIANT_SPRITE = null
+    {
+      const img = new Image()
+      img.onload = () => {
+        const levels = [{ c: img, len: img.width }]
+        levels.meta = { pad: GPAD, h: GH, cy: GCY }
+        let prev = img, w = img.width, h = img.height
+        while (w > 160) {
+          const m = document.createElement('canvas'); m.width = Math.round(w / 2); m.height = Math.round(h / 2)
+          const mg = m.getContext('2d'); mg.imageSmoothingQuality = 'high'; mg.drawImage(prev, 0, 0, m.width, m.height)
+          levels.push({ c: m, len: m.width }); prev = m; w = m.width; h = m.height
+        }
+        GIANT_SPRITE = levels
+      }
+      img.src = 'photos/qingxiao-giant-sword.png'
+    }
+    // ── 众 · 借剑阵：镜头在阵内——低机位站在外环边上望向阵心 ──
+    // 阵心一点白光瞬间爆开，炸成上下九层剑环（下四层剑尖朝天的碗阵，上五层倒悬成穹顶，从头顶掠过）；
+    // 随后六柄巨剑自天而降，悬停片刻，一齐沉入地底消失；阵光渐熄，再起。全程不抖镜头。
+    // 世界坐标：x 左右、y 向上（0 为地面）、z 纵深；相机在原点、高 CAMH；阵眼在 (0,0,ZC)，剑仙悬于 (0,EYE_H,ZC)
+    const ARR = { GIANT: 2.4, PLUNGE: 8.2, FADE: 9.5, END: 10.8 }
+    const ZC = 1150, CAMH = 200, EYE_H = 300, HORIZ = .66, NEAR = 140 // 地平线压到 66%，等于镜头微微仰起看穹顶
+    // 九层穹顶剑环（只有头顶这一组，剑尖朝下倒悬，越高越收拢）：r 半径、h 高度、len 剑长、sp 间距（世界单位）
+    const LAYERS = [
+      { r: 1600, h: 600, len: 42, up: false, sp: 21 }, { r: 1480, h: 700, len: 40, up: false, sp: 20 },
+      { r: 1300, h: 820, len: 37, up: false, sp: 18 }, { r: 1150, h: 920, len: 36, up: false, sp: 17 },
+      { r: 1000, h: 1010, len: 34, up: false, sp: 16 }, { r: 820, h: 1110, len: 32, up: false, sp: 15 },
+      { r: 660, h: 1180, len: 31, up: false, sp: 15 }, { r: 480, h: 1230, len: 30, up: false, sp: 13 },
+      { r: 260, h: 1270, len: 28, up: false, sp: 12 },
+    ]
+    // 四柄巨剑（垂直向下），前后错开：两柄贴近镜头在画面两侧（大得出画）、两柄远在阵心两旁（小）
+    // 每项：x、z、全长、悬停时剑尖高度
+    // 三柄按纵深拉开：470 / 1350 / 1950，投影缩放依次约 3.0 / 1.0 / 0.72，一眼看得出前后。
+    // x 是按「悬停那一幕的焦距」反推的，保证三柄都落在画面里、横向也不挤在一起
+    const GIANTS = [[-131, 470, 1100, 215], [38, 1350, 1050, 330], [514, 1950, 1000, 340]]
+    let arrT = 0, arrOn = 0, flash = 0, arrDt = .016
+    const prevTipY = []
+    const field = [], STRAND = [], streaks = [], glints = [], items = [], sunk = []
+    const clamp01 = (v) => Math.min(1, Math.max(0, v))
+    const easeOutCubic = (p) => 1 - Math.pow(1 - p, 3)
+    const easeOutQuart = (p) => 1 - Math.pow(1 - p, 4)
+    const easeOutExpo = (p) => p >= 1 ? 1 : 1 - Math.pow(2, -10 * p)
+    const easeInOut = (p) => p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2
+    // 摄影机：一炷香的长镜头。四幕各有自己的焦距、俯仰与机位高度，指数缓出地推过去
+    const CAM = [
+      { t: 0, f: 1.05, pitch: 0, h: 200 },      // 幕一 远景：起阵，阵在远处
+      { t: 2.4, f: 1.36, pitch: 6, h: 240 },    // 幕二 中景：巨剑降，镜头推近
+      { t: 5.4, f: 1.56, pitch: 14, h: 300 },   // 幕三 仰视：充能，抬头看
+      { t: 8.2, f: 1.18, pitch: -4, h: 200 },   // 幕四 俯冲：落地，甩下
+      { t: 9.5, f: 1.06, pitch: 0, h: 200 },    // 收
+    ]
+    let camF = CAM[0].f, camPitch = CAM[0].pitch, camH = CAM[0].h, horizonY = H * HORIZ
+    function stepCamera(dt) {
+      let tgt = CAM[0]
+      for (const k of CAM) if (arrT >= k.t) tgt = k
+      if (reduce) { camF = CAM[0].f; camPitch = CAM[0].pitch; camH = CAM[0].h } // 减弱动效时镜头不动
+      else {
+        const k = 1 - Math.pow(.055, dt) // 指数缓出，越接近目标越慢
+        camF += (tgt.f - camF) * k; camPitch += (tgt.pitch - camPitch) * k; camH += (tgt.h - camH) * k
+      }
+      horizonY = H * HORIZ + camPitch * 13 // 抬头 → 地平线下移，看见更多天
+    }
+    const proj = (x, y, z) => { const s = H * camF / z; return [W * .5 + x * s, horizonY + (camH - y) * s, s] }
+    // 空气透视：越远越淡；背光（阵心之后）的剑更亮，面光的压成剪影
+    const depthLit = (z) => (1 - clamp01((z - NEAR) / 3400) * .72) * (z > ZC ? 1.22 : .74)
+    function buildArray() {
+      field.length = 0; STRAND.length = 0
+      const dense = W < 760 ? 2 : 1
+      LAYERS.forEach((L, k) => {
+        const n = Math.round(Math.PI * 2 * L.r / (L.sp * dense))
+        for (let i = 0; i < n; i++) {
+          const a0 = Math.PI * 2 * i / n
+          // 巨剑出现后，小剑各自投奔方位最近的那柄巨剑，在它身边占一个螺旋流位
+          let gi = 0, best = 9
+          GIANTS.forEach(([gx, gz], j) => { const ga = Math.atan2(gz - ZC, gx), d = Math.abs(Math.atan2(Math.sin(a0 - ga), Math.cos(a0 - ga))); if (d < best) { best = d; gi = j } })
+          field.push({ k, a0, w: .7 + Math.random() * .3, gi, delay: Math.random() * 1.4,
+            stiff: 105 + Math.random() * 85, px: 0, py: EYE_H, pz: ZC, vx: 0, vy: 0, vz: 0 })
+        }
+      })
+      // 把每柄巨剑名下的小剑分成若干「股」：同一股角度半径固定、沿剑身首尾相衔均匀排开，
+      // 看上去就是一条条由小剑串成、顺剑面淌下去的光线，而不是一团环绕的剑云
+      const STRANDS = 14, LANES = 3 // 14 条线，每条由 3 股并排的剑铺成一束，不是单排一柄
+      const strands = new Map()
+      for (const s of field) {
+        s.st = (Math.random() * STRANDS) | 0
+        const key = s.gi * 1000 + s.st
+        if (!strands.has(key)) strands.set(key, [])
+        strands.get(key).push(s)
+      }
+      strands.forEach((arr) => {
+        const st = arr[0].st
+        const ang = Math.PI * 2 * st / STRANDS + rnd(-.25, .25)
+        const R = 20 + (st % 3) * 26 + rnd(-8, 8)
+        const ph = rnd(0, Math.PI * 2)
+        const S = { gi: arr[0].gi, ang, R, ph }
+        STRAND.push(S)
+        const per = Math.max(1, Math.ceil(arr.length / LANES))
+        arr.forEach((s, i) => { s.S = S; s.lane = (i % LANES) - (LANES - 1) / 2; s.u0 = (Math.floor(i / LANES) + (i % LANES) * .34) / per })
+      })
+      resetArray()
+    }
+    // 每次起阵重新抽一组爆开的光芒与星闪
+    function resetArray() {
+      arrT = 0; flash = .65; sunk.length = 0
+      for (const f of field) { f.px = 0; f.py = EYE_H; f.pz = ZC; f.vx = f.vy = f.vz = 0 }
+      streaks.length = 0; glints.length = 0
+      for (let i = 0; i < 88; i++) streaks.push({ a: rnd(0, Math.PI * 2), len: rnd(260, 900), w: rnd(.8, 2.4), t0: rnd(0, .16), pink: Math.random() < .3 })
+      for (let i = 0; i < 40; i++) { const a = rnd(0, Math.PI * 2), d = rnd(30, 460); glints.push({ dx: Math.cos(a) * d, dy: Math.sin(a) * d * .6, t0: rnd(0, .9), dur: rnd(.3, .65), size: rnd(10, 40), pink: Math.random() < .35 }) }
+    }
+    function restartArray() { if (arrT < ARR.FADE) arrT = ARR.FADE }
+    function stepArray(dt) {
+      arrOn += ((mode === 'array' ? 1 : 0) - arrOn) * Math.min(1, dt * 1.6)
+      if (arrOn < .01) return
+      arrT += dt
+      arrDt = dt
+      stepCamera(dt)
+      if (arrT >= ARR.END) resetArray()
+      flash = Math.max(0, flash - dt * 1.8)
+    }
+    function giantState(i) {
+      const [gx, gz, hg, hoverTip] = GIANTS[i]
+      const desc = easeOutQuart(clamp01((arrT - ARR.GIANT - i * .4) / 2.6))
+      if (desc <= 0) return null
+      let tipY = 2600 + (hoverTip - 2600) * desc + Math.sin(arrT * .9 + i) * 8 * desc
+      const pl = clamp01((arrT - ARR.PLUNGE - i * .12) / 1)
+      let al = 1
+      if (pl > 0) { tipY = hoverTip + (-1700 - hoverTip) * pl * pl * pl; al = 1 - clamp01(-tipY / 200) } // 入地即淡尽
+      const tip = [gx, tipY, gz], base = [gx, tipY + hg, gz] // 剑尖朝下，笔直垂立
+      const vy = (tipY - (prevTipY[i] === undefined ? tipY : prevTipY[i])) / Math.max(.001, arrDt)
+      prevTipY[i] = tipY
+      // 充能：小剑源源不断没入剑身，剑越来越亮；一开始下坠就放净
+      const charge = clamp01((arrT - ARR.GIANT - i * .4 - .6) / 2.4) * (1 - clamp01(pl * 1.5))
+      return { tip, base, al, pl, z: gz, hg, desc, vy, charge }
+    }
+    // ── 流场：3D 值噪声搭一个势场，取旋度得到无散度速度场 ──
+    // 无散度意味着场里没有源也没有汇，光丝在里面既不会挤成一坨也不会散开，只会被拧出形状
+    const hash3 = (i, j, k) => {
+      let h = (i * 374761393 + j * 668265263 + k * 1274126177) | 0
+      h = Math.imul(h ^ (h >>> 13), 1274126177)
+      return ((h ^ (h >>> 16)) >>> 0) / 4294967296
+    }
+    function vnoise(x, y, z) {
+      const i = Math.floor(x), j = Math.floor(y), k = Math.floor(z)
+      const fx = x - i, fy = y - j, fz = z - k
+      const u = fx * fx * (3 - 2 * fx), v = fy * fy * (3 - 2 * fy), w = fz * fz * (3 - 2 * fz)
+      const L = (a, b, t) => a + (b - a) * t
+      const c = (a, b, d) => hash3(i + a, j + b, k + d)
+      return (L(L(L(c(0,0,0), c(1,0,0), u), L(c(0,1,0), c(1,1,0), u), v),
+               L(L(c(0,0,1), c(1,0,1), u), L(c(0,1,1), c(1,1,1), u), v), w)) * 2 - 1
+    }
+    const E = .55
+    function curl(x, y, z) { // 有限差分求旋度，只在每条线的十来个节点上算，开销可忽略
+      const P = (a, b, c, o) => vnoise(a + o, b + o * 1.7, c + o * .3)
+      const p1y = P(x, y + E, z, 0), p1z = P(x, y, z + E, 0)
+      const p2x = P(x + E, y, z, 11.3), p2z = P(x, y, z + E, 11.3)
+      const p3x = P(x + E, y, z, 23.7), p3y = P(x, y + E, z, 23.7)
+      const n1y = P(x, y - E, z, 0), n1z = P(x, y, z - E, 0)
+      const n2x = P(x - E, y, z, 11.3), n2z = P(x, y, z - E, 11.3)
+      const n3x = P(x - E, y, z, 23.7), n3y = P(x, y - E, z, 23.7)
+      return [(p3y - n3y) - (p2z - n2z), (p1z - n1z) - (p3x - n3x), (p2x - n2x) - (p1y - n1y)]
+    }
+    // 每帧给每条线重算一条被流场平流出来的中轴线。起点不是巨剑当前位置，而是它按速度
+    // 预测出来的位置再加偏移——Reynolds 的 offset pursuit，剑追的是「它要去哪」而不是「它在哪」
+    const NODES = 12, U0 = -.1, USPAN = .95 // 走到剑身下段就没入剑里；剑尖那一截留干净
+    function buildStrandPaths(gst) {
+      const drift = arrT * .1
+      for (const S of STRAND) {
+        const g = gst[S.gi]
+        if (!g) { S.path = null; continue }
+        const lead = g.vy * .16 // 预测提前量：巨剑坠得越快，线被带得越靠前
+        const ox = Math.cos(S.ang) * S.R, oz = Math.sin(S.ang) * S.R
+        const path = S.path || (S.path = [])
+        path.length = 0
+        for (let i = 0; i < NODES; i++) {
+          const u = U0 + USPAN * i / (NODES - 1)
+          const bx = g.tip[0] + ox, bz = g.tip[2] + oz
+          const by = g.base[1] + (g.tip[1] - g.base[1]) * u + lead * u
+          const c = curl(bx * .0017 + S.ph, by * .0017, bz * .0017 + drift)
+          const amp = 190 * Math.sin(clamp01((u - U0) / USPAN) * Math.PI) // 两端收紧、中段最放得开
+          // 充能漏斗：过了中段就往剑身上收，到剑尖处半径归零——小剑是没入剑里，不是绕着飞
+          const fn = u <= .4 ? 1 : Math.pow(clamp01((.87 - u) / .45), 1.5)
+          path.push([bx + ox * (fn - 1) + c[0] * amp * fn, by + c[1] * amp * .3 * fn, bz + oz * (fn - 1) + c[2] * amp * fn])
+        }
+      }
+    }
+    // 一条光线在参数 u 处的世界坐标（0 在剑首、1 在剑尖外）。两组不同频率的摆动叠加，线便不是直的
+    function strandPoint(g, S, u, lane = 0) {
+      const P = S.path
+      if (!P) return [g.tip[0], g.tip[1], g.tip[2], S.ang]
+      const f = clamp01(u) * (NODES - 1), i = Math.min(NODES - 2, f | 0), t = f - i
+      const a = P[i], b = P[i + 1]
+      const x = a[0] + (b[0] - a[0]) * t, y = a[1] + (b[1] - a[1]) * t, z = a[2] + (b[2] - a[2]) * t
+      if (!lane) return [x, y, z, S.ang]
+      // 并排的股：沿局部切线的水平法向偏开，一束线才有宽度
+      const dx = b[0] - a[0], dz = b[2] - a[2], d = Math.hypot(dx, dz) || 1
+      return [x - dz / d * lane * 13, y, z + dx / d * lane * 13, S.ang]
+    }
+    // 每条线铺一层柔光丝：外圈宽而淡、内芯细而亮，两端用渐变淡出
+    function drawStrandWisps(gst, A) {
+      ctx.lineCap = 'round'
+      for (const S of STRAND) {
+        const g = gst[S.gi]
+        if (!g) continue
+        const m = easeInOut(clamp01((arrT - ARR.GIANT - S.gi * .4 - .7) / 1.6))
+        if (m < .05) continue
+        const pts = []
+        for (let i = 0; i <= 34; i++) {
+          const u = i / 34, [px, py, pz, ang] = strandPoint(g, S, u)
+          if (pz < NEAR) continue
+          pts.push([...proj(px, py, pz), ang])
+        }
+        if (pts.length < 2) continue
+        const face = .35 + .65 * Math.abs(Math.cos(pts[0][3]))
+        const a = g.al * A * m * face * depthLit(g.tip[2]) * (.7 + .5 * (g.charge || 0))
+        const gr = ctx.createLinearGradient(pts[0][0], pts[0][1], pts[pts.length - 1][0], pts[pts.length - 1][1])
+        gr.addColorStop(0, 'rgba(190,228,255,0)'); gr.addColorStop(.18, `rgba(190,228,255,${a})`)
+        gr.addColorStop(.8, `rgba(190,228,255,${a})`); gr.addColorStop(1, 'rgba(190,228,255,0)')
+        ctx.beginPath()
+        pts.forEach(([sx, sy], i) => i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy))
+        ctx.strokeStyle = gr; ctx.lineWidth = 17; ctx.globalAlpha = .14; ctx.stroke()
+        ctx.lineWidth = 4.5; ctx.globalAlpha = .34; ctx.stroke()
+        ctx.lineWidth = 1; ctx.globalAlpha = .8; ctx.stroke()
+      }
+      ctx.globalAlpha = 1; ctx.lineCap = 'butt'
+    }
+    // 把一柄小剑送进绘制队列：够大的用云琅贴图，细小的并入批量光线
+    const TIER_A = [.4, .8, 1.25] // 三档明度：远/中/背光，够表达纵深又只需三次描边
+    function pushSmall(b, tp, a, tiers) {
+      const [bx, by] = proj(...b), [tx, ty] = proj(...tp)
+      const sl = Math.hypot(tx - bx, ty - by)
+      if (sl < 1 || sl > 560 || (bx < -300 && tx < -300) || (bx > W + 300 && tx > W + 300)) return
+      const lit = a * depthLit(b[2])
+      if (lit < .02) return
+      if (sl >= 30) { items.push({ z: b[2], b, t: tp, a: Math.min(1, lit) }); return }
+      let ti = 0, best = 9
+      TIER_A.forEach((v, i) => { const d = Math.abs(v - lit); if (d < best) { best = d; ti = i } })
+      const T = tiers[ti]
+      T.glow.moveTo(bx, by); T.glow.lineTo(tx, ty)
+      T.core.moveTo(bx, by); T.core.lineTo(tx, ty)
+      const gx = bx + (tx - bx) * .18, gy = by + (ty - by) * .18, nx = -(ty - by) / sl * 2.4, ny = (tx - bx) / sl * 2.4
+      T.guard.moveTo(gx - nx, gy - ny); T.guard.lineTo(gx + nx, gy + ny)
+    }
+    function ringPath(r, h, e) { // 从阵心炸出：半径与高度都按 e 展开；绕到镜头背后的一段跳过
+      ctx.beginPath()
+      let pen = false
+      for (let i = 0; i <= 96; i++) {
+        const a = i / 96 * Math.PI * 2, z = ZC + Math.sin(a) * r * e
+        if (z < NEAR) { pen = false; continue }
+        const [sx, sy] = proj(Math.cos(a) * r * e, EYE_H + (h - EYE_H) * e, z)
+        pen ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); pen = true
+      }
+    }
+    function drawSword3D(b, tp, a, levels) {
+      const [bx, by] = proj(b[0], b[1], b[2]), [tx, ty] = proj(tp[0], tp[1], tp[2])
+      const dx = tx - bx, dy = ty - by, len = Math.hypot(dx, dy)
+      if (len < 3 || a < .01) return
+      const ux = dx / len, uy = dy / len
+      blade(bx + ux * len * .45, by + uy * len * .45, ux, uy, len, ICE, a, null, levels)
+    }
+    function drawBurst(A) {
+      if (arrT > 1.5) return
+      const bt = arrT
+      const [cx, cy] = proj(0, EYE_H, ZC)
+      ctx.globalCompositeOperation = 'lighter'
+      // 光核：白到蓝的一团，胀开再散
+      const rad = 40 + 620 * easeOutCubic(clamp01(bt / .6)), ca = (1 - clamp01(bt / 1.2)) * A
+      const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad)
+      core.addColorStop(0, `rgba(255,255,255,${ca})`); core.addColorStop(.16, `rgba(240,244,255,${ca * .95})`)
+      core.addColorStop(.42, `rgba(170,205,255,${ca * .5})`); core.addColorStop(1, 'rgba(140,180,255,0)')
+      ctx.fillStyle = core; ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.fill()
+      // 横向炫光带
+      const fw = 120 + 1100 * easeOutCubic(clamp01(bt / .7)), fa = (1 - clamp01(bt / 1)) * A
+      const flare = ctx.createRadialGradient(cx, cy, 0, cx, cy, fw)
+      flare.addColorStop(0, `rgba(255,255,255,${fa * .9})`); flare.addColorStop(.3, `rgba(200,220,255,${fa * .45})`); flare.addColorStop(1, 'rgba(160,190,255,0)')
+      ctx.fillStyle = flare
+      ctx.save(); ctx.translate(cx, cy); ctx.scale(1, .075); ctx.beginPath(); ctx.arc(0, 0, fw, 0, Math.PI * 2); ctx.fill(); ctx.restore()
+      // 放射光芒
+      ctx.lineCap = 'round'
+      for (const s of streaks) {
+        const p = clamp01((bt - s.t0) / .5)
+        if (p <= 0) continue
+        const len = s.len * easeOutCubic(p), al = (1 - clamp01((bt - s.t0) / 1.05)) * A
+        const ux = Math.cos(s.a), uy = Math.sin(s.a) * .62
+        const x0 = cx + ux * len * .12, y0 = cy + uy * len * .12, x1 = cx + ux * len, y1 = cy + uy * len
+        ctx.strokeStyle = s.pink ? `rgba(255,180,235,${al * .35})` : `rgba(160,205,255,${al * .4})`; ctx.lineWidth = s.w * 3
+        ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke()
+        ctx.strokeStyle = `rgba(255,255,255,${al * .9})`; ctx.lineWidth = s.w
+        ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke()
+      }
+      ctx.lineCap = 'butt'
+      // 十字星闪
+      for (const g of glints) {
+        const u = (bt - g.t0) / g.dur
+        if (u <= 0 || u >= 1) continue
+        const a = Math.sin(u * Math.PI) * A, sz = g.size * (.6 + .4 * a), x = cx + g.dx, y = cy + g.dy
+        ctx.strokeStyle = g.pink ? `rgba(255,190,235,${a})` : `rgba(255,255,255,${a})`; ctx.lineWidth = 1.3
+        ctx.beginPath(); ctx.moveTo(x - sz, y); ctx.lineTo(x + sz, y); ctx.moveTo(x, y - sz); ctx.lineTo(x, y + sz); ctx.stroke()
+        ctx.strokeStyle = `rgba(200,225,255,${a * .5})`; ctx.lineWidth = .8
+        ctx.beginPath(); ctx.moveTo(x - sz * .5, y - sz * .5); ctx.lineTo(x + sz * .5, y + sz * .5); ctx.moveTo(x + sz * .5, y - sz * .5); ctx.lineTo(x - sz * .5, y + sz * .5); ctx.stroke()
+      }
+    }
+    // 地面：阵心的光落在地板上，越远越淡；巨剑在地上拖出竖向倒影
+    function drawGround(gst, A) {
+      ctx.globalCompositeOperation = 'source-over'
+      const floor = ctx.createLinearGradient(0, horizonY, 0, H)
+      // 地平线处必须从全透明起，否则填充矩形的上缘就是一条横贯全屏的硬边
+      floor.addColorStop(0, 'rgba(6,17,28,0)')
+      floor.addColorStop(.14, `rgba(6,16,26,${.34 * A})`)
+      floor.addColorStop(.46, `rgba(4,12,21,${.72 * A})`)
+      floor.addColorStop(1, `rgba(3,9,16,${.94 * A})`)
+      ctx.fillStyle = floor; ctx.fillRect(0, horizonY, W, Math.max(0, H - horizonY))
+      // 只留这一层。之前那圈阵心光池会在地上压出一道弧形亮边，倒影矩形也会分出色块
+    }
+    function drawArrayScene() {
+      const fade = arrT > ARR.FADE ? 1 - clamp01((arrT - ARR.FADE) / 1.3) : 1
+      const A = arrOn * fade
+      if (A < .01) return
+      const spread = easeOutCubic(clamp01(arrT / .6))
+      const [ex, ey] = proj(0, EYE_H, ZC)
+      // 阵中冷光：以阵心为源的一团光，加地面升起的薄雾
+      ctx.globalCompositeOperation = 'lighter'
+      const sky = ctx.createRadialGradient(ex, ey, 10, ex, ey, W * .6)
+      sky.addColorStop(0, `rgba(120,175,240,${.22 * A * spread})`); sky.addColorStop(1, 'rgba(110,170,235,0)')
+      ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H)
+      // 巨剑此刻的姿态（未出现为 null）
+      const gst = GIANTS.map((_, i) => giantState(i))
+      buildStrandPaths(gst) // 必须先铺好路径，下面的小剑和光丝都从它取点
+      drawGround(gst, A)
+      ctx.globalCompositeOperation = 'lighter'
+      // 剑环小剑：从阵心炸开成穹顶；巨剑一出，各自脱环飞向巨剑，贴着剑面成螺旋光流跟它降下
+      items.length = 0
+      ctx.lineWidth = 1
+      const tiers = TIER_A.map(() => ({ glow: new Path2D(), core: new Path2D(), guard: new Path2D() }))
+      const anyGiant = gst.some(Boolean)
+      LAYERS.forEach((L, k) => {
+        const e = easeOutExpo(clamp01((arrT - .02 - k * .04) / .5))
+        if (e <= 0 || anyGiant) return
+        ctx.strokeStyle = `rgba(150,212,255,${.07 * A * e})`; ringPath(L.r, L.h, e); ctx.stroke()
+      })
+      for (const s of field) {
+        const L = LAYERS[s.k]
+        const e = easeOutExpo(clamp01((arrT - .02 - s.k * .04) / .5))
+        if (e <= 0) continue
+        const a = s.a0 + arrT * .05 * (s.k % 2 ? -1 : 1)
+        const r = L.r * e
+        let x = Math.cos(a) * r, y = EYE_H + (L.h - EYE_H) * e, z = ZC + Math.sin(a) * r
+        let len = L.len * e * s.w, al = .8 + .2 * s.w
+        // 抵达：位置不再是逐帧算出来的，而是一根临界阻尼弹簧拉过去的——
+        // 远处快、近处自己减速、不过冲，每柄剑的劲道略有差异，队形就不会整齐划一地同时到位
+        // （Reynolds 1999「Steering Behaviors」里的 Arrival，动力学版本）
+        const kk = s.stiff, damp = 2 * Math.sqrt(kk), dt2 = Math.min(.05, arrDt)
+        s.vx += ((x - s.px) * kk - s.vx * damp) * dt2; s.px += s.vx * dt2
+        s.vy += ((y - s.py) * kk - s.vy * damp) * dt2; s.py += s.vy * dt2
+        s.vz += ((z - s.pz) * kk - s.vz * damp) * dt2; s.pz += s.vz * dt2
+        x = s.px; y = s.py; z = s.pz
+        const g = gst[s.gi] // 巨剑一出，整片穹顶的小剑倾巢而出跟着它走
+        const m = g ? easeInOut(clamp01((arrT - ARR.GIANT - s.gi * .4 - s.delay) / 1.6)) : 0
+        if (m > 0) {
+          const flow = g.pl > 0 ? .85 : .2
+          const u = (s.u0 + arrT * flow) % 1
+          const [px, ay, pz, ang] = strandPoint(g, s.S, u, s.lane)
+          const elen = 15 * (g.pl > 0 ? 1.7 : 1) // 一条线上百余柄，得足够小才排得下
+          x += (px - x) * m; y += (ay + elen * .5 - y) * m; z += (pz - z) * m
+          len += (elen - len) * m
+          const face = .4 + .6 * Math.abs(Math.cos(ang)) // 转到侧面的线暗一些，正对镜头的亮
+          const ends = Math.min(1, Math.min(u, 1 - u) * 7) // 两端淡入淡出，线不会突然出现
+          al = al * (1 - m) + g.al * face * ends * m
+        }
+        if (z < NEAR) continue // 绕到镜头背后
+        const nearFade = clamp01((z - NEAR) / 220) // 贴着镜头掠过时淡入淡出
+        pushSmall([x, y, z], [x, y - len, z], A * al * nearFade, tiers)
+      }
+      drawStrandWisps(gst, A)
+      gst.forEach((g) => { if (g) items.push({ z: g.z, b: g.base, t: g.tip, a: Math.min(1, g.al * A * (1 - clamp01((g.z - NEAR) / 4200) * .5)), giant: true, pl: g.pl, hg: g.hg, charge: g.charge }) })
+      tiers.forEach((T, i) => {
+        const v = Math.min(1, TIER_A[i])
+        ctx.strokeStyle = `rgba(150,212,255,${.22 * v})`; ctx.lineWidth = 3.2; ctx.stroke(T.glow)
+        ctx.strokeStyle = `rgba(236,246,255,${.85 * v})`; ctx.lineWidth = 1.1; ctx.stroke(T.core)
+        ctx.strokeStyle = `rgba(150,212,255,${.75 * v})`; ctx.lineWidth = 1; ctx.stroke(T.guard)
+      })
+      items.sort((p, q) => q.z - p.z)
+      for (const it of items) {
+        if (it.giant && !GIANT_SPRITE) continue // 贴图还没到
+        if (it.giant) { // 剑身外一团四面渐隐的冷光（不能用矩形，会在天上留下硬边色块）；下沉时拖出光尾
+          const [tx, ty] = proj(...it.t), [bx, by] = proj(...it.b)
+          const sl = Math.hypot(bx - tx, by - ty)
+          // 光晕是个椭圆，圆底会扣在剑尖上把锋磨圆。所以让它偏向剑首、只覆盖剑身 84%，
+          // 剑尖那一截交给贴图本身的锋
+          const R = sl * .42
+          ctx.save(); ctx.translate(bx + (tx - bx) * .42, by + (ty - by) * .42); ctx.scale(.17, 1)
+          const halo = ctx.createRadialGradient(0, 0, 0, 0, 0, R)
+          halo.addColorStop(0, `rgba(150,210,255,${.26 * it.a})`); halo.addColorStop(.55, `rgba(150,210,255,${.1 * it.a})`); halo.addColorStop(1, 'rgba(150,210,255,0)')
+          const ch = it.charge || 0
+          halo.addColorStop(0, `rgba(150,210,255,${(.24 + .3 * ch) * it.a})`)
+          ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill(); ctx.restore()
+          ctx.lineCap = 'round'
+          if (ch > .02) { // 吃饱了的剑，刃心透出一条越来越亮的白光
+            // 平头线帽：圆帽会在剑尖外扣出一个半圆，把锋变成圆底胶囊。两端也各让开一截
+            ctx.lineCap = 'butt'
+            ctx.strokeStyle = `rgba(232,246,255,${.55 * ch * it.a})`; ctx.lineWidth = Math.max(1, sl * .009)
+            ctx.beginPath()
+            ctx.moveTo(bx + (tx - bx) * .06, by + (ty - by) * .06)
+            ctx.lineTo(bx + (tx - bx) * .86, by + (ty - by) * .86)
+            ctx.stroke()
+            ctx.lineCap = 'round'
+          }
+          ctx.lineCap = 'butt'
+        }
+        if (it.giant) { // 暗金属剑身要不透明地压在天空上，不能用叠加
+          ctx.globalCompositeOperation = 'source-over'
+          drawSword3D(it.b, it.t, it.a, GIANT_SPRITE)
+          ctx.globalCompositeOperation = 'lighter'
+        } else drawSword3D(it.b, it.t, it.a)
+      }
+      drawBurst(A)
+      ctx.globalCompositeOperation = 'source-over'
+      if (flash > 0) { ctx.fillStyle = `rgba(230,240,255,${flash * .5 * A})`; ctx.fillRect(0, 0, W, H) }
+    }
     function setMode(m) {
       if (m === mode || !(m in ALPHA)) return
       mode = m; targetAlpha = ALPHA[m]
       // 切章即收势：不让上一章追指针的惯性把剑群带成一团飘走
       swords.forEach((s) => { if (!s.shot) { s.vx *= .15; s.vy *= .15; s.passed = 0 } })
-      if (m === 'gather') assignFormation()
-    }
-    // 万剑归一再齐鸣（众章点按）
-    function surge() {
-      if (mode !== 'gather' || formT - surgeT0 < 2.4) return
-      surgeT0 = formT; nextWave = formT + .55
+      if (m === 'array' && arrOn < .05) resetArray()
     }
     // 拨弦出剑：从弦上某点射出几柄剑
     function shoot(x, y, n) {
       for (let k = 0; k < n; k++) {
         const s = swords[(Math.random() * swords.length) | 0]
         const a = rnd(-Math.PI * .42, -Math.PI * .12), sp = rnd(320, 520)
-        Object.assign(s, { x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, shot: true, life: 0, ttl: rnd(1.1, 1.7), len: rnd(28, 52) })
+        Object.assign(s, { x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, shot: true, life: 0, ttl: rnd(1.1, 1.7), len: rnd(56, 88) })
       }
     }
     // 万剑归一：全部飞剑向点按处汇聚，远的稍晚出发
@@ -1440,20 +1914,10 @@ export function mountObservation(root, onBack) {
     function step(dt) {
       t += dt
       alpha += (targetAlpha - alpha) * Math.min(1, dt * 2.2)
-      const R = ringR()
-      if (mode === 'gather') {
-        formT += dt
-        if (formT >= nextWave) { // 剑鸣：一道光环自阵眼扩散，扫到哪一环哪一环齐亮
-          waveT0 = formT; nextWave = formT + 3.8
-          swords.forEach((s) => { s.hitAt = waveT0 + RINGS[s.ring] * R / WAVE_V })
-        }
-      }
       const tx = pointer.active ? pointer.x : W * .55 + Math.cos(t * .45) * W * .16
       const ty = pointer.active ? pointer.y : H * .48 + Math.sin(t * .62) * H * .14
-      const gx = W * .5, gy = H * .5
       for (const s of swords) {
         s.px = s.x; s.py = s.y
-        s.flash = Math.max(0, s.flash - dt * 1.4)
         if (s.shot) {
           s.life += dt
           if (s.life >= 0) {
@@ -1472,109 +1936,94 @@ export function mountObservation(root, onBack) {
             const k = Math.min(1, dt * 2.4)
             s.vx += (dx / d * sp - s.vx) * k; s.vy += (dy / d * sp - s.vy) * k
           }
-        } else if (mode === 'gather') {
-          // 圆形剑阵：四环各自反向旋转，剑尖齐指阵眼；随呼吸微涨，剑鸣时外扩，归一时坍缩再外放
-          const k = s.ring, u = formT - surgeT0
-          const th = Math.PI * 2 * s.slot / s.n + (k % 2 ? -1 : 1) * (.3 - k * .06) * formT
-          const r = RINGS[k] * R * breath(k) * (1 + s.flash * .06) * surgeMult(u)
-          const kk = Math.min(1, dt * (u >= 0 && u < 2.4 ? 9 : 3.5))
-          s.x += (gx + Math.cos(th) * r - s.x) * kk
-          s.y += (gy + Math.sin(th) * r - s.y) * kk
-          const out = u >= .5 && u < 1.25 ? 1 : -1 // 齐鸣外放时剑尖朝外
-          s.vx = out * Math.cos(th) * 10; s.vy = out * Math.sin(th) * 10 // 只用于定朝向
-          if (s.hitAt >= 0 && formT >= s.hitAt) { s.flash = 1; s.hitAt = -1 }
-          continue
         } else {
           const tvx = Math.sin(t * .7 + s.len) * 12, tvy = mode === 'ember' ? 9 : -14
           const k = Math.min(1, dt * 1.4)
           s.vx += (tvx - s.vx) * k; s.vy += (tvy - s.vy) * k
         }
         s.x += s.vx * dt; s.y += s.vy * dt
-        if (mode !== 'gather') {
-          if (s.x < -60) s.x = W + 50; else if (s.x > W + 60) s.x = -50
-          if (s.y < -60) s.y = H + 50; else if (s.y > H + 60) s.y = -50
-        }
+        if (s.x < -60) s.x = W + 50; else if (s.x > W + 60) s.x = -50
+        if (s.y < -60) s.y = H + 50; else if (s.y > H + 60) s.y = -50
       }
     }
-    // 画一柄剑：(x,y) 为剑心，(ux,uy) 为剑尖方向；含剑光、剑身、剑格，可选拖尾起点
-    function blade(x, y, ux, uy, len, w, col, a, trailFrom) {
-      const nx = -uy, ny = ux
-      const tipx = x + ux * len * .55, tipy = y + uy * len * .55
-      const tailx = x - ux * len * .45, taily = y - uy * len * .45
-      const midx = x - ux * len * .1, midy = y - uy * len * .1
+    // 画一柄云琅：取合适的缩略级别，按剑心 (x,y)、剑尖方向 (ux,uy)、全长 len 贴上去
+    function blade(x, y, ux, uy, len, tint, a, trailFrom, levelsOverride) {
+      const levels = levelsOverride || SPRITES[tint] || SPRITES[ICE]
+      const m = levels.meta || { pad: SPAD, h: SH, cy: SCY }
+      const need = (len + len * m.pad * 2 / SL) * dpr * 1.25
+      let lv = levels[0]
+      for (const l of levels) if (l.len >= need) lv = l
       if (trailFrom) {
-        ctx.strokeStyle = `rgba(${col},${a * .35})`; ctx.lineWidth = 1
-        ctx.beginPath(); ctx.moveTo(trailFrom[0], trailFrom[1]); ctx.lineTo(tailx, taily); ctx.stroke()
+        ctx.strokeStyle = `rgba(${tint},${a * .35})`; ctx.lineWidth = 1
+        ctx.beginPath(); ctx.moveTo(trailFrom[0], trailFrom[1]); ctx.lineTo(x - ux * len * .1, y - uy * len * .1); ctx.stroke()
       }
-      ctx.fillStyle = `rgba(${col},${a * .16})` // 剑光
-      ctx.beginPath(); ctx.moveTo(tipx, tipy); ctx.lineTo(midx + nx * w * 3, midy + ny * w * 3); ctx.lineTo(tailx, taily); ctx.lineTo(midx - nx * w * 3, midy - ny * w * 3); ctx.closePath(); ctx.fill()
-      ctx.fillStyle = `rgba(${MOON},${a * .85})` // 剑身
-      ctx.beginPath(); ctx.moveTo(tipx, tipy); ctx.lineTo(midx + nx * w, midy + ny * w); ctx.lineTo(tailx, taily); ctx.lineTo(midx - nx * w, midy - ny * w); ctx.closePath(); ctx.fill()
-      const gx2 = tailx + ux * len * .16, gy2 = taily + uy * len * .16 // 剑格
-      const g = 2.2 + w
-      ctx.strokeStyle = `rgba(${col},${a * .9})`; ctx.lineWidth = 1
-      ctx.beginPath(); ctx.moveTo(gx2 + nx * g, gy2 + ny * g); ctx.lineTo(gx2 - nx * g, gy2 - ny * g); ctx.stroke()
+      const s = len / SL
+      ctx.save()
+      ctx.translate(x, y); ctx.rotate(Math.atan2(uy, ux)); ctx.scale(s, s)
+      ctx.globalAlpha = Math.min(1, a)
+      ctx.drawImage(lv.c, -SANCHOR - m.pad, -m.cy, SL + m.pad * 2, m.h)
+      ctx.restore()
     }
-    // 众：阵纹（四环、八方辐线、剑鸣光环）与八方金色主剑
-    function drawArray() {
-      const gx = W * .5, gy = H * .5, R = ringR(), mult = surgeMult(formT - surgeT0)
-      ctx.lineWidth = 1
-      RINGS.forEach((rf, k) => {
-        ctx.strokeStyle = `rgba(${ICE},${alpha * (.05 + k * .025)})`
-        ctx.beginPath(); ctx.arc(gx, gy, Math.max(1, rf * R * breath(k) * mult), 0, Math.PI * 2); ctx.stroke()
-      })
-      ctx.strokeStyle = `rgba(${ICE},${alpha * .05})`
-      for (let i = 0; i < 8; i++) {
-        const a = i * Math.PI / 4 + formT * .02
-        ctx.beginPath()
-        ctx.moveTo(gx + Math.cos(a) * R * .3, gy + Math.sin(a) * R * .3)
-        ctx.lineTo(gx + Math.cos(a) * R * 1.06, gy + Math.sin(a) * R * 1.06)
-        ctx.stroke()
+    // ── 辉光：照 three.js UnrealBloomPass 的路子（阈值 → 模糊 → 相加），
+    //    但场景是 Canvas 2D，所以用两张 1/4 分辨率的离屏画布做等价实现。
+    //    阈值靠「自身相乘」——暗部平方后塌掉，亮部留下，只有剑光会晕开
+    let bloomA = null, bloomB = null, bloomW = 0, bloomH = 0
+    function applyBloom(strength) {
+      if (strength < .02 || reduce) return
+      const w = Math.max(1, Math.round(canvas.width / 4)), h = Math.max(1, Math.round(canvas.height / 4))
+      if (!bloomA || bloomW !== w || bloomH !== h) {
+        bloomW = w; bloomH = h
+        bloomA = document.createElement('canvas'); bloomA.width = w; bloomA.height = h
+        bloomB = document.createElement('canvas'); bloomB.width = w; bloomB.height = h
       }
-      const wr = (formT - waveT0) * WAVE_V
-      if (waveT0 >= 0 && wr < R * 1.3) {
-        ctx.strokeStyle = `rgba(${MOON},${alpha * (1 - wr / (R * 1.3)) * .6})`; ctx.lineWidth = 2
-        ctx.beginPath(); ctx.arc(gx, gy, Math.max(1, wr), 0, Math.PI * 2); ctx.stroke()
-        ctx.lineWidth = 1
-      }
-      for (let i = 0; i < 8; i++) {
-        const a = i * Math.PI / 4 + Math.PI / 8 - formT * .05, r = R * 1.08 * mult
-        blade(gx + Math.cos(a) * r, gy + Math.sin(a) * r, -Math.cos(a), -Math.sin(a), 96, 2.2, GOLD, alpha * .95)
-      }
+      const a = bloomA.getContext('2d'), b = bloomB.getContext('2d')
+      a.globalCompositeOperation = 'copy'; a.drawImage(canvas, 0, 0, w, h)
+      a.globalCompositeOperation = 'multiply'; a.drawImage(bloomA, 0, 0) // 阈值
+      b.globalCompositeOperation = 'copy'
+      b.filter = `blur(${Math.max(2, w * .014)}px)`; b.drawImage(bloomA, 0, 0); b.filter = 'none'
+      ctx.save()
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = strength
+      ctx.drawImage(bloomB, 0, 0, canvas.width, canvas.height)
+      ctx.restore()
     }
     function draw() {
       ctx.clearRect(0, 0, W, H)
-      if (alpha < .01 && !swords.some((s) => s.shot)) return
+      if (arrOn > .01) drawArrayScene()
+      if (alpha < .01 && !swords.some((s) => s.shot)) {
+        ctx.globalCompositeOperation = 'source-over'
+        applyBloom(arrOn > .01 ? .34 + .34 * arrOn : 0)
+        return
+      }
       ctx.globalCompositeOperation = 'lighter'
-      if (mode === 'gather') drawArray()
       for (const s of swords) {
         const spd = Math.hypot(s.vx, s.vy) || 1
         let ux = s.vx / spd, uy = s.vy / spd
         if (spd < 4) { ux = Math.cos(-Math.PI * .22); uy = Math.sin(-Math.PI * .22) }
-        const len = s.len * (s.shot ? 1.35 : 1) * (1 + s.flash * .3)
-        const w = s.w * (s.shot ? 1.3 : 1)
-        const col = s.gold ? GOLD : (mode === 'ember' ? EMBER : ICE)
-        let a = alpha * (1 + s.flash * .9)
+        const len = s.len * (s.shot ? 1.2 : 1)
+        const col = mode === 'ember' ? EMBER : ICE // 心魔章的剑格泛残红，其余都是本色云琅
+        let a = alpha
         if (s.shot) a = Math.max(alpha, .95) * (1 - Math.max(0, s.life) / s.ttl)
         if (a <= .005) continue
         const trail = s.shot && s.life > 0 && spd > 200 ? [s.px - ux * len * .45, s.py - uy * len * .45] : null
-        blade(s.x, s.y, ux, uy, len, w, col, Math.min(1, a), trail)
+        blade(s.x, s.y, ux, uy, len, col, Math.min(1, a), trail)
       }
       ctx.globalCompositeOperation = 'source-over'
+      applyBloom(arrOn > .01 ? .34 + .34 * arrOn : Math.min(.34, alpha * .7))
     }
     function frame(now) {
       if (!running) return
       const dt = Math.min(.05, (now - last) / 1000); last = now
-      if (!document.hidden) { step(dt); draw() }
+      if (!document.hidden) { step(dt); stepArray(dt); draw() }
       raf = requestAnimationFrame(frame)
     }
     resize()
-    if (W < 760) ALPHA.gather = .5 // 窄屏剑阵压在正文上，减亮
+    swords.forEach(fresh) // 建剑时还不知道视口尺寸，量好之后重新撒一遍位置
     if (reduce) { alpha = .25; step(.016); draw() }
     else raf = requestAnimationFrame(frame)
     window.addEventListener('resize', resize)
     return {
-      setMode, shoot, burst, surge, pointer,
+      setMode, shoot, burst, restartArray, pointer,
       destroy() { running = false; cancelAnimationFrame(raf); window.removeEventListener('resize', resize) },
     }
   }
@@ -1791,8 +2240,10 @@ export function mountObservation(root, onBack) {
           <div class="qx-zhong-copy qx-in">
             <p class="qx-kicker">借剑</p>
             <h2 id="qx-zhong-title">这不是一个人的剑，<br/>是众生之剑。</h2>
+          </div>
+          <div class="qx-zhong-note qx-in">
             <p>穆羽的实验把玄方拖进泥里，她一个人的剑不够。于是她向玄方城的百姓借剑，向漂泊者借剑，向历代战死在这片山河上的人借剑。万剑齐鸣的那一刻，我第一次听懂了「凡尘剑心」四个字。</p>
-            <p class="qx-hint"><i aria-hidden="true"></i>点按此处，万剑归一，再齐鸣</p>
+            <p class="qx-hint"><i aria-hidden="true"></i>镜头在阵中，看她借剑<button type="button" class="qx-replay">重新起阵</button></p>
           </div>
           <div class="qx-lend qx-in" aria-label="借剑于三方">
             <p><b>玄方百姓之剑</b><span>家家户户供着她，这一次换她向他们借一回</span></p>
@@ -1838,7 +2289,7 @@ export function mountObservation(root, onBack) {
     const jian = profEl.querySelector('.qx-act--jian')
     const zhong = profEl.querySelector('.qx-act--zhong')
     const onBurst = (e) => { if (!reduce) qxSwords.burst(e.clientX, e.clientY) }
-    const onSurge = () => { if (!reduce) qxSwords.surge() }
+    const onSurge = () => { if (!reduce) qxSwords.restartArray() }
     jian.addEventListener('click', onBurst)
     zhong.addEventListener('click', onSurge)
     profileCleanups.push(() => {

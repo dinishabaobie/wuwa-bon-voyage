@@ -2182,7 +2182,7 @@ html.prof-lock { overflow: hidden; }
   letter-spacing: -.02em; text-wrap: balance;
 }
 .s015 .qx-act-copy > p:not(.qx-kicker):not(.qx-hint),
-.s015 .qx-zhong-copy > p:not(.qx-kicker):not(.qx-hint) {
+.s015 .qx-zhong-note > p:not(.qx-hint) {
   max-width: 62ch; margin: 0 0 1.3rem; color: var(--qx-body);
   font: 1.04rem/2 var(--qx-fang);
 }
@@ -2296,6 +2296,9 @@ html.prof-lock { overflow: hidden; }
 @keyframes qx-drop { 0% { transform: scaleY(0); transform-origin: top; } 60% { transform: scaleY(1); transform-origin: top; } 100% { transform: scaleY(0); transform-origin: bottom; } }
 
 /* ── 章节骨架 ── */
+/* margin 必须清零：档案基础样式里 .prof-overlay section 带 2.6rem 上边距，
+   留缝会让固定在底层的剑阵画布从章节之间透出来，成一条横贯全屏的亮带 */
+.s015 .qx-act { margin: 0; } /* 压过 .prof-overlay section 的 2.6rem，选择器要够重 */
 .qx-act {
   position: relative; min-height: 100svh;
   padding: clamp(6rem, 12vh, 9rem) clamp(2.5rem, 7vw, 7rem);
@@ -2427,23 +2430,37 @@ html.prof-lock { overflow: hidden; }
 .qx-whisper--mo p { font-family: var(--qx-serif); font-size: 1.32rem; letter-spacing: .06em; }
 
 /* ── 众：借剑 ── */
-.qx-act--zhong {
-  grid-template-columns: minmax(0, 60rem); text-align: center; min-height: 104svh; cursor: crosshair;
-  background: radial-gradient(34% 34% at 50% 50%, rgba(4,16,28,.7), rgba(4,16,28,.3) 60%, transparent 80%);
+/* 众：整片视口留给侧视布阵——标题在天上，正文与借剑三方压在底部山脊的暗处 */
+.qx-replay {
+  margin-left: 1rem; padding: .3rem .9rem; min-height: 32px;
+  border: 1px solid rgba(211,177,111,.5); border-radius: 0; background: rgba(4,16,28,.5);
+  color: var(--qx-gold); font: inherit; letter-spacing: .14em; cursor: pointer;
+  transition: color .3s ease, border-color .3s ease, background .3s ease;
 }
-.qx-zhong-copy > p:not(.qx-kicker) { text-shadow: 0 2px 18px rgba(4,16,28,.9); }
-.qx-zhong-copy h2 { text-shadow: 0 2px 28px rgba(4,16,28,.95); }
+.qx-replay:hover { color: var(--qx-moon); border-color: var(--qx-moon); background: rgba(4,16,28,.75); }
+.qx-replay:focus-visible { outline: 1px solid var(--qx-moon); outline-offset: 3px; }
+
+.qx-act--zhong {
+  min-height: 100svh; cursor: pointer; text-align: left;
+  /* 镜头在阵内，画面上下都是剑光——标题与正文所在的上下两带压一层暗，保证可读。
+     顶端必须从透明起（上一章「魔」的底也是透明），否则章节交界会出现一条硬边 */
+  background: linear-gradient(180deg, transparent 0%, rgba(4,16,28,.5) 13%, transparent 32%, transparent 76%, rgba(4,16,28,.92) 100%);
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); grid-template-rows: auto 1fr auto;
+  align-items: end; padding-top: clamp(4.5rem, 9vh, 6rem); padding-bottom: clamp(5.5rem, 10vh, 7rem);
+}
 .qx-act--zhong .qx-act-num { position: absolute; left: clamp(2.5rem, 7vw, 7rem); top: clamp(6rem, 12vh, 9rem); }
-.qx-zhong-copy { justify-self: center; }
+.qx-zhong-copy { grid-column: 1 / 3; grid-row: 1; align-self: start; justify-self: start; margin-left: clamp(4rem, 8vw, 8rem); }
 .qx-zhong-copy h2 {
-  max-width: none; margin-inline: auto;
-  font-size: clamp(2.6rem, 5.4vw, 5.2rem); line-height: 1.22;
+  max-width: 12em; margin: 0; font-size: clamp(2.2rem, 4.2vw, 3.9rem); line-height: 1.2;
+  text-shadow: 0 2px 28px rgba(4,16,28,.95);
 }
 .qx-zhong-copy h2 br + * { color: var(--qx-ice); }
-.qx-zhong-copy > p:not(.qx-kicker) { margin-inline: auto; text-align: left; }
+.qx-zhong-note { grid-column: 1; grid-row: 3; max-width: 32rem; margin-left: clamp(4rem, 8vw, 8rem); }
+.s015 .qx-zhong-note > p:not(.qx-hint) { text-shadow: 0 2px 18px rgba(4,16,28,.95); }
 .qx-lend {
-  margin: 3rem auto 0; display: flex; flex-direction: column; justify-content: center;
-  gap: clamp(2.4rem, 6vw, 6rem); writing-mode: vertical-rl; height: 14rem;
+  grid-column: 2; grid-row: 3; justify-self: end; align-self: end; margin: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(2rem, 4vw, 4rem); writing-mode: vertical-rl; height: 12rem;
 }
 .qx-lend p { margin: 0; color: var(--qx-body); font: .86rem/1.7 var(--qx-fang); letter-spacing: .12em; text-align: start; }
 .qx-lend p b {
@@ -2583,8 +2600,10 @@ html.prof-lock { overflow: hidden; }
   .qx-plate p { margin: 0 0 .8rem; display: flex; gap: .8rem; align-items: baseline; }
   .qx-plate p b { margin: 0; flex: none; }
   .qx-moves, .qx-lend { writing-mode: initial; height: auto; flex-wrap: wrap; justify-content: flex-start; gap: 1.6rem 2.4rem; }
-  .qx-act--zhong { text-align: left; }
+  .qx-act--zhong { text-align: left; min-height: 100svh; display: flex; flex-direction: column; }
   .qx-act--zhong .qx-act-num { position: static; }
+  .qx-zhong-copy, .qx-zhong-note { margin-left: 0; }
+  .qx-zhong-note { margin-top: auto; padding-top: 44svh; }
   .qx-zhong-copy h2 { font-size: clamp(1.9rem, 8.2vw, 3rem); letter-spacing: -.03em; }
   .qx-demon { max-width: 100%; aspect-ratio: 3 / 3.6; margin-bottom: 2.4rem; }
   .qx-act--ye { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding-top: 52svh; padding-bottom: 7rem; }
