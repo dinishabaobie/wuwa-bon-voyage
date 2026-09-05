@@ -3,3 +3,5 @@
 @media(prefers-reduced-motion:reduce){.prof-overlay.chisaki{scroll-behavior:auto}.chisaki *{transition:none!important}}
 
 .prof-overlay.chisaki section{margin-top:0}.cs-nav .cs-close{font-size:23px;padding:15px 8px;flex:none}.cs-hero-shade{z-index:0}
+
+.cs-thumbs{grid-template-columns:repeat(7,minmax(0,1fr))}.cs-thumbs span{gap:5px}@media(max-width:900px){.cs-thumbs{grid-template-columns:repeat(4,minmax(0,1fr))}}
