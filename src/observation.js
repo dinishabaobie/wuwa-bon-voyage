@@ -1,3 +1,4 @@
+import { renderChisaki } from './chisaki.js'
 import './view-chrome.css' // 返回按钮等通用外壳
 import './observation.css'  // 监测墙样式
 import gsap from 'gsap'
@@ -1489,23 +1490,23 @@ export function mountObservation(root, onBack) {
       img.src = 'photos/qingxiao-giant-sword.png'
     }
     // ── 众 · 借剑阵：镜头在阵内——低机位站在外环边上望向阵心 ──
-    // 阵心一点白光瞬间爆开，炸成上下九层剑环（下四层剑尖朝天的碗阵，上五层倒悬成穹顶，从头顶掠过）；
-    // 随后六柄巨剑自天而降，悬停片刻，一齐沉入地底消失；阵光渐熄，再起。全程不抖镜头。
-    // 世界坐标：x 左右、y 向上（0 为地面）、z 纵深；相机在原点、高 CAM_H；阵眼在 (0,0,ZC)，剑仙悬于 (0,EYE_H,ZC)
+    // 阵心一点白光瞬间爆开，炸成九层剑环；随后三柄巨剑自天而降，悬停片刻，一齐沉入地底消失。
+    // 世界坐标：x 左右、y 向上（0 为地面）、z 纵深；相机在原点、高 CAM_H；阵眼在 (0,0,ZC)
     const ARR = { GIANT: 2.4, PLUNGE: 8.2, FADE: 11.2, END: 12.5 }
-    const ZC = 1150, EYE_H = 300, HORIZ = .66, NEAR = 140 // 地平线压到 66%，等于镜头微微仰起看穹顶
-    // 九层穹顶剑环（只有头顶这一组，剑尖朝下倒悬，越高越收拢）：r 半径、h 高度、len 剑长、sp 间距（世界单位）
+    const ZC = 1150, EYE_H = 300, HORIZ = .66, NEAR = 140
+    // 九层穹顶剑环。只收紧层与层的距离，不增加单层剑数；相邻层从半个剑位起排，避免沿半径对齐成直线。
     const LAYERS = [
-      { r: 1600, h: 600, len: 42, up: false, sp: 21 }, { r: 1480, h: 700, len: 40, up: false, sp: 20 },
-      { r: 1300, h: 820, len: 37, up: false, sp: 18 }, { r: 1150, h: 920, len: 36, up: false, sp: 17 },
-      { r: 1000, h: 1010, len: 34, up: false, sp: 16 }, { r: 820, h: 1110, len: 32, up: false, sp: 15 },
-      { r: 660, h: 1180, len: 31, up: false, sp: 15 }, { r: 480, h: 1230, len: 30, up: false, sp: 13 },
-      { r: 260, h: 1270, len: 28, up: false, sp: 12 },
+      { r: 1360, h: 618, len: 42, n: 479 },
+      { r: 1260, h: 656, len: 40, n: 440 },
+      { r: 1160, h: 694, len: 38, n: 429 },
+      { r: 1060, h: 732, len: 36, n: 395 },
+      { r: 960, h: 770, len: 34, n: 357 },
+      { r: 860, h: 808, len: 32, n: 318 },
+      { r: 760, h: 846, len: 30, n: 274 },
+      { r: 660, h: 884, len: 28, n: 222 },
+      { r: 560, h: 922, len: 26, n: 168 },
     ]
-    // 四柄巨剑（垂直向下），前后错开：两柄贴近镜头在画面两侧（大得出画）、两柄远在阵心两旁（小）
-    // 每项：x、z、全长、悬停时剑尖高度
-    // 三柄按纵深拉开：470 / 1350 / 1950，投影缩放依次约 3.0 / 1.0 / 0.72，一眼看得出前后。
-    // x 是按「悬停那一幕的焦距」反推的，保证三柄都落在画面里、横向也不挤在一起
+    // 三柄巨剑按纵深拉开：近、中、远，投影尺寸自然形成前后层次。
     const GIANTS = [[-131, 470, 1100, 390], [38, 1350, 1050, 435], [514, 1950, 1000, 465]]
     let arrT = 0, arrOn = 0, flash = 0, arrDt = .016
     const prevTipY = []
@@ -1526,13 +1527,13 @@ export function mountObservation(root, onBack) {
       field.length = 0; STRAND.length = 0
       const dense = W < 760 ? 2 : 1
       LAYERS.forEach((L, k) => {
-        const n = Math.round(Math.PI * 2 * L.r / (L.sp * dense))
+        const n = Math.max(1, Math.round(L.n / dense))
         for (let i = 0; i < n; i++) {
-          const a0 = Math.PI * 2 * i / n
+          const a0 = Math.PI * 2 * (i + (k % 2) * .5) / n
           // 巨剑出现后，小剑各自投奔方位最近的那柄巨剑，在它身边占一个螺旋流位
           let gi = 0, best = 9
           GIANTS.forEach(([gx, gz], j) => { const ga = Math.atan2(gz - ZC, gx), d = Math.abs(Math.atan2(Math.sin(a0 - ga), Math.cos(a0 - ga))); if (d < best) { best = d; gi = j } })
-          field.push({ k, a0, w: .7 + Math.random() * .3, gi, delay: Math.random() * 1.4,
+          field.push({ k, a0, w: .7 + Math.random() * .3, phase: rnd(0, Math.PI * 2), bend: rnd(.65, 1.35), gi, delay: Math.random() * 1.4,
             stiff: 105 + Math.random() * 85, px: 0, py: EYE_H, pz: ZC, vx: 0, vy: 0, vz: 0 })
         }
       })
@@ -1676,16 +1677,6 @@ export function mountObservation(root, onBack) {
       const gx = bx + (tx - bx) * .18, gy = by + (ty - by) * .18, nx = -(ty - by) / sl * 2.4, ny = (tx - bx) / sl * 2.4
       T.guard.moveTo(gx - nx, gy - ny); T.guard.lineTo(gx + nx, gy + ny)
     }
-    function ringPath(r, h, e) { // 从阵心炸出：半径与高度都按 e 展开；绕到镜头背后的一段跳过
-      ctx.beginPath()
-      let pen = false
-      for (let i = 0; i <= 96; i++) {
-        const a = i / 96 * Math.PI * 2, z = ZC + Math.sin(a) * r * e
-        if (z < NEAR) { pen = false; continue }
-        const [sx, sy] = proj(Math.cos(a) * r * e, EYE_H + (h - EYE_H) * e, z)
-        pen ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); pen = true
-      }
-    }
     function drawSword3D(b, tp, a, levels) {
       const [bx, by] = proj(b[0], b[1], b[2]), [tx, ty] = proj(tp[0], tp[1], tp[2])
       const dx = tx - bx, dy = ty - by, len = Math.hypot(dx, dy)
@@ -1767,19 +1758,23 @@ export function mountObservation(root, onBack) {
       items.length = 0
       ctx.lineWidth = 1
       const tiers = TIER_A.map(() => ({ glow: new Path2D(), core: new Path2D(), guard: new Path2D() }))
-      const anyGiant = gst.some(Boolean)
-      LAYERS.forEach((L, k) => {
-        const e = easeOutExpo(clamp01((arrT - .02 - k * .04) / .5))
-        if (e <= 0 || anyGiant) return
-        ctx.strokeStyle = `rgba(150,212,255,${.07 * A * e})`; ringPath(L.r, L.h, e); ctx.stroke()
-      })
       for (const s of field) {
         const L = LAYERS[s.k]
         const e = easeOutExpo(clamp01((arrT - .02 - s.k * .04) / .5))
         if (e <= 0) continue
-        const a = s.a0 + arrT * .05 * (s.k % 2 ? -1 : 1)
-        const r = L.r * e
-        let x = Math.cos(a) * r, y = EYE_H + (L.h - EYE_H) * e, z = ZC + Math.sin(a) * r
+        const dir = s.k % 2 ? -1 : 1
+        // 呼吸律动：自穹顶顶端向外沿层层传导的灵息波
+        const phi = arrT * 1.6 - s.k * .38
+        const rBreath = 1 + .038 * Math.sin(phi) * e
+        const hBreath = 16 * Math.cos(phi) * e
+        // 周向丝带起伏波与公转速度微调
+        const rotPhase = arrT * .05 * dir + Math.sin(arrT * 1.4 - s.k * .35) * .006 * dir * e
+        const a = s.a0 + rotPhase + Math.sin(arrT * .28 + s.phase) * .012 * s.bend
+        const ripH = 12 * Math.sin(2 * a + arrT * 2.0 + s.k * .65) * e
+        const ripR = 14 * Math.cos(3 * a - arrT * 1.5 + s.k * .5) * e
+        const r = (L.r * rBreath + ripR) * e
+        const heightJitter = Math.sin(arrT * .72 + s.phase) * 7
+        let x = Math.cos(a) * r, y = EYE_H + (L.h + hBreath + ripH + heightJitter - EYE_H) * e, z = ZC + Math.sin(a) * r
         let len = L.len * e * s.w, al = .8 + .2 * s.w
         // 抵达：位置不再是逐帧算出来的，而是一根临界阻尼弹簧拉过去的——
         // 远处快、近处自己减速、不过冲，每柄剑的劲道略有差异，队形就不会整齐划一地同时到位
@@ -1801,10 +1796,21 @@ export function mountObservation(root, onBack) {
           const face = .4 + .6 * Math.abs(Math.cos(ang)) // 转到侧面的线暗一些，正对镜头的亮
           const ends = Math.min(1, Math.min(u, 1 - u) * 7) // 两端淡入淡出，线不会突然出现
           al = al * (1 - m) + g.al * face * ends * m
+        } else {
+          // 灵光微息：生物发光般的脉动流转
+          const pulse = Math.sin(3 * a - arrT * 2.8 + s.k * .85)
+          al *= (0.82 + 0.32 * Math.max(0, pulse))
         }
         if (z < NEAR) continue // 绕到镜头背后
         const nearFade = clamp01((z - NEAR) / 220) // 贴着镜头掠过时淡入淡出
-        pushSmall([x, y, z], [x, y - len, z], A * al * nearFade, tiers)
+
+        // 只把九层小剑阵上移约 6vh；汇入巨剑时逐渐归回原轨，大剑与阵心光效保持原位。
+        const smallLiftY = z * .06 / camF * (1 - m)
+        const baseY = y + smallLiftY
+        // 保留位置上的角度与高度扰动，但所有小剑自身都严格竖直向下。
+        const tipX = x, tipZ = z, tipY = baseY - len
+
+        pushSmall([x, baseY, z], [tipX, tipY, tipZ], A * al * nearFade, tiers)
       }
       gst.forEach((g) => { if (g) items.push({ z: g.z, b: g.base, t: g.tip, a: Math.min(1, g.al * A * (1 - clamp01((g.z - NEAR) / 4200) * .5)), giant: true, pl: g.pl, hg: g.hg, charge: g.charge }) })
       tiers.forEach((T, i) => {
@@ -2391,7 +2397,8 @@ export function mountObservation(root, onBack) {
     deferInitialFocus = false
     profileTrigger = trigger || null
     profEl.style.setProperty('--accent', d.accent)
-    if (d.dual) renderDualProfile(d, code)
+    if (code === 'S-002') profileCleanups.push(renderChisaki(profEl, d))
+    else if (d.dual) renderDualProfile(d, code)
     else if (d.metamorph) renderMetamorphProfile(d, code)
     else if (d.qinSword) {
       renderQinSwordDossier(d, code)
@@ -2419,7 +2426,7 @@ export function mountObservation(root, onBack) {
     // render 负责挂装饰并 push 自己的 cleanup；onScroll 注册后由此统一绑定/初始化/解绑
     const THEMES = [
       { flag: 'wall', render: renderWallDeco },
-      { flag: 'thread', render: renderThreadArchive, onScroll: s002OnScroll },
+      
       { flag: 'logbook', render: renderKeeperLogDeco, onScroll: s009OnScroll },
       { flag: 'engineering', render: renderEngineeringDossier, onScroll: s003OnScroll },
       { flag: 'requiem', render: renderRequiemDossier, onScroll: s004OnScroll },
