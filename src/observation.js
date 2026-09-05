@@ -36,7 +36,6 @@ const PROFILES = {
     name: '千咲', full: '朽叶千咲', element: '湮灭', accent: '#d45a9a',
     photo: 'photos/chisaki-profile.jpg', author: 'TheNotoSeed / Ui_uiiiiiiiii',
     tagline: '命运精心编织的线索，最难忘的那一笔。',
-    thread: true, // 专属 UI：命运卷宗（红线纠缠 → 剪断 → 琥珀 → 重新接线）
     body: `
       <p class="prof-access">// 接入泰提斯 · 观测档案 S-002<br/>记录者：守岸人。被记录者：朽叶千咲。<br/>档案标识：五星共鸣者｜湮灭｜长刃。<br/>在黑海岸的无数次观测里，她是我反复回放的一份记录。你们记住的，或许是那把剪刀、那身校服，以及她在严谨冷静之外偶尔显露的笨拙。我记住的，是她共鸣力里那些红色的线。因为在她身上，我看见了与自己相似的东西：一双能看见连接的眼，和一颗，剪不断连接的心。</p>
 
@@ -68,7 +67,6 @@ const PROFILES = {
         <p>勇气没有换来赞许。她成了怪物，代替被她救下的绿子，成了新的被霸凌对象。所有人都知道霸凌者是谁。唯独她不知道。因为觉醒的同一刻，她患上了<b>心因性视觉识别障碍</b>。人脸，从她心里消失了。于是她把整个世界一并收起：不再交流，不再触碰感情。</p>
         <blockquote class="prof-quote"><p>只要没有交流，便不会受伤；只要没有感受，便不会痛苦。</p><cite>—— 在制服划一的校园里，她分不清是谁在抛掷恶意。她能做的，只是把那些恶毒的纸条一张张剪碎，像剪断无名的夜色。</cite></blockquote>
         <p>那把剪刀，也在她手里变了。小时候，它连着母亲的职业与温柔。十五岁，它第一次指向他人。到最后，它成了她为自己裁剪道路的象征。她把过去、伤害、离别、恶意，全压进了一句话里——<b>「所谓成长，不过就是学会独自修剪生命中所有错位的线。」</b>这句话，我替她记着。</p>
-        <div class="s002-cut" aria-hidden="true"><span></span><b>✂</b><span></span></div>
       </section>
 
       <section>
@@ -1004,26 +1002,6 @@ export function mountObservation(root, onBack) {
       </div>`)
   }
 
-  // ── S-002 专属：命运卷宗（红线从断裂、纠缠，最终重新接起） ──
-  function renderThreadArchive() {
-    profEl.classList.add('s002')
-    profEl.insertAdjacentHTML('beforeend', `
-      <div class="s002-deco" aria-hidden="true">
-        <svg class="s002-threads" viewBox="0 0 1000 1000" preserveAspectRatio="none">
-          <path class="thread-a" pathLength="100" d="M-40,110 C190,20 150,350 395,245 S610,30 780,210 S870,580 1040,430" />
-          <path class="thread-b" pathLength="100" d="M-30,760 C150,610 260,870 420,700 S560,420 760,625 S890,940 1040,760" />
-          <path class="thread-c" pathLength="100" d="M120,-40 C45,190 310,260 225,480 S40,760 210,1040" />
-        </svg>
-        <div class="s002-scissors">✂</div>
-        <div class="s002-timeline">
-          <span>THREAD ARCHIVE</span>
-          <div><i></i><b></b><b></b><b></b><b></b><b></b></div>
-          <em>红线</em>
-        </div>
-        <span class="s002-case">CASE S-002 · KIZUNA TRACE</span>
-      </div>`)
-  }
-
   // ── S-003 专属：隧者工程观测台（蓝图、神经接入与星轨） ──
   function renderEngineeringDossier() {
     profEl.classList.add('s003')
@@ -1303,17 +1281,6 @@ export function mountObservation(root, onBack) {
       dot.setAttribute('cx', (32 + 26 * Math.cos(ang)).toFixed(1))
       dot.setAttribute('cy', (34 - 26 * Math.sin(ang)).toFixed(1))
     }
-  }
-
-  function s002OnScroll() {
-    if (!profEl.classList.contains('s002')) return
-    const max = profEl.scrollHeight - profEl.clientHeight
-    const p = Math.min(1, Math.max(0, profEl.scrollTop / (max || 1)))
-    profEl.style.setProperty('--s002-p', String(p))
-    const phase = p < .16 ? '红线' : p < .32 ? '六岁' : p < .48 ? '十五岁' : p < .65 ? '剪断' : p < .82 ? '琥珀' : '接线'
-    const phaseEl = profEl.querySelector('.s002-timeline em')
-    if (phaseEl && phaseEl.textContent !== phase) phaseEl.textContent = phase
-    profEl.dataset.thread = phase
   }
 
   function s009OnScroll() {
