@@ -1270,3 +1270,142 @@
   .tide-card,
   .tide-deep-link { transition: none; }
 }
+
+/* ── VER 3.7「寻心」档案：暖色月灯主题 ─────────────────────────── */
+.tide-doc[data-theme="lantern"] {
+  --accent: #f2b766;
+  --ember: #d9654a;
+  --lamp-ink: rgba(236, 222, 204, .74);
+  background:
+    radial-gradient(120% 40% at 50% 0%, rgba(242, 183, 102, .07), transparent 70%),
+    linear-gradient(170deg, rgba(24, 22, 34, .66), rgba(10, 12, 24, .55));
+  border-color: rgba(242, 183, 102, .16);
+  border-top-color: rgba(242, 183, 102, .32);
+}
+.tide-doc[data-theme="lantern"] p,
+.tide-doc[data-theme="lantern"] li { color: var(--lamp-ink); }
+.tide-doc[data-theme="lantern"] p b,
+.tide-doc[data-theme="lantern"] li b { color: #fbefdc; }
+.tide-doc[data-theme="lantern"] .tide-entry-title { text-shadow: 0 0 28px rgba(242, 183, 102, .28); }
+
+.xin-prologue { margin-top: 2.2rem; }
+.tide-doc .xin-ask {
+  font-size: clamp(1.08rem, 2.4vw, 1.3rem); line-height: 1.9;
+  color: #fbefdc; letter-spacing: .04em;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--accent);
+  margin-bottom: 1.4rem;
+}
+
+/* 两半岁主 */
+.xin-split {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  margin: 2.2rem 0 1rem;
+  background: linear-gradient(90deg, rgba(150, 190, 240, .28), rgba(242, 183, 102, .4));
+  border: 1px solid transparent;
+}
+.xin-half { padding: 1.3rem 1.3rem 1.1rem; background: rgba(10, 14, 26, .92); }
+.xin-half span {
+  display: block; font-family: var(--font-tech); font-size: .64rem; letter-spacing: .22em;
+  margin-bottom: .5rem;
+}
+.xin-half b { display: block; font-size: 1.15rem; letter-spacing: .12em; margin-bottom: .7rem; }
+.tide-doc .xin-half p { font-size: .9rem; line-height: 1.9; margin: 0; }
+.xin-half.is-cold span, .xin-half.is-cold b { color: #9fc3ee; }
+.xin-half.is-warm span, .xin-half.is-warm b { color: var(--accent); }
+.xin-half.is-warm { background: linear-gradient(200deg, rgba(56, 36, 22, .55), rgba(10, 14, 26, .92) 70%); }
+
+/* 小标题 */
+.xin-h {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: .8rem;
+  margin-bottom: 1.1rem;
+  font-size: 1.2rem; font-weight: 700; letter-spacing: .08em; color: #fbefdc;
+}
+.xin-h em {
+  font-style: normal; font-size: .78rem; letter-spacing: .3em;
+  padding: .12rem .5rem; color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.xin-tag {
+  display: inline-block; margin-bottom: .6rem;
+  font-family: var(--font-tech); font-size: .64rem; letter-spacing: .26em; color: var(--accent);
+}
+
+/* 前夜：暗红 */
+.tide-doc .xin-eve {
+  margin-top: 2.6rem; padding: 1.5rem 1.4rem .6rem;
+  background: linear-gradient(180deg, rgba(120, 30, 26, .2), rgba(60, 14, 14, .06));
+  border-top: 1px solid rgba(217, 101, 74, .4);
+}
+.xin-eve .xin-h em { color: var(--ember); border-color: rgba(217, 101, 74, .5); }
+
+/* 台词 */
+.xin-say { margin: 1.1rem 0 1.3rem; padding: .2rem 0 .2rem 1.1rem; border-left: 1px solid rgba(242, 183, 102, .45); }
+.tide-doc .xin-say p { margin: 0; font-size: 1.04rem; line-height: 1.9; color: #f6e2c2; letter-spacing: .03em; }
+.xin-say.is-omen { border-left-color: var(--ember); }
+.tide-doc .xin-say.is-omen p { color: #f0a08a; }
+.xin-say.is-final {
+  border: none; padding: 1.6rem 0 .4rem; text-align: center;
+}
+.tide-doc .xin-say.is-final p {
+  font-size: clamp(1.2rem, 3vw, 1.55rem); line-height: 1.9; color: #ffe7bf;
+  text-shadow: 0 0 26px rgba(242, 183, 102, .45);
+}
+
+.xin-dialog { margin: 1.1rem 0 1.3rem; padding: .9rem 1.1rem; background: rgba(242, 183, 102, .05); border: 1px solid rgba(242, 183, 102, .14); }
+.tide-doc .xin-dialog p { margin: .25rem 0; font-size: .96rem; color: #f3e3c8; }
+.tide-doc .xin-dialog b {
+  display: inline-block; min-width: 4.2em; margin-right: .6rem;
+  font-family: var(--font-tech); font-size: .7rem; font-weight: 400; letter-spacing: .14em; color: var(--accent);
+}
+
+/* 镜头语法 */
+.xin-grammar { margin: 2rem 0 0; padding: 1.1rem 1.3rem .4rem; border: 1px dashed rgba(242, 183, 102, .25); }
+.tide-doc .xin-grammar ul { list-style: none; padding: 0; }
+.tide-doc .xin-grammar li { font-size: .9rem; }
+.tide-doc .xin-grammar li b { display: inline-block; width: 3em; color: var(--accent); }
+
+/* 十盏月灯 */
+.xin-path { list-style: none; padding: 0 !important; margin: 3.2rem 0 0 !important; position: relative; }
+.xin-path::before {
+  content: ''; position: absolute; left: 1.35rem; top: 1rem; bottom: 2rem; width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(242, 183, 102, .35) 6%, rgba(242, 183, 102, .35) 94%, transparent);
+}
+.tide-doc .xin-lamp { display: grid; grid-template-columns: 2.7rem 1fr; gap: 1.2rem; margin: 0 0 2.6rem; }
+.xin-glyph {
+  position: relative; z-index: 1;
+  display: grid; place-items: center; width: 2.7rem; height: 2.7rem; border-radius: 50%;
+  font-style: normal; font-size: 1.05rem; color: rgba(242, 183, 102, .45);
+  background: #0f1220;
+  border: 1px solid rgba(242, 183, 102, .28);
+  transition: color .9s ease, background .9s ease, box-shadow 1.2s ease, border-color .9s ease;
+}
+.xin-lamp.is-lit .xin-glyph {
+  color: #2a1606;
+  background: radial-gradient(circle at 50% 40%, #ffe3ad, #f2b766 60%, #c9813a);
+  border-color: #ffd28c;
+  box-shadow: 0 0 18px rgba(242, 183, 102, .55), 0 0 44px rgba(242, 183, 102, .22);
+}
+.xin-lamp:first-child.is-lit .xin-glyph {
+  background: radial-gradient(circle at 50% 40%, #ffc0a8, #d9654a 62%, #8f2f22);
+  border-color: #f0a08a; box-shadow: 0 0 18px rgba(217, 101, 74, .55);
+}
+.xin-when { display: block; margin: .55rem 0 .3rem; font-family: var(--font-tech); font-size: .64rem; letter-spacing: .24em; color: rgba(242, 183, 102, .7); }
+.xin-body h3 { font-size: 1.16rem; font-weight: 700; letter-spacing: .06em; color: #fbefdc; margin-bottom: .9rem; }
+.xin-echo { margin-top: 1.2rem; padding: 1rem 1.1rem .2rem; background: linear-gradient(90deg, rgba(217, 101, 74, .1), rgba(242, 183, 102, .1)); }
+
+.xin-why { margin-top: 3rem; }
+.xin-coda { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(242, 183, 102, .2); text-align: center; }
+.tide-doc .xin-coda p { max-width: 36em; margin-left: auto; margin-right: auto; }
+.tide-doc .xin-coda .xin-last { margin-top: 1.8rem; font-size: 1.1rem; letter-spacing: .14em; color: #ffe7bf; }
+
+@media (max-width: 640px) {
+  .xin-split { grid-template-columns: 1fr; }
+  .tide-doc .xin-lamp { grid-template-columns: 2.2rem 1fr; gap: .85rem; }
+  .xin-glyph { width: 2.2rem; height: 2.2rem; font-size: .92rem; }
+  .xin-path::before { left: 1.1rem; }
+  .tide-doc .xin-eve { padding: 1.2rem 1rem .4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xin-glyph { transition: none; }
+}

@@ -258,6 +258,176 @@ const ENTRIES = [
         <p>群星之中闪烁的不止悲悯，还有人类自己。就算即将坠落，也要用最后的微光，照亮一截前路。</p>
       </div>`,
   },
+  {
+    ver: '3.7', name: '寻心', title: '这便是心', region: '梦州 · 梦枢天罗', theme: 'lantern',
+    teaser: '一位岁主被拆成两半：只剩理性的溯心要毁掉玄方城，学会了爱人的心要守住它。',
+    end: '十盏月灯 · 已全部点亮　<b>// 这一次，心不再独行</b>',
+    body: `
+      <div class="xin-prologue">
+        <p class="xin-ask">为什么有的角色代表秩序与理性，却始终触不到人心；<br/>有的角色没有力量，只能勉力撑住局面，却叫人放不下？</p>
+        <p>3.7 的回答，是把一位岁主拆开。心月狐的理性、神性与使命，最终化作「溯心」；祂的情感与责任，交给了一缕分形——「心」。两半在玄方城重逢：一个要按指令毁掉这座城，一个要拼命守住城里的人。这是一个寻心的故事。</p>
+      </div>
+
+      <div class="xin-split">
+        <div class="xin-half is-cold">
+          <span>溯心 · 天罗狐影</span>
+          <b>理性 · 神性</b>
+          <p>与心同源，是岁主最直接的意志。吞噬一切与心月狐相关的数据，待玄方城完成使命，便将其销毁。祂会计算得失、取舍牺牲，却永远不会问一句「这样做对不对」。</p>
+        </div>
+        <div class="xin-half is-warm">
+          <span>心 · 岁主的分形</span>
+          <b>感性 · 人性</b>
+          <p>承载岁主情感与责任的一缕分形，没有岁主的力量。她会犹豫、会自责，会在两百年里反复质问自己——而这份挣扎，恰恰就是答案。</p>
+        </div>
+      </div>
+
+      <section class="xin-eve">
+        <h3 class="xin-h"><em>前夜</em>二百年前 · 暗红色的瑝珑</h3>
+        <p>一切始于无相燹主掀起的危机。那时的瑝珑有无畏的忠义之士，有并肩奔赴战场的兄弟，也有满心私利的蛀虫。画面压在暗红里：红是警示，降低了饱和度的暗红，则把危机拉长成一种持续的压迫；光也被刻意压低，人物常处在半明半暗之间——忠义与私利，本就并存。残象潮是外敌，真正的困局在人心。</p>
+        <blockquote class="xin-say"><p>「人人都伸手试图抓住希望，又害怕抓住的只是虚空。」</p></blockquote>
+        <p>为了安定人心，心月狐决定以玄方城托起这片地界。可超出文明进程的技术现世，总得有人付代价——参与的工匠将有去无回，化作玄方城的一部分。所以从落座到选人，祂始终淡然微笑，脸却一直处在逆光里：镜头只给出祂愿意被看见的那部分，筹谋与取舍都藏在阴影之后。祂越是仔细审视眼前的人，就越看不见跟在身后的人；不祥的红色，已经漫到祂身边。</p>
+        <blockquote class="xin-say is-omen"><p>「心月狐大人，请饮茶。」</p></blockquote>
+        <p>岁主遇刺。此后在建城、清理侵蚀痕迹的现场，残星会的身影浮现出来。为了大局，心月狐化出一缕分形，把自己的情感与责任托付给她，让她替自己把城建完、把文明之匣修好。</p>
+      </section>
+
+      <div class="xin-grammar">
+        <span class="xin-tag">镜头里的三种暗</span>
+        <ul>
+          <li><b>暗红</b>危机不是一次爆发，而是长久的压迫。</li>
+          <li><b>逆光</b>心月狐只让人看见祂愿意被看见的部分。</li>
+          <li><b>遮面</b>凡与岁主相关之处，心的脸几乎都落在阴影里——连她描绘「重塑文明之匣」的美好结局时也是。</li>
+        </ul>
+      </div>
+
+      <ol class="xin-path">
+        <li class="xin-lamp">
+          <i class="xin-glyph" aria-hidden="true">惧</i>
+          <div class="xin-body">
+            <span class="xin-when">壹 · 诞生</span>
+            <h3>跑，不要回头</h3>
+            <p>「心」诞生时最初、也最浓烈的情感，是恐惧。刚接触尘世的小狐狸，转眼就要扛起整个瑝珑的命运。漂泊者化身小狐狸重走这段记忆时，满屏飘着她的呐喊：</p>
+            <blockquote class="xin-say is-omen"><p>「不要，别去！」</p></blockquote>
+            <p>她在求本体不要消逝，也在抗拒即将独自面对的一切。红字起初只在边缘抖动，越往前走越向中央聚拢，直到铺满画面；逃跑时，低机位仰拍下无数眼睛从身后蔓延开，把小狐狸夹在中间，空间被压缩到极致；最后锁链落下——她无处可逃。凶手就在瑝珑，而她力量微弱，只能委曲求全，在夹缝里活下去。</p>
+          </div>
+        </li>
+        <li class="xin-lamp">
+          <i class="xin-glyph" aria-hidden="true">怯</i>
+          <div class="xin-body">
+            <span class="xin-when">贰 · 代行</span>
+            <h3>我……不敢赌</h3>
+            <blockquote class="xin-say"><p>「我……不敢赌。或许我便是缺了岁主的魄力，才导致了如今的局面。」</p></blockquote>
+            <p>她攥紧手，嘴角是藏不住的悲伤——胆怯、迷惘、自我怀疑。她从不觉得自己等同于岁主，可建城与修匣的职责逼她走到台前。为了守住「岁主仍在」这个谎言，她把自己塞进心月狐的样子里：模仿祂的从容、威严，连说话时习惯的停顿都要学。谎言护住了玄方，也成了另一座看不见的囚笼，把心和外面的世界隔开。</p>
+            <blockquote class="xin-say"><p>「人人皆道岁主心月狐携天上之城降临玄方，却无人知晓，我当时有多么忐忑，多么迷茫。」</p></blockquote>
+          </div>
+        </li>
+        <li class="xin-lamp">
+          <i class="xin-glyph" aria-hidden="true">名</i>
+          <div class="xin-body">
+            <span class="xin-when">叁 · 玄翎</span>
+            <h3>一个不叫「心月狐」的名字</h3>
+            <p>囚笼里来了玄翎。她带来春夏秋冬，带来外面的奇闻趣事，让心一点点看见世界的全貌，也有了只属于自己的记忆和朋友。</p>
+            <p>玄翎想给她取一个有别于心月狐的名字。心先是眉头微皱，眼神随即一颤——那是情感第一次松动；可下一刻她就双臂抱胸，目光偏向一侧，不肯直视。她想要这个名字，又不敢让人看出她想要。而「心」这个名字本身就是预言：与心月狐相似，却不相同。</p>
+          </div>
+        </li>
+        <li class="xin-lamp">
+          <i class="xin-glyph" aria-hidden="true">灯</i>
+          <div class="xin-body">
+            <span class="xin-when">肆 · 朝月会</span>
+            <h3>原来听到人们的欢笑，会令我如此心安</h3>
+            <p>她本想以旁观者的身份，替心月狐看一看祂喜欢的朝月会，却没想到人间烟火会这样好看。灯火映出的笑容，是她在黑暗里见过最亮的东西。</p>
+            <blockquote class="xin-say"><p>「我想他们生活得更好些，更快乐些。」</p></blockquote>
+            <p>从这一刻起，让玄方再亮起朝月会的灯火，成了她自己的愿望，而不是岁主交代的任务。她的关怀是平视的：会在人面前停下脚步，看见他们的笑，记住他们的名字。这份与心月狐的不同，在日复一日的相处里越积越浓。</p>
+          </div>
+        </li>
+        <li class="xin-lamp">
+          <i class="xin-glyph" aria-hidden="true">令</i>
+          <div class="xin-body">
+            <span class="xin-when">伍 · 放假</span>
+            <h3>第一道属于自己的命令</h3>
+            <p>玄方城将要完工。她明知工匠们的回答会和当初一样，还是忍不住开口：「你们应该知道，玄方城的进度越是提前，你们……」然后她攥紧拳头、深吸一口气，动用岁主的权力，下令全体放假。</p>
+            <blockquote class="xin-say"><p>「那是我第一次尝试命令他们去做什么事。我希望他们的生活中，不只有对求索的执念。」</p></blockquote>
+            <p>口吻是心月狐的，推动这道命令的却是心自己的情感。这是她第一次主动偏离心月狐的理性逻辑——只是让工匠停下来走一走，很小的一步；可走出这一步，她才真正成了「心」。</p>
+            <div class="xin-dialog"><p><b>漂泊者</b>「心，你是你自己。」</p></div>
+          </div>
+        </li>
+        <li class="xin-lamp">
+          <i class="xin-glyph" aria-hidden="true">行</i>
+          <div class="xin-body">
+            <span class="xin-when">陆 · 最后的核心</span>
+            <h3>有许多人……在等我</h3>
+            <p>后来的人把玄方城奉为岁主的神迹，可在她眼里，这是众人协力的杰作：她看见了定玄卫的勇气，也看见了稷廷工匠的纯粹。建造最后一处核心时，她已因分散力量虚弱到极点，却仍往前走。推着她的不是诞生时被赋予的使命，也不是记忆里那位强大优雅的岁主，而是一路上遇见的人。</p>
+            <blockquote class="xin-say"><p>「有许多人……在等我。」</p></blockquote>
+            <p>所以此后漫长的岁月里，力量散尽的她以小狐狸的模样走街串巷、穿行人群，一盏一盏点亮月灯，看人群欢聚，盼笑容重现。她终于知道自己想守护什么：这些灯火，这些琐碎的心愿，这片人间。</p>
+          </div>
+        </li>
+        <li class="xin-lamp">
+          <i class="xin-glyph" aria-hidden="true">择</i>
+          <div class="xin-body">
+            <span class="xin-when">柒 · 云渊之役</span>
+            <h3>天平的两端</h3>
+            <p>二百年前，云渊之役爆发。她熟悉的人走上战场，被烈火吞没。天平一端是好友玄翎雀和无数玄方军民，另一端是岁主——启用文明之匣，几乎等于亲手害死祂。回忆里，无相燹主高居上方，祂的形态与心记忆中那些抽象的眼睛重叠在一起。她选了违背理性与职责的那一边。</p>
+            <blockquote class="xin-say"><p>「或许，是因为这『心』，才让我无法成为心月狐吧。」</p></blockquote>
+            <p>一个被造出来的分形，为了对人的感情，违背了本体的意志。那一刻她是悲伤的，痛苦而内疚，却仍要救下玄方的人——这份觉悟背后，是人所铸就的文明。</p>
+          </div>
+        </li>
+        <li class="xin-lamp">
+          <i class="xin-glyph" aria-hidden="true">愧</i>
+          <div class="xin-body">
+            <span class="xin-when">捌 · 溯心</span>
+            <h3>岁主已经死了</h3>
+            <p>代价随之而来。以损伤文明之匣的方式显化的玄方城，酝酿出了天罗狐影——溯心。祂冰冷理智，履行使命就要毁掉玄方城；心为了城里的人，必须守住它。每一次碰撞都在提醒她：是你违背了职责，岁主才会逝去。所以每当提起岁主，她总是忧伤、回避，藏着说不出口的内疚与恐惧。</p>
+            <p>她向漂泊者描绘重塑文明之匣的美好结局，画面里她的脸无一例外落在阴影中。直到桥上，漂泊者温柔地拆穿了这个谎：</p>
+            <div class="xin-dialog">
+              <p><b>漂泊者</b>「你已经做得很好了。我不在的时候，辛苦你了。」</p>
+              <p><b>心</b>「岁主已经死了！」</p>
+              <p><b>心</b>「是我……害死了祂……」</p>
+            </div>
+            <p>她承载着岁主的情感，对情绪也格外敏锐，所以越被温柔对待，越无法面对——每一分关心和包容都让愧疚更重。越是重情，就越要承受失去。那些笑容、谎言、自责，还有想牺牲自己的念头，合起来就是她人性的全部。</p>
+          </div>
+        </li>
+        <li class="xin-lamp">
+          <i class="xin-glyph" aria-hidden="true">应</i>
+          <div class="xin-body">
+            <span class="xin-when">玖 · 锁暝</span>
+            <h3>祂加上了你才能解开的封锁</h3>
+            <blockquote class="xin-say"><p>「心月狐将『心』留给了你，而你将真心留给了玄方城。」</p></blockquote>
+            <p>打开未来的钥匙在锁暝身上。她是谛天鉴的掌剑，也是心月狐残存频率的持有者；漫长岁月里，她见证了心月狐的消亡，也见证了心的成长。决战时刻，她带着约定和那缕频率找到了心。</p>
+            <div class="xin-dialog">
+              <p><b>锁暝</b>「祂加上了你才能解开的封锁，打开它吧。」</p>
+              <p><b>心</b>「岁主……我……」</p>
+              <p><b>心月狐</b>「心，我很抱歉。」</p>
+              <p><b>心月狐</b>「去吧，尽情向前走，亦不必回头。」</p>
+            </div>
+            <p>这是跨越两百年的回应。在心月狐眼里，心一路的跌跌撞撞，像极了孩子长大要经历的坎坷：她从胆怯的代行者，长成了被百姓信赖、让玄方安居乐业的岁主。于是那句话，是父母留给已经超越自己的孩子的歉意与祝福。</p>
+            <div class="xin-echo">
+              <span class="xin-tag">回声</span>
+              <p>心诞生时听见的是「跑，不要回头」——那是逃命；两百年后，祂最后说的是「尽情向前走，亦不必回头」——这是放手。同一个「不回头」，从恐惧变成了祝福。</p>
+            </div>
+          </div>
+        </li>
+        <li class="xin-lamp is-last">
+          <i class="xin-glyph" aria-hidden="true">明</i>
+          <div class="xin-body">
+            <span class="xin-when">拾 · 朝月</span>
+            <h3>这便是……文明</h3>
+            <p>跨过愧疚与遗憾，回头看那两百年，正如漂泊者所说，她差的只是正视自己。也只有这样的心，才能成为梦州这片土地上包容一切的神明，才能对溯心说出她所理解的世界与文明：</p>
+            <blockquote class="xin-say is-final"><p>「这便是人，这便是情，这便是心。<br/>这便是……文明。」</p></blockquote>
+          </div>
+        </li>
+      </ol>
+
+      <section class="xin-why">
+        <h3 class="xin-h"><em>余问</em>溯心为什么没有赢</h3>
+        <p>只有理性的岁主，会毫不犹豫地执行毁城的指令。祂会计算得失、取舍牺牲，却不会问「这样做对不对」。心会挣扎，会痛苦，会在百年间反复质问自己——这份挣扎本身就是答案：她守护的不只是这片土地，更是土地上的人。</p>
+        <p>她有喜怒哀乐，有阴晴圆缺。哪怕已是众人认可的岁主，她仍会冒出「牺牲自己、换回真正的岁主」的念头。太温柔，太努力，还带一点笨拙——正因如此，她才能汇聚一颗颗心点亮的灯火，领悟人与文明的另一种形态。</p>
+      </section>
+
+      <div class="xin-coda">
+        <p>文明并不总是冰冷的秩序。它是朝月会上小狐狸放飞的月灯和灯下的笑声，是玄方城角落里刻着名字的石碑；一盏灯火、一块年糕，也可以是文明的载体。</p>
+        <p>第一次参加朝月会时的紧张与好奇，两百年间的痛苦与挣扎，决战时的抉择与牺牲——所有艰难的时刻，都在朝月会的灯火里找到了答案。</p>
+        <p class="xin-last">这一次，心的身影不再独行。</p>
+      </div>`,
+  },
 ]
 
 // 观潮 · 潮位记录纸：航程纪年 / 溯洄纪年 / 深度推演。渲染进 root（root 同时是滚动容器）。
@@ -288,6 +458,26 @@ export function mountTide(root, onBack) {
   }
 
   // ── 潮汐波形仪：页头 canvas 记录笔（多层正弦潮汐）────────────
+  // 3.7「寻心」档案：月灯随阅读逐盏点亮（只亮灯，不藏字）
+  let lampIO = null
+  function watchLamps() {
+    if (lampIO) { lampIO.disconnect(); lampIO = null }
+    const lamps = stage.querySelectorAll('.xin-lamp')
+    if (!lamps.length) return
+    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      lamps.forEach((lamp) => lamp.classList.add('is-lit'))
+      return
+    }
+    lampIO = new IntersectionObserver((records) => {
+      records.forEach((record) => {
+        if (!record.isIntersecting) return
+        record.target.classList.add('is-lit')
+        lampIO.unobserve(record.target)
+      })
+    }, { rootMargin: '0px 0px -30% 0px' })
+    lamps.forEach((lamp) => lampIO.observe(lamp))
+  }
+
   let waveStop = null
   function startWave() {
     if (waveStop) { waveStop(); waveStop = null }
@@ -370,7 +560,7 @@ export function mountTide(root, onBack) {
   const RULERS = {
     timeline: ['2022 · 技术测试', '瑝珑', '黎那汐塔', '拉海洛', '梦州 · 2026'],
     chronology: ['−10000Y · 悲鸣纪元', '远古', '建城', '近世', 'NOW · 本次苏醒'],
-    archive: ['CH·03 深度信道', 'VER 3.1', '异常潮位', 'VER 3.3', 'VERIFIED × 02'],
+    archive: ['CH·03 深度信道', 'VER 3.1', 'VER 3.3', 'VER 3.7', 'VERIFIED × 03'],
   }
   const CHANNELS = [
     ['timeline', 'CH·01', '航程纪年', () => TIMELINE_EVENTS.length],
@@ -507,7 +697,7 @@ export function mountTide(root, onBack) {
           <div>
             <p class="tide-section-code">CHRONICLE // 001-${String(TIMELINE_EVENTS.length).padStart(3, '0')}</p>
             <h2 id="tide-chronicle-title" tabindex="-1">航程纪年</h2>
-            <p>从第一次技术测试，到巡游天际的梦州云梭。版本不是编号，而是漂泊者与文明共同留下的坐标。</p>
+            <p>从第一次技术测试，到灯火初明的梦枢天罗。版本不是编号，而是漂泊者与文明共同留下的坐标。</p>
           </div>
           <div class="tide-chronicle-stats" aria-label="时间轴统计">
             <span><b>${TIMELINE_EVENTS.length}</b> VERSION NODES</span>
@@ -667,7 +857,7 @@ export function mountTide(root, onBack) {
     stage.dataset.view = 'entry'
     stage.innerHTML = `
       <a class="tide-toindex" href="#"><span aria-hidden="true">◂</span> ${returnLabel}</a>
-      <div class="tide-doc">
+      <div class="tide-doc"${e.theme ? ` data-theme="${e.theme}"` : ''}>
         <div class="tide-meta">
           <span class="tide-ver">VER ${e.ver}</span>
           <span class="tide-name">${e.name}</span>
@@ -675,7 +865,7 @@ export function mountTide(root, onBack) {
         </div>
         <h2 class="tide-entry-title" tabindex="-1">${e.title}</h2>
         ${e.body}
-        <p class="tide-end">推演 VER ${e.ver} · 归档完毕　<b>// TETHYS</b></p>
+        <p class="tide-end">${e.end ?? `推演 VER ${e.ver} · 归档完毕　<b>// TETHYS</b>`}</p>
       </div>`
     stage.querySelector('.tide-toindex').addEventListener('click', (ev) => {
       ev.preventDefault()
@@ -684,12 +874,14 @@ export function mountTide(root, onBack) {
       focusView('已返回观潮目录')
     })
     focusView(`已打开深度档案：${e.title}`)
+    watchLamps()
     startWave() // 长文页无波形仪：停掉上一视图的记录笔
   }
 
   showTimeline()
   return () => {
     if (waveStop) { waveStop(); waveStop = null }
+    if (lampIO) { lampIO.disconnect(); lampIO = null }
     root.classList.remove('tide-root')
   }
 }

@@ -1,4 +1,5 @@
 import { renderChisaki } from './chisaki.js'
+import { playMornyeIntro, warmMornyeIntro } from './mornye-intro.js'
 import './view-chrome.css' // 返回按钮等通用外壳
 import './observation.css'  // 监测墙样式
 import gsap from 'gsap'
@@ -2420,13 +2421,28 @@ export function mountObservation(root, onBack) {
   window.addEventListener('keydown', onProfileKeydown, true)
 
   // 点击：有档案则打开档案 / 锁定抖动 / 其余跳转
+  let stopIntro = null   // 正在播放的开场动画（卸载视图时一并取消）
+  // 空闲时分批预热莫宁开场的离屏素材（星云、彗星光体、地表），点开时不卡顿
+  const stopWarm = warmMornyeIntro()
   function activateCard(card) {
       if (card.dataset.status === 'locked') {
         card.classList.add('shake')
         setTimeout(() => card.classList.remove('shake'), 420)
         return
       }
-      if (PROFILES[card.dataset.code]) { openProfile(card.dataset.code, card); return }
+      const code = card.dataset.code
+      if (PROFILES[code]) {
+        // S-003 莫宁：先播专武「宙算仪轨」开场，播到尾声再接入档案
+        if (code === 'S-003') {
+          if (stopIntro) return
+          let revealed = false
+          const stop = playMornyeIntro({ onReveal: () => { revealed = true; stopIntro = null; openProfile(code, card) } })
+          if (!revealed) stopIntro = stop   // 减少动态时会同步直接进入档案，此时不必记录
+          return
+        }
+        openProfile(code, card)
+        return
+      }
       const href = card.dataset.href
       if (href && href !== '#') window.location.href = href
   }
@@ -2453,6 +2469,8 @@ export function mountObservation(root, onBack) {
 
   return () => {
     io.disconnect()
+    if (stopIntro) { stopIntro(); stopIntro = null }
+    stopWarm()
     window.removeEventListener('keydown', onProfileKeydown, true)
     if (clearProfileTimer) clearTimeout(clearProfileTimer)
     profileCleanups.splice(0).forEach((fn) => { try { fn() } catch { /* 句柄已失效则忽略 */ } })

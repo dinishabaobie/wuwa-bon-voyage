@@ -5,7 +5,7 @@ export const TIMELINE_PHASES = [
   { id: 'huanglong', label: '瑝珑', range: 'VER 1.X' },
   { id: 'rinascita', label: '黎那汐塔', range: 'VER 2.X' },
   { id: 'lahairoy', label: '拉海洛', range: 'VER 3.0—3.4' },
-  { id: 'mengzhou', label: '梦州', range: 'VER 3.5—3.6' },
+  { id: 'mengzhou', label: '梦州', range: 'VER 3.5—3.7' },
 ]
 
 export const TIMELINE_EVENTS = [
@@ -141,7 +141,7 @@ export const TIMELINE_EVENTS = [
   },
   {
     id: 'v3-6', phase: 'mengzhou', version: '3.6', title: '蜃云灯影，凡尘剑心',
-    date: '2026.08.20', signal: '当前版本',
+    date: '2026.08.20',
     meta: [
       ['区域', '梦州 · 玄方地界（云梭 · 雾隐阁）'],
       ['共鸣者', '清宵 · 景燃'],
@@ -149,5 +149,16 @@ export const TIMELINE_EVENTS = [
       ['探索', '御剑飞行 · 七弦琴演奏'],
     ],
     summary: '玄方危机初平，漂泊者循岁主心月狐留下的信物前往雾隐阁，与守护玄方数百年的清宵相遇；玄方城也以「云梭」之姿巡游天际。',
+  },
+  {
+    id: 'v3-7', phase: 'mengzhou', version: '3.7', title: '镜锁妄世，心照红尘',
+    date: '2026.09.30', signal: '当前版本', analysisVer: '3.7',
+    meta: [
+      ['区域', '梦州 · 梦枢天罗（心相迷宫 · 六心域）'],
+      ['共鸣者', '心 · 锁暝'],
+      ['主线', '第四章 4 幕「梦枢心相由心生」· 玄方篇终章'],
+      ['记录', '奇谭「璇心如月寄尘情」· 朝月会'],
+    ],
+    summary: '漂泊者与锁暝坠入由记忆与梦境构成的梦枢天罗，在心相迷宫中重走玄方城两百年；首位以岁主身份登场的共鸣者「心」终于承认自己就是梦州的心，玄方篇以朝月会作结。',
   },
 ]

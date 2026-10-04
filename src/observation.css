@@ -2468,3 +2468,25 @@ html.prof-lock { overflow: hidden; }
   .qx-petals { display: none; }
   .qx-demon.is-auto .qx-demon-shadow { animation: none; clip-path: inset(0 0 0 50%); }
 }
+
+/* ── S-003 莫宁 · 专武「宙算仪轨」开场（src/mornye-intro.js）──
+   z-index 200：盖住档案浮层(120)与各视图，低于自定义光标(9999) */
+.mornye-intro {
+  position: fixed; inset: 0; z-index: 200;
+  background: #030208;
+  opacity: 0; transition: opacity .18s ease;
+}
+.mornye-intro.is-on { opacity: 1; }
+.mornye-intro.is-leaving { opacity: 0; transition: opacity .65s ease; pointer-events: none; }
+.mornye-intro canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.mi-skip {
+  position: absolute; right: clamp(1rem, 3vw, 2.4rem); bottom: clamp(1rem, 4vh, 2.2rem);
+  min-height: 44px; padding: 0 .5rem;
+  border: 0; background: none;
+  color: rgba(210,214,255,.5);
+  font: .68rem/1 var(--font-tech); letter-spacing: .32em;
+  transition: color .2s ease;
+}
+.mi-skip:hover, .mi-skip:focus-visible { color: #eef0ff; }
+.mi-skip:focus-visible { outline: 1px solid rgba(170,178,255,.7); outline-offset: 4px; }
+.mi-skip span { margin-left: .5em; }
