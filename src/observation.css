@@ -59,7 +59,7 @@
   background: none;
   border: 1px solid rgba(232,233,242,.16);
   border-radius: 1px;
-  cursor: pointer;
+  cursor: none;
   transition: color .3s, border-color .3s, background .3s;
 }
 .wall-chip:hover { color: var(--ink); border-color: rgba(232,233,242,.4); }
@@ -92,7 +92,7 @@
   overflow: hidden;
   border: 1px solid rgba(232,233,242,.12);
   background: #0c0a12;
-  cursor: pointer;
+  cursor: none;
   transition: border-color .4s, box-shadow .4s, transform .4s;
 }
 .subject-card:focus-visible {
@@ -218,7 +218,7 @@
 
 /* 待解密锁定卡 */
 .subject-card.is-locked {
-  cursor: not-allowed;
+  cursor: none;
   background: repeating-linear-gradient(45deg, #0e0c14 0 10px, #100e16 10px 20px);
 }
 .subject-card.is-locked .card-name,
@@ -759,7 +759,7 @@ html.prof-lock { overflow: hidden; }
 /* 心形暖意计：右下角的玻璃糖果心，她递来的心随旅程被一点点焐暖 */
 .s005-heart {
   position: fixed; right: clamp(20px, 5vw, 64px); bottom: 12vh;
-  z-index: 3; width: 62px; padding: 0; border: none; background: none; cursor: pointer;
+  z-index: 3; width: 62px; padding: 0; border: none; background: none; cursor: none;
   display: flex; flex-direction: column; align-items: center; gap: .6rem;
 }
 .s005-heart svg {
@@ -881,7 +881,7 @@ html.prof-lock { overflow: hidden; }
 .s010.freq-havoc .freq-cap { color: rgba(232,233,242,.55); }
 .freq-opt {
   font: inherit; font-size: .82rem; letter-spacing: .18em; padding: .3rem .45rem;
-  background: none; border: none; cursor: pointer; opacity: .45;
+  background: none; border: none; cursor: none; opacity: .45;
   transition: opacity .3s, color .3s, text-shadow .3s;
 }
 .s010.freq-aero .freq-opt { color: rgba(20,52,42,.75); }
@@ -891,7 +891,7 @@ html.prof-lock { overflow: hidden; }
   text-shadow: 0 0 14px color-mix(in srgb, var(--accent) 60%, transparent);
 }
 .freq-rail {
-  position: relative; width: 58px; height: 22px; border-radius: 999px; cursor: pointer;
+  position: relative; width: 58px; height: 22px; border-radius: 999px; cursor: none;
   border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
   background: color-mix(in srgb, var(--accent) 14%, transparent);
   transition: background .5s, border-color .5s;
@@ -1874,7 +1874,7 @@ html.prof-lock { overflow: hidden; }
 .s007-dial {
   position: fixed; right: clamp(20px, 5vw, 64px); bottom: 11vh; z-index: 3;
   display: flex; flex-direction: column; align-items: center; gap: .45rem;
-  padding: 0; border: none; background: none; cursor: pointer;
+  padding: 0; border: none; background: none; cursor: none;
 }
 .s007-dial svg { width: 66px; overflow: visible; display: block; }
 .s007-dial .arc { fill: none; stroke: rgba(160, 210, 190, .5); stroke-width: 1.2; stroke-dasharray: 3 4; }
@@ -2023,7 +2023,7 @@ html.prof-lock { overflow: hidden; }
 .qx-hero-sound {
   margin-left: 1.2rem; padding: .2rem .1rem; min-height: 24px;
   border: 0; border-bottom: 1px solid rgba(211,177,111,.5); background: none;
-  color: var(--qx-gold); font: inherit; letter-spacing: inherit; cursor: pointer;
+  color: var(--qx-gold); font: inherit; letter-spacing: inherit; cursor: none;
   transition: color .3s ease, border-color .3s ease;
 }
 .qx-hero-sound[aria-pressed="false"] { color: var(--qx-mute); border-bottom-color: rgba(111,142,166,.4); }
@@ -2197,7 +2197,7 @@ html.prof-lock { overflow: hidden; }
 .qx-listen-aside .qx-hero-sound { margin-left: 0; }
 
 /* ── 剑：飞剑随心 ── */
-.qx-act--jian { min-height: 108svh; cursor: crosshair; }
+.qx-act--jian { min-height: 108svh; cursor: none; }
 .qx-act--jian .qx-act-copy {
   position: relative; padding: 1.5rem 0;
 }
@@ -2276,14 +2276,14 @@ html.prof-lock { overflow: hidden; }
 .qx-replay {
   margin-left: 1rem; padding: .3rem .9rem; min-height: 32px;
   border: 1px solid rgba(211,177,111,.5); border-radius: 0; background: rgba(4,16,28,.5);
-  color: var(--qx-gold); font: inherit; letter-spacing: .14em; cursor: pointer;
+  color: var(--qx-gold); font: inherit; letter-spacing: .14em; cursor: none;
   transition: color .3s ease, border-color .3s ease, background .3s ease;
 }
 .qx-replay:hover { color: var(--qx-moon); border-color: var(--qx-moon); background: rgba(4,16,28,.75); }
 .qx-replay:focus-visible { outline: 1px solid var(--qx-moon); outline-offset: 3px; }
 
 .qx-act--zhong {
-  min-height: 100svh; cursor: pointer; text-align: left;
+  min-height: 100svh; cursor: none; text-align: left;
   /* 剑阵完整显现，只在底端轻收进夜色；文字本身用字影保持清晰。 */
   background: linear-gradient(180deg, transparent 76%, rgba(4,16,28,.72) 100%);
   grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); grid-template-rows: auto 1fr auto;
@@ -2392,7 +2392,7 @@ html.prof-lock { overflow: hidden; }
 }
 .qx-hui button {
   position: relative; min-width: 34px; min-height: 40px; padding: 0; border: 0; background: none;
-  display: flex; flex-direction: column; align-items: center; gap: .55rem; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: .55rem; cursor: none;
   color: rgba(200,222,238,.5); font: .7rem/1 var(--qx-fang); letter-spacing: .1em;
   transition: color .3s ease;
 }

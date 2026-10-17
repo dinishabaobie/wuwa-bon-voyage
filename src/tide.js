@@ -405,7 +405,7 @@ const ENTRIES = [
             </div>
           </div>
         </li>
-        <li class="xin-lamp is-last">
+        <li class="xin-lamp">
           <i class="xin-glyph" aria-hidden="true">明</i>
           <div class="xin-body">
             <span class="xin-when">拾 · 朝月</span>
@@ -457,7 +457,6 @@ export function mountTide(root, onBack) {
     })
   }
 
-  // ── 潮汐波形仪：页头 canvas 记录笔（多层正弦潮汐）────────────
   // 3.7「寻心」档案：月灯随阅读逐盏点亮（只亮灯，不藏字）
   let lampIO = null
   function watchLamps() {
@@ -478,9 +477,11 @@ export function mountTide(root, onBack) {
     lamps.forEach((lamp) => lampIO.observe(lamp))
   }
 
+  // ── 潮汐波形仪：页头 canvas 记录笔（多层正弦潮汐）────────────
   let waveStop = null
   function startWave() {
     if (waveStop) { waveStop(); waveStop = null }
+    if (lampIO) { lampIO.disconnect(); lampIO = null } // 每次换视图都放掉上一篇的月灯观察器
     const canvas = stage.querySelector('.tide-wave')
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -560,7 +561,10 @@ export function mountTide(root, onBack) {
   const RULERS = {
     timeline: ['2022 · 技术测试', '瑝珑', '黎那汐塔', '拉海洛', '梦州 · 2026'],
     chronology: ['−10000Y · 悲鸣纪元', '远古', '建城', '近世', 'NOW · 本次苏醒'],
-    archive: ['CH·03 深度信道', 'VER 3.1', 'VER 3.3', 'VER 3.7', 'VERIFIED × 03'],
+    // 固定 5 格（首篇 / 居中一篇 / 最新一篇），与另两个通道一致；手机上隐藏第 2、4 格
+    archive: ['CH·03 深度信道',
+      ...[0, Math.floor((ENTRIES.length - 1) / 2), ENTRIES.length - 1].map((i) => `VER ${ENTRIES[i].ver}`),
+      `VERIFIED × ${String(ENTRIES.length).padStart(2, '0')}`],
   }
   const CHANNELS = [
     ['timeline', 'CH·01', '航程纪年', () => TIMELINE_EVENTS.length],
@@ -874,8 +878,8 @@ export function mountTide(root, onBack) {
       focusView('已返回观潮目录')
     })
     focusView(`已打开深度档案：${e.title}`)
-    watchLamps()
     startWave() // 长文页无波形仪：停掉上一视图的记录笔
+    watchLamps()
   }
 
   showTimeline()

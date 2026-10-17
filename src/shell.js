@@ -44,10 +44,16 @@ export function setupBGM(btn) {
 
   const resumeIfOn = () => {
     if (sessionStorage.getItem('bgmOn') !== '1') return
-    soundOn()
-    const kick = () => { if (bgm.paused) soundOn() }
-    ;['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) =>
-      window.addEventListener(ev, kick, { once: true, passive: true }))
+    const EVENTS = ['pointerdown', 'keydown', 'wheel', 'touchstart']
+    const stop = () => EVENTS.forEach((ev) => window.removeEventListener(ev, kick))
+    // 补播只做一次：用掉任何一个事件就全部撤掉；点在音乐开关上时交给按钮自己切换
+    function kick(e) {
+      stop()
+      if (btn.contains(e.target)) return
+      if (bgm.paused && sessionStorage.getItem('bgmOn') === '1') soundOn()
+    }
+    EVENTS.forEach((ev) => window.addEventListener(ev, kick, { passive: true }))
+    soundOn().then(() => { if (!bgm.paused) stop() })
   }
   return { soundOn, soundOff, resumeIfOn }
 }

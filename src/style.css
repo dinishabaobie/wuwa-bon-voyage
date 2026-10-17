@@ -746,6 +746,7 @@ button:focus-visible,
   transition: opacity .35s ease;
 }
 .view-overlay.show { opacity: 1; }
+.view-overlay.is-closing { pointer-events: none; } /* 淡出时让点击穿透到首页 */
 .view-overlay.prof-lock { overflow: hidden; }
 .view-loading,
 .view-load-error {

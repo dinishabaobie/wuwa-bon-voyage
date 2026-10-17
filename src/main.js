@@ -262,6 +262,7 @@ gsap.ticker.add((time) => lenis.raf(time * 1000))
 // 保留默认卡顿平滑：避免加载时主线程卡顿把时间差一次性灌给开场时间线、导致打字瞬间跑完
 gsap.ticker.lagSmoothing(500, 33)
 lenis.stop() // 加载动画期间锁定滚动
+let siteEntered = false // 开场结束后才允许关闭视图时解开滚动
 
 timeline.querySelectorAll('.tl-item').forEach((btn) => {
   btn.addEventListener('click', () => {
@@ -398,6 +399,7 @@ CHAPTERS.forEach((c) => {
   // ── 从子页面「返回泰提斯终端」：跳过开场动画，直接进入已入场的首屏 ──
   history.replaceState(null, '', location.pathname)
   loader.remove()
+  siteEntered = true
   lenis.start()
   gsap.set(heroChars, { opacity: 1, y: 0 })
   gsap.set(['.hero-eyebrow', '.hero-en', '.hero-lead'], { opacity: 1, y: 0 })
@@ -516,6 +518,7 @@ CHAPTERS.forEach((c) => {
       .add(() => {
         window.scrollTo(0, 0)
         lenis.scrollTo(0, { immediate: true })
+        siteEntered = true
         lenis.start()
       }, '>-0.35')
       .to(loader, { opacity: 0, duration: .6, ease: 'power2.out' }, '<')
@@ -581,8 +584,9 @@ gsap.to('.hero-title', {
     viewInert = null
   }
 
+  const OPEN_VIEW = '.view-overlay:not(.is-closing)'
   async function openView(key, trigger, { pushHistory = true } = {}) {
-    if (busy || document.querySelector('.view-overlay')) return
+    if (busy || document.querySelector(OPEN_VIEW)) return
     const v = VIEWS[key]; if (!v) return
     busy = true
     const id = ++openId
@@ -631,16 +635,21 @@ gsap.to('.hero-title', {
       busy = false
     }
   }
+  // 后退还没触发 popstate 前再按一次返回 / Esc，不能再退一步（否则可能直接离开网站）
+  let backPending = false
   function requestCloseView() {
+    if (backPending) return
     if (history.state?.tethysView === activeViewKey) {
+      backPending = true
       history.back()
       return
     }
     closeView()
   }
   function closeView() {
-    const ov = document.querySelector('.view-overlay')
+    const ov = document.querySelector(OPEN_VIEW)
     if (!ov) return
+    ov.classList.add('is-closing') // 淡出中的旧浮层不再算「视图开着」
     openId++
     const returnTarget = viewTrigger
     viewTrigger = null
@@ -649,10 +658,10 @@ gsap.to('.hero-title', {
     ov.classList.remove('show')
     if (viewCleanup) { try { viewCleanup() } catch {} viewCleanup = null }
     unlockBehind()
-    lenis.start()
+    if (siteEntered) lenis.start()
     setTimeout(() => {
       ov.remove()
-      returnTarget?.focus()
+      if (!document.querySelector(OPEN_VIEW)) returnTarget?.focus()
     }, 320)
   }
   document.querySelectorAll('.hero-module').forEach((a) => {
@@ -664,8 +673,9 @@ gsap.to('.hero-title', {
     })
   })
   window.addEventListener('popstate', (event) => {
+    backPending = false
     const key = event.state?.tethysView
-    const hasView = Boolean(document.querySelector('.view-overlay'))
+    const hasView = Boolean(document.querySelector(OPEN_VIEW))
     if (!key && hasView) closeView()
     else if (key && VIEWS[key] && !hasView) openView(key, null, { pushHistory: false })
   })

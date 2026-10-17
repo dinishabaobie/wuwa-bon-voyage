@@ -70,7 +70,7 @@
   padding: 9px 12px; margin-bottom: 11px;
   font-size: 12.5px; line-height: 1.55;
   color: rgba(232,233,242,.78);
-  cursor: pointer;
+  cursor: none;
   transition: opacity .25s, border-color .2s, box-shadow .2s;
 }
 .bcard strong { color: var(--c); font-size: 14px; font-weight: 800; }

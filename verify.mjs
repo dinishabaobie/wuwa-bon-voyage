@@ -1,6 +1,29 @@
 import assert from 'node:assert/strict'
 import { spawn } from 'node:child_process'
+import { readFileSync } from 'node:fs'
 import { chromium } from 'playwright-core'
+import { TIMELINE_EVENTS } from './src/timeline.js'
+import { CHRONOLOGY_EVENTS } from './src/chronology.js'
+
+// 期望条目数直接从数据源算出，加新版本内容后不用手改测试
+const tideSource = readFileSync(new URL('./src/tide.js', import.meta.url), 'utf8')
+const ENTRY_VERS = [...tideSource.matchAll(/^    ver: '([^']+)'/gm)].map((m) => m[1])
+if (!ENTRY_VERS.length) throw new Error('verify.mjs: 没能从 src/tide.js 的 ENTRIES 里读到任何 ver（缩进或写法变了？）')
+const observationSource = readFileSync(new URL('./src/observation.js', import.meta.url), 'utf8')
+const subjectsBlock = observationSource.match(/const SUBJECTS = \[([\s\S]*?)\n\]/)?.[1] || ''
+const SUBJECT_COUNT = (subjectsBlock.match(/\{ code: 'S-/g) || []).length
+if (!SUBJECT_COUNT) throw new Error('verify.mjs: 没能从 src/observation.js 的 SUBJECTS 里数出观测对象')
+const relationNodes = JSON.parse(readFileSync(new URL('./src/relations.canvas', import.meta.url), 'utf8')).nodes || []
+const EXPECTED = {
+  subjects: SUBJECT_COUNT,
+  timeline: TIMELINE_EVENTS.length,
+  timelineDeepLinks: TIMELINE_EVENTS.filter((event) => ENTRY_VERS.includes(event.analysisVer)).length,
+  archive: ENTRY_VERS.length,
+  chronology: CHRONOLOGY_EVENTS.length,
+  deepLinks: CHRONOLOGY_EVENTS.filter((event) => ENTRY_VERS.includes(event.analysisVer)).length,
+  present: CHRONOLOGY_EVENTS.filter((event) => event.era === 'present').length,
+  relations: relationNodes.filter((node) => node.type === 'text' && node.text && node.text.trim()).length,
+}
 
 const HOST = '127.0.0.1'
 const PORT = 5173
@@ -87,8 +110,8 @@ try {
   await page.getByRole('link', { name: '观测对象', exact: true }).click()
   await page.locator('.view-overlay.show').waitFor()
   await page.waitForURL(/\/observation\.html$/)
-  assert.equal(await page.locator('.subject-card').count(), 15)
-  assert.equal(await page.locator('.subject-card[role="button"][tabindex="0"]').count(), 15)
+  assert.equal(await page.locator('.subject-card').count(), EXPECTED.subjects)
+  assert.equal(await page.locator('.subject-card[role="button"][tabindex="0"]').count(), EXPECTED.subjects)
 
   const firstSubject = page.locator('.subject-card').first()
   await firstSubject.focus()
@@ -141,24 +164,29 @@ try {
     '320px 220px',
     'the shared custom cursor must track the pointer without interpolation',
   )
-  assert.equal(await page.locator('.tide-timeline-item').count(), 23)
+  assert.equal(await page.locator('.tide-timeline-item').count(), EXPECTED.timeline)
+  assert.equal(
+    await page.locator('.tide-timeline-item .tide-deep-link').count(),
+    EXPECTED.timelineDeepLinks,
+    'every timeline event with analysisVer must link to an existing deep analysis entry',
+  )
   const firstTimelineEvent = page.locator('.tide-event-toggle').first()
   await firstTimelineEvent.click()
   assert.equal(await firstTimelineEvent.getAttribute('aria-expanded'), 'true')
   await page.locator('.tide-mode-btn[data-view="archive"]').click()
-  assert.equal(await page.locator('.tide-card').count(), 3)
+  assert.equal(await page.locator('.tide-card').count(), EXPECTED.archive)
   await page.locator('.tide-mode-btn[data-view="chronology"]').click()
-  assert.equal(await page.locator('.tide-chrono-item').count(), 44)
-  assert.equal(await page.locator('.tide-chrono-item .tide-deep-link').count(), 3)
+  assert.equal(await page.locator('.tide-chrono-item').count(), EXPECTED.chronology)
+  assert.equal(await page.locator('.tide-chrono-item .tide-deep-link').count(), EXPECTED.deepLinks)
   await page.locator('.tide-filter[data-era="present"]').click()
-  assert.equal(await page.locator('.tide-chrono-item').count(), 16)
+  assert.equal(await page.locator('.tide-chrono-item').count(), EXPECTED.present)
   await closeModule(page)
 
   await page.getByRole('link', { name: '群像', exact: true }).click()
   await page.locator('.view-overlay.show').waitFor()
   await page.waitForURL(/\/relation\.html$/)
-  assert.equal(await page.locator('.bcard').count(), 110)
-  assert.equal(await page.locator('.bcard[role="button"][tabindex="0"]').count(), 110)
+  assert.equal(await page.locator('.bcard').count(), EXPECTED.relations)
+  assert.equal(await page.locator('.bcard[role="button"][tabindex="0"]').count(), EXPECTED.relations)
   const firstRelation = page.locator('.bcard').first()
   await firstRelation.focus()
   await firstRelation.press('Enter')

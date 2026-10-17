@@ -486,7 +486,9 @@ function stepAsset(k) {
     if (!r || typeof r.next !== 'function') { ASSETS[k] = r; return true }
     JOBS[k] = r
   }
-  const { value, done } = JOBS[k].next()
+  let step
+  try { step = JOBS[k].next() } catch (err) { delete JOBS[k]; throw err } // 出错的生成器不能留着，否则下次会拿到 undefined
+  const { value, done } = step
   if (!done) return false
   ASSETS[k] = value
   delete JOBS[k]
@@ -909,12 +911,21 @@ let active = null
 
 // 播放开场；返回取消函数（取消时不会打开档案）
 export function playMornyeIntro({ onReveal } = {}) {
-  if (active) return active
-  let revealed = false
+  if (active) {
+    // 已在淡出（档案已接入过）：新调用方直接进档案，不再等旧动画
+    if (active.revealed) {
+      try { onReveal?.() } catch (err) { console.error(err) }
+      return () => {}
+    }
+    // 还在播放：改由最新的调用方接收 onReveal，避免新视图的档案打不开
+    active.onReveal = onReveal
+    return active.finish
+  }
+  const state = { onReveal, finish: null, revealed: false }
   const reveal = () => {
-    if (revealed) return
-    revealed = true
-    try { onReveal?.() } catch (err) { console.error(err) }
+    if (state.revealed) return
+    state.revealed = true
+    try { state.onReveal?.() } catch (err) { console.error(err) }
   }
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     reveal()
@@ -932,10 +943,22 @@ export function playMornyeIntro({ onReveal } = {}) {
   document.body.appendChild(el)
   const canvas = el.querySelector('canvas')
   const skipBtn = el.querySelector('.mi-skip')
-  const scene = createScene(canvas)
+  let scene
+  try {
+    scene = createScene(canvas)
+    scene.resize(window.innerWidth, window.innerHeight)
+    scene.draw(0)
+  } catch (err) {
+    // 画布或素材生成失败（如手机内存不足）：撤掉遮罩，直接进入档案
+    console.error(err)
+    el.remove()
+    reveal()
+    return () => {}
+  }
 
-  const layout = () => scene.resize(window.innerWidth, window.innerHeight)
-  layout()
+  // 播放途中再出错（换尺寸重建画布、逐帧绘制）也不能把人困在遮罩后面
+  const fail = (err) => { console.error(err); leave() }
+  const layout = () => { try { scene.resize(window.innerWidth, window.innerHeight) } catch (err) { fail(err) } }
   window.addEventListener('resize', layout)
 
   const openedAt = performance.now()
@@ -978,12 +1001,11 @@ export function playMornyeIntro({ onReveal } = {}) {
   const frame = (now) => {
     if (!start) start = now
     const t = (now - start) / 1000
-    scene.draw(t)
+    try { scene.draw(t) } catch (err) { fail(err); return }
     if (t >= T_REVEAL) leave()
     // 淡出期间定格最后一帧：让出主线程给正在打开的档案页
     if (!finished && !leaving) raf = requestAnimationFrame(frame)
   }
-  scene.draw(0)
   requestAnimationFrame(() => {
     el.classList.add('is-on')
     skipBtn.focus({ preventScroll: true })
@@ -991,6 +1013,7 @@ export function playMornyeIntro({ onReveal } = {}) {
     raf = requestAnimationFrame(frame)
   })
 
-  active = finish
-  return active
+  state.finish = finish
+  active = state
+  return finish
 }

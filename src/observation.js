@@ -2422,8 +2422,16 @@ export function mountObservation(root, onBack) {
 
   // 点击：有档案则打开档案 / 锁定抖动 / 其余跳转
   let stopIntro = null   // 正在播放的开场动画（卸载视图时一并取消）
-  // 空闲时分批预热莫宁开场的离屏素材（星云、彗星光体、地表），点开时不卡顿
-  const stopWarm = warmMornyeIntro()
+  // 指针移到（或键盘聚焦）莫宁卡片时才分批预热开场的离屏素材，不打开 S-003 的访客不用付这份内存
+  let stopWarm = () => {}
+  const mornyeCard = cards.find((c) => c.dataset.code === 'S-003')
+  const startWarm = () => {
+    mornyeCard?.removeEventListener('pointerenter', startWarm)
+    mornyeCard?.removeEventListener('focus', startWarm)
+    stopWarm = warmMornyeIntro()
+  }
+  mornyeCard?.addEventListener('pointerenter', startWarm)
+  mornyeCard?.addEventListener('focus', startWarm)
   function activateCard(card) {
       if (card.dataset.status === 'locked') {
         card.classList.add('shake')
@@ -2470,6 +2478,8 @@ export function mountObservation(root, onBack) {
   return () => {
     io.disconnect()
     if (stopIntro) { stopIntro(); stopIntro = null }
+    mornyeCard?.removeEventListener('pointerenter', startWarm)
+    mornyeCard?.removeEventListener('focus', startWarm)
     stopWarm()
     window.removeEventListener('keydown', onProfileKeydown, true)
     if (clearProfileTimer) clearTimeout(clearProfileTimer)

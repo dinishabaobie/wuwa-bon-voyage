@@ -22,7 +22,7 @@ body {
 a, button { cursor: none; }
 #page { position: relative; min-height: 100vh; }
 
-/* 自定义四芒星光标（子页面） */
+/* 自定义黑海岸花形光标（子页面） */
 #cursor {
   position: fixed; left: 0; top: 0; z-index: 9999;
   width: 28px; height: 28px; margin: -14px 0 0 -14px;
