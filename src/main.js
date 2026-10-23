@@ -58,7 +58,7 @@ const CHAPTERS = [
     ],
     statusDesc: '七丘是黎那汐塔的城邦之一，把古罗马的圆拱、柱式与狮鹫，解构重组成一座现代之城。这里也是月光预见之地——人们依月相推演命运，将被预见的未来，奉为既定的轨迹。可实测读数正与预言悄然分岔：那条被月光照亮的轨道，开始偏移。',
     keeper: '七丘依月相推演命运，把被预见的轨迹，当作既定的未来。这种信任我并不陌生——我自己，也是一台推演的造物。<br/><br/>预言基准：完好。<br/>实测轨迹：持续偏离。',
-    bg: '#0c1828', accent: '#88c6ec', photo: 'photos/3-2.jpg',
+    bg: '#0c1828', accent: '#88c6ec', photo: 'photos/3-2.jpg', credit: '画 @Joezunzun',
   },
   {
     id: 'v33', num: '3.3', ver: '3.0', title: '我们生而眺望',
@@ -74,7 +74,7 @@ const CHAPTERS = [
     ],
     statusDesc: '拉海洛是罗伊冰原之下的地下学园都市，索拉里斯新极点之下的文明核心。头顶的星空由大气拟造阵列点亮；深空联合在此办起星炬学院，罗伊族世代守着日灵与归源的古老传统。终局之后，隧者与阿列夫一相继离去，灭世危机暂退——可学院该如何在失去隧者的明天里继续存在，成了新的难题。',
     keeper: '这里的人住在冰原之下，头顶的星空是人造的，连脚下那颗太阳——炉芯——也是人造的核心，如今已被装上沉睡的隧者。可即便如此，他们依然把自己唤作眺望者。',
-    bg: '#0b1320', accent: '#86bcd8', photo: 'photos/3-3.jpg',
+    bg: '#0b1320', accent: '#86bcd8', photo: 'photos/3-3.jpg', credit: '画 @Patanda',
   },
   {
     id: 'v34', num: '3.4', ver: '3.1', title: '风雪掩埋的故土',
@@ -204,7 +204,7 @@ app.innerHTML = `
         <p class="ch-status-desc">${c.statusDesc}</p>` : ''
       const keeper = c.keeper ? `<blockquote class="ch-keeper"><p>${c.keeper}</p><cite>守岸人 · 观测附注</cite></blockquote>` : ''
       const cast = `<p class="ch-cast">${c.cast.map((n) => `<b>${n}</b>`).join('<span> · </span>')}</p>`
-      const figure = `<figure class="ch-figure"><img src="${c.photo}" alt="${c.title}" loading="lazy" /><figcaption class="fig-tag">${region}</figcaption></figure>`
+      const figure = `<figure class="ch-figure"><img src="${c.photo}" alt="${c.title}" loading="lazy" /><figcaption class="fig-tag">${region}</figcaption>${c.credit ? `<span class="fig-credit">${c.credit}</span>` : ''}</figure>`
       const wide = c.wide ? `<figure class="ch-wide"><img src="${c.wide}" alt="${c.wideAlt || c.title}" loading="lazy" /></figure>` : ''
       const cls = `chapter${c.bigFig ? ' chapter--bigfig' : ''}${c.figFull ? ' chapter--figfull' : ''}`
       const verNum = `<div class="ver-num" aria-hidden="true">${region}</div>`
