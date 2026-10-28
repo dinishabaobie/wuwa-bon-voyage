@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { DataRain } from './datarain.js'
 import { setupCursor, setupBGM } from './shell.js'
+import { TIMELINE_EVENTS } from './timeline.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -118,6 +119,8 @@ const CHAPTERS = [
 ]
 
 const HERO = { bg: '#05060f', accent: '#8b9aff' }
+// 开场「Ver 1.0 — x.x」的终点跟着航程纪年（timeline.js）最新一条走，加了新版本这里自动更新
+const LATEST_VERSION = TIMELINE_EVENTS[TIMELINE_EVENTS.length - 1].version
 const ENDING = {
   bg: '#04050c', accent: '#cdd3ff', photo: 'photos/ending.jpg',
   title: '拉海洛篇章落幕',
@@ -168,10 +171,10 @@ app.innerHTML = `
 
       <div class="hero-core">
         <div class="hero-emblem" aria-hidden="true"></div>
-        <p class="hero-eyebrow">黑海岸 · 泰提斯系统</p>
+        <p class="hero-eyebrow">黑海岸 · 泰提斯</p>
         <h1 class="hero-title">欢迎回家</h1>
         <p class="hero-en" aria-hidden="true">WE&nbsp;WERE&nbsp;BORN&nbsp;TO&nbsp;GAZE</p>
-        <p class="hero-lead">泰提斯已完成这段航程的全部推演。<br/>Ver 1.0 — 3.4，这一路皆已归档于地底星空，愿你旅途愉快。</p>
+        <p class="hero-lead">泰提斯已完成这段航程的全部推演。<br/>Ver 1.0 — ${LATEST_VERSION}，这一路皆已归档于地底星空，愿你旅途愉快。</p>
       </div>
 
       <footer class="hero-foot">
