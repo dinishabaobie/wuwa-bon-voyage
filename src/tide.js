@@ -1,5 +1,8 @@
 import './view-chrome.css' // 返回按钮等通用外壳
 import './tide.css'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Lenis from 'lenis'
 import { TIMELINE_EVENTS, TIMELINE_PHASES } from './timeline.js'
 import { CHRONOLOGY_EVENTS, CHRONOLOGY_ERAS } from './chronology.js'
 
@@ -442,40 +445,454 @@ const ENTRIES = [
   },
 ]
 
-// 观潮 · 潮位记录纸：航程纪年 / 溯洄纪年 / 深度推演。渲染进 root（root 同时是滚动容器）。
+// ── 观潮 · 沉入星空 ───────────────────────────────────────────────
+// 整页是一次下潜：海面是现在，越往下越久远。航程纪年按地区分层（新 → 旧），过了第一次测试
+// 进入溯洄纪年的深海（现在 → 远古），海底是泰提斯的地底星空，深度推演是那里的星。
+
+// 每层水：越深越暗；强调色取该地区 / 纪元自己的光。新地区还没登记时先用 FALLBACK_LOOK
+const PHASE_LOOK = {
+  mengzhou:  { water: '#0f3c46', accent: '#f2b766', latin: 'MENGZHOU' },
+  lahairoy:  { water: '#1a2150', accent: '#b9b1ff', latin: 'LAHAIROY' },
+  rinascita: { water: '#2a1a2f', accent: '#f3a88e', latin: 'RINASCITA' },
+  huanglong: { water: '#0d2a26', accent: '#a7dcc4', latin: 'HUANGLONG' },
+  test:      { water: '#121a23', accent: '#bac7d6', latin: 'PRELUDE' },
+}
+const FALLBACK_LOOK = { water: '#10283a', accent: '#a9d4e6', latin: '' }
+const ERA_LOOK = {
+  present:  { water: '#0b1621', accent: '#9fd8c4' },
+  recent:   { water: '#0e0f1b', accent: '#e6b877' },
+  historic: { water: '#080d18', accent: '#9dc0ea' },
+  ancient:  { water: '#09061a', accent: '#c4b2ee' },
+}
+const ABYSS_LOOK = { water: '#03040a', accent: '#f4e7c4' }
+const FONTS_HREF = 'https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6..96,400..700&family=Noto+Serif+SC:wght@500;600;700;900&display=swap'
+
+const latestEvent = TIMELINE_EVENTS[TIMELINE_EVENTS.length - 1]
+const phaseLook = (id) => PHASE_LOOK[id] || FALLBACK_LOOK
+const eraLook = (id) => ERA_LOOK[id] || FALLBACK_LOOK
+const lookAttrs = (look) => `data-water="${look.water}" data-accent="${look.accent}" style="--tide-accent:${look.accent};--tide-here:${look.water}"`
+
+const yearSpan = (events) => {
+  const years = [...new Set(events.flatMap((event) => event.date.match(/\d{4}/g) || []))].sort()
+  return years.length > 1 ? `${years[0]} — ${years[years.length - 1]}` : years[0]
+}
+
+// 地区层的读数：版本范围、年份、这一层出现过的地名，全部从数据里算
+function phaseFacts(phase, events) {
+  const first = events[0]
+  const last = events[events.length - 1]
+  const range = phase.id === 'test' ? 'PRE'
+    : events.length > 1 ? `${first.version} — ${last.version}` : first.version
+  const places = phase.id === 'test'
+    ? (first.meta || []).map(([label]) => label)
+    : [...new Set(events.flatMap((event) => (event.meta || [])
+        .filter(([label]) => label === '区域')
+        .flatMap(([, value]) => value.split(' · '))))]
+        .filter((place) => place !== phase.label)
+  return { range, years: yearSpan(events), places }
+}
+
+function deepLink(ver) {
+  const i = ver ? ENTRIES.findIndex((entry) => entry.ver === ver) : -1
+  return i > -1
+    ? `<button type="button" class="tide-deep-link" data-entry="${i}">深度推演 · ${ENTRIES[i].name}<span aria-hidden="true"> →</span></button>`
+    : ''
+}
+
+function versionHTML(event, major) {
+  const pre = event.phase === 'test'
+  const num = pre ? 'PRE' : event.version
+  const meta = event.meta || []
+  return `
+    <article class="tide-v ${major ? 'tide-v--major' : 'tide-v--minor'}" id="tide-v-${event.id}" data-reading="${pre ? 'PRE' : `VER ${num}`} · ${event.date.slice(0, 4)}">
+      <p class="tide-v-num${pre ? ' tide-v-num--word' : ''}" aria-hidden="true">${num}</p>
+      <div class="tide-v-body">
+        <p class="tide-v-when">
+          <time datetime="${event.date.slice(0, 10).replaceAll('.', '-')}">${event.date}</time>
+          ${event.signal ? `<span class="tide-v-signal">${event.signal}</span>` : ''}
+        </p>
+        <h3 class="tide-v-title"><span class="tide-sr">${pre ? event.version : `VER ${event.version}`}：</span>${event.title}</h3>
+        <p class="tide-v-summary">${event.summary}</p>
+        ${major
+          ? `<dl class="tide-v-meta">${meta.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')}</dl>`
+          : `<p class="tide-v-meta-line">${meta.map(([label, value]) => `<span><b>${label}</b>${value}</span>`).join('')}</p>`}
+        ${deepLink(event.analysisVer)}
+      </div>
+    </article>`
+}
+
+function phaseHTML(phase) {
+  const events = TIMELINE_EVENTS.filter((event) => event.phase === phase.id)
+  if (!events.length) return ''
+  const look = phaseLook(phase.id)
+  const facts = phaseFacts(phase, events)
+  const opener = events[0]
+  return `
+    <section class="tide-layer" id="tide-layer-${phase.id}" data-mark="${phase.label}" ${lookAttrs(look)} aria-labelledby="tide-h-${phase.id}">
+      <header class="tide-layer-head">
+        ${look.latin ? `<span class="tide-layer-latin" aria-hidden="true">${look.latin}</span>` : ''}
+        <h2 class="tide-layer-name" id="tide-h-${phase.id}">${phase.label}</h2>
+        <p class="tide-layer-facts">
+          <span class="tide-layer-range">${facts.range}</span>
+          <span>${facts.years}</span>
+          <span>${events.length} 个版本</span>
+          ${phase.id === latestEvent.phase ? '<span class="tide-layer-now">此刻所在</span>' : ''}
+        </p>
+        ${facts.places.length ? `<p class="tide-layer-places">${facts.places.join('　')}</p>` : ''}
+      </header>
+      <div class="tide-layer-body">
+        ${[...events].reverse().map((event) => versionHTML(event, event === opener || event === latestEvent)).join('')}
+      </div>
+    </section>`
+}
+
+const echoHTML = (event) => `
+  <article class="tide-echo" data-reading="${event.epoch}">
+    <p class="tide-echo-epoch">${event.epoch}${event.signal ? `<span class="tide-echo-signal">${event.signal}</span>` : ''}</p>
+    <h3 class="tide-echo-title">${event.title}</h3>
+    <p class="tide-echo-body">${event.body}</p>
+    ${deepLink(event.analysisVer)}
+  </article>`
+
+function eraHTML(era, i) {
+  const events = CHRONOLOGY_EVENTS.filter((event) => event.era === era.id).reverse()
+  if (!events.length) return ''
+  return `
+    <section class="tide-era" id="tide-era-${era.id}" data-mark="${era.label}"${i === 0 ? ' data-split' : ''} ${lookAttrs(eraLook(era.id))} aria-labelledby="tide-h-${era.id}">
+      <header class="tide-era-head">
+        <h2 class="tide-era-name" id="tide-h-${era.id}">${era.label}</h2>
+        <p class="tide-era-facts"><span>${era.range}</span><span>${events.length} 段残响</span></p>
+      </header>
+      <div class="tide-era-body">${events.map(echoHTML).join('')}</div>
+    </section>`
+}
+
+// 星图位置（%）：从左到右排开，高低错落
+const starSpot = (i, n) => [Math.round(3 + i * 63 / Math.max(1, n - 1)), [58, 6, 46, 14][i % 4]]
+
+function descentHTML(phases, eras) {
+  const firstYear = TIMELINE_EVENTS[0].date.slice(0, 4)
+  return `
+    <section class="tide-surface" data-mark="海面" ${lookAttrs(phaseLook(latestEvent.phase))} aria-labelledby="tide-title">
+      <div class="tide-surface-art" aria-hidden="true"></div>
+      <div class="tide-surface-text">
+        <p class="tide-kicker">泰提斯 · 潮下档案</p>
+        <h1 class="tide-title" id="tide-title">观潮</h1>
+        <p class="tide-surface-line">往下看吧。越深的地方，越久远；<br />最深处，是这一路的星空。</p>
+        <p class="tide-surface-sign">——守岸人</p>
+      </div>
+      <p class="tide-dive" aria-hidden="true"><span>向下 · 潜入</span><i></i></p>
+    </section>
+    ${phases.map(phaseHTML).join('')}
+    <section class="tide-threshold" ${lookAttrs(phaseLook('test'))} aria-labelledby="tide-h-threshold">
+      <p class="tide-threshold-year" aria-hidden="true">${firstYear}</p>
+      <h2 class="tide-threshold-title" id="tide-h-threshold">航程从这里开始</h2>
+      <p class="tide-threshold-text">再往下，是索拉里斯自己的记忆：${eras.length} 个纪元，${CHRONOLOGY_EVENTS.length} 段残响，一直沉到万年之前。</p>
+    </section>
+    ${eras.map(eraHTML).join('')}
+    <section class="tide-abyss" data-mark="地底星空" ${lookAttrs(ABYSS_LOOK)} aria-labelledby="tide-h-abyss">
+      <h2 class="tide-abyss-title" id="tide-h-abyss">地底星空</h2>
+      <p class="tide-abyss-line">泰提斯最深处的归档。这一路的每一段航程、每一声残响，都在这里亮着。</p>
+      <div class="tide-constellation">
+        <svg aria-hidden="true"><polyline /></svg>
+        ${ENTRIES.map((entry, i) => {
+          const [x, y] = starSpot(i, ENTRIES.length)
+          return `
+            <button type="button" class="tide-star" data-entry="${i}" style="--x:${x};--y:${y}">
+              <span class="tide-star-core" aria-hidden="true"></span>
+              <span class="tide-star-text">
+                <span class="tide-star-ver">VER ${entry.ver}</span>
+                <span class="tide-star-name">${entry.name}</span>
+                <span class="tide-star-title">${entry.title} · ${entry.region}</span>
+                <span class="tide-star-teaser">${entry.teaser}</span>
+              </span>
+            </button>`
+        }).join('')}
+      </div>
+      <div class="tide-abyss-close">
+        <p>愿你旅途愉快。</p>
+        <p class="tide-abyss-sign">——守岸人</p>
+        <button type="button" class="tide-to-surface">回到海面<span aria-hidden="true"> ↑</span></button>
+      </div>
+    </section>`
+}
+
+// 渲染进 root（root 同时是滚动容器：独立页的 #view-root，或首页的 .view-overlay）
 export function mountTide(root, onBack) {
+  gsap.registerPlugin(ScrollTrigger)
+  if (!document.getElementById('tide-fonts')) {
+    document.head.appendChild(Object.assign(document.createElement('link'), { id: 'tide-fonts', rel: 'stylesheet', href: FONTS_HREF }))
+  }
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+  const phases = TIMELINE_PHASES.filter((phase) => phase.id !== 'all').reverse()
+  const eras = CHRONOLOGY_ERAS.filter((era) => era.id !== 'all').reverse()
+
   root.classList.add('tide-root')
   root.innerHTML = `
     <!--
-    THESIS: 观潮是一条从海面潜入记忆深处的潮线，拒绝居中仪表盘式首屏。
-    OWN-WORLD: 冷银海雾、钴蓝深海、青色潮线、锐利边界与真实航程影像。
-    STORY: 用户先看见潮汐，再选择纪年通道，沿潮线阅读事件并进入深度推演。
-    FIRST VIEWPORT: 标题贴左跨越水线，动态潮汐横贯首屏，通道导航在下方接入纵向记录。
-    FORM: 潮线剖面，以海面横线和左侧纵向故事脊柱统领所有视图。
+    THESIS: 观潮是一次下潜：海面是现在，越深越久远，海底是泰提斯的地底星空。拒绝同一模板的卡片竖排和科技读数面板。
+    OWN-WORLD: 水色浸满整页并随深度变化（梦州灯青 → 拉海洛靛紫 → 黎那汐塔暮红 → 瑝珑青瓷 → 测试纪雾灰 → 溯洄墨蓝 → 星空）；宋体写地名，斜体衬线数字当测深读数，左侧深度计的游标是守岸人的蝶。
+    STORY: 先在海面看见守岸人与漂泊者；往下潜，每进一个地区水色就换，大版本停一下，小版本一行带过；过了 2022 进入索拉里斯自己的记忆；落到海底，深度推演是最亮的星。
+    FIRST VIEWPORT: 全幅插画作海面；左下「观潮」与一句守岸人的话；左侧深度计停在「海面」；底部一道下潜提示。
+    FORM: 用户指定方向 A「沉入星空」（未掷骰）；颜色流转同首页：越过 55% 线，1.1 秒缓动。
     -->
-    <div class="tide-sea" aria-hidden="true"><i class="tide-glow"></i></div>
-    <a class="back" href="./index.html#home"><span aria-hidden="true">◂</span> 返回泰提斯终端</a>
+    <div class="tide-sea-layer" aria-hidden="true"><canvas class="tide-sea"></canvas></div>
+    <div class="tide-hud">
+      <a class="back" href="./index.html#home"><span aria-hidden="true">◂</span> 返回泰提斯终端</a>
+      <nav class="tide-gauge" aria-label="下潜深度">
+        <span class="tide-gauge-rail" aria-hidden="true"></span>
+        <ol class="tide-gauge-marks"></ol>
+        <div class="tide-gauge-cursor" aria-hidden="true">
+          <img src="./photos/butterfly.png" alt="" />
+          <span class="tide-gauge-reading"></span>
+        </div>
+      </nav>
+    </div>
     <p class="tide-view-announcer" aria-live="polite" aria-atomic="true"></p>
-    <div class="tide-stage"></div>`
+    <div class="tide-stage">
+      <div class="tide-descent">${descentHTML(phases, eras)}</div>
+      <div class="tide-entry" hidden></div>
+    </div>`
+
   const stage = root.querySelector('.tide-stage')
+  const descent = root.querySelector('.tide-descent')
+  const entryView = root.querySelector('.tide-entry')
   const announcer = root.querySelector('.tide-view-announcer')
+  const marksEl = root.querySelector('.tide-gauge-marks')
+  const cursor = root.querySelector('.tide-gauge-cursor')
+  const readingEl = root.querySelector('.tide-gauge-reading')
+  const clamp = (value) => Math.min(1, Math.max(0, value))
+  const offsetIn = (el) => el.getBoundingClientRect().top - root.getBoundingClientRect().top + root.scrollTop
   root.querySelector('.back').addEventListener('click', (e) => { e.preventDefault(); onBack && onBack() })
 
-  function focusView(message) {
-    requestAnimationFrame(() => {
-      const heading = stage.querySelector('h2[tabindex="-1"]')
-      heading?.focus()
-      announcer.textContent = message
-    })
+  // 滚动手感与首页一致：Lenis 接管 root 这个滚动容器，ScrollTrigger 跟着它更新
+  const lenis = reduce ? null : new Lenis({ wrapper: root, content: stage, duration: 1.35, smoothWheel: true })
+  const tick = (time) => lenis.raf(time * 1000)
+  if (lenis) {
+    lenis.on('scroll', ScrollTrigger.update)
+    gsap.ticker.add(tick)
+  }
+  function goTo(target, duration = 0) {
+    if (lenis) lenis.scrollTo(target, duration ? { duration } : { immediate: true, force: true })
+    else if (typeof target === 'number') root.scrollTop = target
+    else target.scrollIntoView()
   }
 
+  // 深度计：每个地区 / 纪元一格，点了直接潜过去
+  const markSections = [...descent.querySelectorAll('[data-mark]')]
+  marksEl.innerHTML = markSections.map((section, i) => `
+    <li${section.hasAttribute('data-split') ? ' class="is-split"' : ''}>
+      <button type="button" class="tide-gauge-mark" data-i="${i}">${section.dataset.mark}</button>
+    </li>`).join('')
+  marksEl.addEventListener('click', (ev) => {
+    const button = ev.target.closest('.tide-gauge-mark')
+    if (button) goTo(markSections[+button.dataset.i], 1.8)
+  })
+  root.querySelector('.tide-to-surface').addEventListener('click', () => goTo(0, 2.4))
+
+  // 颜色流转（同首页）：某一层越过视口 55% 线时，水色和强调色用 1.1 秒缓缓换过去
+  const hex = (value) => [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16))
+  const toRGB = (value) => value.startsWith('#') ? hex(value) : value.match(/[\d.]+/g).slice(0, 3).map(Number)
+  const firstLook = markSections[0].dataset
+  const tint = { water: firstLook.water, accent: firstLook.accent }
+  const sea = { light: 1, motes: .35, deep: 0, stars: 0, accent: hex(firstLook.accent) }
+  function paintTint() {
+    root.style.setProperty('--tide-water', tint.water)
+    root.style.setProperty('--tide-live', tint.accent)
+    sea.accent = toRGB(tint.accent)
+  }
+  function flowTo({ water, accent }) {
+    if (reduce) { Object.assign(tint, { water, accent }); paintTint(); return }
+    gsap.to(tint, { water, accent, duration: 1.1, ease: 'power2.out', overwrite: 'auto', onUpdate: paintTint })
+  }
+  paintTint()
+  let reading = false
+  const triggers = [...descent.querySelectorAll('[data-water]')].map((section) => ScrollTrigger.create({
+    trigger: section,
+    scroller: root,
+    start: 'top 55%',
+    end: 'bottom 55%',
+    onToggle: (self) => { if (self.isActive && !reading) flowTo(section.dataset) },
+  }))
+
+  // ── 海况画布：海面透光、海雪 / 深海生物光、海底星空 ──
+  const canvas = root.querySelector('.tide-sea')
+  const ctx = canvas.getContext('2d')
+  let W = 0
+  let H = 0
+  function resizeCanvas() {
+    const dpr = Math.min(devicePixelRatio || 1, 2)
+    W = canvas.clientWidth
+    H = canvas.clientHeight
+    canvas.width = Math.round(W * dpr)
+    canvas.height = Math.round(H * dpr)
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+  }
+  const rnd = (a, b) => a + Math.random() * (b - a)
+  const motes = Array.from({ length: 150 }, () => ({ x: Math.random(), y: Math.random(), r: rnd(.5, 1.7), v: rnd(.004, .016), z: rnd(.25, 1), ph: rnd(0, 6.3), bio: Math.random() < .22 }))
+  const stars = Array.from({ length: 260 }, () => ({ x: Math.random(), y: Math.random(), r: Math.random() < .07 ? rnd(1.3, 2.1) : rnd(.35, 1), tw: rnd(.4, 1.8), ph: rnd(0, 6.3) }))
+  const BIO = [143, 227, 208]
+  const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t))
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H)
+    // 海面透下来的光：头顶一团柔光，越往下越淡（不画成一道道光柱）
+    if (sea.light > .01) {
+      const glow = ctx.createRadialGradient(W * .5, -H * .3, 0, W * .5, -H * .3, H * 1.15)
+      glow.addColorStop(0, `rgba(176,226,236,${.13 * sea.light})`)
+      glow.addColorStop(1, 'rgba(176,226,236,0)')
+      ctx.fillStyle = glow
+      ctx.fillRect(0, 0, W, H)
+    }
+    for (const mote of motes) {
+      const glow = mote.bio && sea.deep > 0
+      const color = glow ? mix(sea.accent, BIO, sea.deep) : sea.accent
+      const alpha = sea.motes * (glow ? .85 : .38) * mote.z * (.65 + .35 * Math.sin(t * 1.1 + mote.ph))
+      if (alpha < .01) continue
+      const x = mote.x * W + Math.sin(t * .3 + mote.ph) * 8
+      const y = mote.y * H
+      if (glow) {
+        const radius = mote.r * 5
+        const halo = ctx.createRadialGradient(x, y, 0, x, y, radius)
+        halo.addColorStop(0, `rgba(${color},${alpha})`)
+        halo.addColorStop(1, `rgba(${color},0)`)
+        ctx.fillStyle = halo
+        ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2)
+      } else {
+        ctx.fillStyle = `rgba(${color},${alpha})`
+        ctx.beginPath()
+        ctx.arc(x, y, mote.r * mote.z, 0, 6.2832)
+        ctx.fill()
+      }
+    }
+    if (sea.stars > .01) {
+      for (const star of stars) {
+        ctx.fillStyle = `rgba(255,247,228,${sea.stars * (.5 + .5 * Math.sin(t * star.tw + star.ph))})`
+        ctx.beginPath()
+        ctx.arc(star.x * W, star.y * H, star.r, 0, 6.2832)
+        ctx.fill()
+      }
+    }
+  }
+
+  // ── 深度计游标、读数与海况：跟着滚动位置走 ──
+  let marks = []
+  let readings = []
+  let deepTop = 0
+  let abyssTop = 0
+  let maxScroll = 1
+  function measure() {
+    marks = markSections.map((section, i) => {
+      const li = marksEl.children[i]
+      return { top: offsetIn(section), y: li.offsetTop + li.offsetHeight / 2 }
+    })
+    readings = [...descent.querySelectorAll('[data-reading]')].map((el) => ({ top: offsetIn(el), text: el.dataset.reading }))
+    deepTop = offsetIn(descent.querySelector('.tide-threshold'))
+    abyssTop = offsetIn(descent.querySelector('.tide-abyss'))
+    maxScroll = Math.max(1, root.scrollHeight - root.clientHeight)
+    // 星座连线跟着星星的实际位置画
+    const box = descent.querySelector('.tide-constellation').getBoundingClientRect()
+    descent.querySelector('.tide-constellation polyline').setAttribute('points', [...descent.querySelectorAll('.tide-star-core')].map((core) => {
+      const r = core.getBoundingClientRect()
+      return `${r.left - box.left + r.width / 2},${r.top - box.top + r.height / 2}`
+    }).join(' '))
+  }
+
+  let current = -1
+  let lastY = root.scrollTop
+  function update() {
+    const y = root.scrollTop
+    const vh = root.clientHeight
+    // 往下潜时海雪往上掠过
+    const dy = (y - lastY) / vh
+    lastY = y
+    for (const mote of motes) {
+      mote.y -= dy * mote.z * .5
+      if (mote.y < -.03) mote.y += 1.06
+      else if (mote.y > 1.03) mote.y -= 1.06
+    }
+    if (reading || !marks.length) return
+
+    const mid = y + vh * .55
+    // 游标在相邻两个刻度之间，按这一段的下潜进度移动
+    let j = 0
+    while (j < marks.length - 1 && marks[j + 1].top <= mid) j++
+    const mark = marks[j]
+    const next = marks[j + 1]
+    const progress = next ? clamp((mid - mark.top) / (next.top - mark.top)) : 0
+    cursor.style.transform = `translateY(${mark.y + (next ? (next.y - mark.y) * progress : 0)}px)`
+    if (j !== current) {
+      marksEl.querySelectorAll('.tide-gauge-mark').forEach((button, k) => {
+        if (k === j) button.setAttribute('aria-current', 'location')
+        else button.removeAttribute('aria-current')
+      })
+      current = j
+    }
+    // 读数只在经过具体版本 / 残响时出现，层名已经亮在刻度上
+    let hit = null
+    for (const r of readings) { if (r.top <= mid) hit = r; else break }
+    readingEl.textContent = hit && hit.top >= mark.top ? hit.text : ''
+
+    sea.light = clamp(1 - (y - vh * .4) / (vh * 2.6))
+    sea.motes = .35 + .65 * clamp(y / maxScroll)
+    sea.deep = clamp((mid - deepTop) / vh)
+    sea.stars = clamp((y + vh - abyssTop) / (vh * .9))
+  }
+
+  let raf = 0
+  let last = performance.now()
+  function loop(now) {
+    const dt = Math.min(.05, (now - last) / 1000)
+    last = now
+    for (const mote of motes) {
+      mote.y -= mote.v * dt * mote.z
+      if (mote.y < -.03) { mote.y = 1.03; mote.x = Math.random() }
+    }
+    draw(now / 1000)
+    raf = requestAnimationFrame(loop)
+  }
+
+  let ticking = false
+  const onScroll = () => {
+    if (ticking) return
+    ticking = true
+    requestAnimationFrame(() => {
+      ticking = false
+      update()
+      if (reduce) draw(0)
+    })
+  }
+  root.addEventListener('scroll', onScroll, { passive: true })
+  const onVisibility = () => {
+    if (reduce) return
+    cancelAnimationFrame(raf)
+    if (!document.hidden) {
+      last = performance.now()
+      raf = requestAnimationFrame(loop)
+    }
+  }
+  document.addEventListener('visibilitychange', onVisibility)
+  const resizer = new ResizeObserver(() => {
+    resizeCanvas()
+    if (!reading) { measure(); update() }
+    if (reduce) draw(0)
+  })
+  resizer.observe(root)
+  document.fonts?.ready.then(() => {
+    if (!root.isConnected || reading) return
+    measure()
+    update()
+    triggers.forEach((trigger) => trigger.refresh())
+  })
+
+  // ── 深度推演长文：从星、版本或残响打开；返回时回到原来的位置 ──
   // 3.7「寻心」档案：月灯随阅读逐盏点亮（只亮灯，不藏字）
   let lampIO = null
   function watchLamps() {
     if (lampIO) { lampIO.disconnect(); lampIO = null }
-    const lamps = stage.querySelectorAll('.xin-lamp')
+    const lamps = entryView.querySelectorAll('.xin-lamp')
     if (!lamps.length) return
-    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!('IntersectionObserver' in window) || reduce) {
       lamps.forEach((lamp) => lamp.classList.add('is-lit'))
       return
     }
@@ -489,390 +906,17 @@ export function mountTide(root, onBack) {
     lamps.forEach((lamp) => lampIO.observe(lamp))
   }
 
-  // ── 潮汐波形仪：页头 canvas 记录笔（多层正弦潮汐）────────────
-  let waveStop = null
-  function startWave() {
-    if (waveStop) { waveStop(); waveStop = null }
-    if (lampIO) { lampIO.disconnect(); lampIO = null } // 每次换视图都放掉上一篇的月灯观察器
-    const canvas = stage.querySelector('.tide-wave')
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    const pen = getComputedStyle(canvas).color
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
-    let raf = 0
-    let t = Math.random() * 900
-    let visible = true
-    const io = new IntersectionObserver((entries) => { visible = entries[0].isIntersecting })
-    io.observe(canvas)
-
-    function draw() {
-      const dpr = Math.min(devicePixelRatio || 1, 2)
-      const w = canvas.clientWidth * dpr
-      const h = canvas.clientHeight * dpr
-      if (!w || !h) return
-      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h }
-      ctx.clearRect(0, 0, w, h)
-      const mid = h * 0.56
-      const layers = [
-        { amp: h * 0.28, wl: 540 * dpr, sp: 0.010, alpha: 0.42, lw: 1.6 * dpr, fill: 0.10 },
-        { amp: h * 0.17, wl: 250 * dpr, sp: 0.017, alpha: 0.30, lw: 1.1 * dpr, fill: 0 },
-        { amp: h * 0.08, wl: 130 * dpr, sp: 0.028, alpha: 0.18, lw: 1 * dpr, fill: 0 },
-      ]
-      for (const layer of layers) {
-        ctx.beginPath()
-        for (let x = 0; x <= w; x += 4 * dpr) {
-          const y = mid
-            + Math.sin((x / layer.wl) * Math.PI * 2 + t * layer.sp) * layer.amp
-            + Math.sin((x / (layer.wl * 0.41)) * Math.PI * 2 - t * layer.sp * 1.6) * layer.amp * 0.38
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
-        }
-        ctx.strokeStyle = pen
-        ctx.globalAlpha = layer.alpha
-        ctx.lineWidth = layer.lw
-        ctx.stroke()
-        if (layer.fill) {
-          ctx.lineTo(w, h)
-          ctx.lineTo(0, h)
-          ctx.closePath()
-          const grad = ctx.createLinearGradient(0, mid - layer.amp, 0, h)
-          grad.addColorStop(0, pen)
-          grad.addColorStop(1, 'transparent')
-          ctx.globalAlpha = layer.fill
-          ctx.fillStyle = grad
-          ctx.fill()
-        }
-      }
-      ctx.globalAlpha = 1
-    }
-    function frame() {
-      raf = requestAnimationFrame(frame)
-      if (!visible) return
-      t += 1
-      draw()
-    }
-    reduced ? draw() : frame()
-    waveStop = () => { cancelAnimationFrame(raf); io.disconnect() }
-  }
-
-  let activeView = 'timeline'
-  let activePhase = 'all'
-  let activeEra = 'all'
-  let returnView = 'timeline'
-
-  const phaseById = (id) => TIMELINE_PHASES.find((phase) => phase.id === id)
-  const phaseCount = (id) => id === 'all'
-    ? TIMELINE_EVENTS.length
-    : TIMELINE_EVENTS.filter((event) => event.phase === id).length
-
-  const eraById = (id) => CHRONOLOGY_ERAS.find((era) => era.id === id)
-  const eraCount = (id) => id === 'all'
-    ? CHRONOLOGY_EVENTS.length
-    : CHRONOLOGY_EVENTS.filter((event) => event.era === id).length
-
-  // 刻度带：每个通道有自己的量程
-  const RULERS = {
-    timeline: ['2022 · 技术测试', '瑝珑', '黎那汐塔', '拉海洛', '梦州 · 2026'],
-    chronology: ['−10000Y · 悲鸣纪元', '远古', '建城', '近世', 'NOW · 本次苏醒'],
-    // 固定 5 格（首篇 / 居中一篇 / 最新一篇），与另两个通道一致；手机上隐藏第 2、4 格
-    archive: ['CH·03 深度信道',
-      ...[0, Math.floor((ENTRIES.length - 1) / 2), ENTRIES.length - 1].map((i) => `VER ${ENTRIES[i].ver}`),
-      `VERIFIED × ${String(ENTRIES.length).padStart(2, '0')}`],
-  }
-  const CHANNELS = [
-    ['timeline', 'CH·01', '航程纪年', () => TIMELINE_EVENTS.length],
-    ['chronology', 'CH·02', '溯洄纪年', () => CHRONOLOGY_EVENTS.length],
-    ['archive', 'CH·03', '深度推演', () => ENTRIES.length],
-  ]
-
-  function renderHeader(view) {
-    return `
-      <header class="tide-head" data-view="${view}">
-        <p class="tide-kicker">泰提斯潮汐档案</p>
-        <h1 class="tide-title">观潮</h1>
-        <p class="tide-sub">版本回溯，因果推演，残响归档。</p>
-        <div class="tide-gauge" aria-hidden="true">
-          <canvas class="tide-wave"></canvas>
-          <div class="tide-ruler">${RULERS[view].map((label) => `<span>${label}</span>`).join('')}</div>
-        </div>
-        <div class="tide-depth-scale" aria-hidden="true">
-          <span>海面</span><span>浅层</span><span>深层</span>
-        </div>
-      </header>
-      <nav class="tide-modebar" aria-label="观潮视图">
-        ${CHANNELS.map(([id, ch, label, count]) => `
-          <button type="button" class="tide-mode-btn ${view === id ? 'is-active' : ''}" data-view="${id}" aria-pressed="${view === id}">
-            <i class="tide-mode-led" aria-hidden="true"></i>
-            <span class="tide-mode-ch">${ch}</span>
-            <span>${label}</span><em>${String(count()).padStart(2, '0')}</em>
-          </button>`).join('')}
-      </nav>`
-  }
-
-  function bindModebar() {
-    const views = { timeline: showTimeline, chronology: showChronology, archive: showArchive }
-    stage.querySelectorAll('.tide-mode-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (button.dataset.view === activeView) return
-        const label = button.querySelector('span:not(.tide-mode-ch)').textContent
-        views[button.dataset.view]()
-        focusView(`已切换至${label}`)
-      })
-    })
-  }
-
-  function renderTimelineEvent(event) {
-    const eventIndex = TIMELINE_EVENTS.indexOf(event)
-    const phase = phaseById(event.phase)
-    const analysisIndex = event.analysisVer
-      ? ENTRIES.findIndex((entry) => entry.ver === event.analysisVer)
-      : -1
-    const panelId = `tide-event-${event.id}`
-    const side = eventIndex % 2 === 0 ? 'left' : 'right'
-
-    return `
-      <li class="tide-timeline-item is-${side}">
-        <span class="tide-timeline-node" aria-hidden="true"><i></i></span>
-        <article class="tide-event ${analysisIndex > -1 ? 'has-analysis' : ''}">
-          ${analysisIndex > -1 ? '<span class="tide-event-flag">深度档案</span>' : ''}
-          <button type="button" class="tide-event-toggle" aria-expanded="false" aria-controls="${panelId}">
-            <span class="tide-event-topline">
-              <span class="tide-event-version">${event.version.startsWith('TEST') || event.version.startsWith('PRE') ? event.version : `VER ${event.version}`}</span>
-              <time datetime="${event.date.slice(0, 10).replaceAll('.', '-')}">${event.date}</time>
-            </span>
-            <span class="tide-event-phase">${phase.label} · ${phase.range}</span>
-            <span class="tide-event-title">${event.title}</span>
-            ${event.signal ? `<span class="tide-event-signal">${event.signal}</span>` : ''}
-            <span class="tide-event-teaser">${event.summary}</span>
-            <span class="tide-event-action"><span>展开事件读数</span><i aria-hidden="true">＋</i></span>
-          </button>
-          <div class="tide-event-panel" id="${panelId}" hidden>
-            <dl>
-              ${event.meta.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')}
-            </dl>
-            ${analysisIndex > -1 ? `
-              <button type="button" class="tide-deep-link" data-entry="${analysisIndex}">
-                <span>TETHYS · CAUSAL ANALYSIS</span>
-                进入深度推演 <i aria-hidden="true">→</i>
-              </button>` : ''}
-          </div>
-        </article>
-      </li>`
-  }
-
-  function bindTimelineCards() {
-    const setExpanded = (toggle, expanded) => {
-      const panel = stage.querySelector(`#${toggle.getAttribute('aria-controls')}`)
-      toggle.setAttribute('aria-expanded', String(expanded))
-      panel.hidden = !expanded
-      toggle.querySelector('.tide-event-action span').textContent = expanded ? '收束事件读数' : '展开事件读数'
-      toggle.querySelector('.tide-event-action i').textContent = expanded ? '−' : '＋'
-    }
-
-    stage.querySelectorAll('.tide-event-toggle').forEach((toggle) => {
-      toggle.addEventListener('click', () => {
-        const willExpand = toggle.getAttribute('aria-expanded') !== 'true'
-        stage.querySelectorAll('.tide-event-toggle[aria-expanded="true"]').forEach((openToggle) => {
-          if (openToggle !== toggle) setExpanded(openToggle, false)
-        })
-        setExpanded(toggle, willExpand)
-      })
-    })
-
-    stage.querySelectorAll('.tide-deep-link').forEach((button) => {
-      button.addEventListener('click', () => {
-        returnView = 'timeline'
-        showEntry(+button.dataset.entry)
-      })
-    })
-  }
-
-  function applyPhase(phaseId) {
-    activePhase = phaseId
-    const visibleEvents = phaseId === 'all'
-      ? TIMELINE_EVENTS
-      : TIMELINE_EVENTS.filter((event) => event.phase === phaseId)
-
-    stage.querySelectorAll('.tide-filter').forEach((button) => {
-      const active = button.dataset.phase === phaseId
-      button.classList.toggle('is-active', active)
-      button.setAttribute('aria-pressed', String(active))
-    })
-    stage.querySelector('.tide-timeline-readout').textContent = `显示 ${visibleEvents.length} / ${TIMELINE_EVENTS.length} 条记录`
-    stage.querySelector('.tide-timeline').innerHTML = visibleEvents.map(renderTimelineEvent).join('')
-    bindTimelineCards()
-  }
-
-  function showTimeline() {
-    activeView = 'timeline'
-    root.scrollTop = 0
-    stage.dataset.view = activeView
-    stage.innerHTML = `
-      ${renderHeader('timeline')}
-      <section class="tide-chronicle" aria-labelledby="tide-chronicle-title">
-        <div class="tide-chronicle-intro">
-          <div>
-            <p class="tide-section-code">CHRONICLE // 001-${String(TIMELINE_EVENTS.length).padStart(3, '0')}</p>
-            <h2 id="tide-chronicle-title" tabindex="-1">航程纪年</h2>
-            <p>从第一次技术测试，到灯火初明的梦枢天罗。版本不是编号，而是漂泊者与文明共同留下的坐标。</p>
-          </div>
-          <div class="tide-chronicle-stats" aria-label="时间轴统计">
-            <span><b>${TIMELINE_EVENTS.length}</b> VERSION NODES</span>
-            <span><b>${ENTRIES.length}</b> DEEP ARCHIVES</span>
-          </div>
-        </div>
-        <div class="tide-filterbar">
-          <div class="tide-filters" role="group" aria-label="按篇章筛选">
-            ${TIMELINE_PHASES.map((phase) => `
-              <button type="button" class="tide-filter" data-phase="${phase.id}" aria-pressed="false">
-                <span>${phase.label}</span><em>${String(phaseCount(phase.id)).padStart(2, '0')}</em>
-              </button>`).join('')}
-          </div>
-          <p class="tide-timeline-readout" aria-live="polite"></p>
-        </div>
-        <ol class="tide-timeline" aria-label="鸣潮版本时间轴"></ol>
-      </section>`
-
-    bindModebar()
-    stage.querySelectorAll('.tide-filter').forEach((button) => {
-      button.addEventListener('click', () => applyPhase(button.dataset.phase))
-    })
-    applyPhase(activePhase)
-    startWave()
-  }
-
-  // ── 溯洄纪年：索拉里斯世界观内的纪事（整理自「游戏内事件时间轴」白板）──
-  function renderChronologyEvent(event) {
-    const eventIndex = CHRONOLOGY_EVENTS.indexOf(event)
-    const era = eraById(event.era)
-    const analysisIndex = event.analysisVer
-      ? ENTRIES.findIndex((entry) => entry.ver === event.analysisVer)
-      : -1
-    const side = eventIndex % 2 === 0 ? 'left' : 'right'
-
-    return `
-      <li class="tide-timeline-item tide-chrono-item is-${side}" style="--era:${event.tint || era.color}">
-        <span class="tide-timeline-node" aria-hidden="true"><i></i></span>
-        <article class="tide-event tide-chrono ${analysisIndex > -1 ? 'has-analysis' : ''}">
-          ${analysisIndex > -1 ? '<span class="tide-event-flag">深度档案</span>' : ''}
-          <div class="tide-chrono-inner">
-            <span class="tide-event-topline">
-              <span class="tide-event-version">${event.epoch}</span>
-              <span class="tide-chrono-code">ECHO ${String(eventIndex + 1).padStart(2, '0')}</span>
-            </span>
-            <span class="tide-event-phase">${era.label} · ${era.range}</span>
-            <h3 class="tide-event-title">${event.title}</h3>
-            ${event.signal ? `<span class="tide-event-signal">${event.signal}</span>` : ''}
-            <p class="tide-chrono-body">${event.body}</p>
-            ${analysisIndex > -1 ? `
-              <button type="button" class="tide-deep-link" data-entry="${analysisIndex}">
-                <span>TETHYS · CAUSAL ANALYSIS</span>
-                进入深度推演 <i aria-hidden="true">→</i>
-              </button>` : ''}
-          </div>
-        </article>
-      </li>`
-  }
-
-  function applyEra(eraId) {
-    activeEra = eraId
-    const visibleEvents = eraId === 'all'
-      ? CHRONOLOGY_EVENTS
-      : CHRONOLOGY_EVENTS.filter((event) => event.era === eraId)
-
-    stage.querySelectorAll('.tide-filter').forEach((button) => {
-      const active = button.dataset.era === eraId
-      button.classList.toggle('is-active', active)
-      button.setAttribute('aria-pressed', String(active))
-    })
-    stage.querySelector('.tide-timeline-readout').textContent = `显示 ${visibleEvents.length} / ${CHRONOLOGY_EVENTS.length} 条残响`
-    stage.querySelector('.tide-timeline').innerHTML = visibleEvents.map(renderChronologyEvent).join('')
-    stage.querySelectorAll('.tide-deep-link').forEach((button) => {
-      button.addEventListener('click', () => {
-        returnView = 'chronology'
-        showEntry(+button.dataset.entry)
-      })
-    })
-  }
-
-  function showChronology() {
-    activeView = 'chronology'
-    root.scrollTop = 0
-    stage.dataset.view = activeView
-    stage.innerHTML = `
-      ${renderHeader('chronology')}
-      <section class="tide-chronicle" aria-labelledby="tide-chronology-title">
-        <div class="tide-chronicle-intro">
-          <div>
-            <p class="tide-section-code">RETRACE // 001-${String(CHRONOLOGY_EVENTS.length).padStart(3, '0')}</p>
-            <h2 id="tide-chronology-title" tabindex="-1">溯洄纪年</h2>
-            <p>并非版本编号，而是索拉里斯自身的记忆——从悲鸣纪元的第一道残响，到此刻仍在延展的旅程。</p>
-          </div>
-          <div class="tide-chronicle-stats" aria-label="纪年统计">
-            <span><b>${CHRONOLOGY_EVENTS.length}</b> ECHO NODES</span>
-            <span><b>${CHRONOLOGY_ERAS.length - 1}</b> ERA PHASES</span>
-          </div>
-        </div>
-        <div class="tide-filterbar">
-          <div class="tide-filters" role="group" aria-label="按纪元筛选">
-            ${CHRONOLOGY_ERAS.map((era) => `
-              <button type="button" class="tide-filter" data-era="${era.id}" style="--era:${era.color}" aria-pressed="false">
-                <span>${era.label}</span><em>${String(eraCount(era.id)).padStart(2, '0')}</em>
-              </button>`).join('')}
-          </div>
-          <p class="tide-timeline-readout" aria-live="polite"></p>
-        </div>
-        <ol class="tide-timeline" aria-label="索拉里斯世界纪年"></ol>
-      </section>`
-
-    bindModebar()
-    stage.querySelectorAll('.tide-filter').forEach((button) => {
-      button.addEventListener('click', () => applyEra(button.dataset.era))
-    })
-    applyEra(activeEra)
-    startWave()
-  }
-
-  function showArchive() {
-    activeView = 'archive'
-    root.scrollTop = 0
-    stage.dataset.view = activeView
-    stage.innerHTML = `
-      ${renderHeader('archive')}
-      <div class="tide-index">
-        <div class="tide-index-heading">
-          <div>
-            <p class="tide-section-code">CAUSAL ANALYSIS // VERIFIED</p>
-            <h2 tabindex="-1">深度推演</h2>
-          </div>
-          <p class="tide-index-hint">// 选择一则记录，展开完整因果链</p>
-        </div>
-        ${ENTRIES.map((e, i) => `
-          <button class="tide-card" data-i="${i}">
-            <span class="tide-card-ver">VER ${e.ver}</span>
-            <div class="tide-card-main">
-              <h3 class="tide-card-name">${e.name}<em>${e.title}</em></h3>
-              <p class="tide-card-teaser">${e.teaser}</p>
-              <span class="tide-card-region">${e.region}</span>
-            </div>
-            <span class="tide-card-go" aria-hidden="true">→</span>
-          </button>`).join('')}
-      </div>`
-    bindModebar()
-    stage.querySelectorAll('.tide-card').forEach((c) =>
-      c.addEventListener('click', () => {
-        returnView = 'archive'
-        showEntry(+c.dataset.i)
-      }))
-    startWave()
-  }
-
-  function showEntry(i) {
+  let resume = null
+  function showEntry(i, opener) {
     const e = ENTRIES[i]
-    const returnLabel = { timeline: '观潮 · 航程纪年', chronology: '观潮 · 溯洄纪年', archive: '观潮 · 推演目录' }[returnView]
-    root.scrollTop = 0
-    stage.dataset.view = 'entry'
-    stage.innerHTML = `
-      <a class="tide-toindex" href="#"><span aria-hidden="true">◂</span> ${returnLabel}</a>
+    const from = opener.closest('[data-mark]')?.dataset.mark || '观潮'
+    resume = { y: root.scrollTop, opener }
+    reading = true
+    root.classList.add('is-reading')
+    descent.hidden = true
+    entryView.hidden = false
+    entryView.innerHTML = `
+      <a class="tide-toindex" href="#"><span aria-hidden="true">◂</span> 回到${from}</a>
       <div class="tide-doc"${e.theme ? ` data-theme="${e.theme}"` : ''}>
         <div class="tide-meta">
           <span class="tide-ver">VER ${e.ver}</span>
@@ -883,21 +927,68 @@ export function mountTide(root, onBack) {
         ${e.body}
         <p class="tide-end">${e.end ?? `推演 VER ${e.ver} · 归档完毕　<b>// TETHYS</b>`}</p>
       </div>`
-    stage.querySelector('.tide-toindex').addEventListener('click', (ev) => {
+    entryView.querySelector('.tide-toindex').addEventListener('click', (ev) => {
       ev.preventDefault()
-      const views = { timeline: showTimeline, chronology: showChronology, archive: showArchive }
-      views[returnView]()
-      focusView('已返回观潮目录')
+      closeEntry()
     })
-    focusView(`已打开深度档案：${e.title}`)
-    startWave() // 长文页无波形仪：停掉上一视图的记录笔
+    triggers.forEach((trigger) => trigger.disable(false))
+    // 长文在星空里读：关掉海面的光，星星全亮
+    Object.assign(sea, { light: 0, motes: .35, deep: 1, stars: 1 })
+    flowTo(ABYSS_LOOK)
+    lenis?.resize()
+    goTo(0)
+    requestAnimationFrame(() => {
+      entryView.querySelector('.tide-entry-title')?.focus({ preventScroll: true })
+      announcer.textContent = `已打开深度档案：${e.title}`
+    })
     watchLamps()
   }
 
-  showTimeline()
-  return () => {
-    if (waveStop) { waveStop(); waveStop = null }
+  function closeEntry() {
     if (lampIO) { lampIO.disconnect(); lampIO = null }
-    root.classList.remove('tide-root')
+    entryView.hidden = true
+    entryView.innerHTML = ''
+    descent.hidden = false
+    root.classList.remove('is-reading')
+    reading = false
+    lenis?.resize()
+    goTo(resume?.y || 0)
+    measure()
+    triggers.forEach((trigger) => trigger.enable())
+    const active = triggers.find((trigger) => trigger.isActive)
+    flowTo((active ? active.trigger : markSections[0]).dataset)
+    update()
+    requestAnimationFrame(() => {
+      resume?.opener?.focus({ preventScroll: true })
+      announcer.textContent = '已返回观潮'
+    })
+  }
+
+  descent.addEventListener('click', (ev) => {
+    const opener = ev.target.closest('[data-entry]')
+    if (opener) showEntry(+opener.dataset.entry, opener)
+  })
+
+  resizeCanvas()
+  measure()
+  update()
+  if (reduce) draw(0)
+  else raf = requestAnimationFrame(loop)
+
+  return () => {
+    cancelAnimationFrame(raf)
+    root.removeEventListener('scroll', onScroll)
+    document.removeEventListener('visibilitychange', onVisibility)
+    resizer.disconnect()
+    if (lampIO) { lampIO.disconnect(); lampIO = null }
+    triggers.forEach((trigger) => trigger.kill())
+    gsap.killTweensOf(tint)
+    if (lenis) {
+      gsap.ticker.remove(tick)
+      lenis.destroy()
+    }
+    root.classList.remove('tide-root', 'is-reading')
+    root.style.removeProperty('--tide-water')
+    root.style.removeProperty('--tide-live')
   }
 }

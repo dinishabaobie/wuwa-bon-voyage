@@ -2,8 +2,8 @@ import assert from 'node:assert/strict'
 import { spawn } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { chromium } from 'playwright-core'
-import { TIMELINE_EVENTS } from './src/timeline.js'
-import { CHRONOLOGY_EVENTS } from './src/chronology.js'
+import { TIMELINE_EVENTS, TIMELINE_PHASES } from './src/timeline.js'
+import { CHRONOLOGY_EVENTS, CHRONOLOGY_ERAS } from './src/chronology.js'
 
 // 期望条目数直接从数据源算出，加新版本内容后不用手改测试
 const tideSource = readFileSync(new URL('./src/tide.js', import.meta.url), 'utf8')
@@ -22,6 +22,10 @@ const EXPECTED = {
   chronology: CHRONOLOGY_EVENTS.length,
   deepLinks: CHRONOLOGY_EVENTS.filter((event) => ENTRY_VERS.includes(event.analysisVer)).length,
   present: CHRONOLOGY_EVENTS.filter((event) => event.era === 'present').length,
+  // 深度计：海面 + 每个有记录的地区 + 每个有残响的纪元 + 地底星空
+  depthMarks: 2
+    + TIMELINE_PHASES.filter((phase) => TIMELINE_EVENTS.some((event) => event.phase === phase.id)).length
+    + CHRONOLOGY_ERAS.filter((era) => CHRONOLOGY_EVENTS.some((event) => event.era === era.id)).length,
   relations: relationNodes.filter((node) => node.type === 'text' && node.text && node.text.trim()).length,
 }
 
@@ -164,22 +168,35 @@ try {
     '320px 220px',
     'the shared custom cursor must track the pointer without interpolation',
   )
-  assert.equal(await page.locator('.tide-timeline-item').count(), EXPECTED.timeline)
+  assert.equal(await page.locator('.tide-v').count(), EXPECTED.timeline)
   assert.equal(
-    await page.locator('.tide-timeline-item .tide-deep-link').count(),
+    await page.locator('.tide-v .tide-deep-link').count(),
     EXPECTED.timelineDeepLinks,
     'every timeline event with analysisVer must link to an existing deep analysis entry',
   )
-  const firstTimelineEvent = page.locator('.tide-event-toggle').first()
-  await firstTimelineEvent.click()
-  assert.equal(await firstTimelineEvent.getAttribute('aria-expanded'), 'true')
-  await page.locator('.tide-mode-btn[data-view="archive"]').click()
-  assert.equal(await page.locator('.tide-card').count(), EXPECTED.archive)
-  await page.locator('.tide-mode-btn[data-view="chronology"]').click()
-  assert.equal(await page.locator('.tide-chrono-item').count(), EXPECTED.chronology)
-  assert.equal(await page.locator('.tide-chrono-item .tide-deep-link').count(), EXPECTED.deepLinks)
-  await page.locator('.tide-filter[data-era="present"]').click()
-  assert.equal(await page.locator('.tide-chrono-item').count(), EXPECTED.present)
+  assert.equal(await page.locator('.tide-echo').count(), EXPECTED.chronology)
+  assert.equal(await page.locator('.tide-echo .tide-deep-link').count(), EXPECTED.deepLinks)
+  assert.equal(await page.locator('#tide-era-present .tide-echo').count(), EXPECTED.present)
+  assert.equal(await page.locator('.tide-star').count(), EXPECTED.archive)
+  assert.equal(
+    await page.locator('.tide-gauge-mark').count(),
+    EXPECTED.depthMarks,
+    'the depth gauge must list the surface, every region and era, and the star sky',
+  )
+  await page.locator('.tide-star').last().click()
+  await page.locator('.tide-entry .tide-doc').waitFor()
+  await page.waitForFunction(
+    () => document.activeElement?.classList.contains('tide-entry-title'),
+    null,
+    { timeout: 3_000 },
+  )
+  await page.locator('.tide-toindex').click()
+  await page.locator('.tide-descent').waitFor()
+  await page.waitForFunction(
+    () => document.activeElement?.classList.contains('tide-star'),
+    null,
+    { timeout: 3_000 },
+  )
   await closeModule(page)
 
   await page.getByRole('link', { name: '群像', exact: true }).click()
